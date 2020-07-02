@@ -1,0 +1,23 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto">
+
+  <description>
+    <title>Running basic test with local correlator connected to C8Y</title>
+    <purpose><![CDATA[
+        Basic scenario - run and test EPL Test in local correlator connected to Cumulocity
+]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group></group>
+    </groups>
+  </classification>
+
+  <data>
+    <class name="LocalCorrelatorSimpleTest" module="${EPL_TESTING_SDK}/testframework/apamax/eplapplications/basetest"/>
+    <user-data name="EPLApp" value="AlarmOnMeasurementThreshold"/>
+  </data>
+
+</pysystest>

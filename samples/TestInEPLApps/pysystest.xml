@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto" state="runnable">
+
+  <description>
+    <title>Run a test of an EPL application inside Cumulocity</title>
+    <purpose><![CDATA[
+		Basic test of an EPL application, running the app and tests inside EPL apps in Cumulocity.
+]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group></group>
+    </groups>
+  </classification>
+
+  <data>
+    <class name="EPLAppsSimpleTest" module="${EPL_TESTING_SDK}/testframework/apamax/eplapplications/basetest"/>
+    <user-data name="EPLApp" value="AlarmOnMeasurementThreshold"/>
+  </data>
+  
+  <traceability>
+    <requirements>
+      <requirement id=""/>     
+    </requirements>
+  </traceability>
+</pysystest>

@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools 10.6.6.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="apamax.eplapplications.eplapps" href="apamax.eplapplications.eplapps.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.eplapps.html" title="apamax.eplapplications.eplapps"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.6.6.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for Apama EPL Apps</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-apamax.eplapplications.platform">
+<span id="apamax-eplapplications-platform"></span><h1>apamax.eplapplications.platform<a class="headerlink" href="#module-apamax.eplapplications.platform" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="cumulocityplatform">
+<h2>CumulocityPlatform<a class="headerlink" href="#cumulocityplatform" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="apamax.eplapplications.platform.CumulocityPlatform">
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.platform.</code><code class="sig-name descname">CumulocityPlatform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to create a connection to the Cumulocity platform configured in pysysproject.xml
+and spool the logs from the platform locally.</p>
+<dl class="simple">
+<dt>Requires the following properties to be set in pysysproject.xml:</dt><dd><ul class="simple">
+<li><p>CUMULOCITY_SERVER_URL</p></li>
+<li><p>CUMULOCITY_TENANT</p></li>
+<li><p>CUMULOCITY_USERNAME</p></li>
+<li><p>CUMULOCITY_PASSWORD</p></li>
+</ul>
+</dd>
+</dl>
+<p>For use with the EPLApps class for uploading EPL applications:</p>
+<blockquote>
+<div><p>self.platform = CumulocityPlatform(self)
+eplapps = EPLApps(self.platform.getC8YConnection())
+eplapps.deploy(self.input+’/test.mon’, activate=True)
+self.waitForGrep(self.platform.getApamaLogFile(), expr=’Added monitor eplfiles.test’)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> – The PySys test object using this platform object.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile">
+<code class="sig-name descname">getApamaLogFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getApamaLogFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path to the Apama log file within Cumulocity</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection">
+<code class="sig-name descname">getC8YConnection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getC8YConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the C8yConnection object for this platform</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.platform.CumulocityPlatform.getC8yConnectionDetails">
+<code class="sig-name descname">getC8yConnectionDetails</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getC8yConnectionDetails"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getC8yConnectionDetails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the (url, tenantid, username, password) defined in the pysysproject.xml)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.platform.CumulocityPlatform.shutdown">
+<code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop spooling the log files when the test finishes</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing-epl.html">Writing tests for EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="apamax.html">PySys helpers for Apama EPL Apps</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="apamax.eplapplications.html">apamax.eplapplications</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.basetest.html">apamax.eplapplications.basetest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.buildVersions.html">apamax.eplapplications.buildVersions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.connection.html">apamax.eplapplications.connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.eplapps.html">apamax.eplapplications.eplapps</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">apamax.eplapplications.platform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cumulocityplatform">CumulocityPlatform</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.eplapps.html" title="apamax.eplapplications.eplapps"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.6.6.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for Apama EPL Apps</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020 Software AG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+    </div>
+  </body>
+</html>

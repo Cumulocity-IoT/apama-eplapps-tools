@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pysysproject>
+	<requires-pysys>1.3.0</requires-pysys>
+	<requires-python>3</requires-python>
+
+	<!-- MUST be set, point to the checkout of the EPL testing repository -->
+	<property name="EPL_TESTING_SDK" value="${env.EPL_TESTING_SDK}"/>
+
+	<!-- Set to the location containing your EPL application monitors -->
+	<property name="EPL_APPS" value="${env.EPL_APPS}" default="${env.EPL_TESTING_SDK}/samples/apps"/>
+	
+	<!-- Specify the tenant which will be used to run the tests -->
+	<property name="CUMULOCITY_SERVER_URL" value="${env.CUMULOCITY_SERVER_URL}" default="https://mytenant.myorg.com" />
+
+	<!-- username and password must be provided for authentication.-->
+	<property name="CUMULOCITY_USERNAME" value="${env.CUMULOCITY_USERNAME}" default="myUserName" />
+	<property name="CUMULOCITY_PASSWORD" value="${env.CUMULOCITY_PASSWORD}" default="myPassword" />
+	
+	<!-- only needed for running an external correlator -->
+	<property name="CUMULOCITY_APPKEY" value="apamaepl-key"/>
+
+	<!-- only needed for running within EPL apps -->
+	<property name="CUMULOCITY_TENANT" value="${env.CUMULOCITY_TENANT}" default="t0000000" />
+
+	<property root="testRootDir"/>
+	<property environment="env"/>
+	<property osfamily="osfamily"/>
+
+	<!-- Used if using a local installation of Apama to run tests in a local correlator -->
+	<property name="APAMA_HOME" value="${env.APAMA_HOME}"/>
+	<property name="APAMA_WORK" value="${env.APAMA_WORK}"/>
+	<property name="APAMA_BIN_DIR"              value="${env.APAMA_HOME}/bin"/>
+
+	<property name="defaultAbortOnError" value="true"/>
+	<property name="defaultIgnoreExitStatus" value="false"/>
+	<property name="defaultEnvironsTempDir" value="self.output"/>
+	<property name="redirectPrintToLogger" value="false"/>
+	<property name="verboseWaitForSignal" value="true"/>
+
+	<property name="shutdownApamaComponentsAfterTest" value="true"/>
+
+	<path value="${EPL_TESTING_SDK}/testframework"/>
+
+</pysysproject>
