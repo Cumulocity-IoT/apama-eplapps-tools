@@ -11,10 +11,8 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 from pysys.constants import *
-import apamax.eplapplications
-from apamax.eplapplications import ApamaC8YBaseTest
-from apamax.eplapplications import CumulocityPlatform
-from apamax.eplapplications import EPLApps
+from apamax.eplapplications import CumulocityPlatform, EPLApps
+from apamax.eplapplications.basetest import ApamaC8YBaseTest
 import os 
 
 class PySysTest(ApamaC8YBaseTest):

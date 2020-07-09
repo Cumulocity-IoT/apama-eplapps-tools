@@ -13,19 +13,12 @@ rem See the License for the specific language governing permissions and limitati
 
 setlocal
 
-if not defined APAMA_HOME (goto UNDEFINED)
-
 set THIS_SCRIPT=%~$PATH:0
 call :getpath %THIS_SCRIPT
-set "PATH=%APAMA_HOME%\third_party\python;%PATH%"
-python.exe "%THIS_DIR%\eplapp.py" %* 
+py.exe "%THIS_DIR%\eplapp.py" %* 
 if NOT %errorlevel% == 0 ( 
 	EXIT /B %errorlevel%
 )
-goto END
-
-:UNDEFINED
-echo Please run this script from an apama_env shell or Apama Command Prompt.
 goto END
 
 :END

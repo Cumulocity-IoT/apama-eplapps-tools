@@ -169,7 +169,7 @@ To run in Apama EPL Apps, your run.py should look something like this:
 
 .. code-block:: python
 
- from apamax.eplapplications import ApamaC8YBaseTest
+ from apamax.eplapplications.basetest import ApamaC8YBaseTest
  class PySysTest(ApamaC8YBaseTest):
 
 	def execute(self):
@@ -198,7 +198,7 @@ To run with a local correlator, it should look something like this:
 
 .. code-block:: python
 
- from apamax.eplapplications import ApamaC8YBaseTest
+ from apamax.eplapplications.basetest import ApamaC8YBaseTest
  class PySysTest(ApamaC8YBaseTest):
 
 	def execute(self):

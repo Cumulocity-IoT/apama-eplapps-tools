@@ -12,8 +12,8 @@
 
 from pysys.constants import *
 from apama.basetest import ApamaBaseTest
-from apamax.eplapplications import ApamaC8YBaseTest
 from apama.correlator import CorrelatorHelper
+from apamax.eplapplications.basetest import ApamaC8YBaseTest
 import subprocess
 import os 
 

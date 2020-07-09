@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Using PySys to test your EPL apps &#8212; EPL Apps Tools 10.6.6.1 documentation</title>
+    <title>Using PySys to test your EPL apps &#8212; EPL Apps Tools 10.6.6.2 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.6.6.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.6.6.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -170,7 +170,7 @@
 <p>For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.</p>
 <p>In order to view documentaion on classes for PySys helpers for EPL Apps please see: <a class="reference external" href="https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/">PySys helpers</a></p>
 <p>To run in Apama EPL Apps, your run.py should look something like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apamax.eplapplications</span> <span class="kn">import</span> <span class="n">ApamaC8YBaseTest</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apamax.eplapplications.basetest</span> <span class="kn">import</span> <span class="n">ApamaC8YBaseTest</span>
 <span class="k">class</span> <span class="nc">PySysTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
 
        <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -196,7 +196,7 @@
 </pre></div>
 </div>
 <p>To run with a local correlator, it should look something like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apamax.eplapplications</span> <span class="kn">import</span> <span class="n">ApamaC8YBaseTest</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apamax.eplapplications.basetest</span> <span class="kn">import</span> <span class="n">ApamaC8YBaseTest</span>
 <span class="k">class</span> <span class="nc">PySysTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
 
        <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -285,7 +285,7 @@
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.6.6.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.6.6.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
