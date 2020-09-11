@@ -133,7 +133,7 @@ class EPLAppsCLI:
 				name='deploy', description='Deploys an EPL (.mon) file to Apama EPL Apps in Cumulocity IoT',
 				usages=[
 					'eplapp.py deploy <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--file FILE> [option]*',
-					'eplapp.py deploy [--help]'
+					'eplapp.py deploy [--help]',
 					'eplapp.py deploy [--version]'
 				],
 				mandatoryOptionsMessage='Mandatory options for deploying a file to Apama EPL Apps:',
@@ -158,7 +158,7 @@ class EPLAppsCLI:
 				name='delete', description='Deletes an existing EPL app in Cumulocity IoT',
 				usages=[
 					'eplapp.py delete <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--name NAME>',
-					'eplapp.py delete [--help]'
+					'eplapp.py delete [--help]',
 					'eplapp.py delete [--version]'
 				],
 				mandatoryOptionsMessage='Mandatory options for deleting an EPL app:',
@@ -175,7 +175,7 @@ class EPLAppsCLI:
 				name='list', description='Prints a list of your existing EPL apps in Cumulocity IoT',
 				usages=[
 					'eplapp.py list <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD>',
-					'eplapp.py list [--help]'
+					'eplapp.py list [--help]',
 					'eplapp.py list [--version]'
 				],
 				mandatoryOptionsMessage='Mandatory options for printing list of EPL apps in Cumulocity IoT:',
@@ -190,7 +190,7 @@ class EPLAppsCLI:
 				name='update', description='Updates an existing EPL app in Cumulocity IoT',
 				usages=[
 					'eplapp.py update <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--name NAME> <options>+',
-					'eplapp.py update [--help]'
+					'eplapp.py update [--help]',
 					'eplapp.py update [--version]'
 				],
 				mandatoryOptionsMessage='Mandatory options for updating an EPL app in Cumulocity IoT:',
@@ -219,7 +219,7 @@ class EPLAppsCLI:
 		:return: 0 if the command was executed successfully, or a non-zero error code otherwise.
 		"""
 		try:
-			RELEASE_TRAIN_VERSION='10.6.6'
+			RELEASE_TRAIN_VERSION='10.7.0'
 			optlist, commands = self.parseCommandLineArgs(args)
 		except Exception as err:
 			print(f'error: Could not parse command line options. {err}')

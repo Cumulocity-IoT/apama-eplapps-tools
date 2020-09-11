@@ -32,7 +32,8 @@ monitor AlarmOnMeasurementThresholdTest {
 	constant string ALARM_TYPE := "ThresholdExceededAlarm";
 
 	constant float MEASUREMENT_THRESHOLD := 100.0;
-	constant float ALARM_WAIT_TIMEOUT := 10.0;
+	constant float NOT_EXPECTING_ALARM_WAIT_TIMEOUT := 10.0;
+	constant float EXPECTING_ALARM_WAIT_TIMEOUT := 45.0;
 
 	action onload()
 	{	
@@ -59,8 +60,15 @@ monitor AlarmOnMeasurementThresholdTest {
 			// Send measurement and check to see whether an alarm is raised 
 			monitor.subscribe(Alarm.SUBSCRIBE_CHANNEL);
 			integer measurementReqId := sendMeasurement(device.deviceId, value);
+
+			// Define how long we wait for alarm depending on whether one is expected
+			float alarmWaitTimeout := NOT_EXPECTING_ALARM_WAIT_TIMEOUT;
+			if (expectingAlarm){
+				alarmWaitTimeout := EXPECTING_ALARM_WAIT_TIMEOUT;
+			}
+
 			// Listener for if alarm is raised within timeout
-			on Alarm(source=device.deviceId, type=ALARM_TYPE) and not wait(ALARM_WAIT_TIMEOUT) 
+			on Alarm(source=device.deviceId, type=ALARM_TYPE) and not wait(alarmWaitTimeout) 
 			{
 				if expectingAlarm {
 					log testName + ": "+ ALARM_TYPE + " raised - PASS" at INFO;
@@ -69,7 +77,7 @@ monitor AlarmOnMeasurementThresholdTest {
 				}
 			}
 			// Listener for if alarm is not raised within timeout
-			on wait(ALARM_WAIT_TIMEOUT) and not Alarm(source=device.deviceId, type=ALARM_TYPE) 
+			on wait(alarmWaitTimeout) and not Alarm(source=device.deviceId, type=ALARM_TYPE) 
 			{
 				if expectingAlarm {
 					log testName + ": "+ ALARM_TYPE + " not raised when one was expected - FAIL" at ERROR;

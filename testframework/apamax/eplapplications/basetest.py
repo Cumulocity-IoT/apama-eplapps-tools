@@ -80,9 +80,9 @@ class ApamaC8YBaseTest(BaseTest):
 
 		#need to have a version independent addition or this will need to be maintained.
 		apama_project.addBundle("Automatic onApplicationInitialized")
-		apama_project.addBundle("Cumulocity IoT > Cumulocity Client 10.5+")
-		apama_project.addBundle("Cumulocity IoT > Event Definitions for Cumulocity 10.5+")
-		apama_project.addBundle("Cumulocity IoT > Utilities for Cumulocity 10.5+")
+		apama_project.addBundle("Cumulocity IoT > Cumulocity Client")
+		apama_project.addBundle("Cumulocity IoT > Event Definitions for Cumulocity")
+		apama_project.addBundle("Cumulocity IoT > Utilities for Cumulocity")
 		apama_project.addBundle("Correlator Management")
 		apama_project.addBundle("JSON Support")
 		apama_project.addBundle("Time Format")
@@ -111,12 +111,16 @@ class ApamaC8YBaseTest(BaseTest):
 		paramImpl["CUMULOCITY_MEASUREMENT_FORMAT"] = getattr(self.project, 'CUMULOCITY_MEASUREMENT_FORMAT', 'BOTH')
 		paramImpl['CUMULOCITY_TENANT'] = getattr(self.project, 'CUMULOCITY_TENANT', '')
 		paramImpl['CUMULOCITY_FORCE_INITIAL_HOST'] = getattr(self.project, 'CUMULOCITY_FORCE_INITIAL_HOST', 'true')
+		paramImpl['CUMULOCITY_PROXY_HOST']=''
+		paramImpl['CUMULOCITY_PROXY_PORT']=''
+		paramImpl['CUMULOCITY_PROXY_USERNAME']=''
+		paramImpl['CUMULOCITY_PROXY_PASSWORD']=''
 		if params is not None:	
 			for prop in params:
 				paramImpl[prop] = params[prop]
 		
 		propFileName = os.path.join(self.output, "CumulocityIoT.properties")
-		destFileName = "/connectivity/CumulocityClient10.5+/CumulocityIoT.properties"
+		destFileName = "/connectivity/CumulocityClient/CumulocityIoT.properties"
 		#create a local props file 
 		with open(propFileName, "w", encoding='utf8') as propfile:
 			propfile.write('\ufeff\n')
@@ -179,7 +183,6 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 		eplApps = self.getTestSubjectEPLApps()
 		self.addEPLAppsToProject(eplApps, project)
 		project.deploy()
-		self.waitForFile('CumulocityIoT.yaml',filedir=project.deployedDir()+'/config/connectivity/CumulocityClient10.5+/')
 
 		# Run local correlator connected to C8Y with Apama EPL Apps and test files deployed
 		correlator = CorrelatorHelper(self, name='c8y-correlator')              

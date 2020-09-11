@@ -38,7 +38,7 @@ class C8yConnection(object):
 		except Exception as e:
 			self.logger.warn("Could not get the platform version to compare version information - is apama-ctrl subscribed?")
 
-	def request(self, method, path, body=None, headers=None):
+	def request(self, method, path, body=None, headers=None, useLocationHeaderPostResp=True):
 		"""
 		Perform an HTTP request. In case of POST request, return the id of the created resource.
 
@@ -46,6 +46,8 @@ class C8yConnection(object):
 		:param path: The path of the resource.
 		:param body: The body for the request.
 		:param headers: The headers for the request.
+		:param useLocationHeaderPostResp: Whether or not to attempt to use the
+			'Location' header in the response to return the ID of the resource that was created by a POST request.
 		:return: Body of the response. In case of POST request, id of the resource specified by the Location header.
 		"""
 		headers = headers or {}
@@ -60,10 +62,11 @@ class C8yConnection(object):
 			raise Exception(
 				f'Failed to perform REST request for resource {path} on url {self.base_url}. Verify that the base Cumulocity URL is correct.')
 
-		# return the object id if POST
-		if method == 'POST':
+		if useLocationHeaderPostResp and method == 'POST':
+			# Attempt to use location header to return the ID of the resource
 			loc = resp.getheader('Location', '')
-			if loc.endswith('/'): loc = loc[:-1]
+			if loc.endswith('/'):
+				loc = loc[:-1]
 			return loc.split('/')[-1]
 		return resp.read()
 
@@ -84,7 +87,7 @@ class C8yConnection(object):
 			body = json.loads(body)
 		return body
 
-	def do_request_json(self, method, path, body, headers=None):
+	def do_request_json(self, method, path, body, headers=None, **kwargs):
 		"""
 		Perform REST request (POST/GET mainly) with JSON body.
 
@@ -97,4 +100,4 @@ class C8yConnection(object):
 		headers = headers or {}
 		headers['Content-Type'] = 'application/json'
 		body = json.dumps(body)
-		return self.request(method, path, body, headers)
+		return self.request(method, path, body, headers, **kwargs)

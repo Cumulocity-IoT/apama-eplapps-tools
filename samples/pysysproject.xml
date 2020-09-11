@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pysysproject>
-	<requires-pysys>1.3.0</requires-pysys>
-	<requires-python>3</requires-python>
+	<requires-pysys>1.5.0</requires-pysys>
+	<requires-python>3.6</requires-python>
 
 	<!-- MUST be set, point to the checkout of the EPL testing repository -->
 	<property name="EPL_TESTING_SDK" value="${env.EPL_TESTING_SDK}"/>
@@ -21,14 +21,15 @@
 	<property osfamily="osfamily"/>
 
 	<!-- Used if using a local installation of Apama to run tests in a local correlator -->
-	<property name="APAMA_HOME" value="${env.APAMA_HOME}"/>
-	<property name="APAMA_WORK" value="${env.APAMA_WORK}"/>
+	<property name="APAMA_HOME" value="${env.APAMA_HOME}" default="(APAMA_HOME not set)"/>
+	<property name="APAMA_WORK" value="${env.APAMA_WORK}" default="(APAMA_WORK not set)"/>
 
 	<property name="defaultAbortOnError" value="true"/>
 	<property name="defaultIgnoreExitStatus" value="false"/>
 	<property name="defaultEnvironsTempDir" value="self.output"/>
 	<property name="redirectPrintToLogger" value="false"/>
 	<property name="verboseWaitForSignal" value="true"/>
+    <property name="supportMultipleModesPerRun" value="true"/>
 
 	<property name="shutdownApamaComponentsAfterTest" value="true"/>
 

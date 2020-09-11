@@ -9,6 +9,7 @@
 # either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
+import json
 import os
 import urllib
 from pathlib import Path
@@ -33,6 +34,7 @@ class EPLApps:
 		:param inactive: Boolean of whether the app should be 'active' (inactive=False) or 'inactive' (inactive=True) when it is deployed.
 		:param redeploy: Boolean of whether we are overwriting an existing EPL app.
 		"""
+		active = not inactive
 		# Check EPL file specified is valid .mon file:
 		if not os.path.exists(file):
 			raise FileNotFoundError(f'Deploy failed. File \'{file}\' not found.')
@@ -54,10 +56,7 @@ class EPLApps:
 				try:
 					updateArgs = {'file': file}
 					if description is not None: updateArgs['description'] = description
-					if inactive: 
-						updateArgs['state'] = 'inactive'
-					else: 
-						updateArgs['state'] = 'active'
+					updateArgs['state'] = 'active' if active else 'inactive'
 					self.update(name, **updateArgs)
 					return
 				except Exception as err:
@@ -72,12 +71,20 @@ class EPLApps:
 			body = {
 				'name': name,
 				'description': description or '',
-				'state': ('inactive' if inactive else 'active'),
+				'state': 'active' if active else 'inactive',
 				'contents': file_contents
 			}
-			self.connection.do_request_json('POST', '/service/cep/eplfiles', body)
+			responseBytes = self.connection.do_request_json('POST', '/service/cep/eplfiles', body, useLocationHeaderPostResp=False)
+			response = json.loads(responseBytes)
+
+			if active and len(response['errors']) > 0:
+				self.delete(name)
+				errorStrings = []
+				for error in response['errors']:
+					errorStrings.append(f"[{os.path.basename(file)}:{error['line']}] {error['text']}")
+				raise ValueError('\n'.join(errorStrings))
 		except Exception as err:
-			raise OSError(f'Unable to deploy EPL app \'{name}\' using POST on {self.connection.base_url}/service/cep/eplfiles. {err}')
+			raise OSError(f'Unable to deploy EPL app \'{name}\' using POST on {self.connection.base_url}/service/cep/eplfiles.\n{err}')
 
 
 	def update(self, name, new_name=None, file=None, description=None, state=None):
@@ -100,13 +107,17 @@ class EPLApps:
 			raise OSError(f'Update failed. {err}')
 
 		body = {}
-		if new_name is not None: body['name'] = new_name
-		if description is not None: body['description'] = description
+		if new_name is not None:
+			body['name'] = new_name
+		if description is not None:
+			body['description'] = description
+
 		if state is not None:
 			if state.lower() in ('active', 'inactive'):
 				body['state'] = state.lower()
 			else:
 				raise ValueError(f'Update failed. Invalid argument, \'{state}\', specified for the --state option. State can either be \'active\' or \'inactive\'.')
+
 		if file is not None:
 			# Check file is valid:
 			if not os.path.exists(file):
@@ -119,9 +130,16 @@ class EPLApps:
 				raise IOError(f"Update failed. {err}")
 			body['contents'] = contents
 		try:
-			self.connection.do_request_json('PUT', f'/service/cep/eplfiles/{appId}', body)
+			responseBytes = self.connection.do_request_json('PUT', f'/service/cep/eplfiles/{appId}', body)
+			response = json.loads(responseBytes)
+
+			if len(response['errors']) > 0:
+				errorStrings = []
+				for error in response['errors']:
+					errorStrings.append(f"[{response['name']}:{error['line']}] {error['text']}")
+				raise ValueError('\n'.join(errorStrings))
 		except Exception as err:
-			raise ConnectionError(f'Unable to update EPL app \'{name}\' using PUT on {self.connection.base_url}/service/cep/eplfiles/{appId}. {err}')
+			raise ConnectionError(f'Unable to update EPL app \'{name}\' using PUT on {self.connection.base_url}/service/cep/eplfiles/{appId}.\n{err}')
 
 
 	def getAppId(self, appName: str, jsonEPLAppsList=None):

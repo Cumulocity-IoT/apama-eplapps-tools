@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.eplapps &#8212; EPL Apps Tools 10.6.6.2 documentation</title>
+    <title>apamax.eplapplications.eplapps &#8212; EPL Apps Tools 10.7.0.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -48,6 +48,7 @@
 <span class="c1"># either express or implied.</span>
 <span class="c1"># See the License for the specific language governing permissions and limitations under the License.</span>
 
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">urllib</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -72,6 +73,7 @@
 <span class="sd">		:param inactive: Boolean of whether the app should be &#39;active&#39; (inactive=False) or &#39;inactive&#39; (inactive=True) when it is deployed.</span>
 <span class="sd">		:param redeploy: Boolean of whether we are overwriting an existing EPL app.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">active</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">inactive</span>
 		<span class="c1"># Check EPL file specified is valid .mon file:</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
 			<span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Deploy failed. File </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
@@ -93,10 +95,7 @@
 				<span class="k">try</span><span class="p">:</span>
 					<span class="n">updateArgs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">file</span><span class="p">}</span>
 					<span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">updateArgs</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
-					<span class="k">if</span> <span class="n">inactive</span><span class="p">:</span> 
-						<span class="n">updateArgs</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;inactive&#39;</span>
-					<span class="k">else</span><span class="p">:</span> 
-						<span class="n">updateArgs</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;active&#39;</span>
+					<span class="n">updateArgs</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;active&#39;</span> <span class="k">if</span> <span class="n">active</span> <span class="k">else</span> <span class="s1">&#39;inactive&#39;</span>
 					<span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">updateArgs</span><span class="p">)</span>
 					<span class="k">return</span>
 				<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
@@ -111,12 +110,20 @@
 			<span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
 				<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
 				<span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-				<span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;inactive&#39;</span> <span class="k">if</span> <span class="n">inactive</span> <span class="k">else</span> <span class="s1">&#39;active&#39;</span><span class="p">),</span>
+				<span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="s1">&#39;active&#39;</span> <span class="k">if</span> <span class="n">active</span> <span class="k">else</span> <span class="s1">&#39;inactive&#39;</span><span class="p">,</span>
 				<span class="s1">&#39;contents&#39;</span><span class="p">:</span> <span class="n">file_contents</span>
 			<span class="p">}</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;/service/cep/eplfiles&#39;</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+			<span class="n">responseBytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;/service/cep/eplfiles&#39;</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">useLocationHeaderPostResp</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+			<span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">responseBytes</span><span class="p">)</span>
+
+			<span class="k">if</span> <span class="n">active</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+				<span class="n">errorStrings</span> <span class="o">=</span> <span class="p">[]</span>
+				<span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">]:</span>
+					<span class="n">errorStrings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">error</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">error</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errorStrings</span><span class="p">))</span>
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to deploy EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> using POST on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to deploy EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> using POST on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles.</span><span class="se">\n</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EPLApps.update"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.update">[docs]</a>	<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">new_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -139,13 +146,17 @@
 			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Update failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 		<span class="n">body</span> <span class="o">=</span> <span class="p">{}</span>
-		<span class="k">if</span> <span class="n">new_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">body</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_name</span>
-		<span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">body</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+		<span class="k">if</span> <span class="n">new_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">body</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_name</span>
+		<span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">body</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+
 		<span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">,</span> <span class="s1">&#39;inactive&#39;</span><span class="p">):</span>
 				<span class="n">body</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 			<span class="k">else</span><span class="p">:</span>
 				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Update failed. Invalid argument, </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1">, specified for the --state option. State can either be </span><span class="se">\&#39;</span><span class="s1">active</span><span class="se">\&#39;</span><span class="s1"> or </span><span class="se">\&#39;</span><span class="s1">inactive</span><span class="se">\&#39;</span><span class="s1">.&#39;</span><span class="p">)</span>
+
 		<span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="c1"># Check file is valid:</span>
 			<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
@@ -158,9 +169,16 @@
 				<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Update failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 			<span class="n">body</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contents</span>
 		<span class="k">try</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/service/cep/eplfiles/</span><span class="si">{</span><span class="n">appId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+			<span class="n">responseBytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/service/cep/eplfiles/</span><span class="si">{</span><span class="n">appId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+			<span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">responseBytes</span><span class="p">)</span>
+
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="n">errorStrings</span> <span class="o">=</span> <span class="p">[]</span>
+				<span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">]:</span>
+					<span class="n">errorStrings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">error</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">error</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errorStrings</span><span class="p">))</span>
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-			<span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to update EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> using PUT on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles/</span><span class="si">{</span><span class="n">appId</span><span class="si">}</span><span class="s1">. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+			<span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to update EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> using PUT on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles/</span><span class="si">{</span><span class="n">appId</span><span class="si">}</span><span class="s1">.</span><span class="se">\n</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EPLApps.getAppId"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.getAppId">[docs]</a>	<span class="k">def</span> <span class="nf">getAppId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">jsonEPLAppsList</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -241,7 +259,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
