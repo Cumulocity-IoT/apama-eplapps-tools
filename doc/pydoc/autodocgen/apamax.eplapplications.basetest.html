@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.6.6.1 documentation</title>
+    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.6.6.3 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="apamax.eplapplications.html" title="apamax.eplapplications"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.6.6.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.6.6.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for Apama EPL Apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li> 
       </ul>
@@ -118,6 +118,12 @@ If this tag is not defined (or the value is an empty string) then 
 </dd></dl>
 
 <dl class="py method">
+<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant">
+<code class="sig-name descname">prepareTenant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.prepareTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares the tenant for a test by deleting all devices created by previous tests, and clearing all active alarms.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains setup actions to be executed before the test is executed.</p>
@@ -159,6 +165,17 @@ using GET request to <a class="reference external" href="http://correlator.host:
 </dd></dl>
 
 <dl class="py method">
+<dt id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains setup actions to be executed before the test is executed.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">setup</span></code> method may be overridden by individual test classes, or (more commonly) in a custom <code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTest</span></code> 
+subclass that provides common functionality for multiple individual tests. If you override this method, be 
+sure to call <code class="docutils literal notranslate"><span class="pre">super(BASETEST_CLASS_HERE,</span> <span class="pre">self).setup()</span></code> to allow the setup commands from the base test to run.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">setup</span></code> throws an exception, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">cleanup</span></code> method will still be called, to allow for clean up resources 
+that were already allocated.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.validate">
 <code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks than no errors were logged to the correlator log file.</p>
@@ -179,6 +196,13 @@ using GET request to <a class="reference external" href="http://correlator.host:
 <code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs all the tests in the Input directory against the applications configured in the EPL_APPS 
 directory or with the EPLApps directive using EPL applications to run each test.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant">
+<code class="sig-name descname">prepareTenant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.prepareTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL Apps which have been uploaded by tests, and clearing all active alarms.</p>
+<p>This is done first so that there’s no possibility existing test apps raising alarms or creating devices</p>
 </dd></dl>
 
 <dl class="py method">
@@ -267,7 +291,7 @@ that were already allocated.</p>
         <li class="right" >
           <a href="apamax.eplapplications.html" title="apamax.eplapplications"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.6.6.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.6.6.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for Apama EPL Apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li> 
       </ul>

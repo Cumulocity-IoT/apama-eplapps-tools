@@ -11,9 +11,8 @@
 */
 
 /**
-* This application listens for all measurements of type "c8y_Temperature" with
-* fragment "c8y_Temperature" and series "T" and raises a "TemperatureHighAlarm"
-* if temperature value exceeds 100.0.
+* This application listens for measurements of type "myMeasurementType"
+* and raises a "ThresholdExceededAlarm" if measurement value exceeds 100.0.
 */
 
 using com.apama.cumulocity.Measurement;

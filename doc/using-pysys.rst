@@ -8,7 +8,7 @@ Introduction
 
 PySys is a testing framework that provides a way to test your applications. 
 
-See `PySys Documentation <https://pysys-test.github.io/pysys-test/>`_ for details on how the framework can be used and the facilities it contains. 
+See `PySys Documentation <https://pysys-test.github.io/pysys-test/>`_ for details on installation and how the framework can be used and the facilities it contains. 
 
 .. _test-in-cloud:
 
@@ -158,6 +158,11 @@ Run the test from within the samples directory by using the following command:
 
     pysys run TestLocalCorrelator
 
+Whenever you run a test using a local correlator, before the test is executed:
+
++ All active Alarms in your Cumulocity IoT tenant are cleared.
++ Any devices created by previous tests (which are identified by the device name having prefix "PYSYS\_") are deleted from your tenant.
+
 Advanced tests
 ==============
 
@@ -169,7 +174,7 @@ To run in Apama EPL Apps, your run.py should look something like this:
 
 .. code-block:: python
 
- from apamax.eplapplications import ApamaC8YBaseTest
+ from apamax.eplapplications.basetest import ApamaC8YBaseTest
  class PySysTest(ApamaC8YBaseTest):
 
 	def execute(self):
@@ -198,7 +203,7 @@ To run with a local correlator, it should look something like this:
 
 .. code-block:: python
 
- from apamax.eplapplications import ApamaC8YBaseTest
+ from apamax.eplapplications.basetest import ApamaC8YBaseTest
  class PySysTest(ApamaC8YBaseTest):
 
 	def execute(self):

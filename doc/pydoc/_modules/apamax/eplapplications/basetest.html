@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.6.6.1 documentation</title>
+    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.6.6.3 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -76,7 +76,10 @@
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">modelId</span> <span class="o">=</span> <span class="mi">0</span></div>
+		<span class="bp">self</span><span class="o">.</span><span class="n">modelId</span> <span class="o">=</span> <span class="mi">0</span> 
+		<span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span> <span class="o">=</span> <span class="s2">&quot;PYSYS_&quot;</span> 
+		<span class="c1"># connect to the platform</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="n">CumulocityPlatform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.createAppKey"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createAppKey">[docs]</a>	<span class="k">def</span> <span class="nf">createAppKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -112,12 +115,11 @@
 			<span class="kn">from</span> <span class="nn">apama.project</span> <span class="kn">import</span> <span class="n">ProjectHelper</span>
 		<span class="k">except</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="s2">&quot;Could not load Apama extensions. Try running from an Apama installation&quot;</span><span class="p">)</span>
-		<span class="c1">#create the project and add required bundles</span>
-
+		<span class="c1"># create the project and add required bundles</span>
 		<span class="n">apama_project</span> <span class="o">=</span> <span class="n">ProjectHelper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 		<span class="n">apama_project</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">existingProject</span><span class="p">)</span> 
 
-		<span class="c1">#need to have a version independent addition or this will need to be maintained.</span>
+		<span class="c1"># need to have a version independent addition or this will need to be maintained.</span>
 		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Automatic onApplicationInitialized&quot;</span><span class="p">)</span>
 		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Cumulocity IoT &gt; Cumulocity Client 10.5+&quot;</span><span class="p">)</span>
 		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Cumulocity IoT &gt; Event Definitions for Cumulocity 10.5+&quot;</span><span class="p">)</span>
@@ -192,12 +194,62 @@
 				<span class="c1"># Check file is a .mon file before appending</span>
 				<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">eplApp</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;.mon&#39;</span><span class="p">:</span>
 					<span class="n">eplAppsPaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_APPS</span><span class="p">,</span> <span class="n">eplApp</span><span class="p">))</span>
-		<span class="k">return</span> <span class="n">eplAppsPaths</span></div></div>
+		<span class="k">return</span> <span class="n">eplAppsPaths</span></div>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.prepareTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Prepares the tenant for a test by deleting all devices created by previous tests, and clearing all active alarms. </span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Preparing tenant to run test(s)&#39;</span><span class="p">)</span>
+		<span class="c1"># Clear all active alarms</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_clearActiveAlarms</span><span class="p">()</span>
+		<span class="c1"># Delete devices that were created by tests</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestDevices</span><span class="p">()</span></div>
+
+	<span class="k">def</span> <span class="nf">_clearActiveAlarms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Clears all active alarms as part of a pre-test tenant cleanup. </span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Clearing active alarms&quot;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;/alarm/alarms?status=ACTIVE&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;CLEARED&quot;</span><span class="p">})</span>
+
+	<span class="k">def</span> <span class="nf">_deleteTestDevices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Deletes all ManagedObjects that have name prefixed with &quot;PYSYS_&quot; and the &#39;c8y_isDevice&#39; param as part of pre-test tenant cleanup.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deleting old test devices&quot;</span><span class="p">)</span>
+		<span class="c1"># Retrieving test devices</span>
+		<span class="n">PAGE_SIZE</span> <span class="o">=</span> <span class="mi">100</span> 	<span class="c1"># By default, pageSize = 5 for querying to C8y</span>
+		<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span>
+			<span class="s2">&quot;/inventory/managedObjects&quot;</span> <span class="o">+</span>
+			<span class="sa">f</span><span class="s2">&quot;?query=has(c8y_IsDevice)+and+name+eq+&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span><span class="si">}</span><span class="s2">*&#39;&quot;</span> <span class="o">+</span>
+			<span class="sa">f</span><span class="s2">&quot;&amp;pageSize=</span><span class="si">{</span><span class="n">PAGE_SIZE</span><span class="si">}</span><span class="s2">&amp;currentPage=1&amp;withTotalPages=true&quot;</span><span class="p">)</span>
+		<span class="n">testDevices</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;managedObjects&#39;</span><span class="p">]</span>
+		<span class="c1"># Make sure we retrieve all pages from query</span>
+		<span class="n">TOTAL_PAGES</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;statistics&#39;</span><span class="p">][</span><span class="s1">&#39;totalPages&#39;</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">TOTAL_PAGES</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">currentPage</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">TOTAL_PAGES</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+				<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span>
+					<span class="s2">&quot;/inventory/managedObjects&quot;</span> <span class="o">+</span>
+					<span class="sa">f</span><span class="s2">&quot;?query=has(c8y_IsDevice)+and+name+eq+&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span><span class="si">}</span><span class="s2">*&#39;&quot;</span> <span class="o">+</span>
+					<span class="sa">f</span><span class="s2">&quot;&amp;pageSize=</span><span class="si">{</span><span class="n">PAGE_SIZE</span><span class="si">}</span><span class="s2">&amp;currentPage=</span><span class="si">{</span><span class="n">currentPage</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+				<span class="n">testDevices</span> <span class="o">=</span> <span class="n">testDevices</span> <span class="o">+</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;managedObjects&#39;</span><span class="p">]</span>
+		
+		<span class="c1"># Deleting test devices</span>
+		<span class="n">testDeviceIds</span> <span class="o">=</span> <span class="p">[</span><span class="n">device</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">testDevices</span><span class="p">]</span>
+		<span class="k">for</span> <span class="n">deviceId</span> <span class="ow">in</span> <span class="n">testDeviceIds</span><span class="p">:</span>
+			<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/inventory/managedObjects/</span><span class="si">{</span><span class="n">deviceId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest">[docs]</a><span class="k">class</span> <span class="nc">LocalCorrelatorSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">		Base test for running test with no run.py with local correlator connected to Cumulocity IoT.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LocalCorrelatorSimpleTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">LocalCorrelatorSimpleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+		<span class="c1"># Prepare the tenant for the test by performing a pre-test cleanup of artifacts from previous tests</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest.execute"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -210,7 +262,6 @@
 		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="p">):</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;EPL_TESTING_SDK is not valid (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="si">}</span><span class="s1">). Please set the EPL_TESTING_SDK environment variable.&#39;</span><span class="p">)</span>
 
-		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connecting to Cumulocity platform at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_SERVER_URL</span><span class="si">}</span><span class="s2"> as user </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_USERNAME</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 		<span class="kn">from</span> <span class="nn">apama.correlator</span> <span class="kn">import</span> <span class="n">CorrelatorHelper</span>
 		<span class="c1"># Create test project and add C8Y properties and EPL Apps </span>
 		<span class="n">project</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createProject</span><span class="p">(</span><span class="s2">&quot;test-project&quot;</span><span class="p">)</span>
@@ -298,38 +349,29 @@
 <span class="sd">	&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EPLAppsSimpleTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="nb">super</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">EPLAppsSimpleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+		<span class="c1"># connect to the platform</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">tests</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">apps</span> <span class="o">=</span> <span class="kc">None</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">addCleanupFunction</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">())</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span> <span class="o">=</span> <span class="s2">&quot;PYSYS_&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">EPL_TEST_APP_PREFIX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span> <span class="o">+</span> <span class="s2">&quot;TEST_&quot;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span>  <span class="c1"># Prefix test device names the same way as EPL apps</span>
-
 		<span class="c1"># Check EPL_TESTING_SDK env is set</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="p">):</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;EPL_TESTING_SDK is not valid (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="si">}</span><span class="s1">). Please set the EPL_TESTING_SDK environment variable.&#39;</span><span class="p">)</span>
-		<span class="c1"># connect to the platform</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="n">CumulocityPlatform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span> <span class="o">=</span> <span class="n">EPLApps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">())</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">()</span></div>
 
-		<span class="bp">self</span><span class="o">.</span><span class="n">_prepareTenant</span><span class="p">()</span></div>
-
-	<span class="k">def</span> <span class="nf">_prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EPLAppsSimpleTest.prepareTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Prepares the tenant for a test by deleting all EPL apps uploaded </span>
-<span class="sd">			and devices created by previous tests, and clearing all active alarms. </span>
+<span class="sd">			Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL Apps which have been uploaded by tests, and clearing all active alarms. </span>
+<span class="sd">			</span>
+<span class="sd">			This is done first so that there&#39;s no possibility existing test apps raising alarms or creating devices</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Preparing tenant to run test(s)&#39;</span><span class="p">)</span>
-		<span class="c1"># Delete all EPL Apps which have been uploaded by tests</span>
-		<span class="c1"># This is done first so that there&#39;s no possibility existing test apps raising alarms or creating devices</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestEPLApps</span><span class="p">()</span>
-		<span class="c1"># Clear all active alarms</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">_clearActiveAlarms</span><span class="p">()</span>
-		<span class="c1"># Delete devices that were created by tests</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestDevices</span><span class="p">()</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">EPLAppsSimpleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">()</span></div>
+
 
 	<span class="k">def</span> <span class="nf">_deleteTestEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -346,40 +388,6 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Deleting the following EPL apps: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">appsToDelete</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">appsToDelete</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-
-	<span class="k">def</span> <span class="nf">_clearActiveAlarms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Clears all active alarms as part of a pre-test tenant cleanup. </span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Clearing active alarms...&quot;</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;/alarm/alarms?status=ACTIVE&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;CLEARED&quot;</span><span class="p">})</span>
-
-	<span class="k">def</span> <span class="nf">_deleteTestDevices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Deletes all ManagedObjects that have name prefixed with &quot;PYSYS_&quot; and the &#39;c8y_isDevice&#39; param </span>
-<span class="sd">			as part of pre-test tenant cleanup.</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="c1"># Retrieving test devices</span>
-		<span class="n">PAGE_SIZE</span> <span class="o">=</span> <span class="mi">100</span> 	<span class="c1"># By default, pageSize = 5 for querying to C8y</span>
-		<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span>
-			<span class="s2">&quot;/inventory/managedObjects&quot;</span> <span class="o">+</span>
-			<span class="sa">f</span><span class="s2">&quot;?query=has(c8y_IsDevice)+and+name+eq+&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span><span class="si">}</span><span class="s2">*&#39;&quot;</span> <span class="o">+</span>
-			<span class="sa">f</span><span class="s2">&quot;&amp;pageSize=</span><span class="si">{</span><span class="n">PAGE_SIZE</span><span class="si">}</span><span class="s2">&amp;currentPage=1&amp;withTotalPages=true&quot;</span><span class="p">)</span>
-		<span class="n">testDevices</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;managedObjects&#39;</span><span class="p">]</span>
-		<span class="c1"># Make sure we retrieve all pages from query</span>
-		<span class="n">TOTAL_PAGES</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;statistics&#39;</span><span class="p">][</span><span class="s1">&#39;totalPages&#39;</span><span class="p">]</span>
-		<span class="k">if</span> <span class="n">TOTAL_PAGES</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-			<span class="k">for</span> <span class="n">currentPage</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">TOTAL_PAGES</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-				<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span>
-					<span class="s2">&quot;/inventory/managedObjects&quot;</span> <span class="o">+</span>
-					<span class="sa">f</span><span class="s2">&quot;?query=has(c8y_IsDevice)+and+name+eq+&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span><span class="si">}</span><span class="s2">*&#39;&quot;</span> <span class="o">+</span>
-					<span class="sa">f</span><span class="s2">&quot;&amp;pageSize=</span><span class="si">{</span><span class="n">PAGE_SIZE</span><span class="si">}</span><span class="s2">&amp;currentPage=</span><span class="si">{</span><span class="n">currentPage</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-				<span class="n">testDevices</span> <span class="o">=</span> <span class="n">testDevices</span> <span class="o">+</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;managedObjects&#39;</span><span class="p">]</span>
-		
-		<span class="c1"># Deleting test devices</span>
-		<span class="n">testDeviceIds</span> <span class="o">=</span> <span class="p">[</span><span class="n">device</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">testDevices</span><span class="p">]</span>
-		<span class="k">for</span> <span class="n">deviceId</span> <span class="ow">in</span> <span class="n">testDeviceIds</span><span class="p">:</span>
-			<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/inventory/managedObjects/</span><span class="si">{</span><span class="n">deviceId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EPLAppsSimpleTest.execute"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -470,7 +478,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

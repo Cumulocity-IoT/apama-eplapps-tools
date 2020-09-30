@@ -9,8 +9,6 @@ you to script uploads of your EPL apps and manage them for CI/CD use cases.
 It also provides extensions to the PySys test framework to allow you 
 to simply write tests for your EPL apps and to run them automatically.
 
-See <http://www.apamacommunity.com/docs> <https://cumulocity.com/guides/apama> for further docs.
-
 Disclaimer
 ----------
 These tools are provided as-is and without warranty or support. They do not 
@@ -38,6 +36,15 @@ You can read up on how to use PySys to test your EPL apps in `Using PySys to tes
 To find out how to write a test for your EPL apps please look at `Writing tests for EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc//testing-epl>`_.
 
 In order to view documentation on classes for PySys helpers for Apama EPL Apps please see: `PySys helpers <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/autodocgen/apamax.eplapplications.html#module-apamax.eplapplications>`_.
+
+See <http://www.apamacommunity.com/docs> <https://cumulocity.com/guides/apama> <https://pysys-test.github.io/pysys-test/> for further docs.
+
+System requirements
+-------------------
+This SDK requires an installation of Python 3.7+ and will run on either Windows or Linux.
+
+The EPL apps test framework requires you to have an installation of PySys. See `PySys Documentation <https://pysys-test.github.io/pysys-test/>`_ for details. If you want the option of running tests locally, you will also need an installation of Apama, which can be obtained from <http://www.apamacommunity.com/downloads/>. If you choose to install Apama, you may skip the manual installation of Python and PySys as both are shipped with Apama. 
+
 
 Repository structure
 ====================

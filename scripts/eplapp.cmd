@@ -13,19 +13,28 @@ rem See the License for the specific language governing permissions and limitati
 
 setlocal
 
-if not defined APAMA_HOME (goto UNDEFINED)
-
 set THIS_SCRIPT=%~$PATH:0
 call :getpath %THIS_SCRIPT
+if not defined APAMA_HOME (goto APAMA_HOME_UNDEFINED)
+
 set "PATH=%APAMA_HOME%\third_party\python;%PATH%"
 python.exe "%THIS_DIR%\eplapp.py" %* 
+goto CHECK
+
+:APAMA_HOME_UNDEFINED
+WHERE python >NUL 2>&1
+if errorlevel 1 (goto PY_UNDEFINED)
+python.exe "%THIS_DIR%\eplapp.py" %* 
+goto CHECK
+
+:PY_UNDEFINED
+echo Please add an appropriate Python 3 version to your path. Please refer to the System requirements section of the documentaion.
+goto END
+
+:CHECK
 if NOT %errorlevel% == 0 ( 
 	EXIT /B %errorlevel%
 )
-goto END
-
-:UNDEFINED
-echo Please run this script from an apama_env shell or Apama Command Prompt.
 goto END
 
 :END

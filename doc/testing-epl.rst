@@ -10,16 +10,16 @@ The behavior of most EPL apps usually consists of receiving data, sending measur
 
 + Creating device simulators.
 + Sending mock data to Cumulocity IoT.
-+ Listening for events that the EPL app should produce; and/or
++ Listening for events that the EPL app should produce.
 + Querying Cumulocity IoT for any objects created by the EPL app.
 
-This can all be done using additional EPL apps that run parallel to the EPL app that we wish to test for correctness. This document will demonstrate some of the common processes involved in writing these additional EPL apps that test your exising EPL apps, while outlining some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK.  
+This can all be done using additional EPL apps that run parallel to the EPL app that we wish to test for correctness. This document will demonstrate some of the common processes involved in writing these additional EPL apps that test your existing EPL apps, while outlining some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK. 
 
 Creating device simulators
 ===========================
 All measurements and alarms in Cumulocity IoT must be associated with a source. Devices in Cumulocity IoT are represented by managed objects, each of which has a unique identifier. When sending measurement or alarm events, the ``source`` field of these events must be set to a identifier of a managed object in Cumulocity IoT. Therefore, in order to send measurements from our test EPL app, it must create a ``ManagedObject`` device simulator to be the source of these measurements.
 
-If you are using the PySys framework to :ref:`run tests in the cloud <test-in-cloud>`, any devices created by your tests should be named with prefix "PYSYS\_", and have the ``c8y_IsDevice`` property. These indicators are what the framework uses to identify which devices should be deleted following a test. Note that deleting a device in Cumulocity IoT will also delete any alarms or measurements associated with that device so the cleanup from a test is done when another test is next run in the cloud again. 
+If you are using the PySys framework to :ref:`run tests in the cloud <test-in-cloud>`, any devices created by your tests should be named with prefix "PYSYS\_", and have the ``c8y_IsDevice`` property. These indicators are what the framework uses to identify which devices should be deleted following a test. Note that deleting a device in Cumulocity IoT will also delete any alarms or measurements associated with that device so the cleanup from a test is done when another test is next run. 
 
 To see how this can be done, have a look at the ``createNewDevice`` action below::
 
