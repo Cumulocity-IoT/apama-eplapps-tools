@@ -53,7 +53,7 @@
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>PySys is a testing framework that provides a way to test your applications.</p>
-<p>See <a class="reference external" href="https://pysys-test.github.io/pysys-test/">PySys Documentation</a> for details on how the framework can be used and the facilities it contains.</p>
+<p>See <a class="reference external" href="https://pysys-test.github.io/pysys-test/">PySys Documentation</a> for details on installation and how the framework can be used and the facilities it contains.</p>
 </div>
 <div class="section" id="testing-in-the-cumulocity-iot-cloud">
 <span id="test-in-cloud"></span><h2>Testing in the Cumulocity IoT cloud<a class="headerlink" href="#testing-in-the-cumulocity-iot-cloud" title="Permalink to this headline">¶</a></h2>
@@ -163,6 +163,11 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys run TestLocalCorrelator
 </pre></div>
 </div>
+<p>Whenever you run a test using a local correlator, before the test is executed:</p>
+<ul class="simple">
+<li><p>All active Alarms in your Cumulocity IoT tenant are cleared.</p></li>
+<li><p>Any devices created by previous tests (which are identified by the device name having prefix “PYSYS_”) are deleted from your tenant.</p></li>
+</ul>
 </div>
 </div>
 <div class="section" id="advanced-tests">

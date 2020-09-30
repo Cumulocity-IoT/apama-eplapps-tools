@@ -37,7 +37,10 @@ class ApamaC8YBaseTest(BaseTest):
 
 	def setup(self):
 		super(ApamaC8YBaseTest, self).setup()
-		self.modelId = 0
+		self.modelId = 0 
+		self.TEST_DEVICE_PREFIX = "PYSYS_" 
+		# connect to the platform
+		self.platform = CumulocityPlatform(self)
 
 	def createAppKey(self, url, username, password):
 		"""
@@ -73,12 +76,11 @@ class ApamaC8YBaseTest(BaseTest):
 			from apama.project import ProjectHelper
 		except:
 			self.abort(BLOCKED, "Could not load Apama extensions. Try running from an Apama installation")
-		#create the project and add required bundles
-
+		# create the project and add required bundles
 		apama_project = ProjectHelper(self, name)
 		apama_project.create(existingProject) 
 
-		#need to have a version independent addition or this will need to be maintained.
+		# need to have a version independent addition or this will need to be maintained.
 		apama_project.addBundle("Automatic onApplicationInitialized")
 		apama_project.addBundle("Cumulocity IoT > Cumulocity Client")
 		apama_project.addBundle("Cumulocity IoT > Event Definitions for Cumulocity")
@@ -159,10 +161,60 @@ class ApamaC8YBaseTest(BaseTest):
 					eplAppsPaths.append(os.path.join(self.project.EPL_APPS, eplApp))
 		return eplAppsPaths
 
+	def prepareTenant(self):
+		"""
+			Prepares the tenant for a test by deleting all devices created by previous tests, and clearing all active alarms. 
+		"""
+		self.log.info('Preparing tenant to run test(s)')
+		# Clear all active alarms
+		self._clearActiveAlarms()
+		# Delete devices that were created by tests
+		self._deleteTestDevices()
+
+	def _clearActiveAlarms(self):
+		"""
+			Clears all active alarms as part of a pre-test tenant cleanup. 
+		"""
+		self.log.info("Clearing active alarms")
+		self.platform.getC8YConnection().do_request_json('PUT', '/alarm/alarms?status=ACTIVE', {"status": "CLEARED"})
+
+	def _deleteTestDevices(self):
+		"""
+			Deletes all ManagedObjects that have name prefixed with "PYSYS_" and the 'c8y_isDevice' param as part of pre-test tenant cleanup.
+		"""
+		self.log.info("Deleting old test devices")
+		# Retrieving test devices
+		PAGE_SIZE = 100 	# By default, pageSize = 5 for querying to C8y
+		resp = self.platform.getC8YConnection().do_get(
+			"/inventory/managedObjects" +
+			f"?query=has(c8y_IsDevice)+and+name+eq+'{self.TEST_DEVICE_PREFIX}*'" +
+			f"&pageSize={PAGE_SIZE}&currentPage=1&withTotalPages=true")
+		testDevices = resp['managedObjects']
+		# Make sure we retrieve all pages from query
+		TOTAL_PAGES = resp['statistics']['totalPages']
+		if TOTAL_PAGES > 1:
+			for currentPage in range(2, TOTAL_PAGES + 1):
+				resp = self.platform.getC8YConnection().do_get(
+					"/inventory/managedObjects" +
+					f"?query=has(c8y_IsDevice)+and+name+eq+'{self.TEST_DEVICE_PREFIX}*'" +
+					f"&pageSize={PAGE_SIZE}&currentPage={currentPage}")
+				testDevices = testDevices + resp['managedObjects']
+		
+		# Deleting test devices
+		testDeviceIds = [device['id'] for device in testDevices]
+		for deviceId in testDeviceIds:
+			resp = self.platform.getC8YConnection().request('DELETE', f'/inventory/managedObjects/{deviceId}')
+
+
 class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 	""" 
 		Base test for running test with no run.py with local correlator connected to Cumulocity IoT.
 	"""
+
+	def setup(self):
+		super(LocalCorrelatorSimpleTest, self).setup()
+		# Prepare the tenant for the test by performing a pre-test cleanup of artifacts from previous tests
+		self.prepareTenant()
 
 	def execute(self):
 		"""
@@ -175,7 +227,6 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 		if not os.path.isdir(self.project.EPL_TESTING_SDK):
 			self.abort(BLOCKED, f'EPL_TESTING_SDK is not valid ({self.project.EPL_TESTING_SDK}). Please set the EPL_TESTING_SDK environment variable.')
 
-		self.log.info(f"Connecting to Cumulocity platform at {self.project.CUMULOCITY_SERVER_URL} as user {self.project.CUMULOCITY_USERNAME}")
 		from apama.correlator import CorrelatorHelper
 		# Create test project and add C8Y properties and EPL Apps 
 		project = self.createProject("test-project")
@@ -262,38 +313,29 @@ class EPLAppsSimpleTest(ApamaC8YBaseTest):
 	"""
 
 	def setup(self):
-		super(ApamaC8YBaseTest, self).setup()
+		super(EPLAppsSimpleTest, self).setup()
+		# connect to the platform
 		self.tests = None
 		self.apps = None
-		self.platform = None
 		self.eplapps = None
 		self.addCleanupFunction(lambda: self.shutdown())
-		self.EPL_APP_PREFIX = "PYSYS_"
+		self.EPL_APP_PREFIX = self.TEST_DEVICE_PREFIX
 		self.EPL_TEST_APP_PREFIX = self.EPL_APP_PREFIX + "TEST_"
-		self.TEST_DEVICE_PREFIX = self.EPL_APP_PREFIX  # Prefix test device names the same way as EPL apps
-
 		# Check EPL_TESTING_SDK env is set
 		if not os.path.isdir(self.project.EPL_TESTING_SDK):
 			self.abort(BLOCKED, f'EPL_TESTING_SDK is not valid ({self.project.EPL_TESTING_SDK}). Please set the EPL_TESTING_SDK environment variable.')
-		# connect to the platform
-		self.platform = CumulocityPlatform(self)
 		self.eplapps = EPLApps(self.platform.getC8YConnection())
+		self.prepareTenant()
 
-		self._prepareTenant()
-
-	def _prepareTenant(self):
+	def prepareTenant(self):
 		"""
-			Prepares the tenant for a test by deleting all EPL apps uploaded 
-			and devices created by previous tests, and clearing all active alarms. 
+			Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL Apps which have been uploaded by tests, and clearing all active alarms. 
+			
+			This is done first so that there's no possibility existing test apps raising alarms or creating devices
 		"""
-		self.log.info('Preparing tenant to run test(s)')
-		# Delete all EPL Apps which have been uploaded by tests
-		# This is done first so that there's no possibility existing test apps raising alarms or creating devices
 		self._deleteTestEPLApps()
-		# Clear all active alarms
-		self._clearActiveAlarms()
-		# Delete devices that were created by tests
-		self._deleteTestDevices()
+		super(EPLAppsSimpleTest, self).prepareTenant()
+
 
 	def _deleteTestEPLApps(self):
 		"""
@@ -310,40 +352,6 @@ class EPLAppsSimpleTest(ApamaC8YBaseTest):
 			self.log.info(f'Deleting the following EPL apps: {str(appsToDelete)}')
 		for name in appsToDelete:
 			self.eplapps.delete(name)
-
-	def _clearActiveAlarms(self):
-		"""
-			Clears all active alarms as part of a pre-test tenant cleanup. 
-		"""
-		self.log.info("Clearing active alarms...")
-		self.platform.getC8YConnection().do_request_json('PUT', '/alarm/alarms?status=ACTIVE', {"status": "CLEARED"})
-
-	def _deleteTestDevices(self):
-		"""
-			Deletes all ManagedObjects that have name prefixed with "PYSYS_" and the 'c8y_isDevice' param 
-			as part of pre-test tenant cleanup.
-		"""
-		# Retrieving test devices
-		PAGE_SIZE = 100 	# By default, pageSize = 5 for querying to C8y
-		resp = self.platform.getC8YConnection().do_get(
-			"/inventory/managedObjects" +
-			f"?query=has(c8y_IsDevice)+and+name+eq+'{self.TEST_DEVICE_PREFIX}*'" +
-			f"&pageSize={PAGE_SIZE}&currentPage=1&withTotalPages=true")
-		testDevices = resp['managedObjects']
-		# Make sure we retrieve all pages from query
-		TOTAL_PAGES = resp['statistics']['totalPages']
-		if TOTAL_PAGES > 1:
-			for currentPage in range(2, TOTAL_PAGES + 1):
-				resp = self.platform.getC8YConnection().do_get(
-					"/inventory/managedObjects" +
-					f"?query=has(c8y_IsDevice)+and+name+eq+'{self.TEST_DEVICE_PREFIX}*'" +
-					f"&pageSize={PAGE_SIZE}&currentPage={currentPage}")
-				testDevices = testDevices + resp['managedObjects']
-		
-		# Deleting test devices
-		testDeviceIds = [device['id'] for device in testDevices]
-		for deviceId in testDeviceIds:
-			resp = self.platform.getC8YConnection().request('DELETE', f'/inventory/managedObjects/{deviceId}')
 
 	def execute(self):
 		"""
