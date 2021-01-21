@@ -209,6 +209,54 @@ class EPLAppsCLI:
 				],
 				function=EPLApps.update,
 				successMessage='EPL app was successfully updated.'
+			),
+			'batchdeploy': EPLAppsCLI.Command(
+				name='batchdeploy',
+				description='Deploys a set of EPL (.mon) files listed in a csv to Apama EPL Apps in Cumulocity IoT',
+				usages=[
+					'eplapp.py batchdeploy <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--csvfile CSVFILE> <--basepath BASEPATH> [option]*',
+					'eplapp.py batchdeploy [--help]'
+					'eplapp.py batchdeploy [--version]'
+				],
+				mandatoryOptionsMessage='Mandatory options for deploying a set of file to Apama EPL Apps:',
+				mandatoryOptions=[
+					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
+					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
+					['-p', '--password', 'PASSWORD', 'your Cumulocity IoT password'],
+					['-f', '--csvfile', 'CSVFILE',
+						'the filepath to the csv file listing all the EPLApps to be deployed.'
+						'The csv rows must be of format [eplappname, deploymentstatus] and should not contain a header. '
+						'The deployment status can be either NOT_DEPLOYED or DEPLOYED'],
+					['-d', '--basepath', 'BASEPATH', 'the folder containing all the monitor files to be deployed.'
+													 'The files must be named [eplappname].mon for each entry in the csv file.']
+				],
+				optionalOptionsMessage='Optional options for deploying a file to Apama EPL Apps:',
+				optionalOptions=[
+					['-r', '--redeploy', 'REDEPLOY', 'overwrite the contents of an existing EPL app']
+				],
+				function=EPLApps.batchdeploy,
+				arguments={'redeploy': True},  # Only need to supply default option arguments
+				successMessage='EPL apps command executed successfully.'
+			),
+			'batchdelete': EPLAppsCLI.Command(
+				name='batchdelete', description='Deletes all existing EPL apps given in a CSV file from Cumulocity IoT',
+				usages=[
+					'eplapp.py batchdelete <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--csvfile CSVFILE> ',
+					'eplapp.py batchdelete [--help]'
+					'eplapp.py batchdelete [--version]'
+				],
+				mandatoryOptionsMessage='Mandatory options for batch deleting EPL apps:',
+				mandatoryOptions=[
+					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
+					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
+					['-p', '--password', 'PASSWORD', 'your Cumulocity IoT password'],
+					['-f', '--csvfile', 'CSVFILE',
+						'the filepath to the csv file listing all the EPLApps to be deployed.'
+						'The csv rows must be of format [eplappname, deploymentstatus] and should not contain a header. '
+						'The deployment status can be either NOT_DEPLOYED or DEPLOYED']
+				],
+				function=EPLApps.batchdelete,
+				successMessage='EPL apps command executed successfully.'
 			)
 		}
 

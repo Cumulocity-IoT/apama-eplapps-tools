@@ -11,7 +11,7 @@
 
 import json
 import os
-import urllib
+import csv
 from pathlib import Path
 
 
@@ -86,6 +86,31 @@ class EPLApps:
 		except Exception as err:
 			raise OSError(f'Unable to deploy EPL app \'{name}\' using POST on {self.connection.base_url}/service/cep/eplfiles.\n{err}')
 
+	def batchdeploy(self, csvfile, basepath, redeploy=True):
+		"""
+		Deploys a whole set of EPL monitor files as EPL Apps. The EPL Apps to be deployed need to be listed in a CSV file along their
+		deployment status (NOT_DEPLOYED or DEPLOYED)
+
+		:param csvfile the path to the CSV file. Each row needs to be of format [EPLName, DeploymentStatus]
+		:param basepath the folder containing the monitor files
+		:param redeploy redeploy any existing EPL Apps with the new version. If set to false (default: True) any already existing EPL App will be skipped
+		"""
+		allrulesfile = csvfile
+		file = open(file=allrulesfile, newline='')
+		reader = csv.reader(file)
+
+		for i, row in enumerate(reader):
+			if len(row) < 2:
+				print(f'Wrong format of row {i}: {row}')
+				continue
+			eplappname = row[0]
+			status = row[1]
+			try:
+				self.deploy(file=os.path.join(basepath, eplappname + ".mon"), name=eplappname,
+							inactive=(status != "NOT_DEPLOYED"), redeploy=redeploy)
+				print(f'Deployed {eplappname}')
+			except Exception as err:
+				print(err)
 
 	def update(self, name, new_name=None, file=None, description=None, state=None):
 		"""
@@ -182,3 +207,23 @@ class EPLApps:
 			self.connection.request('DELETE', f'/service/cep/eplfiles/{appId}')
 		except Exception as err:
 			raise OSError(f'Unable to delete EPL app \'{name}\' using DELETE on {self.connection.base_url}/service/cep/eplfiles. {err}')
+
+	def batchdelete(self, csvfile):
+		"""
+		Deletes all EPL apps from Cumulocity given in the file.
+
+		:param csvfile: The path of the CSV file containing the EPL app names to be deleted.
+		"""
+		allrulesfile = csvfile
+		file = open(file=allrulesfile, newline='')
+		reader = csv.reader(file)
+
+		rules = self.getEPLApps()
+		deployedNames = {}
+		for app in rules:
+			deployedNames[app['name']] = app['id']
+		for row in reader:
+			eplappname = row[0]
+			if eplappname in deployedNames:
+				self.delete(eplappname)
+				print(f"Deleted {eplappname}")

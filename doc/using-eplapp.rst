@@ -15,6 +15,8 @@ The commands available are:
 + ``deploy`` - Uploads a local .mon file to EPL apps in Cumulocity IoT.
 + ``delete`` - Deletes an EPL app from Cumulocity IoT.
 + ``update`` - Updates one or more of the fields of an existing EPL app in Cumulocity IoT.
++ ``batchdeploy`` - Uploads or updates a set of local .mon files to EPL apps in Cumulocity IoT.
++ ``batchdelete`` - Deletes a set of existing EPL apps in Cumulocity IoT.
 
 All of these commands have the following *mandatory* options for connecting to your Cumulocity IoT tenant: 
 
@@ -93,3 +95,52 @@ An example of an ``update`` command where we are changing *all* of the EPL app f
 .. code-block:: shell
 
     eplapp.py update -c <url> -u <username> -p <password> -n <old_name> -w <new_name> -f <monFile> -d "new description" -s active 
+
+Batch deploying to Apama EPL Apps in Cumulocity IoT
+---------------------------------------------------
+
+The ``batchdeploy`` command has an additional *mandatory* option:
+
++ ``-f | --csvfile <file>`` - The path to the CSV file that lists the EPL Apps you wish to upload to Cumulocity IoT as an EPL app and their deployment status (either NOT_DEPLOYED ot DEPLOYED)
++ ``-d | --basepath <path>`` - The path to the directory containing the monitor files you wish to upload to Cumulocity IoT as an EPL app.
+
+The CSV file content should not have a header and e.g. look like this:
+
+::
+
+ EplAppName1,DEPLOYED
+ EplAppName2,NOT_DEPLOYED
+
+The command assumes that the monitor files in the basepath follow the scheme <eplappname>.mon
+
+Thus, the minimal command for deploying to Apama EPL Apps would look like the following:
+
+.. code-block:: shell
+
+    eplapp.py batchdeploy -c <url> -u <username> -p <password> -f <csvfile> -d <directory>
+
+This would upload an active EPL app with no description and the same name as the .mon file specified.
+
+The ``batchdeploy`` command also has the following *optional* option:
+
++ ``-r | --redeploy`` - Overwrites the contents of an existing EPL app of name specified by the ``--name`` option.
+
+Batch deleting EPL apps
+-----------------------
+
+The ``batchdelete`` command has an additional *mandatory* option:
+
++ ``-f | --csvfile <file>`` -  The path to the CSV file that lists the EPL Apps you wish to delete from Cumulocity IoT
+
+The batch delete only requires the name of the EPL Apps, thus it is actually sufficient to put one EPL App name per line
+
+::
+
+ EplAppName1
+ EplAppName2
+
+For example:
+
+.. code-block:: shell
+
+    eplapp.py delete -c <url> -u <username> -p <password> -f <filename>
