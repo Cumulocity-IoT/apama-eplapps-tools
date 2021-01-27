@@ -107,7 +107,7 @@ class EPLApps:
 			status = row[1]
 			try:
 				self.deploy(file=os.path.join(basepath, eplappname + ".mon"), name=eplappname,
-							inactive=(status != "NOT_DEPLOYED"), redeploy=redeploy)
+							inactive=(status != "DEPLOYED"), redeploy=redeploy)
 				print(f'Deployed {eplappname}')
 			except Exception as err:
 				print(err)
