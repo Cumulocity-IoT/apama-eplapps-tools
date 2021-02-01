@@ -12,6 +12,7 @@
 import json
 import os
 import urllib
+import codecs
 from pathlib import Path
 
 
@@ -64,7 +65,7 @@ class EPLApps:
 			else:
 				raise FileExistsError(f'Deploy failed. \'{name}\' already exists in Apama EPL Apps.')
 		try:
-			file_contents = Path(file).read_text()
+			file_contents = self.__read_text_withBOM(file)
 		except Exception as err:
 			raise IOError(f"Deploy failed. {err}")
 		try:
@@ -125,7 +126,7 @@ class EPLApps:
 			elif os.path.splitext(file)[1] != '.mon':
 				raise TypeError(f'Update failed. \'{file}\' is not a valid .mon file.')
 			try:
-				contents = Path(file).read_text()
+				contents = self.__read_text_withBOM(file)
 			except Exception as err:
 				raise IOError(f"Update failed. {err}")
 			body['contents'] = contents
@@ -182,3 +183,16 @@ class EPLApps:
 			self.connection.request('DELETE', f'/service/cep/eplfiles/{appId}')
 		except Exception as err:
 			raise OSError(f'Unable to delete EPL app \'{name}\' using DELETE on {self.connection.base_url}/service/cep/eplfiles. {err}')
+	
+	def __read_text_withBOM(self, path):
+		"""
+		Thin wrapper for Path(<path>).read_text() . It assumes the file is UTF-8 encoded if it starts with the UTF-8 BOM, despite the current locale.
+		This method is used internally to make the tool behave consistently with many text editors and IDEs on Windows, which also honour the UTF-8 BOM.
+		Such a file is rendered correctly, therefore it should also be deployed correctly, else user expectations are confounded.
+
+		:param path: The path to extract the text from
+		"""
+		if Path(path).read_bytes().startswith(codecs.BOM_UTF8):
+			return Path(path).read_text(encoding="utf8")
+		else:
+			return Path(path).read_text()

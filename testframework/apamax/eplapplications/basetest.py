@@ -82,9 +82,9 @@ class ApamaC8YBaseTest(BaseTest):
 
 		# need to have a version independent addition or this will need to be maintained.
 		apama_project.addBundle("Automatic onApplicationInitialized")
-		apama_project.addBundle("Cumulocity IoT > Cumulocity Client")
-		apama_project.addBundle("Cumulocity IoT > Event Definitions for Cumulocity")
-		apama_project.addBundle("Cumulocity IoT > Utilities for Cumulocity")
+		apama_project.addBundle("Cumulocity IoT > Cumulocity Client 10.5+")
+		apama_project.addBundle("Cumulocity IoT > Event Definitions for Cumulocity 10.5+")
+		apama_project.addBundle("Cumulocity IoT > Utilities for Cumulocity 10.5+")
 		apama_project.addBundle("Correlator Management")
 		apama_project.addBundle("JSON Support")
 		apama_project.addBundle("Time Format")
@@ -122,7 +122,7 @@ class ApamaC8YBaseTest(BaseTest):
 				paramImpl[prop] = params[prop]
 		
 		propFileName = os.path.join(self.output, "CumulocityIoT.properties")
-		destFileName = "/connectivity/CumulocityClient/CumulocityIoT.properties"
+		destFileName = "/connectivity/CumulocityClient10.5+/CumulocityIoT.properties"
 		#create a local props file 
 		with open(propFileName, "w", encoding='utf8') as propfile:
 			propfile.write('\ufeff\n')
