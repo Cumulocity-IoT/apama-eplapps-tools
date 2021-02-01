@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.eplapps &#8212; EPL Apps Tools 10.6.6.3 documentation</title>
+    <title>apamax.eplapplications.eplapps &#8212; EPL Apps Tools 10.6.6.22 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.22 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -50,6 +50,7 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 
@@ -104,7 +105,7 @@
 			<span class="k">else</span><span class="p">:</span>
 				<span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Deploy failed. </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> already exists in Apama EPL Apps.&#39;</span><span class="p">)</span>
 		<span class="k">try</span><span class="p">:</span>
-			<span class="n">file_contents</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+			<span class="n">file_contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__read_text_withBOM</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Deploy failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 		<span class="k">try</span><span class="p">:</span>
@@ -153,7 +154,7 @@
 			<span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;.mon&#39;</span><span class="p">:</span>
 				<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Update failed. </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> is not a valid .mon file.&#39;</span><span class="p">)</span>
 			<span class="k">try</span><span class="p">:</span>
-				<span class="n">contents</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+				<span class="n">contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__read_text_withBOM</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 			<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 				<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Update failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 			<span class="n">body</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contents</span>
@@ -202,7 +203,20 @@
 		<span class="k">try</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/service/cep/eplfiles/</span><span class="si">{</span><span class="n">appId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to delete EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> using DELETE on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div></div>
+			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to delete EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> using DELETE on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+	
+	<span class="k">def</span> <span class="nf">__read_text_withBOM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Thin wrapper for Path(&lt;path&gt;).read_text() . It assumes the file is UTF-8 encoded if it starts with the UTF-8 BOM, despite the current locale.</span>
+<span class="sd">		This method is used internally to make the tool behave consistently with many text editors and IDEs on Windows, which also honour the UTF-8 BOM.</span>
+<span class="sd">		Such a file is rendered correctly, therefore it should also be deployed correctly, else user expectations are confounded.</span>
+
+<span class="sd">		:param path: The path to extract the text from</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">BOM_UTF8</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span></div>
 </pre></div>
 
           </div>
@@ -241,12 +255,12 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.6.6.22 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020 Software AG.
+        &#169; Copyright 2021 Software AG.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
     </div>
   </body>
