@@ -149,6 +149,8 @@ monitor AlarmOnMeasurementThresholdTest {
 			// Cause test to fail early, rather than wait for timeout
 			die; 
 		}
+
+		log "Sending measurement with value " + value.toString() at INFO;
 		return reqId;
 	}
 }

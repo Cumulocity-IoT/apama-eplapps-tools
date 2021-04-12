@@ -63,7 +63,7 @@ monitor AlarmOnMeasurementThresholdTest {
 
 			// Define how long we wait for alarm depending on whether one is expected
 			float alarmWaitTimeout := NOT_EXPECTING_ALARM_WAIT_TIMEOUT;
-			if (expectingAlarm){
+			if expectingAlarm {
 				alarmWaitTimeout := EXPECTING_ALARM_WAIT_TIMEOUT;
 			}
 
@@ -149,6 +149,8 @@ monitor AlarmOnMeasurementThresholdTest {
 			// Cause test to fail early, rather than wait for timeout
 			die; 
 		}
+
+		log "Sending measurement with value " + value.toString() at INFO;
 		return reqId;
 	}
 }

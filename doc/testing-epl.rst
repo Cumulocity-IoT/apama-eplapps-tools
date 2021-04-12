@@ -83,6 +83,8 @@ If your EPL app listens for measurements (or any other kind of event), your test
 			// Cause test to fail early, rather than wait for timeout
 			die; 
 		}
+
+		log "Sending measurement with value " + value.toString() at INFO;
 		return reqId;
 	}
 
