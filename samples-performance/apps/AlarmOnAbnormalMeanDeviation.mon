@@ -1,0 +1,192 @@
+﻿/*
+ Copyright (c) 2021 Software AG, Darmstadt, Germany and/or its licensors
+
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ file except in compliance with the License. You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the
+ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.
+*/
+
+using com.apama.cumulocity.Measurement;
+using com.apama.cumulocity.Alarm;
+using com.apama.cumulocity.FindAlarm;
+using com.apama.cumulocity.FindAlarmResponse;
+using com.apama.cumulocity.FindAlarmResponseAck;
+using com.apama.cumulocity.ObjectCommitted;
+using com.apama.cumulocity.ObjectCommitFailed;
+using com.apama.aggregates.avg;
+
+/**
+* This application listens for all measurements of specified type with
+* specified fragment and series and raises an alarm if mean value
+* for a device deviates beyond the specified range compared to the mean of all devices.
+*
+* Note: The mean of a device is only compared against the mean of all devices only when measurements
+* for that device are received.
+*
+* Note: This is not a production-ready app, only a basic workload for performance and sizing tests. It 
+* does not support various features which may be needed for a production-ready application, for example,
+* updating already raised alarms, finding existing alarms to clear at the startup, 
+* recovery of means after a restart, calculation of mean by handling measurements sent during restart, etc.
+*/
+monitor AlarmOnMeanOutlier {
+	/** The measurement type to listen for. */
+	constant string MEASUREMENT_TYPE := "@MEASUREMENT_TYPE@";
+
+	/** The measurement fragment to listen for. */
+	constant string MEASUREMENT_FRAGMENT := "@MEASUREMENT_FRAGMENT@";
+
+	/** The measurement series to listen for. */
+	constant string MEASUREMENT_SERIES := "@MEASUREMENT_SERIES@";
+
+	/** The type of alarm to raise when a device mean is outside the specified range compared to the mean of all devices.*/
+	constant string ALARM_TYPE := "@ALARM_TYPE@";
+
+	/** The severity of the alarm to raise. */
+	constant string ALARM_SEVERITY := "@ALARM_SEVERITY@";
+	
+	/** Duration of the window for calculating moving average (mean). */
+	float WINDOW_DURATION_SECS := float.parse("@WINDOW_DURATION_SECS@");
+	
+	/** 
+	 * The range of deviation allowed for a device mean compared to the mean of all devices. If the 
+	 * mean of a device deviates beyond this range, then an alarm is raised.
+	 */
+	constant float DEVIATION_RANGE_PERCENTAGE := 1.0;
+	
+	/** Mean of all devices. */
+	float allDevicesMean;
+
+	/** Mean per device. */
+	dictionary<string/*deviceId*/, float/*mean*/> perDeviceMean;
+	
+	/** The ID of any raised alarm for a device. If an alarm creation is in progress, then the alarm ID will be an empty string.*/
+	dictionary<string /*deviceId*/, string /*alarmId*/> raisedAlarms;
+	
+	/** Event for extracting mean per device from EPL stream. */
+	event MovingMean {
+		/** The device ID. */
+		string source;
+		/** The mean value. */
+		float mean;
+	}
+	
+	action onload() {
+		// Subscribe to Measurement.SUBSCRIBE_CHANNEL to receive all measurements
+		monitor.subscribe(Measurement.SUBSCRIBE_CHANNEL);
+	
+		// Calculate mean of all devices.
+		from m in all Measurement(type=MEASUREMENT_TYPE) within WINDOW_DURATION_SECS
+			where m.measurements.hasKey(MEASUREMENT_FRAGMENT) and m.measurements[MEASUREMENT_FRAGMENT].hasKey(MEASUREMENT_SERIES)
+			select avg(m.measurements[MEASUREMENT_FRAGMENT][MEASUREMENT_SERIES].value) as movingMean
+		{
+			allDevicesMean := movingMean;
+		}
+		
+		// Calculate mean per device
+		from m in all Measurement(type=MEASUREMENT_TYPE)
+			partition by m.source within WINDOW_DURATION_SECS
+			where m.measurements.hasKey(MEASUREMENT_FRAGMENT) and m.measurements[MEASUREMENT_FRAGMENT].hasKey(MEASUREMENT_SERIES)
+			group by m.source
+			select MovingMean(m.source, avg(m.measurements[MEASUREMENT_FRAGMENT][MEASUREMENT_SERIES].value)) as movingMean
+		{
+			perDeviceMean[movingMean.source] := movingMean.mean;
+			// If the mean is within range then clear the alarm if previously raised.
+			// If the mean is not within the range then raise an alarm if not already raised.
+			if checkWithinRange(movingMean.source) {
+				clearAlarm(movingMean.source);
+			} else {
+				raiseAlarm(movingMean.source);
+			}
+		}
+	}
+	
+	/**
+	 * Check if the mean of the device is within the configured range compared to the average of all devices.
+	 * @param source The source ID.
+	 * @returns True if average of the device is within the range.
+	 */
+	action checkWithinRange(string source) returns boolean {
+		float deviceMean := perDeviceMean.getOr(source, allDevicesMean);
+		float diff := (allDevicesMean - deviceMean).abs();
+		return diff * 100.0 / allDevicesMean <= DEVIATION_RANGE_PERCENTAGE;
+	}
+	
+	/** 
+	 * Raise an alarm for the specified device if not already raised.
+	 * 
+	 * @param source The ID of the device.
+	 */
+	action raiseAlarm(string source) {
+		// nothing to do if already raised
+		if raisedAlarms.hasKey(source) { return; }
+		
+		raisedAlarms[source] := "";
+		float deviceMean := perDeviceMean.getOr(source, allDevicesMean);
+		float percent := deviceMean * 100.0 / allDevicesMean;
+		sendAlarmCreateRequest(source, "The mean of the device " + deviceMean.toString() + " is " + percent.toString() + "% of mean of all devices.");
+	}
+	
+	/**
+	 * Clear a previously raised alarm by the app. If alarm ID is not yet available then add it to the pending list.
+	 * @param source The ID of the device.
+	 */
+	action clearAlarm(string source) {
+		if raisedAlarms.hasKey(source) {
+			string alarmId := raisedAlarms[source];
+			if alarmId != "" {
+				send newAlarmObject(raisedAlarms[source], source, "CLEARED", "The mean of the device is within the allowed range now.") to Alarm.SEND_CHANNEL;
+				raisedAlarms.remove(source);
+			} else {
+				// Alarm creation is in progress. The alarm will be cleared when the alarm ID is received and the device's mean is within the range.
+			}
+		}
+		// else no alarm was raised previously so nothing to clear
+	}
+	
+	/**
+	 * Send a request to create an alarm.
+	 * @param source The ID of the device.
+	 * @param msg The text for the alarm message.
+	 */
+	action sendAlarmCreateRequest(string source, string msg) {
+		Alarm alarm := newAlarmObject("", source, "ACTIVE", msg);
+		integer reqId := com.apama.cumulocity.Util.generateReqId();
+
+		on ObjectCommitted(reqId=reqId) as commit and not ObjectCommitFailed(reqId=reqId) {
+			raisedAlarms[source] := commit.id;
+			if checkWithinRange(source) {
+				clearAlarm(source);
+			}
+		}
+
+		on ObjectCommitFailed(reqId=reqId) as failure and not ObjectCommitted(reqId=reqId) {
+			//something bad happened, perhaps the source was deleted
+			log "Failed to create alarm " + alarm.toString() + ", statusCode : " + failure.statusCode.toString() + ", error : " + failure.body.valueToString() at ERROR;
+		}
+
+		send alarm.withResponse(reqId, new dictionary<string, string>) to Alarm.SEND_CHANNEL;
+	}
+
+	/**
+	 * Send an alarm to the specified device to either create a new alarm or update an existing alarm.
+	 * @param id The ID of the alarm to update. Should be empty string to create a new alarm.
+	 * @param source The ID of the device.
+	 * @param status The alarm status.
+	 * @param msg The alarm message.
+	 */
+	action newAlarmObject(string id, string source, string status, string msg) returns Alarm {
+		Alarm alarm := new Alarm;
+		alarm.id := id;
+		alarm.status := status;
+		alarm.severity := ALARM_SEVERITY;
+		alarm.source := source;
+		alarm.text := msg;
+		alarm.type := ALARM_TYPE;
+		alarm.time := currentTime;
+		return alarm;
+	}
+}

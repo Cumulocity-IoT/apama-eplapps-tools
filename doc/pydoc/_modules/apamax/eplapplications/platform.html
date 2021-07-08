@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools 10.7.0.24 documentation</title>
+    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools 10.7.0.26 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.26 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -55,7 +55,7 @@
 
 <div class="viewcode-block" id="CumulocityPlatform"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform">[docs]</a><span class="k">class</span> <span class="nc">CumulocityPlatform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Class to create a connection to the Cumulocity platform configured in pysysproject.xml</span>
+<span class="sd">	Class to create a connection to the Cumulocity IoT platform configured in pysysproject.xml</span>
 <span class="sd">	and spool the logs from the platform locally.</span>
 
 <span class="sd">	Requires the following properties to be set in pysysproject.xml:</span>
@@ -140,24 +140,24 @@
 				<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s2">&quot;/application/applications/</span><span class="si">%s</span><span class="s2">/logs/</span><span class="si">%s</span><span class="s2">?dateFrom=</span><span class="si">%s</span><span class="s2">&amp;dateTo=2099-01-01T00:00:00</span><span class="si">%%</span><span class="s2">2B01:00&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span><span class="p">,</span> <span class="n">startdate</span><span class="p">),</span> <span class="n">jsonResp</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 				<span class="n">logLatest</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-				<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;platform.log&#39;</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">log</span><span class="p">:</span>
+				<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;platform.log&#39;</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
 					<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">logLatest</span><span class="p">:</span>
 						<span class="k">if</span> <span class="n">line</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">logLineDeduplication</span><span class="p">:</span>
-							<span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+							<span class="n">logfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 					<span class="n">logLineDeduplication</span> <span class="o">=</span> <span class="n">logLineDeduplication</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">logLatest</span><span class="p">)</span>
 			<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 				<span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Exception while spooling logs:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
 <div class="viewcode-block" id="CumulocityPlatform.shutdown"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.shutdown">[docs]</a>	<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Stop spooling the log files when the test finishes &quot;&quot;&quot;</span>
+		<span class="sd">&quot;&quot;&quot; Stop spooling the log files when the test finishes. &quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">__spoolLogs</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="CumulocityPlatform.getC8YConnection"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection">[docs]</a>	<span class="k">def</span> <span class="nf">getC8YConnection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Return the C8yConnection object for this platform &quot;&quot;&quot;</span>
+		<span class="sd">&quot;&quot;&quot; Return the C8yConnection object for this platform. &quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span></div>
 
 <div class="viewcode-block" id="CumulocityPlatform.getApamaLogFile"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile">[docs]</a>	<span class="k">def</span> <span class="nf">getApamaLogFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Return the path to the Apama log file within Cumulocity &quot;&quot;&quot;</span>
+		<span class="sd">&quot;&quot;&quot; Return the path to the Apama log file within Cumulocity IoT.&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;platform.log&#39;</span><span class="p">)</span></div></div>
 </pre></div>
 
@@ -171,7 +171,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../using-eplapp.html">Using the eplapp.py command line tool</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../testing-epl.html">Writing tests for EPL apps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../using-pysys.html">Using PySys to test your EPL apps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autodocgen/apamax.html">PySys helpers for Apama EPL Apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../performance-testing.html">Testing the performance of your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
@@ -197,7 +198,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.26 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

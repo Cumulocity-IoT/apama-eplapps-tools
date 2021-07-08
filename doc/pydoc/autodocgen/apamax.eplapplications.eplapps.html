@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.eplapps &#8212; EPL Apps Tools 10.7.0.24 documentation</title>
+    <title>apamax.eplapplications.eplapps &#8212; EPL Apps Tools 10.7.0.26 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -16,7 +16,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="apamax.eplapplications.platform" href="apamax.eplapplications.platform.html" />
+    <link rel="next" title="apamax.eplapplications.perf" href="apamax.eplapplications.perf.html" />
     <link rel="prev" title="apamax.eplapplications.connection" href="apamax.eplapplications.connection.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -29,13 +29,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="apamax.eplapplications.platform.html" title="apamax.eplapplications.platform"
+          <a href="apamax.eplapplications.perf.html" title="apamax.eplapplications.perf"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="apamax.eplapplications.connection.html" title="apamax.eplapplications.connection"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.7.0.24 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for Apama EPL Apps</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.7.0.26 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li> 
       </ul>
     </div>  
@@ -53,7 +53,7 @@
 <dt id="apamax.eplapplications.eplapps.EPLApps">
 <em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.eplapps.</code><code class="sig-name descname">EPLApps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connection</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/eplapps.html#EPLApps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.eplapps.EPLApps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class for interacting with Apama EPL Apps in Cumulocity</p>
+<p>Class for interacting with Apama EPL Apps in Cumulocity IoT.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>connection</strong> – A C8yConnection object for the connection to the platform.</p>
@@ -62,7 +62,7 @@
 <dl class="py method">
 <dt id="apamax.eplapplications.eplapps.EPLApps.delete">
 <code class="sig-name descname">delete</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/eplapps.html#EPLApps.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.eplapps.EPLApps.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deletes an EPL app in Cumulocity.</p>
+<dd><p>Deletes an EPL app in Cumulocity IoT.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> – The name of the EPL app to be deleted.</p>
@@ -73,13 +73,13 @@
 <dl class="py method">
 <dt id="apamax.eplapplications.eplapps.EPLApps.deploy">
 <code class="sig-name descname">deploy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inactive</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">redeploy</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/eplapps.html#EPLApps.deploy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.eplapps.EPLApps.deploy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deploys a local mon file to Apama EPL Apps in Cumulocity.</p>
+<dd><p>Deploys a local mon file to Apama EPL Apps in Cumulocity IoT.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file</strong> – Path to local mon file to be deployed as an EPL app</p></li>
+<li><p><strong>file</strong> – Path to local mon file to be deployed as an EPL app.</p></li>
 <li><p><strong>name</strong> – Name of the EPL app to be uploaded (optional). By default this will be the name of the mon file being uploaded.</p></li>
-<li><p><strong>description</strong> – Description of the EPL app (optional)</p></li>
+<li><p><strong>description</strong> – Description of the EPL app (optional).</p></li>
 <li><p><strong>inactive</strong> – Boolean of whether the app should be ‘active’ (inactive=False) or ‘inactive’ (inactive=True) when it is deployed.</p></li>
 <li><p><strong>redeploy</strong> – Boolean of whether we are overwriting an existing EPL app.</p></li>
 </ul>
@@ -112,7 +112,7 @@
 <dd class="field-odd"><p><strong>includeContents</strong> – Fetches the EPL files with their contents if True. This is an optional query parameter.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A json object of all the user’s EPL apps in Cumulocity</p>
+<dd class="field-even"><p>A json object of all the user’s EPL apps in Cumulocity IoT.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -120,7 +120,7 @@
 <dl class="py method">
 <dt id="apamax.eplapplications.eplapps.EPLApps.update">
 <code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">new_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/eplapps.html#EPLApps.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.eplapps.EPLApps.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates an EPL app in Cumulocity.</p>
+<dd><p>Updates an EPL app in Cumulocity IoT.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -150,7 +150,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../using-eplapp.html">Using the eplapp.py command line tool</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../testing-epl.html">Writing tests for EPL apps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../using-pysys.html">Using PySys to test your EPL apps</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="apamax.html">PySys helpers for Apama EPL Apps</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../performance-testing.html">Testing the performance of your EPL apps</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="apamax.html">PySys helpers for EPL apps</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="apamax.eplapplications.html">apamax.eplapplications</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.basetest.html">apamax.eplapplications.basetest</a></li>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.buildVersions.html">apamax.eplapplications.buildVersions</a></li>
@@ -159,6 +160,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#eplapps">EPLApps</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.perf.html">apamax.eplapplications.perf</a></li>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.platform.html">apamax.eplapplications.platform</a></li>
 </ul>
 </li>
@@ -190,13 +192,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="apamax.eplapplications.platform.html" title="apamax.eplapplications.platform"
+          <a href="apamax.eplapplications.perf.html" title="apamax.eplapplications.perf"
              >next</a> |</li>
         <li class="right" >
           <a href="apamax.eplapplications.connection.html" title="apamax.eplapplications.connection"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.7.0.24 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for Apama EPL Apps</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.7.0.26 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li> 
       </ul>
     </div>

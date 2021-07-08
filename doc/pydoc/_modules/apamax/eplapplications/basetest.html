@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.7.0.24 documentation</title>
+    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.7.0.26 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.26 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -54,41 +54,49 @@
 <span class="kn">import</span> <span class="nn">urllib.request</span>
 <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()))))))</span>
 <span class="kn">from</span> <span class="nn">apamax.eplapplications.eplapps</span> <span class="kn">import</span> <span class="n">EPLApps</span>
 <span class="kn">from</span> <span class="nn">apamax.eplapplications.platform</span> <span class="kn">import</span> <span class="n">CumulocityPlatform</span>
 <span class="kn">from</span> <span class="nn">apamax.eplapplications.connection</span> <span class="kn">import</span> <span class="n">C8yConnection</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="n">APPLICATION_NAME</span> <span class="o">=</span> <span class="s1">&#39;pysys-test-application&#39;</span>
 <span class="n">APPLICATION_KEY</span> <span class="o">=</span> <span class="s1">&#39;pysys-test-key&#39;</span>
 
 <div class="viewcode-block" id="ApamaC8YBaseTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest">[docs]</a><span class="k">class</span> <span class="nc">ApamaC8YBaseTest</span><span class="p">(</span><span class="n">BaseTest</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Base test for EPL Applications tests.</span>
+<span class="sd">	Base test for EPL applications tests.</span>
 
-<span class="sd">	Requires the following to be set on the project in pysysproject.xml file (typically from the environment):</span>
+<span class="sd">	Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):</span>
 
 <span class="sd">	- EPL_TESTING_SDK</span>
-<span class="sd">	- APAMA_HOME - only if running a local correlator</span>
+<span class="sd">	- APAMA_HOME - Only if running a local correlator.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+		<span class="c1"># Check EPL_TESTING_SDK env is set</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="p">):</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;EPL_TESTING_SDK is not valid (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="si">}</span><span class="s1">). Please set the EPL_TESTING_SDK environment variable.&#39;</span><span class="p">)</span>
+
 		<span class="bp">self</span><span class="o">.</span><span class="n">modelId</span> <span class="o">=</span> <span class="mi">0</span> 
-		<span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span> <span class="o">=</span> <span class="s2">&quot;PYSYS_&quot;</span> 
+		<span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span> <span class="o">=</span> <span class="s2">&quot;PYSYS_&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span>
 		<span class="c1"># connect to the platform</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="n">CumulocityPlatform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.createAppKey"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createAppKey">[docs]</a>	<span class="k">def</span> <span class="nf">createAppKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Checks if the tenant has an external application defined for us and if not, creates it.</span>
-<span class="sd">			:param url: The URL to the Cumulocity tenant.</span>
+
+<span class="sd">			:param url: The URL to the Cumulocity IoT tenant.</span>
 <span class="sd">			:param username: The user to authenticate to the tenant.</span>
 <span class="sd">			:param password: The password to authenticate to the tenant.</span>
 
-<span class="sd">			:return: A app key suitable for connecting a test correlator to the tenant.</span>
+<span class="sd">			:return: An app key suitable for connecting a test correlator to the tenant.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">try</span><span class="p">:</span>
 			<span class="n">conn</span> <span class="o">=</span> <span class="n">C8yConnection</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
@@ -103,12 +111,13 @@
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.createProject"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createProject">[docs]</a>	<span class="k">def</span> <span class="nf">createProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">existingProject</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Create a ProjectHelper object which mimics the Cumulocity EPL applications environment.</span>
+<span class="sd">			Creates a `ProjectHelper` object which mimics the Cumulocity IoT EPL applications environment.</span>
 
-<span class="sd">			Adds all the required bundles and adds the properties to connect and authenticate to the configured Cumulocity tenant.</span>
+<span class="sd">			Adds all the required bundles and adds the properties to connect and authenticate to the configured Cumulocity IoT tenant.</span>
 
-<span class="sd">			:param name: The name of the project</span>
+<span class="sd">			:param name: The name of the project.</span>
 <span class="sd">			:param existingProject: If provided the path to an existing project. The environment will be added to that project instead of a new one.</span>
+<span class="sd">			:return: A `ProjectHelper` object.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="c1"># only import apama.project when calling this function which requires it</span>
 		<span class="k">try</span><span class="p">:</span>
@@ -131,9 +140,10 @@
 		<span class="k">return</span> <span class="n">apama_project</span></div>
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.addC8YPropertiesToProject"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.addC8YPropertiesToProject">[docs]</a>	<span class="k">def</span> <span class="nf">addC8YPropertiesToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">apamaProject</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;adds the connection parameters into the project</span>
+		<span class="sd">&quot;&quot;&quot;Adds the connection parameters into a project.</span>
 <span class="sd">		</span>
-<span class="sd">		:param params: dictionary to override and add to those defined for the project::</span>
+<span class="sd">		:param apamaProject: The `ProjectHelper` object for a project.</span>
+<span class="sd">		:param params: The dictionary of parameters to override and add to those defined for the project::</span>
 <span class="sd">		</span>
 <span class="sd">			&lt;property name=&quot;CUMULOCITY_USERNAME&quot; value=&quot;my-user&quot;/&gt;</span>
 <span class="sd">			&lt;property name=&quot;CUMULOCITY_PASSWORD&quot; value=&quot;my-password&quot;/&gt;</span>
@@ -171,10 +181,11 @@
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.getTestSubjectEPLApps"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getTestSubjectEPLApps">[docs]</a>	<span class="k">def</span> <span class="nf">getTestSubjectEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Retrieves a list of paths to EPL App(s) being tested.  </span>
-<span class="sd">			If the user defines the &lt;user-data name=&quot;EPLApp&quot; value=&quot;EPLAppToBeTested&quot;/&gt; tag in the pysystest.xml file,</span>
-<span class="sd">			then we just return the EPL App defined by the tag&#39;s value. </span>
-<span class="sd">			If this tag is not defined (or the value is an empty string) then all the mon files in project.EPL_APPS directory are returned.</span>
+<span class="sd">			Retrieves a list of paths to the EPL apps being tested.</span>
+
+<span class="sd">			If the user defines the `&lt;user-data name=&quot;EPLApp&quot; value=&quot;EPLAppToBeTested&quot;/&gt;` tag in the pysystest.xml file, </span>
+<span class="sd">			then we just return the EPL app defined by the tag&#39;s value. If this tag is not defined (or the value is an empty string) </span>
+<span class="sd">			then all the mon files in the project.EPL_APPS directory are returned.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="c1"># Check EPL_APPS env is valid</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_APPS</span><span class="p">):</span>
@@ -192,7 +203,7 @@
 			<span class="k">else</span><span class="p">:</span>
 				<span class="n">eplAppsPaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_APPS</span><span class="p">,</span> <span class="n">eplApp</span><span class="p">))</span>
 		<span class="k">else</span><span class="p">:</span>
-			<span class="c1"># If user has not defined EPLApp in pysystest.xml, return all files in project.EPL_APPS by default </span>
+			<span class="c1"># If user has not defined EPLApp in pysystest.xml, return all files in project.EPL_APPS by default </span>
 			<span class="n">eplAppsFiles</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_APPS</span><span class="p">)</span>
 			<span class="k">for</span> <span class="n">eplApp</span> <span class="ow">in</span> <span class="n">eplAppsFiles</span><span class="p">:</span>
 				<span class="c1"># Check file is a .mon file before appending</span>
@@ -210,6 +221,161 @@
 		<span class="c1"># Delete devices that were created by tests</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestDevices</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="ApamaC8YBaseTest.createTestDevice"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice">[docs]</a>	<span class="k">def</span> <span class="nf">createTestDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;PySysTestDevice&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Creates a Cumulocity IoT device for testing.</span>
+
+<span class="sd">		:param str name: The name of the device. The name of the device is prefixed with `PYSYS_` so that the framework can identify and clean up test devices.</span>
+<span class="sd">		:param type: The type of the device.</span>
+<span class="sd">		:type type: str, optional</span>
+<span class="sd">		:param children: The list of device IDs to add them as children to the created device.</span>
+<span class="sd">		:type children: list[str], optional</span>
+<span class="sd">		:return: The ID of the device created.</span>
+<span class="sd">		:rtype: str</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">device</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span><span class="si">}{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;c8y_IsDevice&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+			<span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span>
+			<span class="s1">&#39;com_cumulocity_model_Agent&#39;</span><span class="p">:</span> <span class="p">{}</span>
+		<span class="p">}</span>
+		<span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;/inventory/managedObjects&#39;</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+		
+		<span class="n">children</span> <span class="o">=</span> <span class="n">children</span> <span class="ow">or</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/inventory/managedObjects/</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">/childDevices&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;managedObject&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">child</span><span class="p">}})</span>
+		<span class="k">return</span> <span class="nb">id</span></div>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.getAlarms"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms">[docs]</a>	<span class="k">def</span> <span class="nf">getAlarms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Gets all alarms with matching parameters.</span>
+
+<span class="sd">		For example::</span>
+<span class="sd">		</span>
+<span class="sd">			self.getAlarms(type=&#39;my_alarms&#39;, dateFrom=&#39;2021-04-15 11:00:00.000Z&#39;, </span>
+<span class="sd">							dateTo=&#39;2021-04-15 11:30:00.000Z&#39;)</span>
+
+<span class="sd">		:param source: The source object of the alarm. Get alarms for all objects if not specified.</span>
+<span class="sd">		:type source: str, optional</span>
+<span class="sd">		:param type: The type of alarm to get. Get alarms of all types if not specified.</span>
+<span class="sd">		:type type: str, optional</span>
+<span class="sd">		:param status: The status of the alarms to get. Get alarms of all status if not specified.</span>
+<span class="sd">		:type status: str, optional</span>
+<span class="sd">		:param dateFrom: The start time of the alarm in the ISO format. If specified, only alarms that are created on or after this time are fetched.</span>
+<span class="sd">		:type dateFrom: str, optional</span>
+<span class="sd">		:param dateTo: The end time of the alarm in the ISO format. If specified, only alarms that are created on or before this time are fetched.</span>
+<span class="sd">		:type dateTo: str, optional</span>
+<span class="sd">		:param \**kwargs: All additional keyword arguments are treated as extra parameters for filtering alarms. </span>
+<span class="sd">		:return: List of alarms.</span>
+<span class="sd">		:rtype: list[object]</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">queryParams</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="k">if</span> <span class="n">source</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span>
+		<span class="k">if</span> <span class="nb">type</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span>
+		<span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span>
+		<span class="k">if</span> <span class="n">dateFrom</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="p">[</span><span class="s1">&#39;dateFrom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dateFrom</span>
+		<span class="k">if</span> <span class="n">dateTo</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="p">[</span><span class="s1">&#39;dateTo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dateTo</span>		
+		<span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+			
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getCumulocityObjectCollection</span><span class="p">(</span><span class="s1">&#39;/alarm/alarms&#39;</span><span class="p">,</span> <span class="n">queryParams</span><span class="o">=</span><span class="n">queryParams</span><span class="p">,</span> <span class="n">responseKey</span><span class="o">=</span><span class="s1">&#39;alarms&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.getOperations"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations">[docs]</a>	<span class="k">def</span> <span class="nf">getOperations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceId</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fragmentType</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Gets all operations with matching parameters.</span>
+
+<span class="sd">		For example::</span>
+<span class="sd">		</span>
+<span class="sd">			self.getOperations(fragmentType=&#39;my_ops&#39;, dateFrom=&#39;2021-04-15 11:00:00.000Z&#39;, </span>
+<span class="sd">								dateTo=&#39;2021-04-15 11:30:00.000Z&#39;)</span>
+
+<span class="sd">		:param deviceId: The device ID of the alarm. Get operations for all devices if not specified.</span>
+<span class="sd">		:type deviceId: str, optional</span>
+<span class="sd">		:param fragmentType: The type of fragment that must be part of the operation.</span>
+<span class="sd">		:type fragmentType: str, optional</span>
+<span class="sd">		:param dateFrom: The start time of the operation in the ISO format. If specified, only operations that are created on or after this time are fetched.</span>
+<span class="sd">		:type dateFrom: str, optional</span>
+<span class="sd">		:param dateTo: The end time of the operation in the ISO format. If specified, only operations that are created on or before this time are fetched.</span>
+<span class="sd">		:type dateTo: str, optional</span>
+<span class="sd">		:param \**kwargs: All additional keyword arguments are treated as extra parameters for filtering operations.</span>
+<span class="sd">		:return: List of operations.</span>
+<span class="sd">		:rtype: list[object]</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="n">queryParams</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="k">if</span> <span class="n">deviceId</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="p">[</span><span class="s1">&#39;deviceId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">deviceId</span>
+		<span class="k">if</span> <span class="n">fragmentType</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="p">[</span><span class="s1">&#39;fragmentType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fragmentType</span>
+		<span class="k">if</span> <span class="n">dateFrom</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="p">[</span><span class="s1">&#39;dateFrom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dateFrom</span>
+		<span class="k">if</span> <span class="n">dateTo</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="p">[</span><span class="s1">&#39;dateTo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dateTo</span>
+		<span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+			<span class="n">queryParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+		
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getCumulocityObjectCollection</span><span class="p">(</span><span class="s1">&#39;/devicecontrol/operations&#39;</span><span class="p">,</span> <span class="n">queryParams</span><span class="o">=</span><span class="n">queryParams</span><span class="p">,</span> <span class="n">responseKey</span><span class="o">=</span><span class="s1">&#39;operations&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.copyWithReplace"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.copyWithReplace">[docs]</a>	<span class="k">def</span> <span class="nf">copyWithReplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceFile</span><span class="p">,</span> <span class="n">targetFile</span><span class="p">,</span> <span class="n">replacementDict</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Copies the source file to the target file and replaces the placeholder strings with the actual values.</span>
+
+<span class="sd">			:param sourceFile: The path to the source file to copy.</span>
+<span class="sd">			:type sourceFile: str</span>
+<span class="sd">			:param targetFile: The path to the target file.</span>
+<span class="sd">			:type targetFile: str</span>
+<span class="sd">			:param replacementDict: A dictionary containing placeholder strings and their actual values to replace.</span>
+<span class="sd">			:type replacementDict: dict[str, str]</span>
+<span class="sd">			:param marker: Marker string used to surround replacement strings in the source file to disambiguate from normal strings. For example, `@`.</span>
+<span class="sd">			:type marker: str, optional	</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">def</span> <span class="nf">mapper</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">replacementDict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+				<span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">marker</span><span class="si">}{</span><span class="n">key</span><span class="si">}{</span><span class="n">marker</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+			<span class="k">return</span> <span class="n">line</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sourceFile</span><span class="p">,</span> <span class="n">targetFile</span><span class="p">,</span> <span class="n">mappers</span><span class="o">=</span><span class="p">[</span><span class="n">mapper</span><span class="p">])</span></div>
+		
+	<span class="k">def</span> <span class="nf">_getCumulocityObjectCollection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resourceUrl</span><span class="p">,</span> <span class="n">queryParams</span><span class="p">,</span> <span class="n">responseKey</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Gets all Cumulocity IoT object collection.</span>
+
+<span class="sd">			Fetches all pages of the collection.</span>
+
+<span class="sd">			:param str resourceUrl: The base url of the object to get. For example, /alarm/alarms.</span>
+<span class="sd">			:param dict[str,str] queryParams: The query parameters.</span>
+<span class="sd">			:param str responseKey: The key to use to get actual object list from the response JSON.</span>
+<span class="sd">			:return: List of all object.</span>
+<span class="sd">			:rtype: list[object]</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">PAGE_SIZE</span> <span class="o">=</span> <span class="mi">100</span> 	<span class="c1"># By default, pageSize = 5 for querying to C8y</span>
+		<span class="n">queryParams</span> <span class="o">=</span> <span class="n">queryParams</span> <span class="ow">or</span> <span class="p">{}</span>
+		
+		<span class="k">def</span> <span class="nf">create_url</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">):</span>
+			<span class="n">p</span> <span class="o">=</span> <span class="n">queryParams</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+			<span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+			<span class="k">if</span> <span class="s1">&#39;?&#39;</span> <span class="ow">in</span> <span class="n">resourceUrl</span><span class="p">:</span>
+				<span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resourceUrl</span><span class="si">}</span><span class="s1">&amp;</span><span class="si">{</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resourceUrl</span><span class="si">}</span><span class="s1">?</span><span class="si">{</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+
+		<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="n">create_url</span><span class="p">(</span><span class="n">pageSize</span><span class="o">=</span><span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">currentPage</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">withTotalPages</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+		<span class="n">result</span> <span class="o">+=</span> <span class="n">resp</span><span class="p">[</span><span class="n">responseKey</span><span class="p">]</span>
+		<span class="c1"># Make sure we retrieve all pages from query</span>
+		<span class="n">TOTAL_PAGES</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;statistics&#39;</span><span class="p">][</span><span class="s1">&#39;totalPages&#39;</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">TOTAL_PAGES</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">currentPage</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">TOTAL_PAGES</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+				<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="n">create_url</span><span class="p">(</span><span class="n">pageSize</span><span class="o">=</span><span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">currentPage</span><span class="o">=</span><span class="n">currentPage</span><span class="p">))</span>
+				<span class="n">result</span> <span class="o">+=</span> <span class="n">resp</span><span class="p">[</span><span class="n">responseKey</span><span class="p">]</span>
+
+		<span class="k">return</span> <span class="n">result</span>
+
 	<span class="k">def</span> <span class="nf">_clearActiveAlarms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Clears all active alarms as part of a pre-test tenant cleanup. </span>
@@ -222,28 +388,48 @@
 <span class="sd">			Deletes all ManagedObjects that have name prefixed with &quot;PYSYS_&quot; and the &#39;c8y_isDevice&#39; param as part of pre-test tenant cleanup.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deleting old test devices&quot;</span><span class="p">)</span>
-		<span class="c1"># Retrieving test devices</span>
-		<span class="n">PAGE_SIZE</span> <span class="o">=</span> <span class="mi">100</span> 	<span class="c1"># By default, pageSize = 5 for querying to C8y</span>
-		<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span>
-			<span class="s2">&quot;/inventory/managedObjects&quot;</span> <span class="o">+</span>
-			<span class="sa">f</span><span class="s2">&quot;?query=has(c8y_IsDevice)+and+name+eq+&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span><span class="si">}</span><span class="s2">*&#39;&quot;</span> <span class="o">+</span>
-			<span class="sa">f</span><span class="s2">&quot;&amp;pageSize=</span><span class="si">{</span><span class="n">PAGE_SIZE</span><span class="si">}</span><span class="s2">&amp;currentPage=1&amp;withTotalPages=true&quot;</span><span class="p">)</span>
-		<span class="n">testDevices</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;managedObjects&#39;</span><span class="p">]</span>
-		<span class="c1"># Make sure we retrieve all pages from query</span>
-		<span class="n">TOTAL_PAGES</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;statistics&#39;</span><span class="p">][</span><span class="s1">&#39;totalPages&#39;</span><span class="p">]</span>
-		<span class="k">if</span> <span class="n">TOTAL_PAGES</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-			<span class="k">for</span> <span class="n">currentPage</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">TOTAL_PAGES</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-				<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span>
-					<span class="s2">&quot;/inventory/managedObjects&quot;</span> <span class="o">+</span>
-					<span class="sa">f</span><span class="s2">&quot;?query=has(c8y_IsDevice)+and+name+eq+&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span><span class="si">}</span><span class="s2">*&#39;&quot;</span> <span class="o">+</span>
-					<span class="sa">f</span><span class="s2">&quot;&amp;pageSize=</span><span class="si">{</span><span class="n">PAGE_SIZE</span><span class="si">}</span><span class="s2">&amp;currentPage=</span><span class="si">{</span><span class="n">currentPage</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-				<span class="n">testDevices</span> <span class="o">=</span> <span class="n">testDevices</span> <span class="o">+</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;managedObjects&#39;</span><span class="p">]</span>
-		
+		<span class="n">testDevices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getCumulocityObjectCollection</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/inventory/managedObjects&quot;</span><span class="p">,</span> 
+						<span class="n">queryParams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;query&#39;</span><span class="p">:</span><span class="sa">f</span><span class="s2">&quot;has(c8y_IsDevice) and name eq &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span><span class="si">}</span><span class="s2">*&#39;&quot;</span><span class="p">},</span>
+						<span class="n">responseKey</span><span class="o">=</span><span class="s1">&#39;managedObjects&#39;</span><span class="p">)</span>
 		<span class="c1"># Deleting test devices</span>
 		<span class="n">testDeviceIds</span> <span class="o">=</span> <span class="p">[</span><span class="n">device</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">testDevices</span><span class="p">]</span>
 		<span class="k">for</span> <span class="n">deviceId</span> <span class="ow">in</span> <span class="n">testDeviceIds</span><span class="p">:</span>
-			<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/inventory/managedObjects/</span><span class="si">{</span><span class="n">deviceId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+			<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/inventory/managedObjects/</span><span class="si">{</span><span class="n">deviceId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
+	<span class="k">def</span> <span class="nf">_deleteTestEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Deletes all EPL apps with name prefixed by &quot;PYSYS_&quot; or &quot;PYSYS_TEST&quot;</span>
+<span class="sd">			as part of a pre-test tenant cleanup. </span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">eplapps</span> <span class="o">=</span> <span class="n">EPLApps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">())</span>
+		<span class="n">appsToDelete</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">allApps</span> <span class="o">=</span> <span class="n">eplapps</span><span class="o">.</span><span class="n">getEPLApps</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">eplApp</span> <span class="ow">in</span> <span class="n">allApps</span><span class="p">:</span>
+			<span class="n">name</span> <span class="o">=</span> <span class="n">eplApp</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span><span class="p">):</span>
+				<span class="n">appsToDelete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">appsToDelete</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Deleting the following EPL apps: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">appsToDelete</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">appsToDelete</span><span class="p">:</span>
+			<span class="n">eplapps</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.getUTCTime"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getUTCTime">[docs]</a>	<span class="k">def</span> <span class="nf">getUTCTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">			Gets a Cumulocity IoT-compliant UTC timestamp string for the current time or the specified time.</span>
+
+<span class="sd">			:param timestamp: The epoc timestamp to get timestamp string for. Use current time if not specified.</span>
+<span class="sd">			:type timestamp: float, optional</span>
+<span class="sd">			:return: Timestamp string.</span>
+<span class="sd">			:rtype: str</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="n">timestamp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">microsecond</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.000Z&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span></div></div>
 
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest">[docs]</a><span class="k">class</span> <span class="nc">LocalCorrelatorSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot; </span>
@@ -258,13 +444,11 @@
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest.execute"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Runs all the tests in the Input directory against the applications configured in the EPL_APPS </span>
-<span class="sd">			directory or with the EPLApps directive. </span>
+<span class="sd">			directory or with the `EPLApps` directive. </span>
 <span class="sd">		&quot;&quot;&quot;</span>
-		<span class="c1"># Check APAMA_HOME and EPL_TESTING_SDK env are valid</span>
+		<span class="c1"># Check APAMA_HOME env is set</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">APAMA_HOME</span><span class="p">):</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;APAMA_HOME project property is not valid (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">APAMA_HOME</span><span class="si">}</span><span class="s1">). Try running in an Apama command prompt.&#39;</span><span class="p">)</span>
-		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;EPL_TESTING_SDK is not valid (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="si">}</span><span class="s1">). Please set the EPL_TESTING_SDK environment variable.&#39;</span><span class="p">)</span>
 
 		<span class="kn">from</span> <span class="nn">apama.correlator</span> <span class="kn">import</span> <span class="n">CorrelatorHelper</span>
 		<span class="c1"># Create test project and add C8Y properties and EPL Apps </span>
@@ -296,7 +480,7 @@
 
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest.validate"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.validate">[docs]</a>	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Checks than no errors were logged to the correlator log file.</span>
+<span class="sd">			Checks that no errors were logged to the correlator log file.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="c1"># look for log statements in the correlator log file</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking for errors&quot;</span><span class="p">)</span>
@@ -304,7 +488,7 @@
 
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest.addEPLAppsToProject"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.addEPLAppsToProject">[docs]</a>	<span class="k">def</span> <span class="nf">addEPLAppsToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eplApps</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Adds the EPL app(s) being tested to a project. </span>
+<span class="sd">			Adds the EPL app(s) being tested to a project. </span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">for</span> <span class="n">eplApp</span> <span class="ow">in</span> <span class="n">eplApps</span><span class="p">:</span>
 			<span class="k">try</span><span class="p">:</span>
@@ -316,7 +500,7 @@
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile">[docs]</a>	<span class="k">def</span> <span class="nf">getMonitorsFromInjectedFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">correlator</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Retrieves a list of active monitors in a correlator, added from a particular mon file </span>
-<span class="sd">			using GET request to http://correlator.host:correlator.port </span>
+<span class="sd">			using a GET request to http://correlator.host:correlator.port.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">monitors</span> <span class="o">=</span> <span class="p">[]</span>
 		<span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="n">correlator</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">correlator</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span>
@@ -348,7 +532,7 @@
 
 <div class="viewcode-block" id="EPLAppsSimpleTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest">[docs]</a><span class="k">class</span> <span class="nc">EPLAppsSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Base test for running test with no run.py on EPL apps running in Cumulocity.</span>
+<span class="sd">		Base test for running test with no run.py on EPL apps running in Cumulocity IoT.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EPLAppsSimpleTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -358,44 +542,24 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">apps</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">addCleanupFunction</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">())</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEST_DEVICE_PREFIX</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">EPL_TEST_APP_PREFIX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span> <span class="o">+</span> <span class="s2">&quot;TEST_&quot;</span>
-		<span class="c1"># Check EPL_TESTING_SDK env is set</span>
-		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;EPL_TESTING_SDK is not valid (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="si">}</span><span class="s1">). Please set the EPL_TESTING_SDK environment variable.&#39;</span><span class="p">)</span>
+
 		<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span> <span class="o">=</span> <span class="n">EPLApps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">())</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EPLAppsSimpleTest.prepareTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL Apps which have been uploaded by tests, and clearing all active alarms. </span>
+<span class="sd">			Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL apps which have been uploaded by tests, and clearing all active alarms. </span>
 <span class="sd">			</span>
-<span class="sd">			This is done first so that there&#39;s no possibility existing test apps raising alarms or creating devices</span>
+<span class="sd">			This is done first so that it is not possible for existing test apps to raise alarms or create devices.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestEPLApps</span><span class="p">()</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">EPLAppsSimpleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">()</span></div>
 
-
-	<span class="k">def</span> <span class="nf">_deleteTestEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Deletes all EPL apps with name prefixed by &quot;PYSYS_&quot; or &quot;PYSYS_TEST&quot;</span>
-<span class="sd">			as part of a pre-test tenant cleanup. </span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="n">appsToDelete</span> <span class="o">=</span> <span class="p">[]</span>
-		<span class="n">allApps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span><span class="o">.</span><span class="n">getEPLApps</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-		<span class="k">for</span> <span class="n">eplApp</span> <span class="ow">in</span> <span class="n">allApps</span><span class="p">:</span>
-			<span class="n">name</span> <span class="o">=</span> <span class="n">eplApp</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-			<span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span><span class="p">):</span>
-				<span class="n">appsToDelete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">appsToDelete</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Deleting the following EPL apps: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">appsToDelete</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-		<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">appsToDelete</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-
 <div class="viewcode-block" id="EPLAppsSimpleTest.execute"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Runs all the tests in the Input directory against the applications configured in the EPL_APPS </span>
-<span class="sd">			directory or with the EPLApps directive using EPL applications to run each test.</span>
+<span class="sd">			directory or with the `EPLApps` directive using EPL apps to run each test.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="c1"># EPL Applications under test</span>
 		<span class="n">appPaths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTestSubjectEPLApps</span><span class="p">()</span>
@@ -426,14 +590,14 @@
 		
 <div class="viewcode-block" id="EPLAppsSimpleTest.validate"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.validate">[docs]</a>	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Ensure that no errors were logged in the platform log file while we were running the test.</span>
+<span class="sd">			Ensures that no errors were logged in the platform log file while we were running the test.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking for errors&quot;</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .*&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 		
 <div class="viewcode-block" id="EPLAppsSimpleTest.shutdown"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.shutdown">[docs]</a>	<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Deactivate all EPL apps which were uploaded when the test terminates.</span>
+<span class="sd">			Deactivates all uploaded EPL apps when the test terminates.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deactivating EPL apps&quot;</span><span class="p">)</span>
 		<span class="c1"># when we finish, deactivate anything we started</span>
@@ -455,7 +619,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../using-eplapp.html">Using the eplapp.py command line tool</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../testing-epl.html">Writing tests for EPL apps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../using-pysys.html">Using PySys to test your EPL apps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autodocgen/apamax.html">PySys helpers for Apama EPL Apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../performance-testing.html">Testing the performance of your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
@@ -481,7 +646,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.24 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.7.0.26 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

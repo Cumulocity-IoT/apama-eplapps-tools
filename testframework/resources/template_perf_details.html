@@ -1,0 +1,98 @@
+<div id="test_variation_@VARIATION_ID@">
+	<h2>
+		<a class="variationtitlelink" href="#test_variation_@VARIATION_ID@">@VARIATION_TITLE@</a>
+	</h2>
+</div>
+
+<h3>Test Configuration</h3>
+@TEST_CONFIGURATION@
+
+<h3>Performance Summary</h3>
+<h4>Standard Performance Statistics</h4>
+@STATS_TABLE@
+@ADDITIONAL_PERF_STATISTICS@
+
+<h3>Performance Charts</h3>
+<p>These graphs are interactive! 
+	<ul>
+		<li>To zoom in, just make a vertical or horizontal selection</li>
+		<li>To reset the zoom to show the full range of each graph, double-click</li>
+		<li>To pan, hold SHIFT while dragging.</li>
+	</ul>
+</p>
+
+<script type="text/javascript">
+	var charts_@VARIATION_ID@ = [];
+</script>
+
+<div id="chartholder_correlator_queues_@VARIATION_ID@">
+	<h4 id="chart_correlator_queues_@VARIATION_ID@"> 
+		<a href="#chart_correlator_queues_@VARIATION_ID@">Correlator queues:</a>
+	</h4>
+	<div class="chartdiv chart_correlator_queues_@VARIATION_ID@" id="chartdiv_correlator_queues_@VARIATION_ID@" style="width:90%;"></div>
+</div>
+<script type="text/javascript">
+	var datapoints = [@CORRELATOR_QUEUES_DATA@];
+	var g = new Dygraph(document.getElementById("chartdiv_correlator_queues_@VARIATION_ID@"), datapoints, {
+				"ylabel": "Queue length", 
+				"labels": ["time", "iq=queued input", "oq=queued output"], 
+				"colors": ["red", "orange"], 
+				"labelsKMB": true, 
+				"legend": "always", 
+				"labelsSeparateLines": true, 
+				"highlightSeriesOpts": {"strokeWidth": 2}, 
+				"xlabel": "@CORRELATOR_QUEUES_TIMERANGE@",
+				"legendFormatter":legendFormatter
+			});
+	charts_@VARIATION_ID@.push(g);
+</script>
+
+<div id="chartholder_memory_@VARIATION_ID@">
+	<h4 id="chart_memory_@VARIATION_ID@">
+		<a href="#chart_memory_@VARIATION_ID@">Memory Usage</a>
+	</h4>
+	<div class="chartdiv chart_memory_@VARIATION_ID@" id="chartdiv_memory_@VARIATION_ID@" style="width:90%;"></div>
+</div>
+<script type="text/javascript">
+	var datapoints = [@MEMORY_DATA@];
+	var g = new Dygraph(document.getElementById("chartdiv_memory_@VARIATION_ID@"), datapoints, {
+				"labels": ["time", "Total (MB)", "Apama Ctrl JVM (MB)", "Correlator (MB)"], 
+				"colors": ["red", "orange", "purple"], 
+				"labelsKMG2": true, 
+				"legend": "always", 
+				"labelsSeparateLines": true, 
+				"highlightSeriesOpts": {"strokeWidth": 2}, 
+				"xlabel": "@MEMORY_TIMERANGE@",
+				"legendFormatter":legendFormatter
+			});
+	charts_@VARIATION_ID@.push(g);
+</script>
+
+<div id="chartholder_cpu_usage_@VARIATION_ID@">
+	<h4 id="chart_cpu_usage_@VARIATION_ID@">
+		<a href="#chart_cpu_usage_@VARIATION_ID@">CPU Usage</a>
+	</h4>
+	<div class="chartdiv chart_cpu_usage_@VARIATION_ID@" id="chartdiv_cpu_usage_@VARIATION_ID@" style="width:90%;"></div>
+</div>
+<script type="text/javascript">
+	var datapoints = [@CPU_USAGE_DATA@];
+	var g = new Dygraph(document.getElementById("chartdiv_cpu_usage_@VARIATION_ID@"), datapoints, {
+				"labels": ["time", "CPU (millicpu)"], 
+				"colors": ["red"], 
+				"labelsKMG2": true, 
+				"legend": "always", 
+				"labelsSeparateLines": true, 
+				"highlightSeriesOpts": {"strokeWidth": 2}, 
+				"xlabel": "@CPU_USAGE_TIMERANGE@",
+				"legendFormatter":legendFormatter
+			});
+	charts_@VARIATION_ID@.push(g);
+</script>
+
+<script type="text/javascript">
+	var chartsSync = Dygraph.synchronize(charts_@VARIATION_ID@, {
+		selection: true,
+		zoom: true,
+		range: false,
+	});
+</script>

@@ -1,0 +1,92 @@
+
+/*
+ Copyright (c) 2021 Software AG, Darmstadt, Germany and/or its licensors
+
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ file except in compliance with the License. You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the
+ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.
+*/
+
+using com.apama.cumulocity.Operation;
+using com.apama.cumulocity.Alarm;
+
+using com.apama.cumulocity.Util;
+using com.apama.cumulocity.ObjectCommitted;
+using com.apama.cumulocity.ObjectCommitFailed;
+
+/**
+* This application listens for all Active Alarms of a particular type and creates an Operation if
+* the alarm is not cleared within some configured duration.
+*
+* Note: This is not a production-ready app, only a basic workload for performance and sizing tests. It
+* does not support various features which may be needed for a production-ready application, for example,
+* querying already raised alarms at startup, clearing alarms after creating operation, etc.
+*/
+monitor OperationOnAlarmNotCleared {
+
+	/** Duration to wait for alarm to be cleared before creating an operation. */
+	float ALARM_CLEAR_DURATION_MINUTES := float.parse("@ALARM_CLEAR_DURATION_MINUTES@");
+
+	/** The type of the alarm to monitor. */
+	constant string ALARM_TYPE := "@ALARM_TYPE@";
+
+	/** The fragment type for generated operations. */
+	constant string OPERATION_FRAGMENT := "@OPERATION_FRAGMENT@";
+
+	/**
+	 * Keep track of the alarms we are tracking. Used for de-duplication, so that we don't create multiple Operation
+	 * for same Alarm.
+	 */
+	dictionary<string, string> alreadyTrackedAlarms;
+
+	action onload() {
+
+		// Subscribe to Alarm.SUBSCRIBE_CHANNEL to receive all alarms
+		monitor.subscribe(Alarm.SUBSCRIBE_CHANNEL);
+
+		on all Alarm(status="ACTIVE", type=ALARM_TYPE) as alarm {
+			if not alreadyTrackedAlarms.hasKey(alarm.id) {
+				alreadyTrackedAlarms[alarm.id] := alarm.id;
+
+				float waitTime := alarm.time + ALARM_CLEAR_DURATION_MINUTES * 60.0 - currentTime;
+				on wait(waitTime) and not Alarm(id=alarm.id, status="CLEARED") {
+					createOperation(alarm.source, alarm.id);
+				}
+			} else {
+				// There is a already a listener waiting for this alarm to be Cleared
+			}
+		}
+		on all Alarm(status="CLEARED", type=ALARM_TYPE) as alarm {
+			if alreadyTrackedAlarms.hasKey(alarm.id) {
+				alreadyTrackedAlarms.remove(alarm.id);
+			}
+		}
+	}
+
+	/**
+	 * Create and send Operation for a device
+	 * @param source The ID of ManagedObject against which Operation will be created
+	 * @alarmId The ID of the alarm which was not cleared within threshold duration
+	 */
+	action createOperation(string source, string alarmId) {
+
+		// Create and send new Operation with given source */
+		Operation operation := new Operation;
+		operation.source := source;
+		operation.params[OPERATION_FRAGMENT] := {
+			<any>"alarm": <any>alarmId,
+			"shutdown": true
+		};
+
+		integer reqId := Util.generateReqId();
+		send operation.withResponse(reqId, new dictionary<string, string>) to Operation.SEND_CHANNEL;
+
+		on ObjectCommitFailed(reqId=reqId) as resp and not ObjectCommitted(reqId=reqId) {
+			log "Unable to create operation, reason: " + resp.toString() at ERROR;
+		}
+	}
+}

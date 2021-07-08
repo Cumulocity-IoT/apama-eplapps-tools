@@ -1,0 +1,158 @@
+/*
+ Copyright (c) 2021 Software AG, Darmstadt, Germany and/or its licensors
+
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ file except in compliance with the License. You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the
+ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.
+*/
+
+using com.apama.cumulocity.Measurement;
+using com.apama.cumulocity.Alarm;
+using com.apama.cumulocity.FindAlarm;
+using com.apama.cumulocity.FindAlarmResponse;
+using com.apama.cumulocity.FindAlarmResponseAck;
+using com.apama.cumulocity.ObjectCommitted;
+using com.apama.cumulocity.ObjectCommitFailed;
+
+/**
+* This application listens for all measurements of specified type with
+* specified fragment and series and raises an alarm if measurement value 
+* exceeds the specified threshold.
+*
+* Note: This is not a production-ready app, only a basic workload for performance and sizing tests. It 
+* does not support various features which may be needed for a production-ready application, for example,
+* updating already raised alarms, finding existing alarms to clear at the startup, etc.
+*/
+monitor AlarmOnMeasurementThreshold {
+	/** The measurement type to listen for. */
+	constant string MEASUREMENT_TYPE := "@MEASUREMENT_TYPE@";
+
+	/** The measurement fragment to listen for. */
+	constant string MEASUREMENT_FRAGMENT := "@MEASUREMENT_FRAGMENT@";
+
+	/** The measurement series to listen for. */
+	constant string MEASUREMENT_SERIES := "@MEASUREMENT_SERIES@";
+
+	/** The threshold value. Raise an alarm if a measurement value exceeds this value. */
+	float MEASUREMENT_THRESHOLD := float.parse("@MEASUREMENT_THRESHOLD@");
+
+	/** The type of alarm to raise when a measurement value exceeds the threshold value. */
+	constant string ALARM_TYPE := "@ALARM_TYPE@";
+
+	/** The severity of the alarm to raise. */
+	constant string ALARM_SEVERITY := "@ALARM_SEVERITY@";
+	
+	/** The latest measurement value for a device. */
+	dictionary<string /*deviceId*/, float /*measurement value*/> cachedValues;
+
+	/** The ID of any raised alarm for a device. If an alarm creation is in progress, then the alarm ID will be an empty string. */
+	dictionary<string /*deviceId*/, string /*alarmId*/> raisedAlarms;
+
+	action onload() {
+		// Subscribe to Measurement.SUBSCRIBE_CHANNEL to receive all measurements
+		monitor.subscribe(Measurement.SUBSCRIBE_CHANNEL);
+
+		on all Measurement(type=MEASUREMENT_TYPE) as m {
+			if not m.measurements.hasKey(MEASUREMENT_FRAGMENT) or 
+				not m.measurements[MEASUREMENT_FRAGMENT].hasKey(MEASUREMENT_SERIES) 
+			{
+				// Not the correct measurement type
+				return;
+			}
+
+			float value := m.measurements[MEASUREMENT_FRAGMENT][MEASUREMENT_SERIES].value;
+			// Cache the current value
+			cachedValues[m.source] := value;
+
+			// Measurement value is greater than the threshold value, raise an alarm if not already raised
+			if value > MEASUREMENT_THRESHOLD {
+				raiseAlarm(m.source);
+			} else {
+				clearAlarm(m.source);
+			}
+		}
+	}
+	
+	/** 
+	 * Raise an alarm for the specified device if not already raised.
+	 * 
+	 * @param source The ID of the device.
+	 */
+	action raiseAlarm(string source) {
+		// An alarm of already raised.
+		if raisedAlarms.hasKey(source) { return; }
+		
+		// Add it in the raisedAlarms dictionary to track that an alarm was raised but
+		// the ID of the alarm is not yet available.
+		raisedAlarms[source] := "";
+		sendAlarmCreateRequest(source, "The measurement value " + cachedValues[source].toString() +
+								" exceeded threshold value " + MEASUREMENT_THRESHOLD.toString());
+	}
+
+	/**
+	 * Clear a previously raised alarm by the app. If alarm ID is not yet available then do not do anything, as the alarm will be
+	 * cleared once the alarm ID is available and the value is below the threshold.
+	 * @param source The ID of the device.
+	 */
+	action clearAlarm(string source) {
+		if raisedAlarms.hasKey(source) {
+			string alarmId := raisedAlarms[source];
+			if alarmId != "" {
+				send newAlarmObject(alarmId, source, "CLEARED", "The measurement value " + cachedValues[source].toString() +
+									" is now within the threshold value " + MEASUREMENT_THRESHOLD.toString()) to Alarm.SEND_CHANNEL;
+				raisedAlarms.remove(source);
+			} else {
+				// Alarm creation is in progress. The alarm will be cleared when the alarm ID is received and the device's mean is within the range.
+			}
+		}
+		// else, either no alarm was raised previously or already cleared
+	}
+	
+	/**
+	 * Send a request to create an alarm.
+	 * @param source The ID of the device.
+	 * @param msg The text for the alarm message.
+	 */
+	action sendAlarmCreateRequest(string source, string msg) {
+		Alarm alarm := newAlarmObject("", source, "ACTIVE", msg);
+		integer reqId := com.apama.cumulocity.Util.generateReqId();
+
+		on ObjectCommitted(reqId=reqId) as commit and not ObjectCommitFailed(reqId=reqId) {
+			raisedAlarms[source] := commit.id;
+			// Alarm created. Check if the value is below the threshold then it should be cleared.
+			if cachedValues.hasKey(source) and cachedValues[source] <= MEASUREMENT_THRESHOLD {
+				clearAlarm(source);
+			}
+		}
+
+		on ObjectCommitFailed(reqId=reqId) as failure and not ObjectCommitted(reqId=reqId) {
+			//something bad happened, perhaps the source was deleted
+			log "Failed to create alarm " + alarm.toString() + ", statusCode : " + failure.statusCode.toString() + ", error : " + failure.body.valueToString() at ERROR;
+		}
+
+		send alarm.withResponse(reqId, new dictionary<string, string>) to Alarm.SEND_CHANNEL;
+	}
+
+	/**
+	 * Send an alarm to the specified device to either create a new alarm or update an existing alarm.
+	 * @param id The ID of the alarm to update. Should be empty string to create a new alarm.
+	 * @param source The ID of the device.
+	 * @param status The alarm status.
+	 * @param msg The alarm message.
+	 */
+	action newAlarmObject(string id, string source, string status, string msg) returns Alarm {
+		Alarm alarm := new Alarm;
+		alarm.id := id;
+		alarm.status := status;
+		alarm.severity := ALARM_SEVERITY;
+		alarm.source := source;
+		alarm.text := msg;
+		alarm.type := ALARM_TYPE;
+		alarm.time := currentTime;
+		return alarm;
+	}
+}

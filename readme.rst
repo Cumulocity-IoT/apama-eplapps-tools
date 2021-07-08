@@ -33,9 +33,11 @@ Complete documentation for Apama EPL Apps Tools can be found `here <https://Soft
 
 You can read up on how to use PySys to test your EPL apps in `Using PySys to test EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc//using-pysys>`_.
 
-To find out how to write a test for your EPL apps please look at `Writing tests for EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc//testing-epl>`_.
+To find out how to write a test for your EPL apps look at `Writing tests for EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc//testing-epl>`_.
 
-In order to view documentation on classes for PySys helpers for Apama EPL Apps please see: `PySys helpers <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/autodocgen/apamax.eplapplications.html#module-apamax.eplapplications>`_.
+To find out how to performance test your EPL apps look at `Performance testing EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/performance>`_.
+
+In order to view the documentation on classes for PySys helpers for Apama EPL Apps see: `PySys helpers <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/autodocgen/apamax.eplapplications.html#module-apamax.eplapplications>`_.
 
 See <http://www.apamacommunity.com/docs> <https://cumulocity.com/guides/apama> <https://pysys-test.github.io/pysys-test/> for further docs.
 
@@ -49,20 +51,23 @@ The EPL apps test framework requires you to have an installation of PySys. See `
 Repository structure
 ====================
 
-+-------------------------+----------------------------------------------------------+
-| apama-eplapps-tools/    | this directory                                           |
-+-------------------------+----------------------------------------------------------+
-|     readme.rst          | this file                                                |
-+-------------------------+----------------------------------------------------------+
-|     doc/                | directory containing documentation                       |
-+-------------------------+----------------------------------------------------------+
-|     scripts/            | directory containing tools for Apama EPL Applications    |
-+-------------------------+----------------------------------------------------------+
-|     testframework/      | directory containing PySys extensions                    |
-+-------------------------+----------------------------------------------------------+
-|     samples/            | directory containing example code demonstrating testing  |
-+-------------------------+----------------------------------------------------------+
++-------------------------+----------------------------------------------------------------------+
+| apama-eplapps-tools/    | this directory                                                       |
++-------------------------+----------------------------------------------------------------------+
+|    readme.rst           | this file                                                            |
++-------------------------+----------------------------------------------------------------------+
+|    doc/                 | directory containing documentation                                   |
++-------------------------+----------------------------------------------------------------------+
+|    scripts/             | directory containing tools for Apama EPL Applications                |
++-------------------------+----------------------------------------------------------------------+
+|    testframework/       | directory containing PySys extensions                                |
++-------------------------+----------------------------------------------------------------------+
+|    samples/             | directory containing example code demonstrating testing              |
++-------------------------+----------------------------------------------------------------------+
+|    samples-performance/ | directory containing example code demonstrating performance testing  |
++-------------------------+----------------------------------------------------------------------+
 
+Change Log
+-----------
 
-
-
+See `Change Log <changelog.rst>`_ for changes.

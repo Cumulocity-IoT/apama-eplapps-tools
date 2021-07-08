@@ -1,0 +1,38 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto" state="runnable">
+
+  <description>
+    <title>Performance of BuildingOccupancyMonitoring App</title>
+    <purpose><![CDATA[
+      Check performance of the BuildingOccupancyMonitoring app.
+
+      The BuildingOccupancyMonitoring app is a combination of three EPL apps to monitor occupancies 
+      of buildings. It combines BuildingOccupancyCalculation, AlarmOnMeasurementThreshold, and 
+      OperationOnAlarmNotCleared EPL apps.
+
+      Each building has multiple access points through which people can enter or exit. Each access point 
+      generates measurements for the total number of people entered and exited through it. The 
+      BuildingOccupancyCalculation app calculates the total occupancy of each building and generates 
+      periodic measurements with the count. The AlarmOnMeasurementThreshold is used to monitor the total occupancy 
+      of each building and raises an alarm if occupancy is more than the defined threshold. The OperationOnAlarmNotCleared 
+      app monitors the raised alarms and creates an operation if a raised alarm is not cleared within the configured duration.
+]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group>performance</group>
+    </groups>
+  </classification>
+
+  <data>
+    <class name="PySysTest" module="run"/>
+  </data>
+  
+  <traceability>
+    <requirements>
+      <requirement id=""/>
+    </requirements>
+  </traceability>
+</pysystest>
