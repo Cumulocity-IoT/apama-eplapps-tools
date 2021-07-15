@@ -17,7 +17,7 @@ from pathlib import Path
 
 
 class EPLApps:
-	"""Class for interacting with Apama EPL Apps in Cumulocity
+	"""Class for interacting with Apama EPL Apps in Cumulocity IoT.
 
 		:param connection: A C8yConnection object for the connection to the platform.
 	"""
@@ -27,11 +27,11 @@ class EPLApps:
 
 	def deploy(self, file, name='', description=None, inactive=False, redeploy=False):
 		"""
-		Deploys a local mon file to Apama EPL Apps in Cumulocity.
+		Deploys a local mon file to Apama EPL Apps in Cumulocity IoT.
 
-		:param file: Path to local mon file to be deployed as an EPL app
+		:param file: Path to local mon file to be deployed as an EPL app.
 		:param name: Name of the EPL app to be uploaded (optional). By default this will be the name of the mon file being uploaded.
-		:param description: Description of the EPL app (optional)
+		:param description: Description of the EPL app (optional).
 		:param inactive: Boolean of whether the app should be 'active' (inactive=False) or 'inactive' (inactive=True) when it is deployed.
 		:param redeploy: Boolean of whether we are overwriting an existing EPL app.
 		"""
@@ -90,7 +90,7 @@ class EPLApps:
 
 	def update(self, name, new_name=None, file=None, description=None, state=None):
 		"""
-		Updates an EPL app in Cumulocity.
+		Updates an EPL app in Cumulocity IoT.
 
 		:param name: name of the EPL App to be updated.
 		:param new_name: the updated name of the EPL app (optional)
@@ -160,7 +160,7 @@ class EPLApps:
 	def getEPLApps(self, includeContents=False):
 		"""
 		:param includeContents: Fetches the EPL files with their contents if True. This is an optional query parameter.
-		:return: A json object of all the user's EPL apps in Cumulocity
+		:return: A json object of all the user's EPL apps in Cumulocity IoT.
 		"""
 		try:
 			return self.connection.do_get(f'/service/cep/eplfiles?contents={includeContents}')['eplfiles']
@@ -169,7 +169,7 @@ class EPLApps:
 
 	def delete(self, name: str):
 		"""
-		Deletes an EPL app in Cumulocity.
+		Deletes an EPL app in Cumulocity IoT.
 
 		:param name: The name of the EPL app to be deleted.
 		"""

@@ -15,6 +15,10 @@ The behavior of most EPL apps usually consists of receiving data, sending measur
 
 This can all be done using additional EPL apps that run parallel to the EPL app that we wish to test for correctness. This document will demonstrate some of the common processes involved in writing these additional EPL apps that test your existing EPL apps, while outlining some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK. 
 
+See the :doc:`Performance testing EPL apps <performance-testing>` document for writing performance tests.
+
+.. _device-simulator:
+
 Creating device simulators
 ===========================
 All measurements and alarms in Cumulocity IoT must be associated with a source. Devices in Cumulocity IoT are represented by managed objects, each of which has a unique identifier. When sending measurement or alarm events, the ``source`` field of these events must be set to a identifier of a managed object in Cumulocity IoT. Therefore, in order to send measurements from our test EPL app, it must create a ``ManagedObject`` device simulator to be the source of these measurements.
@@ -56,7 +60,7 @@ To see how this can be done, have a look at the ``createNewDevice`` action below
 		return reqId;
 	}
 
-This action initializes a ``ManagedObject`` (using the "PYSYS\_" naming prefix and adding the ``c8y_IsDevice`` property), before sending it using a ``withReponse`` action. It then confirms that it has been successfully created using listeners for ``ObjectCommitted`` and ``ObjectCommitFailed`` events. Whenever you are creating or updating an object in Cumulocity IoT and you want to verify that the change has been successful, it is recommended that you use the ``withResponse`` action in conjunction with ``ObjectCommitted`` and ``ObjectCommitFailed`` listeners (for more information, see the information on updating a managed object in the 'The Cumulocity IoT Transport Connectivity Plug-in' section of the `documentation <https://documentation.softwareag.com/apamadoc.htm>`_). Using this approach you can easily relay when the process has completed (which is done by sending an event, ``DeviceCreated``, in the example above), and in the event of an error you can cause the test to exit quickly.
+This action initializes a ``ManagedObject`` (using the "PYSYS\_" naming prefix and adding the ``c8y_IsDevice`` property), before sending it using a ``withResponse`` action. It then confirms that it has been successfully created using listeners for ``ObjectCommitted`` and ``ObjectCommitFailed`` events. Whenever you are creating or updating an object in Cumulocity IoT and you want to verify that the change has been successful, it is recommended that you use the ``withResponse`` action in conjunction with ``ObjectCommitted`` and ``ObjectCommitFailed`` listeners (for more information, see the information on updating a managed object in the 'The Cumulocity IoT Transport Connectivity Plug-in' section of the `documentation <https://documentation.softwareag.com/apamadoc.htm>`_). Using this approach you can easily relay when the process has completed (which is done by sending an event, ``DeviceCreated``, in the example above), and in the event of an error you can cause the test to exit quickly.
 
 
 Sending events to your EPL apps
@@ -142,7 +146,7 @@ Using an example of a test that checks for an alarm, this would involve subscrib
 
 		// Send measurement and check to see whether an alarm is raised 
 		integer measurementReqId := sendMeasurement(device.deviceId, value);
-		on ObjectCommited(reqId=measurementReqId)
+		on ObjectCommitted(reqId=measurementReqId)
 		and not ObjectCommitFailed(reqId=measurementReqId)
 		{
 			send FindAlarm(reqId, {"source": device.deviceId, "type": ALARM_TYPE, "resolved": "false"}) to FindAlarm.SEND_CHANNEL;

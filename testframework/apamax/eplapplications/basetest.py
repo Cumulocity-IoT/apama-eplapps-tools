@@ -15,41 +15,49 @@ from pysys.basetest import BaseTest
 import urllib.request
 import xml.etree.ElementTree as ET
 import os
+import urllib
 import inspect
 import hashlib
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))))
 from apamax.eplapplications.eplapps import EPLApps
 from apamax.eplapplications.platform import CumulocityPlatform
 from apamax.eplapplications.connection import C8yConnection
+from datetime import datetime
 
 APPLICATION_NAME = 'pysys-test-application'
 APPLICATION_KEY = 'pysys-test-key'
 
 class ApamaC8YBaseTest(BaseTest):
 	"""
-	Base test for EPL Applications tests.
+	Base test for EPL applications tests.
 
-	Requires the following to be set on the project in pysysproject.xml file (typically from the environment):
+	Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):
 
 	- EPL_TESTING_SDK
-	- APAMA_HOME - only if running a local correlator
+	- APAMA_HOME - Only if running a local correlator.
 	"""
 
 	def setup(self):
 		super(ApamaC8YBaseTest, self).setup()
+		# Check EPL_TESTING_SDK env is set
+		if not os.path.isdir(self.project.EPL_TESTING_SDK):
+			self.abort(BLOCKED, f'EPL_TESTING_SDK is not valid ({self.project.EPL_TESTING_SDK}). Please set the EPL_TESTING_SDK environment variable.')
+
 		self.modelId = 0 
-		self.TEST_DEVICE_PREFIX = "PYSYS_" 
+		self.TEST_DEVICE_PREFIX = "PYSYS_"
+		self.EPL_APP_PREFIX = self.TEST_DEVICE_PREFIX
 		# connect to the platform
 		self.platform = CumulocityPlatform(self)
 
 	def createAppKey(self, url, username, password):
 		"""
 			Checks if the tenant has an external application defined for us and if not, creates it.
-			:param url: The URL to the Cumulocity tenant.
+
+			:param url: The URL to the Cumulocity IoT tenant.
 			:param username: The user to authenticate to the tenant.
 			:param password: The password to authenticate to the tenant.
 
-			:return: A app key suitable for connecting a test correlator to the tenant.
+			:return: An app key suitable for connecting a test correlator to the tenant.
 		"""
 		try:
 			conn = C8yConnection(url, username, password)
@@ -64,12 +72,13 @@ class ApamaC8YBaseTest(BaseTest):
 
 	def createProject(self, name, existingProject=None):
 		"""
-			Create a ProjectHelper object which mimics the Cumulocity EPL applications environment.
+			Creates a `ProjectHelper` object which mimics the Cumulocity IoT EPL applications environment.
 
-			Adds all the required bundles and adds the properties to connect and authenticate to the configured Cumulocity tenant.
+			Adds all the required bundles and adds the properties to connect and authenticate to the configured Cumulocity IoT tenant.
 
-			:param name: The name of the project
+			:param name: The name of the project.
 			:param existingProject: If provided the path to an existing project. The environment will be added to that project instead of a new one.
+			:return: A `ProjectHelper` object.
 		"""
 		# only import apama.project when calling this function which requires it
 		try:
@@ -92,9 +101,10 @@ class ApamaC8YBaseTest(BaseTest):
 		return apama_project
 
 	def addC8YPropertiesToProject(self, apamaProject, params=None):
-		"""adds the connection parameters into the project
+		"""Adds the connection parameters into a project.
 		
-		:param params: dictionary to override and add to those defined for the project::
+		:param apamaProject: The `ProjectHelper` object for a project.
+		:param params: The dictionary of parameters to override and add to those defined for the project::
 		
 			<property name="CUMULOCITY_USERNAME" value="my-user"/>
 			<property name="CUMULOCITY_PASSWORD" value="my-password"/>
@@ -132,10 +142,11 @@ class ApamaC8YBaseTest(BaseTest):
 
 	def getTestSubjectEPLApps(self):
 		"""
-			Retrieves a list of paths to EPL App(s) being tested.  
-			If the user defines the <user-data name="EPLApp" value="EPLAppToBeTested"/> tag in the pysystest.xml file,
-			then we just return the EPL App defined by the tag's value. 
-			If this tag is not defined (or the value is an empty string) then all the mon files in project.EPL_APPS directory are returned.
+			Retrieves a list of paths to the EPL apps being tested.
+
+			If the user defines the `<user-data name="EPLApp" value="EPLAppToBeTested"/>` tag in the pysystest.xml file, 
+			then we just return the EPL app defined by the tag's value. If this tag is not defined (or the value is an empty string) 
+			then all the mon files in the project.EPL_APPS directory are returned.
 		"""
 		# Check EPL_APPS env is valid
 		if not os.path.isdir(self.project.EPL_APPS):
@@ -153,7 +164,7 @@ class ApamaC8YBaseTest(BaseTest):
 			else:
 				eplAppsPaths.append(os.path.join(self.project.EPL_APPS, eplApp))
 		else:
-			# If user has not defined EPLApp in pysystest.xml, return all files in project.EPL_APPS by default 
+			# If user has not defined EPLApp in pysystest.xml, return all files in project.EPL_APPS by default 
 			eplAppsFiles = os.listdir(self.project.EPL_APPS)
 			for eplApp in eplAppsFiles:
 				# Check file is a .mon file before appending
@@ -171,6 +182,161 @@ class ApamaC8YBaseTest(BaseTest):
 		# Delete devices that were created by tests
 		self._deleteTestDevices()
 
+	def createTestDevice(self, name, type='PySysTestDevice', children=None):
+		"""
+		Creates a Cumulocity IoT device for testing.
+
+		:param str name: The name of the device. The name of the device is prefixed with `PYSYS_` so that the framework can identify and clean up test devices.
+		:param type: The type of the device.
+		:type type: str, optional
+		:param children: The list of device IDs to add them as children to the created device.
+		:type children: list[str], optional
+		:return: The ID of the device created.
+		:rtype: str
+		"""
+		device = {
+			'name': f'{self.TEST_DEVICE_PREFIX}{name}',
+			'c8y_IsDevice': True,
+			'type': type,
+			'com_cumulocity_model_Agent': {}
+		}
+		id = self.platform.getC8YConnection().do_request_json('POST', '/inventory/managedObjects', device)
+		
+		children = children or []
+		for child in children:
+			self.platform.getC8YConnection().do_request_json('POST', f'/inventory/managedObjects/{id}/childDevices', {'managedObject': {'id': child}})
+		return id
+
+	def getAlarms(self, source=None, type=None, status=None, dateFrom=None, dateTo=None, **kwargs):
+		"""
+		Gets all alarms with matching parameters.
+
+		For example::
+		
+			self.getAlarms(type='my_alarms', dateFrom='2021-04-15 11:00:00.000Z', 
+							dateTo='2021-04-15 11:30:00.000Z')
+
+		:param source: The source object of the alarm. Get alarms for all objects if not specified.
+		:type source: str, optional
+		:param type: The type of alarm to get. Get alarms of all types if not specified.
+		:type type: str, optional
+		:param status: The status of the alarms to get. Get alarms of all status if not specified.
+		:type status: str, optional
+		:param dateFrom: The start time of the alarm in the ISO format. If specified, only alarms that are created on or after this time are fetched.
+		:type dateFrom: str, optional
+		:param dateTo: The end time of the alarm in the ISO format. If specified, only alarms that are created on or before this time are fetched.
+		:type dateTo: str, optional
+		:param \**kwargs: All additional keyword arguments are treated as extra parameters for filtering alarms. 
+		:return: List of alarms.
+		:rtype: list[object]
+		"""
+		queryParams = {}
+		if source:
+			queryParams['source'] = source
+		if type:
+			queryParams['type'] = type
+		if status:
+			queryParams['status'] = status
+		if dateFrom:
+			queryParams['dateFrom'] = dateFrom
+		if dateTo:
+			queryParams['dateTo'] = dateTo		
+		if kwargs:
+			queryParams.update(kwargs)
+			
+		return self._getCumulocityObjectCollection('/alarm/alarms', queryParams=queryParams, responseKey='alarms')
+
+	def getOperations(self, deviceId=None, fragmentType=None, dateFrom=None, dateTo=None, **kwargs):
+		"""
+		Gets all operations with matching parameters.
+
+		For example::
+		
+			self.getOperations(fragmentType='my_ops', dateFrom='2021-04-15 11:00:00.000Z', 
+								dateTo='2021-04-15 11:30:00.000Z')
+
+		:param deviceId: The device ID of the alarm. Get operations for all devices if not specified.
+		:type deviceId: str, optional
+		:param fragmentType: The type of fragment that must be part of the operation.
+		:type fragmentType: str, optional
+		:param dateFrom: The start time of the operation in the ISO format. If specified, only operations that are created on or after this time are fetched.
+		:type dateFrom: str, optional
+		:param dateTo: The end time of the operation in the ISO format. If specified, only operations that are created on or before this time are fetched.
+		:type dateTo: str, optional
+		:param \**kwargs: All additional keyword arguments are treated as extra parameters for filtering operations.
+		:return: List of operations.
+		:rtype: list[object]
+		"""
+
+		queryParams = {}
+		if deviceId:
+			queryParams['deviceId'] = deviceId
+		if fragmentType:
+			queryParams['fragmentType'] = fragmentType
+		if dateFrom:
+			queryParams['dateFrom'] = dateFrom
+		if dateTo:
+			queryParams['dateTo'] = dateTo
+		if kwargs:
+			queryParams.update(kwargs)
+		
+		return self._getCumulocityObjectCollection('/devicecontrol/operations', queryParams=queryParams, responseKey='operations')
+
+	def copyWithReplace(self, sourceFile, targetFile, replacementDict, marker='@'):
+		"""
+			Copies the source file to the target file and replaces the placeholder strings with the actual values.
+
+			:param sourceFile: The path to the source file to copy.
+			:type sourceFile: str
+			:param targetFile: The path to the target file.
+			:type targetFile: str
+			:param replacementDict: A dictionary containing placeholder strings and their actual values to replace.
+			:type replacementDict: dict[str, str]
+			:param marker: Marker string used to surround replacement strings in the source file to disambiguate from normal strings. For example, `@`.
+			:type marker: str, optional	
+		"""
+		def mapper(line):
+			for key, value in replacementDict.items():
+				line = line.replace(f'{marker}{key}{marker}', str(value))
+			return line
+		self.copy(sourceFile, targetFile, mappers=[mapper])
+		
+	def _getCumulocityObjectCollection(self, resourceUrl, queryParams, responseKey):
+		"""
+			Gets all Cumulocity IoT object collection.
+
+			Fetches all pages of the collection.
+
+			:param str resourceUrl: The base url of the object to get. For example, /alarm/alarms.
+			:param dict[str,str] queryParams: The query parameters.
+			:param str responseKey: The key to use to get actual object list from the response JSON.
+			:return: List of all object.
+			:rtype: list[object]
+		"""
+		result = []
+		PAGE_SIZE = 100 	# By default, pageSize = 5 for querying to C8y
+		queryParams = queryParams or {}
+		
+		def create_url(**params):
+			p = queryParams.copy()
+			p.update(params)
+			if '?' in resourceUrl:
+				return f'{resourceUrl}&{urllib.parse.urlencode(p)}'
+			else:
+				return f'{resourceUrl}?{urllib.parse.urlencode(p)}'
+
+		resp = self.platform.getC8YConnection().do_get(create_url(pageSize=PAGE_SIZE, currentPage=1, withTotalPages=True))
+
+		result += resp[responseKey]
+		# Make sure we retrieve all pages from query
+		TOTAL_PAGES = resp['statistics']['totalPages']
+		if TOTAL_PAGES > 1:
+			for currentPage in range(2, TOTAL_PAGES + 1):
+				resp = self.platform.getC8YConnection().do_get(create_url(pageSize=PAGE_SIZE, currentPage=currentPage))
+				result += resp[responseKey]
+
+		return result
+
 	def _clearActiveAlarms(self):
 		"""
 			Clears all active alarms as part of a pre-test tenant cleanup. 
@@ -183,28 +349,48 @@ class ApamaC8YBaseTest(BaseTest):
 			Deletes all ManagedObjects that have name prefixed with "PYSYS_" and the 'c8y_isDevice' param as part of pre-test tenant cleanup.
 		"""
 		self.log.info("Deleting old test devices")
-		# Retrieving test devices
-		PAGE_SIZE = 100 	# By default, pageSize = 5 for querying to C8y
-		resp = self.platform.getC8YConnection().do_get(
-			"/inventory/managedObjects" +
-			f"?query=has(c8y_IsDevice)+and+name+eq+'{self.TEST_DEVICE_PREFIX}*'" +
-			f"&pageSize={PAGE_SIZE}&currentPage=1&withTotalPages=true")
-		testDevices = resp['managedObjects']
-		# Make sure we retrieve all pages from query
-		TOTAL_PAGES = resp['statistics']['totalPages']
-		if TOTAL_PAGES > 1:
-			for currentPage in range(2, TOTAL_PAGES + 1):
-				resp = self.platform.getC8YConnection().do_get(
-					"/inventory/managedObjects" +
-					f"?query=has(c8y_IsDevice)+and+name+eq+'{self.TEST_DEVICE_PREFIX}*'" +
-					f"&pageSize={PAGE_SIZE}&currentPage={currentPage}")
-				testDevices = testDevices + resp['managedObjects']
-		
+		testDevices = self._getCumulocityObjectCollection(f"/inventory/managedObjects", 
+						queryParams={'query':f"has(c8y_IsDevice) and name eq '{self.TEST_DEVICE_PREFIX}*'"},
+						responseKey='managedObjects')
 		# Deleting test devices
 		testDeviceIds = [device['id'] for device in testDevices]
 		for deviceId in testDeviceIds:
 			resp = self.platform.getC8YConnection().request('DELETE', f'/inventory/managedObjects/{deviceId}')
 
+	def _deleteTestEPLApps(self):
+		"""
+			Deletes all EPL apps with name prefixed by "PYSYS_" or "PYSYS_TEST"
+			as part of a pre-test tenant cleanup. 
+		"""
+		eplapps = EPLApps(self.platform.getC8YConnection())
+		appsToDelete = []
+		allApps = eplapps.getEPLApps(False)
+		for eplApp in allApps:
+			name = eplApp["name"]
+			if name.startswith(self.EPL_APP_PREFIX):
+				appsToDelete.append(name)
+		if len(appsToDelete) > 0:
+			self.log.info(f'Deleting the following EPL apps: {str(appsToDelete)}')
+		for name in appsToDelete:
+			eplapps.delete(name)
+
+	def getUTCTime(self, timestamp=None):
+		""" 
+			Gets a Cumulocity IoT-compliant UTC timestamp string for the current time or the specified time.
+
+			:param timestamp: The epoc timestamp to get timestamp string for. Use current time if not specified.
+			:type timestamp: float, optional
+			:return: Timestamp string.
+			:rtype: str
+		"""
+		if timestamp is not None:
+			t = datetime.utcfromtimestamp(timestamp)
+		else:
+			t = datetime.utcnow()
+		if t.microsecond == 0:
+			return t.isoformat() + '.000Z'
+		else:
+			return t.isoformat()[:-3] + 'Z'
 
 class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 	""" 
@@ -219,13 +405,11 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 	def execute(self):
 		"""
 			Runs all the tests in the Input directory against the applications configured in the EPL_APPS 
-			directory or with the EPLApps directive. 
+			directory or with the `EPLApps` directive. 
 		"""
-		# Check APAMA_HOME and EPL_TESTING_SDK env are valid
+		# Check APAMA_HOME env is set
 		if not os.path.isdir(self.project.APAMA_HOME):
 			self.abort(BLOCKED, f'APAMA_HOME project property is not valid ({self.project.APAMA_HOME}). Try running in an Apama command prompt.')
-		if not os.path.isdir(self.project.EPL_TESTING_SDK):
-			self.abort(BLOCKED, f'EPL_TESTING_SDK is not valid ({self.project.EPL_TESTING_SDK}). Please set the EPL_TESTING_SDK environment variable.')
 
 		from apama.correlator import CorrelatorHelper
 		# Create test project and add C8Y properties and EPL Apps 
@@ -257,7 +441,7 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 
 	def validate(self):
 		"""
-			Checks than no errors were logged to the correlator log file.
+			Checks that no errors were logged to the correlator log file.
 		"""
 		# look for log statements in the correlator log file
 		self.log.info("Checking for errors")
@@ -265,7 +449,7 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 
 	def addEPLAppsToProject(self, eplApps, project):
 		"""
-			Adds the EPL app(s) being tested to a project. 
+			Adds the EPL app(s) being tested to a project. 
 		"""
 		for eplApp in eplApps:
 			try:
@@ -277,7 +461,7 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 	def getMonitorsFromInjectedFile(self, correlator, file):
 		"""
 			Retrieves a list of active monitors in a correlator, added from a particular mon file 
-			using GET request to http://correlator.host:correlator.port 
+			using a GET request to http://correlator.host:correlator.port.
 		"""
 		monitors = []
 		url = f'http://{correlator.host}:{correlator.port}'
@@ -309,7 +493,7 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 
 class EPLAppsSimpleTest(ApamaC8YBaseTest):
 	"""
-		Base test for running test with no run.py on EPL apps running in Cumulocity.
+		Base test for running test with no run.py on EPL apps running in Cumulocity IoT.
 	"""
 
 	def setup(self):
@@ -319,44 +503,24 @@ class EPLAppsSimpleTest(ApamaC8YBaseTest):
 		self.apps = None
 		self.eplapps = None
 		self.addCleanupFunction(lambda: self.shutdown())
-		self.EPL_APP_PREFIX = self.TEST_DEVICE_PREFIX
 		self.EPL_TEST_APP_PREFIX = self.EPL_APP_PREFIX + "TEST_"
-		# Check EPL_TESTING_SDK env is set
-		if not os.path.isdir(self.project.EPL_TESTING_SDK):
-			self.abort(BLOCKED, f'EPL_TESTING_SDK is not valid ({self.project.EPL_TESTING_SDK}). Please set the EPL_TESTING_SDK environment variable.')
+
 		self.eplapps = EPLApps(self.platform.getC8YConnection())
 		self.prepareTenant()
 
 	def prepareTenant(self):
 		"""
-			Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL Apps which have been uploaded by tests, and clearing all active alarms. 
+			Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL apps which have been uploaded by tests, and clearing all active alarms. 
 			
-			This is done first so that there's no possibility existing test apps raising alarms or creating devices
+			This is done first so that it is not possible for existing test apps to raise alarms or create devices.
 		"""
 		self._deleteTestEPLApps()
 		super(EPLAppsSimpleTest, self).prepareTenant()
 
-
-	def _deleteTestEPLApps(self):
-		"""
-			Deletes all EPL apps with name prefixed by "PYSYS_" or "PYSYS_TEST"
-			as part of a pre-test tenant cleanup. 
-		"""
-		appsToDelete = []
-		allApps = self.eplapps.getEPLApps(False)
-		for eplApp in allApps:
-			name = eplApp["name"]
-			if name.startswith(self.EPL_APP_PREFIX):
-				appsToDelete.append(name)
-		if len(appsToDelete) > 0:
-			self.log.info(f'Deleting the following EPL apps: {str(appsToDelete)}')
-		for name in appsToDelete:
-			self.eplapps.delete(name)
-
 	def execute(self):
 		"""
 			Runs all the tests in the Input directory against the applications configured in the EPL_APPS 
-			directory or with the EPLApps directive using EPL applications to run each test.
+			directory or with the `EPLApps` directive using EPL apps to run each test.
 		"""
 		# EPL Applications under test
 		appPaths = self.getTestSubjectEPLApps()
@@ -387,14 +551,14 @@ class EPLAppsSimpleTest(ApamaC8YBaseTest):
 		
 	def validate(self):
 		"""
-			Ensure that no errors were logged in the platform log file while we were running the test.
+			Ensures that no errors were logged in the platform log file while we were running the test.
 		"""
 		self.log.info("Checking for errors")
 		self.assertGrep(self.platform.getApamaLogFile(), expr=' (ERROR|FATAL) .*', contains=False)
 		
 	def shutdown(self):
 		"""
-			Deactivate all EPL apps which were uploaded when the test terminates.
+			Deactivates all uploaded EPL apps when the test terminates.
 		"""
 		self.log.info("Deactivating EPL apps")
 		# when we finish, deactivate anything we started

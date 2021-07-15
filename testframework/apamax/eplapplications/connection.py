@@ -14,7 +14,7 @@ from  apamax.eplapplications.buildVersions import RELEASE_TRAIN_VERSION
 
 class C8yConnection(object):
 	"""
-	Simple object to create connection to Cumulocity and perform REST requests.
+	Simple object to create connection to Cumulocity IoT and perform REST requests.
 	"""
 
 	def __init__(self, url, username, password):

@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto" state="runnable">
+
+  <description>
+    <title>Basic correctness test of BuildingOccupancyCalculation app</title>
+    <purpose><![CDATA[
+      Check that the BuildingOccupancyCalculation app works correctly. Send data to access points
+      and verify that the building is generating correct measurements.
+]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group></group>
+    </groups>
+  </classification>
+
+  <data>
+    <class name="PySysTest" module="run"/>
+  </data>
+  
+  <traceability>
+    <requirements>
+      <requirement id=""/>
+    </requirements>
+  </traceability>
+</pysystest>

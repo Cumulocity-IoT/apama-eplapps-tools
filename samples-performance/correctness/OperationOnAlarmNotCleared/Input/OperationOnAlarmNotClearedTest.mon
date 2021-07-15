@@ -1,0 +1,228 @@
+/*
+ Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ file except in compliance with the License. You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the
+ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.
+*/
+
+using com.apama.cumulocity.Util;
+using com.apama.cumulocity.Alarm;
+using com.apama.cumulocity.Operation;
+using com.apama.cumulocity.ManagedObject;
+using com.apama.cumulocity.ObjectCommitted;
+using com.apama.cumulocity.ObjectCommitFailed;
+
+event DeviceCreated {
+	string deviceId;
+	integer reqId;
+}
+
+monitor OperationOnAlarmNotClearedTest {
+	/** Alarm type to monitor. */
+	constant string ALARM_TYPE := "@ALARM_TYPE@";
+
+	/** Duration to wait for alarms to be cleared before creating an operation. */
+	constant float ALARM_CLEAR_DURATION_MINUTES := @ALARM_CLEAR_DURATION_MINUTES@;
+
+	/** Type of the devices to create. */
+	constant string DEVICE_TYPE := "testDevice";
+	/** Prefix to use when creating test devices. */
+	constant string TEST_DEVICE_PREFIX := "PYSYS_";
+
+	/** Time to wait for an operation to be created or not created. */
+	float OPERATION_WAIT_TIMEOUT := 10.0 + ALARM_CLEAR_DURATION_MINUTES * 60.0;
+
+	action onload()	{
+		// Check that operation is created when alarm is not cleared
+		runAlarmNotClearedTestCase();
+		// Check that operation is not created when alarm is cleared
+		runAlarmClearedTestCase();
+		// Check that operation is not created when alarm of different type is created
+		runAlarmOfDifferentTypeTestCase();
+	}
+
+	/**
+	 * Creates a new device, generates an Alarm from this device and checks to see
+	 * if an Operation is created within configured time.
+	 */
+	action runAlarmNotClearedTestCase() {
+		monitor.subscribe("TEST_CHANNEL");
+
+		// Create a device for this subtest
+		on DeviceCreated(reqId=createNewDevice("OperationOnAlarmNotClearedTestDevice")) as device {
+			monitor.subscribe(Operation.SUBSCRIBE_CHANNEL);
+			monitor.subscribe(Alarm.SUBSCRIBE_CHANNEL);
+
+			// Listener for alarm creation
+			on Alarm(source=device.deviceId, severity="MAJOR", type=ALARM_TYPE) as a {
+				// Check that an operation is created.
+				on Operation(source=device.deviceId) and not wait(OPERATION_WAIT_TIMEOUT) {
+					log "Operation created - PASS" at INFO;
+				}
+				on wait (OPERATION_WAIT_TIMEOUT) and not Operation(source=device.deviceId) {
+					log "Operation not created when it was expected - FAIL" at ERROR;
+				}
+			}
+
+			// Raise an alarm to start the subtest
+			raiseAlarm(device.deviceId, ALARM_TYPE);
+		}
+	}
+
+	/**
+	 * Creates a new device, generates an Alarm from this device and then clears after sometime.
+	 * It then verifies that no Operation is created within the configured time.
+	 */
+	action runAlarmClearedTestCase() {
+		monitor.subscribe("TEST_CHANNEL");
+
+		// Create a device for this subtest
+		on DeviceCreated(reqId=createNewDevice("OperationOnAlarmNotClearedTestDevice")) as device {
+			monitor.subscribe(Operation.SUBSCRIBE_CHANNEL);
+			monitor.subscribe(Alarm.SUBSCRIBE_CHANNEL);
+
+			// Listener for alarm creation
+			on Alarm(source=device.deviceId, severity="MAJOR", type=ALARM_TYPE) as a {
+
+				// Wait for 2 seconds before clearing the alarm
+				on wait(2.0) {
+					clearAlarm(a.id);
+
+					// Check that no operation is created.
+					on wait (OPERATION_WAIT_TIMEOUT) and not Operation(source=device.deviceId) {
+						log "Operation not created - PASS" at INFO;
+					}
+					on Operation(source=device.deviceId) and not wait(OPERATION_WAIT_TIMEOUT) {
+						log "Operation created when it was not expected - FAIL" at ERROR;
+					}
+				}
+			}
+
+			// Raise an alarm to start the subtest
+			raiseAlarm(device.deviceId, ALARM_TYPE);
+		}
+	}
+
+	/**
+	 * Creates a new device, generates an Alarm of type not same as ALARM_TYPE, and verify
+	 * that no Operation is created within the configured time.
+	 */
+	action runAlarmOfDifferentTypeTestCase() {
+		monitor.subscribe("TEST_CHANNEL");
+
+		// Create a device for this subtest
+		on DeviceCreated(reqId=createNewDevice("OperationOnAlarmNotClearedTestDevice")) as device {
+			monitor.subscribe(Operation.SUBSCRIBE_CHANNEL);
+			monitor.subscribe(Alarm.SUBSCRIBE_CHANNEL);
+
+			// Type of alarm to generate which is not same as ALARM_TYPE
+			string alarmType := ALARM_TYPE + "_2";
+			// Listener for alarm creation
+			on Alarm(source=device.deviceId, severity="MAJOR", type=alarmType) as a {
+				// Check that no operation is created.
+				on wait (OPERATION_WAIT_TIMEOUT) and not Operation(source=device.deviceId) {
+					log "Operation not created - PASS" at INFO;
+				}
+
+				on Operation(source=device.deviceId) and not wait(OPERATION_WAIT_TIMEOUT) {
+					log "Operation created when it was not expected - FAIL" at ERROR;
+				}
+			}
+
+			// Raise an alarm to start the subtest
+			raiseAlarm(device.deviceId, alarmType);
+		}
+	}
+
+
+	/**
+	 * Creates a device simulator to be the source of the alarm.
+	 * @param name The name of our device simulator.
+	 * @returns The reqId of the ManagedObject event sent to create a device.
+	 */
+	action createNewDevice(string name) returns integer {
+		ManagedObject mo := new ManagedObject;
+		mo.type := DEVICE_TYPE;
+
+		mo.name := TEST_DEVICE_PREFIX + name;
+		mo.params.add("c8y_IsDevice", new dictionary<any, any>);
+		mo.params.add("com_cumulocity_model_Agent", new dictionary<any, any>);
+
+		// Create a ManagedObject in Cumulocity IoT and receive a response event confirming the change
+		integer reqId := Util.generateReqId();
+		send mo.withResponse(reqId, new dictionary<string, string>) to ManagedObject.SEND_CHANNEL;
+
+		// Listener for when device has been created
+		on ObjectCommitted(reqId=reqId) as resp
+		and not ObjectCommitFailed(reqId=reqId)
+		{
+			ManagedObject device := <ManagedObject> resp.object;
+			log "New simulator device created " + device.id at INFO;
+			send DeviceCreated(device.id, reqId) to "TEST_CHANNEL";
+		}
+		// Listener for if creation of device fails
+		on ObjectCommitFailed(reqId=reqId) as resp
+		and not ObjectCommitted(reqId=reqId)
+		{
+			log "Unable to create simulator device, reason : " + resp.toString() at ERROR;
+			// Cause test to fail early, rather than wait for timeout
+			die;
+		}
+		return reqId;
+	}
+
+	/**
+	 * Creates an ACTIVE alarm of specific type for specified device
+	 * @param source The id of the ManagedObject that is the source of the alarm.
+	 * @param type The type of alarm to generate
+	*/
+	action raiseAlarm(string source, string type)
+	{
+		Alarm a := new Alarm;
+		a.source := source;
+		a.time := currentTime;
+		a.type := type;
+		a.text := "Test alarm.";
+		a.status := "ACTIVE";
+		a.severity := "MAJOR";
+
+		integer reqId := Util.generateReqId();
+		send a.withResponse(reqId, new dictionary<string, string>) to Alarm.SEND_CHANNEL;
+
+		// Listener for if creation of alarm fails
+		on ObjectCommitFailed(reqId=reqId) as resp
+		and not ObjectCommitted(reqId=reqId)
+		{
+			log "Unable to create alarm, reason : " + resp.toString() at ERROR;
+			// Cause test to fail early, rather than wait for timeout
+			die;
+		}
+	}
+
+	/**
+	 * Clears an alarm
+	 * @param id The id of the alarm to clear
+	*/
+	action clearAlarm(string id) {
+		Alarm a := new Alarm;
+		a.id := id;
+		a.status := "CLEARED";
+
+		integer reqId := Util.generateReqId();
+		send a.withResponse(reqId, new dictionary<string, string>) to Alarm.SEND_CHANNEL;
+
+		// Listener for if creation of alarm fails
+		on ObjectCommitFailed(reqId=reqId) as resp
+		and not ObjectCommitted(reqId=reqId)
+		{
+			log "Unable to clear alarm, reason : " + resp.toString() at ERROR;
+			// Cause test to fail early, rather than wait for timeout
+			die;
+		}
+	}
+}

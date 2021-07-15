@@ -28,7 +28,7 @@ python.exe "%THIS_DIR%\eplapp.py" %*
 goto CHECK
 
 :PY_UNDEFINED
-echo Please add an appropriate Python 3 version to your path. Please refer to the System requirements section of the documentaion.
+echo Please add an appropriate Python 3 version to your path. Please refer to the System requirements section of the documentation.
 goto END
 
 :CHECK

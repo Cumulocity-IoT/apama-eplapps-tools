@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>@TEST_TITLE@</title>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/danvk/dygraphs@b55a71/src/extras/synchronizer.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.css" />
+	
+	<script type="text/javascript">
+		var charts = [];
+		
+		var days_abbr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		
+		function legendFormatter(data) {
+			var dygraph = data.dygraph;
+			var html = "";
+			var showvalues = data.x != null; // false if there's no selected value currently
+			
+			// Need a way to lookup the JavaScript dygraph object later from the onclick listener 
+			// (using just a javascript string), so assign a unique id to the div and add a data attribute to it
+			// (would be great if dygraphs did this automatically)
+			if (!dygraph.graphDiv.id) {
+				var i = 1;
+				while (document.getElementById("__dygraph"+i)) 
+					i++;
+				dygraph.graphDiv.id = "__dygraph"+i;
+			}
+			if (!dygraph.graphDiv.dygraph) { dygraph.graphDiv.dygraph = data.dygraph; }
+			
+			var seriesIndex = 0;
+			data.series.forEach(function(series) 
+			{
+				html += "<label><input type='checkbox' onclick=\"document.getElementById('"+dygraph.graphDiv.id+"').dygraph.setVisibility("+seriesIndex+", ";
+				if (dygraph.visibility()[seriesIndex]) { 
+					html += "false);\" checked>";
+				} else {
+					html += "true);\" >"; 
+				}
+				
+				var labeledData = series.labelHTML;
+				
+				// workaround for the bug where Dygraph.prototype.setColors_ un-sets color for any series where visibility=false; 
+				// this workaround gives correct color if configured using options{colors:[...]} and falls back to transparent if not
+				series.dashHTML = series.dashHTML.replace("color: undefined;", "color: "+(dygraph.getColors()[seriesIndex] || "rgba(255,255,255,0.0)")+";");
+				
+				if (showvalues && series != undefined && series.y != undefined) { labeledData += ': ' + series.yHTML; }
+				if (series.isHighlighted) { labeledData = '<b>' + labeledData + '</b>'; }
+				html += series.dashHTML + " " + labeledData + "</label><br>\n";
+				seriesIndex += 1;
+			});
+			// Display x value at the end, after all the series (to avoid making them jump up/down when there's no selection)
+			if (showvalues) {
+				var thisdate = new Date(data.x);
+				var isostring = thisdate.toISOString();
+				html += days_abbr[thisdate.getDay()]+" "+isostring.slice(0, 10)+" "+isostring.slice(11, 11+8) + " UTC";
+			}
+			return html;
+		}
+	</script>
+
+	<style>
+		body { font-family: tahoma; }
+		
+		span.key { font-weight:bold;}
+
+		a { /* avoid Chrome making underlined parentheses look weird */
+			text-decoration-skip-ink: none;
+		}
+		a.backtotoplink:visited {color:#0000ff;}
+		a.variationtitlelink:link {color:#c20000;}
+		a.variationtitlelink:visited {color:#c20000}
+		.dygraph-legend {
+			left:80px !important;
+		}
+		.charts_toc > li.nobullet {
+			list-style-type:none;
+		}
+		
+		table {
+			border-collapse: collapse;
+			font-size: 0.9rem;
+		}
+
+		td, th {
+			border: 1px solid rgb(190,190,190);
+			padding: 10px 20px;
+		}
+
+		th {
+			background-color: rgb(235,235,235);
+		}
+
+		td {
+			text-align: center;
+		}
+
+		tr:nth-child(even) td {
+			background-color: rgb(250,250,250);
+		}
+
+		tr:nth-child(odd) td {
+			background-color: rgb(245,245,245);
+		}
+	</style>
+</head>
+<body>
+	<div id="top_of_the_page"/>
+	<h1>@TEST_TITLE@</h1>
+
+	<h2>Environment Details</h2>
+	@ENVIRONMENT_DETAILS@
+
+	@VARIATION_LINKS@
+
+	@VARIATION_DATA@
+
+</body></html>

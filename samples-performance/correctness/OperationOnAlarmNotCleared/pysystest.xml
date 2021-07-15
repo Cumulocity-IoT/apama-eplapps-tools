@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto" state="runnable">
+
+  <description>
+    <title>Basic correctness test of OperationOnAlarmNotCleared app</title>
+    <purpose><![CDATA[
+      Check that the OperationOnAlarmNotCleared app works correctly. Raise alarms and test that Operations
+      are raised if the alarm is not cleared within some duration.
+]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group></group>
+    </groups>
+  </classification>
+
+  <data>
+    <class name="PySysTest" module="run"/>
+  </data>
+  
+  <traceability>
+    <requirements>
+      <requirement id=""/>
+    </requirements>
+  </traceability>
+</pysystest>
