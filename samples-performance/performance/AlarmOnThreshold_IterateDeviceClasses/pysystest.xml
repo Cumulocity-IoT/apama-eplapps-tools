@@ -1,0 +1,45 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto" state="runnable">
+
+  <description>
+    <title>Performance of AlarmOnMeasurementThreshold App for variations of device count and data rate</title>
+    <purpose><![CDATA[
+      Check the performance of the AlarmOnMeasurementThreshold app by iterating over devices of various
+      classes.
+      
+      The Cumulocity IoT Device Classes define the incoming update frequency for each class of devices:
+      +================+========================+====================+=======================+
+      | Device class   | Update frequency       | Example device     | Min Ev/s | Max Ev/s   |
+      +================+========================+====================+==========+============+
+      |  A             | < 1 per hour           | Smart Water Meter  |      -   | 0.0003     |
+      +----------------+----------------- ------+--------------------+----------+------------+
+      |  B             | 1-6 per hour           | Vending Machine    | 0.0003   | 0.0017     |
+      +----------------+------------------------+--------------------+----------+------------+
+      |  C             | 6 per hour - 1 per min | Air Compressor     | 0.0017   | 0.0167     |
+      +----------------+------------------------+--------------------+----------+------------+
+      |  D             | 1 - 6 per min          | Excavator          | 0.0167   | 0.1000     |
+      +----------------+------------------------+--------------------+----------+------------+
+      |  E             | 6 per min - 1 per sec  | Vehicle Telematics | 0.1000   | 1.0000     |
+      +----------------+------------------------+--------------------+----------+------------+
+      |  F             | > 1 per sec            | Painting Robot     | 1.0000   | 1,000.0000 |
+      +----------------+------------------------+--------------------+----------+------------+
+]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group>performance</group>
+    </groups>
+  </classification>
+
+  <data>
+    <class name="PySysTest" module="run"/>
+  </data>
+  
+  <traceability>
+    <requirements>
+      <requirement id=""/>
+    </requirements>
+  </traceability>
+</pysystest>

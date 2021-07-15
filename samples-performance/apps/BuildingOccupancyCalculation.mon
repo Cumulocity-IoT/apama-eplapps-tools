@@ -1,0 +1,213 @@
+/*
+ Copyright (c) 2021 Software AG, Darmstadt, Germany and/or its licensors
+
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ file except in compliance with the License. You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the
+ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.
+*/
+
+using com.apama.cumulocity.Measurement;
+using com.apama.cumulocity.MeasurementValue;
+using com.apama.cumulocity.ManagedObject;
+
+using com.apama.cumulocity.FindAlarm;
+using com.apama.cumulocity.FindAlarmResponse;
+using com.apama.cumulocity.FindAlarmResponseAck;
+
+using com.apama.cumulocity.FindManagedObject;
+using com.apama.cumulocity.FindManagedObjectResponse;
+using com.apama.cumulocity.FindManagedObjectResponseAck;
+
+using com.apama.cumulocity.Util;
+
+/**
+ * This application monitors access points of buildings and periodically generates 
+ * measurements containing total occupancy of the building.
+ * 
+ * Each building has multiple access points through which people can enter or exit. 
+ * Each access point generates measurements for the total number of people entered 
+ * and exited through it. This application listens to the measurements from access points. 
+ * The measurements for access points contain the current count of the number of people 
+ * who entered and exited through the access point. The total occupancy of a building is 
+ * calculated from measurements of all access points within a building. A measurement for 
+ * the total occupancy count of a building is periodically generated and sent to Cumulocity IoT.
+ * 
+ * The application finds the building to monitor by querying the managed objects of 
+ * the defined type. The access points of a building are found by querying the children 
+ * of the managed object of the building.
+ *
+ * Note: This is not a production-ready app, only a basic workload for performance and sizing tests. It
+ * does not support various features which may be needed for a production-ready application, for example,
+ * dynamically add or remove buildings, dynamically add or remove access points, etc.
+*/
+monitor BuildingAccessPointsMonitoring {
+
+	/** ManagedObject type identifying a building. */
+	constant string BUILDING_MO_TYPE := "@BUILDING_MO_TYPE@";
+
+	/** ManagedObject type identifying an access point. */
+	constant string ACCESS_POINT_MO_TYPE := "@ACCESS_POINT_MO_TYPE@";
+
+	/** The measurement type to listen for. */
+	constant string ACCESS_POINT_MEASUREMENT_TYPE := "@ACCESS_POINT_MEASUREMENT_TYPE@";
+
+	/** The measurement fragment to listen for. */
+	constant string ACCESS_POINT_MEASUREMENT_FRAGMENT := "@ACCESS_POINT_MEASUREMENT_FRAGMENT@";
+
+	/** The measurement series containing the number of people who entered the building. */
+	constant string ACCESS_POINT_ENTERED_SERIES := "@ACCESS_POINT_ENTERED_SERIES@";
+
+	/** The measurement series containing the number of people who exited the building. */
+	constant string ACCESS_POINT_EXITED_SERIES := "@ACCESS_POINT_EXITED_SERIES@";
+
+
+	/** The type of measurements to generate. */
+	constant string BUILDING_MEASUREMENT_TYPE := "@BUILDING_MEASUREMENT_TYPE@";
+
+	/** The fragment of measurements to generate. */
+	constant string BUILDING_MEASUREMENT_FRAGMENT := "@BUILDING_MEASUREMENT_FRAGMENT@";
+
+	/** The series of measurements to generate. */
+	constant string BUILDING_MEASUREMENT_SERIES := "@BUILDING_MEASUREMENT_SERIES@";
+
+	/** Interval in sec between output generation. */
+	constant float OUTPUT_GENERATION_INTERVAL := 1.0;
+
+	/** The ID of the building, monitored by the current monitor instance. */
+	string buildingId;
+
+	event AccessPointData {
+		/** The number of people entered through this access point. */
+		integer numberOfPeopleEntered;
+
+		/** The number of people exited through this access point. */
+		integer numberOfPeopleExited;
+	}
+
+	/** Map of access points for this building and its corresponding data. */
+	dictionary<string, AccessPointData> accessPoints;
+
+	action onload() {
+
+		// Query all buildings, and start monitoring them. */
+		monitor.subscribe(FindManagedObjectResponse.SUBSCRIBE_CHANNEL);
+
+		integer reqId := Util.generateReqId();
+		FindManagedObject fmo := new FindManagedObject;
+		fmo.reqId := reqId;
+		fmo.params["type"] := BUILDING_MO_TYPE;
+
+		on all FindManagedObjectResponse(reqId=reqId) as resp and not FindManagedObjectResponseAck(reqId=reqId) {
+			spawn startMonitoringBuilding(resp.id, resp.managedObject.childDeviceIds);
+		}
+
+		on FindManagedObjectResponseAck(reqId=reqId) {
+			monitor.unsubscribe(FindManagedObjectResponse.SUBSCRIBE_CHANNEL);
+		}
+
+		send fmo to FindManagedObject.SEND_CHANNEL;
+	}
+
+	/**
+	 * Filters access points from the list of child devices and start monitoring them.
+	 * @param id The ID of the building this monitor instance is monitoring.
+	 * @param childDeviceIds List of child devices of this building.
+	 */
+	action startMonitoringBuilding(string id, sequence<string> childDeviceIds) {
+		// Initialize data for this building
+		buildingId := id;
+		accessPoints := {};
+
+		// Query for all child devices which are access points */
+		integer reqId := Util.generateReqId();
+		FindManagedObject fmo := new FindManagedObject;
+		fmo.reqId := reqId;
+		fmo.params["type"] := ACCESS_POINT_MO_TYPE;
+		fmo.params["ids"] := ",".join(childDeviceIds);
+
+		monitor.subscribe(FindManagedObjectResponse.SUBSCRIBE_CHANNEL);
+		on all FindManagedObjectResponse(reqId=reqId) as resp and not FindManagedObjectResponseAck(reqId=reqId) {
+			accessPoints[resp.id] := new AccessPointData;
+		}
+
+		on FindManagedObjectResponseAck(reqId=reqId) {
+			monitor.unsubscribe(FindManagedObjectResponse.SUBSCRIBE_CHANNEL);
+
+			// Once we have all the access points for this building, start listening for measurements.
+			setupListener();
+		}
+
+		send fmo to FindManagedObject.SEND_CHANNEL;
+	}
+
+	/**
+	 * Initializes the measurement listener t listen for measurements from access points. Also initializes
+	 * a periodic trigger to generate and send measurement for the building periodically.
+	 */
+	action setupListener() {
+
+		// Subscribe to Measurement.SUBSCRIBE_CHANNEL to receive all measurements
+		monitor.subscribe(Measurement.SUBSCRIBE_CHANNEL);
+
+		on all Measurement(type=ACCESS_POINT_MEASUREMENT_TYPE) as m {
+
+			// If the measurement has the correct fragment, and we are tracking the access point from
+			// where this measurement was generated, then we need to process it.
+			if m.measurements.hasKey(ACCESS_POINT_MEASUREMENT_FRAGMENT) and accessPoints.hasKey(m.source) {
+
+				// Update corresponding AccessPointData
+				AccessPointData accessPointData := accessPoints[m.source];
+				dictionary<string, MeasurementValue> series := m.measurements[ACCESS_POINT_MEASUREMENT_FRAGMENT];
+
+				if series.hasKey(ACCESS_POINT_ENTERED_SERIES) {
+					accessPointData.numberOfPeopleEntered := series[ACCESS_POINT_ENTERED_SERIES].value.round();
+				}
+
+				if series.hasKey(ACCESS_POINT_EXITED_SERIES) {
+					accessPointData.numberOfPeopleExited := series[ACCESS_POINT_EXITED_SERIES].value.round();
+				}
+			}
+		}
+
+		// Generate output for this building
+		on all wait(OUTPUT_GENERATION_INTERVAL) {
+			integer numberOfPeopleInside := 0;
+
+			AccessPointData data;
+
+			// Iterate over the access point's data and figure out the number of people inside the building.
+			for data in accessPoints.values() {
+				numberOfPeopleInside := numberOfPeopleInside + data.numberOfPeopleEntered - data.numberOfPeopleExited;
+			}
+
+			// Send measurement for this building
+			generateMeasurement(numberOfPeopleInside);
+		}
+
+		log "Building occupancy calculation setup completed for building " + buildingId at INFO;
+	}
+
+	/**
+	 * Creates and sends measurements containing the number of people inside the building to Cumulocity IoT.
+	 * @param numOfPeopleInsideBuilding The number of people inside the building.
+	 */
+	action generateMeasurement(integer numOfPeopleInsideBuilding) {
+		// Creating a new measurement containing the number of people inside the building.
+		Measurement buildingMeasurement := new Measurement;
+		buildingMeasurement.type := BUILDING_MEASUREMENT_TYPE;
+		buildingMeasurement.source := buildingId;
+		buildingMeasurement.time := currentTime;
+		MeasurementValue measurementValue := buildingMeasurement.measurements
+							.getOrAddDefault(BUILDING_MEASUREMENT_FRAGMENT)
+							.getOrAddDefault(BUILDING_MEASUREMENT_SERIES);
+		measurementValue.value := numOfPeopleInsideBuilding.toFloat();
+		measurementValue.unit := "count";
+
+		// Send the measurement to Cumulocity IoT.
+		send buildingMeasurement to Measurement.SEND_CHANNEL;
+	}
+}

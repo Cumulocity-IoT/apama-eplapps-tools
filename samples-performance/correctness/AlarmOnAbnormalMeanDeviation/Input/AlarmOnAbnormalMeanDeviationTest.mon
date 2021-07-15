@@ -1,0 +1,188 @@
+/*
+ Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ file except in compliance with the License. You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the
+ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.
+*/
+
+using com.apama.cumulocity.Measurement;
+using com.apama.cumulocity.ManagedObject;
+using com.apama.cumulocity.ObjectCommitted;
+using com.apama.cumulocity.ObjectCommitFailed;
+using com.apama.cumulocity.Util;
+using com.apama.cumulocity.Alarm;
+
+monitor AlarmOnDeviationOfDeviceMeanTest {
+	/** Event used to notify device creation result internally. */
+	event DeviceCreated {
+		string deviceId;
+		integer reqId;
+	}
+
+	/** The measurement framgment to create. */
+	constant string FRAGMENT_NAME := "@MEASUREMENT_FRAGMENT@";
+	/** The measurement series to create. */
+	constant string SERIES_NAME := "@MEASUREMENT_SERIES@";
+	/** The measurement type to create. */
+	constant string MEASUREMENT_TYPE := "@MEASUREMENT_TYPE@";
+	/** The type of alarms raised.*/
+	constant string ALARM_TYPE := "@ALARM_TYPE@";
+
+	/** Type of the device to create for testing. */
+	constant string DEVICE_TYPE := "testDevice";
+	/** Prefix to use for test devices. */
+	constant string TEST_DEVICE_PREFIX := "PYSYS_";
+
+	/** The time to wait for alarm to be not created. */
+	constant float NOT_EXPECTING_ALARM_WAIT_TIMEOUT := 10.0;
+	/** The time to wait for alarms to be created or cleared */
+	constant float EXPECTING_ALARM_WAIT_TIMEOUT := 45.0;
+
+	action onload()
+	{	
+		runTestCase();
+	}
+
+	/**
+	Creates three new device, send measurements to all devices, 
+	and then send a measuremnt to change the mean of a device to be outside the 
+	allowed range compared to mean of all devices. Check that alarm is raised and 
+	then cleared if mean is again within the allowed range.
+	
+	Test failures are logged at ERROR; test passes are logged at INFO.
+	*/
+	action runTestCase() 
+	{	
+		monitor.subscribe("TEST_CHANNEL");
+		// Create three devices to be the source of our measurements
+		on DeviceCreated(reqId=createNewDevice("AlarmOnMeanOutlierDevice1")) as device1
+			and  DeviceCreated(reqId=createNewDevice("AlarmOnMeanOutlierDevice2")) as device2
+			and  DeviceCreated(reqId=createNewDevice("AlarmOnMeanOutlierDevice3")) as device3
+		{
+			monitor.subscribe(Alarm.SUBSCRIBE_CHANNEL);
+
+			// Send few measurements for device1 and device2 so that mean is around 100
+			integer measurementReqId := sendMeasurement(device1.deviceId, 99.99);
+			measurementReqId := sendMeasurement(device1.deviceId, 100.00);
+			measurementReqId := sendMeasurement(device1.deviceId, 100.01);
+			measurementReqId := sendMeasurement(device2.deviceId, 99.98);
+			measurementReqId := sendMeasurement(device2.deviceId, 100.0);
+			measurementReqId := sendMeasurement(device2.deviceId, 100.02);
+
+			// send few measurements for device3 to check alarm is not generated if mean is similar
+			measurementReqId := sendMeasurement(device3.deviceId, 99.8);
+			measurementReqId := sendMeasurement(device3.deviceId, 100.2);
+
+			// Check that alarm is not generate
+			on Alarm(source=device3.deviceId, type=ALARM_TYPE) as alarm and not wait(NOT_EXPECTING_ALARM_WAIT_TIMEOUT) 
+			{
+				log ALARM_TYPE + " raised when mean of the device should have been within the range - FAIL" at ERROR;
+			}
+			// Listener for if alarm is not raised within timeout
+			on wait(NOT_EXPECTING_ALARM_WAIT_TIMEOUT) and not Alarm(source=device3.deviceId, type=ALARM_TYPE) 
+			{
+				log ALARM_TYPE + " not raised when mean of the device is within the range - PASS" at INFO;
+
+				// send measurement to bring down the mean of device3 outside of the defined range
+				measurementReqId := sendMeasurement(device3.deviceId, 73.0); // oveall mean would be 97 now, device3 mean would be 91
+
+				// wait for alam to be created
+				// Listener for if alarm is raised within timeout
+				on Alarm(source=device3.deviceId, type=ALARM_TYPE) as alarm and not wait(EXPECTING_ALARM_WAIT_TIMEOUT) 
+				{
+					log ALARM_TYPE + " raised when mean of the device is outside of the range - PASS" at INFO;
+					// measurent to bring the mean of device3 within the range of global mean
+					measurementReqId := sendMeasurement(device3.deviceId, 125.0);
+					waitForAlarmToClear(alarm.id);
+				}
+				// Listener for if alarm is not raised within timeout
+				on wait(EXPECTING_ALARM_WAIT_TIMEOUT) and not Alarm(source=device3.deviceId, type=ALARM_TYPE) 
+				{
+					log ALARM_TYPE + " not raised when mean of the device is outside of the range - FAIL" at ERROR;
+				}
+			}
+		}
+	}
+
+	/**
+	Creates a device simulator to be the source of the measurement. 
+	@param name The name of our device simulator.
+	@returns The reqId of the ManagedObject event sent to create a device.
+	*/
+	action createNewDevice(string name) returns integer 
+	{
+		ManagedObject mo := new ManagedObject;
+		mo.type := DEVICE_TYPE;
+		
+		mo.name := TEST_DEVICE_PREFIX + name; 
+		mo.params.add("c8y_IsDevice", new dictionary<any, any>);
+
+		// Create a ManagedObject in Cumulocity IoT and receive a response event confirming the change
+		integer reqId := Util.generateReqId();
+		send mo.withResponse(reqId, new dictionary<string, string>) to ManagedObject.SEND_CHANNEL;
+
+		// Listener for when device has been created
+		on ObjectCommitted(reqId=reqId) as resp
+		and not ObjectCommitFailed(reqId=reqId)
+		{
+			ManagedObject device := <ManagedObject> resp.object; 
+			log "New simulator device created " + device.id at INFO;
+			send DeviceCreated(device.id, reqId) to "TEST_CHANNEL";
+		}
+		// Listener for if creation of device fails
+		on ObjectCommitFailed(reqId=reqId) as resp
+		and not ObjectCommitted(reqId=reqId)
+		{
+			log "Unable to create simulator device, reason : " + resp.toString() at ERROR;
+			// Cause test to fail early, rather than wait for timeout
+			die;
+		}
+		return reqId;
+	}
+
+	/**
+	Sends a measurement with a given value to Cumulocity IoT.  
+	@param source The id of the ManagedObject that is the source of the measurement. 
+	@param value The value of the measurement to be sent.
+	@returns The reqId of the measurement event.
+	*/
+	action sendMeasurement(string source, float value) returns integer
+	{
+		Measurement m := new Measurement;
+		m.source := source;
+		m.time := currentTime;
+		m.type := MEASUREMENT_TYPE;
+		m.measurements.getOrAddDefault(FRAGMENT_NAME).getOrAddDefault(SERIES_NAME).value := value;
+		
+		integer reqId := Util.generateReqId();
+		send m.withResponse(reqId, new dictionary<string, string>) to Measurement.SEND_CHANNEL;
+
+		// Listener for if creation of measurement fails
+		on ObjectCommitFailed(reqId=reqId) as resp
+		and not ObjectCommitted(reqId=reqId) 
+		{
+			log "Unable to create measurement, reason : " + resp.toString() at ERROR;
+			// Cause test to fail early, rather than wait for timeout
+			die; 
+		}
+		return reqId;
+	}
+
+	action waitForAlarmToClear(string alarmId) {
+		// Listener for alarm to be cleared within timeout
+		on Alarm(id=alarmId, status="CLEARED") and not wait(EXPECTING_ALARM_WAIT_TIMEOUT) 
+		{
+			log ALARM_TYPE + " cleard - PASS" at INFO;
+		}
+		// Listener for if alarm is not cleared within timeout
+		on wait(EXPECTING_ALARM_WAIT_TIMEOUT) and not Alarm(id=alarmId, status="CLEARED") 
+		{
+			log ALARM_TYPE + " not cleared - FAIL" at ERROR;
+		}
+	}
+}

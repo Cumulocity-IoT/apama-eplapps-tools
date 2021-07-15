@@ -16,7 +16,7 @@ from .connection import C8yConnection
 
 class CumulocityPlatform(object):
 	"""
-	Class to create a connection to the Cumulocity platform configured in pysysproject.xml
+	Class to create a connection to the Cumulocity IoT platform configured in pysysproject.xml
 	and spool the logs from the platform locally.
 
 	Requires the following properties to be set in pysysproject.xml:
@@ -101,22 +101,22 @@ class CumulocityPlatform(object):
 				resp = self._c8yConn.do_get("/application/applications/%s/logs/%s?dateFrom=%s&dateTo=2099-01-01T00:00:00%%2B01:00" % (self._applicationId, self._instanceName, startdate), jsonResp=False)
 				logLatest = resp.decode('utf8').split("\n")
 
-				with open(os.path.join(self.parent.output, 'platform.log'), 'a', encoding='utf8') as log:
+				with open(os.path.join(self.parent.output, 'platform.log'), 'a', encoding='utf8') as logfile:
 					for line in logLatest:
 						if line not in logLineDeduplication:
-							log.write(line + "\n")
+							logfile.write(line + "\n")
 					logLineDeduplication = logLineDeduplication.union(logLatest)
 			except Exception as e:
 				log.error("Exception while spooling logs:" + str(e))
 
 	def shutdown(self):
-		""" Stop spooling the log files when the test finishes """
+		""" Stop spooling the log files when the test finishes. """
 		self.__spoolLogs = False
 
 	def getC8YConnection(self):
-		""" Return the C8yConnection object for this platform """
+		""" Return the C8yConnection object for this platform. """
 		return self._c8yConn
 
 	def getApamaLogFile(self):
-		""" Return the path to the Apama log file within Cumulocity """
+		""" Return the path to the Apama log file within Cumulocity IoT."""
 		return os.path.join(self.parent.output, 'platform.log')

@@ -15,6 +15,10 @@ See `PySys Documentation <https://pysys-test.github.io/pysys-test/>`_ for detail
 Testing in the Cumulocity IoT cloud
 ===================================
 
+.. _setup-for-test-in-cloud:
+
+Setup for testing in the Cumulocity IoT cloud
+----------------------------------------------
 You can automatically test your applications only using a Cumulocity IoT tenant with Apama EPL Apps enabled. To do this, you will need a dedicated Cumulocity IoT tenant for your testing in order to avoid disrupting any production activities. When testing within Cumulocity IoT, no Apama installation is required, just a copy of PySys, which can be installed via Pip, and a copy of this SDK.
 
 There is an extension to PySys that is needed for the framework included in this GitHub repository, it can automatically be made available to the PySys tests by setting the EPL_TESTING_SDK environment variable. You simply need to point it to the path where you checked out this repository. 
@@ -31,7 +35,7 @@ Or for Windows:
 
     set EPL_TESTING_SDK=path_to_sdk
 
-In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples directory of this GitHub repository.
+In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples and samples-performance directories of this GitHub repository.
 
 You can create an empty PySys project by copying the pysysproject.xml from the sample or by running:
 
@@ -39,7 +43,7 @@ You can create an empty PySys project by copying the pysysproject.xml from the s
 
     pysys makeproject
 
-The project configuration will need to provide some configuration for how to run all of the tests. The sample project is already configured to do this - it allows you to provide credentials for your tenant via environment variables CUMULOCITY_SERVER_URL, CUMULOCITY_USERNAME and CUMULOCITY_PASSWORD, along with the EPL_TESTING_SDK described above.
+The project configuration will need to provide some configuration for how to run all of the tests. The sample projects are already configured to do this - they allow you to provide credentials for your tenant via environment variables CUMULOCITY_SERVER_URL, CUMULOCITY_USERNAME, and CUMULOCITY_PASSWORD, along with the EPL_TESTING_SDK described above.
 
 If you start with a blank project file, you will need to add properties for these values to the pysysproject.xml file:
 
@@ -64,15 +68,19 @@ You can also put these properties directly in the file.
 
 If your server URL does not specify the tenant (such as when using Cumulocity IoT Edge), then set that in the username with a /, for example, t1234567/myUserName.
 
-A PySys test case comprises a directory with a unique name, containing a pysystest.xml and an Input directory containing your test EPL monitors. These should be written according to the :doc:`Writing tests for EPL apps <testing-epl>` document, for example, AlarmOnMeasurementThresholdTest.mon in the provided samples. In particular, they must terminate either by all the listeners terminating or with an explicit 'die' statement.
+Creating a test
+----------------
+See :doc:`Testing the performance of your EPL apps <performance-testing>` for details on creating and running performance tests.
 
-To create the test, you can either copy an existing test (such as one of our samples) and rename it, or by running:
+To create a test, you can either copy an existing test (such as one of our samples) and rename it, or by running:
 
 .. code-block:: shell
     
     pysys make TestName
 
 If you do this, the default PySys test case comes with a run.py file. For these tests, you should remove that file, it is not needed. If you do want to use it, see the '`Advanced tests`_' section below.
+
+A PySys test case comprises a directory with a unique name, containing a pysystest.xml and an Input directory containing your test EPL monitors. These should be written according to the :doc:`Writing tests for EPL apps <testing-epl>` document, for example, AlarmOnMeasurementThresholdTest.mon in the provided samples. In particular, they must terminate either by all the listeners terminating or with an explicit 'die' statement.
 
 The test is configured through the pysystest.xml file. This contains the title and purpose, which you should use for a description of what your test does. You must also use it to specify how to run your test. To run a test using Apama EPL Apps in your Cumulocity IoT tenant, you must add the following block:
 
@@ -117,6 +125,8 @@ Any other existing EPL apps, analytics builder models, devices, or historic data
 
 After the test has finished, any EPL apps that were uploaded to your tenant by the test are deactivated. 
 
+See :doc:`Testing the performance of your EPL apps <performance-testing>` for details on running performance tests.
+
 Testing locally
 ===============
 
@@ -139,7 +149,7 @@ Setting which EPL app to run the test on works as before.
 Running the test
 -----------------
 
-To run the test using a local correlator requires the APAMA_HOME project property to be set as the path to your installation of Apama. This can be done by simply running the test in an Apama command prompt or by explicity setting the APAMA_HOME environment variable.
+To run the test using a local correlator requires the APAMA_HOME project property to be set as the path to your installation of Apama. This can be done by simply running the test in an Apama command prompt or by explicitly setting the APAMA_HOME environment variable.
 
 The sample for running with a local correlator is as below:
 
@@ -168,7 +178,9 @@ Advanced tests
 
 For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.
 
-In order to view documentaion on classes for PySys helpers for EPL Apps please see: `PySys helpers <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/>`_
+In order to view documentation on classes for PySys helpers for EPL Apps please see: `PySys helpers <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/>`_
+
+See :doc:`Testing the performance of your EPL apps <performance-testing>` for details on writing performance tests.
 
 To run in Apama EPL Apps, your run.py should look something like this:
 
