@@ -22,7 +22,7 @@ This project is licensed under the Apache 2.0 license - see https://www.apache.o
 
 Apama EPL Apps Tools Version
 -------------------------
-This version of the SDK supports Apama EPL Apps Tools 10.9.0. 
+This version of the SDK supports Apama EPL Apps Tools 10.10.0. 
 
 Documentation
 -------------
@@ -71,3 +71,4 @@ Change Log
 -----------
 
 See `Change Log <changelog.rst>`_ for changes.
+
