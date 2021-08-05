@@ -31,11 +31,11 @@ Complete documentation for Apama EPL Apps Tools can be found `here <https://Soft
 
 `Using the eplapp.py command line tool <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/using-eplapp>`_ is the guide which shows you how to use this tool to perform REST requests to Apama EPL Apps in Cumulocity IoT.
 
-You can read up on how to use PySys to test your EPL apps in `Using PySys to test EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/using-pysys>`_.
+You can read up on how to use PySys to test your EPL apps in `Using PySys to test EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc//using-pysys>`_.
 
-To find out how to write a test for your EPL apps look at `Writing tests for EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/testing-epl>`_.
+To find out how to write a test for your EPL apps look at `Writing tests for EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc//testing-epl>`_.
 
-To find out how to performance test your EPL apps look at `Performance testing EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/performance-testing>`_.
+To find out how to performance test your EPL apps look at `Performance testing EPL apps <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/performance>`_.
 
 In order to view the documentation on classes for PySys helpers for Apama EPL Apps see: `PySys helpers <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/autodocgen/apamax.eplapplications.html#module-apamax.eplapplications>`_.
 
