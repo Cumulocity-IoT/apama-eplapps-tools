@@ -219,7 +219,7 @@ class EPLAppsCLI:
 		:return: 0 if the command was executed successfully, or a non-zero error code otherwise.
 		"""
 		try:
-			RELEASE_TRAIN_VERSION='10.10.0'
+			RELEASE_TRAIN_VERSION='10.11.0'
 			optlist, commands = self.parseCommandLineArgs(args)
 		except Exception as err:
 			print(f'error: Could not parse command line options. {err}')

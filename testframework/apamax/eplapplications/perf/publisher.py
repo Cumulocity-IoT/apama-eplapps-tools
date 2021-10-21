@@ -6,7 +6,7 @@ import time
 import math
 import json
 import sys, os
-import importlib
+import importlib.util
 from datetime import datetime as dt
 from apamax.eplapplications.connection import C8yConnection
 from apamax.eplapplications.perf import ObjectCreator

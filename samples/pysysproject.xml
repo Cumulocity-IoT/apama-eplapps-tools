@@ -9,7 +9,10 @@
 	<!-- Set to the location containing your EPL application monitors -->
 	<property name="EPL_APPS" value="${env.EPL_APPS}" default="${env.EPL_TESTING_SDK}/samples/apps"/>
 	
-	<!-- Specify the tenant which will be used to run the tests -->
+	<!-- Specify the tenant which will be used to run the tests.
+	     If your server URL does not specify the tenant (such as when using Cumulocity IoT Edge),
+	     then set that in the username with a /, for example, t1234567/myUserName.
+	 -->
 	<property name="CUMULOCITY_SERVER_URL" value="${env.CUMULOCITY_SERVER_URL}" default="https://mytenant.myorg.com" />
 
 	<!-- username and password must be provided for authentication.-->
@@ -34,5 +37,15 @@
 	<property name="shutdownApamaComponentsAfterTest" value="true"/>
 
 	<path value="${EPL_TESTING_SDK}/testframework"/>
+
+	<default-file-encodings>
+		<default-file-encoding pattern="run.log" encoding="utf-8"/>
+		
+		<default-file-encoding pattern="*.xml"  encoding="utf-8"/>
+		<default-file-encoding pattern="*.json" encoding="utf-8"/>
+		<default-file-encoding pattern="*.yaml" encoding="utf-8"/>
+		
+		<default-file-encoding pattern="*.log" encoding="utf-8"/>
+	</default-file-encodings>	
 
 </pysysproject>

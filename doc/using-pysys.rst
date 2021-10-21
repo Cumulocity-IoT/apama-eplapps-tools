@@ -37,36 +37,7 @@ Or for Windows:
 
 In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples and samples-performance directories of this GitHub repository.
 
-You can create an empty PySys project by copying the pysysproject.xml from the sample or by running:
-
-.. code-block:: shell
-
-    pysys makeproject
-
-The project configuration will need to provide some configuration for how to run all of the tests. The sample projects are already configured to do this - they allow you to provide credentials for your tenant via environment variables CUMULOCITY_SERVER_URL, CUMULOCITY_USERNAME, and CUMULOCITY_PASSWORD, along with the EPL_TESTING_SDK described above.
-
-If you start with a blank project file, you will need to add properties for these values to the pysysproject.xml file:
-
-.. code-block:: xml
-
-	<!-- Set to the location containing this repository -->
-	<property name="EPL_TESTING_SDK" value="${env.EPL_TESTING_SDK}"/>
-
-	<!-- Set to the location containing your EPL application monitors -->
-	<property name="EPL_APPS" value="${env.EPL_APPS}" default="${env.EPL_TESTING_SDK}/samples/apps"/>
-
-	<!-- Specify the tenant which will be used to run the tests -->
-	<property name="CUMULOCITY_SERVER_URL" value="${env.CUMULOCITY_SERVER_URL}" default="https://mytenant.cumulocity.com" />
-
-	<!-- username and password must be provided for authentication -->
-	<property name="CUMULOCITY_USERNAME" value="${env.CUMULOCITY_USERNAME}" default="myUserName" />
-	<property name="CUMULOCITY_PASSWORD" value="${env.CUMULOCITY_PASSWORD}" default="myPassword" />
-	
-	<path value="${EPL_TESTING_SDK}/testframework"/>
-
-You can also put these properties directly in the file.
-
-If your server URL does not specify the tenant (such as when using Cumulocity IoT Edge), then set that in the username with a /, for example, t1234567/myUserName.
+You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains essential configuration necessary for testing with Apama and Cumulocity.
 
 Creating a test
 ----------------

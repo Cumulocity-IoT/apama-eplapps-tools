@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Using PySys to test your EPL apps &#8212; EPL Apps Tools 10.10.0.3 documentation</title>
+    <title>Using PySys to test your EPL apps &#8212; EPL Apps Tools 10.11.0.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.10.0.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.11.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -70,30 +70,7 @@
 </pre></div>
 </div>
 <p>In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples and samples-performance directories of this GitHub repository.</p>
-<p>You can create an empty PySys project by copying the pysysproject.xml from the sample or by running:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys makeproject
-</pre></div>
-</div>
-<p>The project configuration will need to provide some configuration for how to run all of the tests. The sample projects are already configured to do this - they allow you to provide credentials for your tenant via environment variables CUMULOCITY_SERVER_URL, CUMULOCITY_USERNAME, and CUMULOCITY_PASSWORD, along with the EPL_TESTING_SDK described above.</p>
-<p>If you start with a blank project file, you will need to add properties for these values to the pysysproject.xml file:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Set to the location containing this repository --&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;EPL_TESTING_SDK&quot;</span> <span class="na">value=</span><span class="s">&quot;${env.EPL_TESTING_SDK}&quot;</span><span class="nt">/&gt;</span>
-
-<span class="c">&lt;!-- Set to the location containing your EPL application monitors --&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;EPL_APPS&quot;</span> <span class="na">value=</span><span class="s">&quot;${env.EPL_APPS}&quot;</span> <span class="na">default=</span><span class="s">&quot;${env.EPL_TESTING_SDK}/samples/apps&quot;</span><span class="nt">/&gt;</span>
-
-<span class="c">&lt;!-- Specify the tenant which will be used to run the tests --&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;CUMULOCITY_SERVER_URL&quot;</span> <span class="na">value=</span><span class="s">&quot;${env.CUMULOCITY_SERVER_URL}&quot;</span> <span class="na">default=</span><span class="s">&quot;https://mytenant.cumulocity.com&quot;</span> <span class="nt">/&gt;</span>
-
-<span class="c">&lt;!-- username and password must be provided for authentication --&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;CUMULOCITY_USERNAME&quot;</span> <span class="na">value=</span><span class="s">&quot;${env.CUMULOCITY_USERNAME}&quot;</span> <span class="na">default=</span><span class="s">&quot;myUserName&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;CUMULOCITY_PASSWORD&quot;</span> <span class="na">value=</span><span class="s">&quot;${env.CUMULOCITY_PASSWORD}&quot;</span> <span class="na">default=</span><span class="s">&quot;myPassword&quot;</span> <span class="nt">/&gt;</span>
-
-<span class="nt">&lt;path</span> <span class="na">value=</span><span class="s">&quot;${EPL_TESTING_SDK}/testframework&quot;</span><span class="nt">/&gt;</span>
-</pre></div>
-</div>
-<p>You can also put these properties directly in the file.</p>
-<p>If your server URL does not specify the tenant (such as when using Cumulocity IoT Edge), then set that in the username with a /, for example, t1234567/myUserName.</p>
+<p>You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains essential configuration necessary for testing with Apama and Cumulocity.</p>
 </div>
 <div class="section" id="creating-a-test">
 <h3>Creating a test<a class="headerlink" href="#creating-a-test" title="Permalink to this headline">¶</a></h3>
@@ -302,7 +279,7 @@
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.10.0.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.11.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
