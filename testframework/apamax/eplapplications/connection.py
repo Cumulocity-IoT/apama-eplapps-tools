@@ -1,5 +1,5 @@
 ## License
-# Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+# Copyright (c) 2020-2021 Software AG, Darmstadt, Germany and/or its licensors
 
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -23,10 +23,8 @@ class C8yConnection(object):
 		auth_handler = urllib.request.HTTPBasicAuthHandler()
 		auth_handler.add_password(realm='Name of Your Realm', uri=url, user=username, passwd=password)
 		auth_handler.add_password(realm='Cumulocity', uri=url, user=username, passwd=password)
-		ctx = ssl.create_default_context()
-		ctx.check_hostname = False
-		ctx.verify_mode = ssl.CERT_NONE
-		self.urlopener = urllib.request.build_opener(urllib.request.HTTPSHandler(context=ctx, check_hostname=False),
+		ctx = ssl.SSLContext(ssl.PROTOCOL_TLS)
+		self.urlopener = urllib.request.build_opener(urllib.request.HTTPSHandler(context=ctx),
 																	auth_handler)
 		self.base_url = url
 		self.auth_header = "Basic " + base64.b64encode(bytes("%s:%s" % (username, password), "utf8")).decode()
@@ -34,9 +32,9 @@ class C8yConnection(object):
 		try:
 			platform_version = self.do_get('/service/cep/diagnostics/componentVersion')['releaseTrainVersion']
 			if platform_version != RELEASE_TRAIN_VERSION:
-				self.logger.warn(f"Version mismatch, Apama microservice is version {platform_version} but you are using version {RELEASE_TRAIN_VERSION}.")
+				self.logger.warning(f"Version mismatch, Apama microservice is version {platform_version} but you are using version {RELEASE_TRAIN_VERSION}.")
 		except Exception as e:
-			self.logger.warn("Could not get the platform version to compare version information - is apama-ctrl subscribed?")
+			self.logger.warning("Could not get the platform version to compare version information - is apama-ctrl subscribed?")
 
 	def request(self, method, path, body=None, headers=None, useLocationHeaderPostResp=True):
 		"""

@@ -77,7 +77,7 @@ class CumulocityPlatform(object):
 					self.parent.log.debug("Caught exception looking for platform subscription. Assuming that means it's a different application: %s" % e)
 
 		if not self._instanceName or not self._applicationId:
-			raise Exception("Could not find the cep service running in your tenant")
+			raise Exception("Could not find the apama-ctrl service running in your tenant")
 			
 		self.parent.startBackgroundThread("spooling", self._logSpoolingThread)
 		self.parent.waitForGrep('platform.log', expr='.')

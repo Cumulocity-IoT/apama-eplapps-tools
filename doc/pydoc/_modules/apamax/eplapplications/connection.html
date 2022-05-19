@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.connection &#8212; EPL Apps Tools 10.11.0.1 documentation</title>
+    <title>apamax.eplapplications.connection &#8212; EPL Apps Tools 10.13.0.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.11.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -38,7 +38,7 @@
             
   <h1>Source code for apamax.eplapplications.connection</h1><div class="highlight"><pre>
 <span></span><span class="c1">## License</span>
-<span class="c1"># Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors</span>
+<span class="c1"># Copyright (c) 2020-2021 Software AG, Darmstadt, Germany and/or its licensors</span>
 
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this</span>
 <span class="c1"># file except in compliance with the License. You may obtain a copy of the License at</span>
@@ -62,10 +62,8 @@
 		<span class="n">auth_handler</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPBasicAuthHandler</span><span class="p">()</span>
 		<span class="n">auth_handler</span><span class="o">.</span><span class="n">add_password</span><span class="p">(</span><span class="n">realm</span><span class="o">=</span><span class="s1">&#39;Name of Your Realm&#39;</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
 		<span class="n">auth_handler</span><span class="o">.</span><span class="n">add_password</span><span class="p">(</span><span class="n">realm</span><span class="o">=</span><span class="s1">&#39;Cumulocity&#39;</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
-		<span class="n">ctx</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">create_default_context</span><span class="p">()</span>
-		<span class="n">ctx</span><span class="o">.</span><span class="n">check_hostname</span> <span class="o">=</span> <span class="kc">False</span>
-		<span class="n">ctx</span><span class="o">.</span><span class="n">verify_mode</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">CERT_NONE</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">urlopener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPSHandler</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">ctx</span><span class="p">,</span> <span class="n">check_hostname</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+		<span class="n">ctx</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">SSLContext</span><span class="p">(</span><span class="n">ssl</span><span class="o">.</span><span class="n">PROTOCOL_TLS</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">urlopener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPSHandler</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">ctx</span><span class="p">),</span>
 																	<span class="n">auth_handler</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">url</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">auth_header</span> <span class="o">=</span> <span class="s2">&quot;Basic &quot;</span> <span class="o">+</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">),</span> <span class="s2">&quot;utf8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
@@ -73,9 +71,9 @@
 		<span class="k">try</span><span class="p">:</span>
 			<span class="n">platform_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/service/cep/diagnostics/componentVersion&#39;</span><span class="p">)[</span><span class="s1">&#39;releaseTrainVersion&#39;</span><span class="p">]</span>
 			<span class="k">if</span> <span class="n">platform_version</span> <span class="o">!=</span> <span class="n">RELEASE_TRAIN_VERSION</span><span class="p">:</span>
-				<span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Version mismatch, Apama microservice is version </span><span class="si">{</span><span class="n">platform_version</span><span class="si">}</span><span class="s2"> but you are using version </span><span class="si">{</span><span class="n">RELEASE_TRAIN_VERSION</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Version mismatch, Apama microservice is version </span><span class="si">{</span><span class="n">platform_version</span><span class="si">}</span><span class="s2"> but you are using version </span><span class="si">{</span><span class="n">RELEASE_TRAIN_VERSION</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Could not get the platform version to compare version information - is apama-ctrl subscribed?&quot;</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not get the platform version to compare version information - is apama-ctrl subscribed?&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="C8yConnection.request"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.connection.html#apamax.eplapplications.connection.C8yConnection.request">[docs]</a>	<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">useLocationHeaderPostResp</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -179,12 +177,12 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.11.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021 Software AG.
+        &#169; Copyright 2022 Software AG.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
     </div>
   </body>

@@ -1,5 +1,5 @@
 ## License
-# Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+# Copyright (c) 2020-2021 Software AG, Darmstadt, Germany and/or its licensors
 
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -226,7 +226,7 @@ class ApamaC8YBaseTest(BaseTest):
 		:type dateFrom: str, optional
 		:param dateTo: The end time of the alarm in the ISO format. If specified, only alarms that are created on or before this time are fetched.
 		:type dateTo: str, optional
-		:param \**kwargs: All additional keyword arguments are treated as extra parameters for filtering alarms. 
+		:param \\**kwargs: All additional keyword arguments are treated as extra parameters for filtering alarms. 
 		:return: List of alarms.
 		:rtype: list[object]
 		"""
@@ -263,7 +263,7 @@ class ApamaC8YBaseTest(BaseTest):
 		:type dateFrom: str, optional
 		:param dateTo: The end time of the operation in the ISO format. If specified, only operations that are created on or before this time are fetched.
 		:type dateTo: str, optional
-		:param \**kwargs: All additional keyword arguments are treated as extra parameters for filtering operations.
+		:param \\**kwargs: All additional keyword arguments are treated as extra parameters for filtering operations.
 		:return: List of operations.
 		:rtype: list[object]
 		"""
