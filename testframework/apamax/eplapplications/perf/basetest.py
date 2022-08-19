@@ -1,5 +1,5 @@
 ## License
-# Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+# Copyright (c) 2020-2022 Software AG, Darmstadt, Germany and/or its licensors
 
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -8,16 +8,16 @@
 # License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
-
 from pysys.constants import *
 import json
-import urllib
+import urllib, urllib.error
 import sys, os, time, pathlib, glob
 import csv
 import math, statistics
 from pysys.utils.linecount import linecount
 from apamax.eplapplications.basetest import ApamaC8YBaseTest
 from apamax.eplapplications.eplapps import EPLApps
+from apamax.eplapplications.smartrules import SmartRulesManager
 
 # constants for performance metrics strings.
 PERF_TIMESTAMP = 'timestamp'
@@ -34,7 +34,7 @@ PERF_CEP_PROXY_REQ_COMPLETED = 'cep_proxy_requests_completed'
 PERF_CEP_PROXY_REQ_FAILED = 'cep_proxy_requests_failed'
 PERF_CPU_USAGE_MILLI = 'cpu_usage_milli'
 
-# Description of metrics
+# Description of metrics. Order is important as it determines the order of fields in the final HTML report table
 METRICS_DESCRIPTION = {
 	PERF_TOTAL_MEMORY_USAGE: 'Total Memory Usage (MB)',
 	PERF_MEMORY_CORR: 'Correlator Memory Usage (MB)',
@@ -42,9 +42,9 @@ METRICS_DESCRIPTION = {
 	PERF_CORR_IQ_SIZE: 'Correlator Input Queue Size',
 	PERF_CORR_OQ_SIZE: 'Correlator Output Queue Size',
 	PERF_CORR_SPAW_RATE: 'Correlator Swapping Rate',
+	PERF_CPU_USAGE_MILLI: 'CPU Usage (millicpu)',
 	PERF_CORR_NUM_INPUT_RECEIVED: 'Number of Inputs Received',
 	PERF_CORR_NUM_OUTPUT_SENT: 'Number of Outputs Sent',
-	PERF_CPU_USAGE_MILLI: 'CPU Usage (millicpu)',
 	PERF_CEP_PROXY_REQ_STARTED: 'CEP Requests Started',
 	PERF_CEP_PROXY_REQ_COMPLETED: 'CEP Requests Completed',
 	PERF_CEP_PROXY_REQ_FAILED: 'CEP Requests Failed',
@@ -85,55 +85,66 @@ class ObjectCreator:
 		"""
 		raise Exception('Not Implemeted')
 
-class EPLAppsPerfTest(ApamaC8YBaseTest):
+class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 	"""
-	Base class for EPL applications performance tests.
+	Base class for performance tests for EPL apps and smart rules.
 
 	Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):
 
 	- EPL_TESTING_SDK
 
-	:ivar eplapps: The object for deploying and un-deploying EPL apps.
+	:ivar eplapps: The object for deploying and undeploying EPL apps.
+	:vartype eplapps: :class:`~apamax.eplapplications.eplapps.EPLApps`
+	:ivar smartRulesManager: The object for managing smart rules.
+	:vartype smartRulesManager: :class:`~apamax.eplapplications.smartrules.SmartRulesManager`
 	"""
 
 	def setup(self):
-		super(EPLAppsPerfTest, self).setup()
+		super(ApamaC8YPerfBaseTest, self).setup()
 		self.addCleanupFunction(lambda: self._shutdown())
 		self.eplapps = EPLApps(self.platform.getC8YConnection())
+		self.smartRulesManager = SmartRulesManager(self.platform.getTenant(), self.log)
 
-		self.perfMonitorThread = None # Current performance monitoring thread
-		self.perfMonitorCount = 0	# Number of time performance monitoring is started
-		self.simulators = []	# All simulators
+		self.perfMonitorThread = None 	# Current performance monitoring thread
+		self.perfMonitorCount = 0		# Number of time performance monitoring is started
+		self.simulators = {}			# All simulators per tenant
 
-	def prepareTenant(self, restartMicroservice=False):
+	def prepareTenant(self, restartMicroservice=False,tenant=None):
 		"""
 			Prepares the tenant for a performance test by deleting all devices created by previous tests, deleting all EPL test applications, and clearing all active alarms.
 
 			This must be called by the test before the application is deployed.
 
-			:param bool restartMicroservice: Restart Apama-ctrl microservice.
+			:param bool restartMicroservice: Restart the Apama-ctrl microservice.
+			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		"""
-		self.log.info('Preparing tenant to run performance test')
-		
-		# delete existing EPL test apps
-		self._deleteTestEPLApps()
+		tenantId = (tenant or self.platform.getTenant()).getTenantId()
+		self.log.info(f'Preparing tenant {tenantId} to run performance test')
+
+		# Stop any running simulators
+		self._stopSimulators(tenantId)
+
+		# Delete existing EPL test apps
+		self._deleteTestEPLApps(tenant)
 		
 		# Clear all active alarms
-		self._clearActiveAlarms()
+		self._clearActiveAlarms(tenant)
 		
 		# Delete devices that were created by tests
-		self._deleteTestDevices()
+		self._deleteTestDevices(tenant)
+		
+		# Delete all smartrules created by the tests
+		self._deleteTestSmartRules(tenant)
 
-		# stop monitoring thread
+		# Stop monitoring thread
 		if self.perfMonitorThread:
-			self.perfMonitorThread.stop()
-			self.perfMonitorThread.join()
-		
-		# stop any running simulators
-		for s in self.simulators:
-			s.stop()
-		self.simulators = []
-		
+			# Do not stop perf monitoring thread if testing against multi-tenant microservice
+			# and tenant is specified explicitly, because we need to monitor all tenants at once.
+			if not (self.platform.isMultiTenantMicroservice() and tenant is not None):
+				self.perfMonitorThread.stop()
+				self.perfMonitorThread.join()
+
 		if restartMicroservice:
 			self._restartApamaMicroserviceImpl()
 
@@ -144,18 +155,65 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		if self.perfMonitorThread:
 			self.perfMonitorThread.stop()
 			self.perfMonitorThread.join()
+		self._disableTestSmartRules()
 		self._deactivateTestEPLApps()
 		self._generateFinalHTMLReport()
+		for t in self.simulators.keys():
+			self._stopSimulators(t)
+
+	def _stopSimulators(self, tenantId):
+		""" Stop running simulators for the specified tenant ID. """
+		if tenantId in self.simulators:
+			simulators = self.simulators[tenantId]
+			for s in simulators:
+				try:
+					s.stop()
+				except Exception as ex:
+					self.log.warn(f'Failed to stop simulator: {ex}')
+			self.simulators[tenantId] = []
+
+	def _deleteTestEPLApps(self,tenant=None):
+		super()._deleteTestEPLApps(tenant)
+
+	def _disableTestSmartRules(self):
+		""" As part of test cleanup, disable smart rules created by the framework for all tenants."""
+		for tenant in self.platform.getSubscribedTenants():
+			sm = SmartRulesManager(tenant, self.log)
+			rules = sm.getAllSmartRules(withLocalRules=True)
+			for rule in rules:
+				if rule._isTestSmartRule():
+					rule.setEnabled(False)
+					rule.deploy()
+
+	def _deleteTestSmartRules(self,tenant=None):
+		"""
+		Delete smart rules created by the framework.
+		
+		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, smart rules are deleted from the tenant configured in the pysysproject.xml file.
+		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
+		"""
+		self.log.info("Clearing test smart rules")
+		sm = self.smartRulesManager
+		if tenant is not None:
+			sm = SmartRulesManager(tenant, self.log)
+		
+		existingSmartRules = sm.getAllSmartRules(withLocalRules=True)
+		for rule in existingSmartRules:
+			if rule._isTestSmartRule():
+				rule.delete()
 
 	def restartApamaMicroservice(self):
 		"""
-			Restarts Apama-ctrl microservice and waits for it to come back up.
+			Restarts the Apama-ctrl microservice and waits for it to come back up.
 		"""
 		self._restartApamaMicroserviceImpl()
 
 	def _restartApamaMicroserviceImpl(self):
 		""" Restarts Apama-ctrl microservice and wait for it to come back up. """
-
+		if self.platform.isSmartrulesOnlyMicroservice():
+			# We cannot restart smartrules microservice
+			self.log.info(f'Cannot restart {self.platform.getMicroserviceName()} microservice as it is not supported.')
+			return
 		self.log.info('Restarting Apama-ctrl microservice')
 		count1 = linecount(self.platform.getApamaLogFile(), 'Microservice restart Microservice .* is being restarted')
 		count2 = linecount(self.platform.getApamaLogFile(), 'httpServer-instance.*Started receiving messages')
@@ -176,19 +234,20 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 
 	def _deactivateTestEPLApps(self):
 		"""
-		Deactivates all EPL test apps.
+		Deactivates all EPL test apps as part of test cleanup.
 		"""
-		eplapps = self.eplapps.getEPLApps(False) or []
-		for app in eplapps:
-			name = app["name"]
-			if name.startswith(self.EPL_APP_PREFIX):
-				try:
-					self.eplapps.update(name, state='inactive')	
-				except Exception as e:
-					self.log.info(f"Failed to deactivate app {name}: {e}")
+		if self.platform.supportsEPLApps():
+			eplapps = self.eplapps.getEPLApps(False) or []
+			for app in eplapps:
+				name = app["name"]
+				if name.startswith(self.EPL_APP_PREFIX):
+					try:
+						self.eplapps.update(name, state='inactive')
+					except Exception as e:
+						self.log.info(f"Failed to deactivate app {name}: {e}")
 
 
-	def startMeasurementSimulator(self, devices, perDeviceRate, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP'):
+	def startMeasurementSimulator(self, devices, perDeviceRate, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP', tenant=None):
 		"""
 			Starts a measurement simulator process to publish simulated measurements to Cumulocity IoT.
 
@@ -205,8 +264,10 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.
 			:param duration: The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.
 			:type duration: float, optional
+			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, measurements are published to the tenant configured in the pysysproject.xml file.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
 			:return: The process handle of the simulator process.
-			:rtype: pysys.process.Process
+			:rtype: L{pysys.process.Process}
 
 			For example::
 
@@ -238,9 +299,113 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 				        [10, 50],                   # constructor parameters for MyMeasurementCreator class
 				    )
 		"""
-		return self._startPublisher(devices, perDeviceRate, '/measurement/measurements', creatorFile, creatorClassName, creatorParams, duration, processingMode)
+		return self._startPublisher(devices, perDeviceRate, '/measurement/measurements', creatorFile, creatorClassName, creatorParams, duration, processingMode,tenant=tenant)
 
-	def _startPublisher(self, devices, perDeviceRate, resourceUrl, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP'):
+	def startEventSimulator(self, devices, perDeviceRate, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP', tenant=None):
+		"""
+			Starts an event simulator process to publish simulated events to Cumulocity IoT.
+
+			The simulator uses an instance of the provided event creator class to create new events to send, 
+			allowing the test to publish events of different types and sizes.
+			The simulator looks up the specified class in the specified Python file and creates a new instance of the class
+			using the provided parameters. The event creator class must extend the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.
+
+			:param list[str] devices: List of device IDs to generate events for.
+			:param float perDeviceRate: The rate of events to publish per device.
+			:param str creatorFile: The path to the Python file containing the event creator class.
+			:param str creatorClassName: The name of the event creator class that extends the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.
+			:param list creatorParams: The list of parameters to pass to the constructor of the event creator class to create a new instance.
+			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.
+			:param duration: The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.
+			:type duration: float, optional
+			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, events are published to the tenant configured in the pysysproject.xml file.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
+			:return: The process handle of the simulator process.
+			:rtype: L{pysys.process.Process}
+
+			For example::
+
+				# In a 'creator.py' file in test input directory.
+				class MyEventCreator(ObjectCreator):
+				    def createObject(self, device, time):
+				        return {
+				                    'time': time,
+				                    'type': 'pos_update_event',
+				                    'text': 'Position update',
+				                    'source': {
+				                        'id': device
+				                    },
+				                    'c8y_Position': {
+				                        'lng': random.uniform(0, 10),
+				                        'lat': random.uniform(0, 10)
+				                    }
+				                }
+				
+				...
+
+				# In the test
+				self.startEventSimulator(
+				        ['12345'],                  # device IDs
+				        1,                          # rate of events to publish
+				        f'{self.input}/creator.py', # Python file path
+				        'MyEventCreator',           # class name
+				        [],                         # constructor parameters for MyEventCreator class
+				    )
+		"""
+		return self._startPublisher(devices, perDeviceRate, '/event/events', creatorFile, creatorClassName, creatorParams, duration, processingMode,tenant=tenant)
+	
+	def startAlarmSimulator(self, devices, perDeviceRate, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP', tenant=None):
+		"""
+			Starts an alarm simulator process to publish simulated alarms to Cumulocity IoT.
+
+			The simulator uses an instance of the provided alarm creator class to create new alarms to send, 
+			allowing the test to publish alarms of different types.
+			The simulator looks up the specified class in the specified Python file and creates a new instance of the class
+			using the provided parameters. The alarm creator class must extend the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.
+
+			:param list[str] devices: List of device IDs to generate alarms for.
+			:param float perDeviceRate: The rate of alarms to publish per device.
+			:param str creatorFile: The path to the Python file containing the alarm creator class.
+			:param str creatorClassName: The name of the alarm creator class that extends the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.
+			:param list creatorParams: The list of parameters to pass to the constructor of the alarm creator class to create a new instance.
+			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.
+			:param duration: The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.
+			:type duration: float, optional
+			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, alarms are published to the tenant configured in the pysysproject.xml file.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
+			:return: The process handle of the simulator process.
+			:rtype: L{pysys.process.Process}
+
+			For example::
+
+				# In a 'creator.py' file in test input directory.
+				class MyAlarmCreator(ObjectCreator):
+				    def createObject(self, device, time):
+				        return {
+				                    'source': {
+				                        'id': device
+				                    },
+				                    'type': 'my_alarm',
+				                    'text': 'My alarm',
+				                    'severity': 'MAJOR',
+				                    'status': 'ACTIVE',
+				                    'time': time,
+				                }
+				
+				...
+
+				# In the test
+				self.startAlarmSimulator(
+				        ['12345'],                  # device IDs
+				        0.01,                       # rate of alarms to publish
+				        f'{self.input}/creator.py', # Python file path
+				        'MyAlarmCreator',           # class name
+				        [],                         # constructor parameters for MyAlarmCreator class
+				    )
+		"""
+		return self._startPublisher(devices, perDeviceRate, '/alarm/alarms', creatorFile, creatorClassName, creatorParams, duration, processingMode,tenant=tenant)
+
+	def _startPublisher(self, devices, perDeviceRate, resourceUrl, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP',tenant=None):
 		"""
 			Starts a publisher process to publish simulated data to Cumulocity IoT using provided object creator class.
 
@@ -253,9 +418,14 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT and QUIESCENT.
 			:param duration: The duration (in seconds) to run simulators for. If no duration specified then it runs until either stopped or end of the test.
 			:type duration: float, optional
+			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, data is published to the tenant configured in the pysysproject.xml file.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
 			:return: The publisher object which can be stopped by calling stop() method on it.
-			:rtype: pysys.process.Process
+			:rtype: L{pysys.process.Process}
 		"""
+		tenant = tenant or self.platform.getTenant()
+		if not isinstance(devices, list):
+			devices = [devices]
 		object_creator_info = {
 			'className': creatorClassName,
 			'constructorParams': creatorParams,
@@ -263,10 +433,16 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		}
 		env = self.getDefaultEnvirons(command=sys.executable)
 		test_framework_root=f'{self.project.EPL_TESTING_SDK}/testframework'
-		env['PYTHONPATH'] = f'{test_framework_root}{os.pathsep}{env.get("PYTHONPATH", "")}'
+		pythonpath = test_framework_root
+		# Add python path from parent
+		for d in [env, os.environ]:
+			if d.get('PYTHONPATH', '') != '':
+				pythonpath = f"{pythonpath}{os.pathsep}{d.get('PYTHONPATH', '')}"
+
+		env['PYTHONPATH'] = pythonpath
 		env['PYTHONDONTWRITEBYTECODE'] = 'true'
 
-		(url, tanant_id, username, password) = self.platform.getC8yConnectionDetails()
+		(url, username, password) = tenant.url, tenant.username, tenant.password
 		script_path = str(pathlib.Path(__file__).parent.joinpath('publisher.py'))
 		arguments = [script_path,
 			'--base_url', url,
@@ -283,9 +459,9 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 			arguments.extend(['--duration', str(duration)])
 
 		self.mkdir(f'{self.output}/simulators')
-		stdouterr=self.allocateUniqueStdOutErr('simulators/measurementpublisher')
+		stdouterr=self.allocateUniqueStdOutErr('simulators/publisher')
 		p = self.startPython(arguments, stdouterr=stdouterr, disableCoverage=True, environs=env, background=True)
-		self.simulators.append(p)
+		self.simulators.setdefault(tenant.getTenantId(), []).append(p)
 		self.waitForGrep(stdouterr[0], expr='Started publishing Cumulocity', errorExpr=['ERROR ', 'DataPublisher failed'])
 		return p
 	
@@ -312,10 +488,11 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		paq_version = self.platform.getC8YConnection().do_get('/service/cep/diagnostics/componentVersion').get('componentVersion', '<unknown>')
 		apamaCtrlStatus = self.platform.getC8YConnection().do_get('/service/cep/diagnostics/apamaCtrlStatus')
 		microservice_name = apamaCtrlStatus.get('microservice_name', '<unknown>')
-		uptime = apamaCtrlStatus.get('uptime_secs', '<unknown>')
 		c8y_url = self.platform.getC8YConnection().base_url
 		c8y_version = self.platform.getC8YConnection().do_get('/tenant/system/options/system/version').get('value', '<unknown>')
-		pam_version = self.platform.getC8YConnection().do_get('/service/cep/diagnostics/info', headers={'Accept':'application/json'}).get('productVersion', '<unknow>')
+		diagnostic_info = self.platform.getC8YConnection().do_get('/service/cep/diagnostics/info', headers={'Accept':'application/json'})
+		pam_version = diagnostic_info.get('productVersion', '<unknown>')
+		uptime = diagnostic_info.get('uptime', '<unknown>')
 		app_manifest = self.platform.getC8YConnection().do_get(f'/application/applicationsByName/{microservice_name}')
 		microservice_resources = app_manifest.get('applications', [{}])[0]['manifest']['resources']
 		cpu_limit = microservice_resources['cpu']
@@ -324,15 +501,23 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		else:
 			cpu_limit += ' cores'
 
-		return {
+		env = {
 			'Cumulocity IoT Tenant': c8y_url,
 			'Cumulocity IoT Version': c8y_version,
 			'Microservice name': microservice_name,
 			'Microservice CPU Limit': cpu_limit,
 			'Microservice Memory Limit': microservice_resources['memory'],
 			'Apama Version': f'PAM {pam_version}, PAQ {paq_version}',
-			'Uptime (secs)': uptime
 		}
+
+		try:
+			up = float(uptime)
+			uptime = int(up / 1000)
+		except Exception:
+			pass
+
+		env['Uptime (secs)'] = uptime
+		return env
 
 	def startPerformanceMonitoring(self, pollingInterval=2):
 		"""
@@ -371,11 +556,12 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 			except Exception:
 				return 0
 		try:
-			fieldnames = [PERF_TIMESTAMP, PERF_TOTAL_MEMORY_USAGE, PERF_MEMORY_CORR, PERF_MEMORY_APCTRL,
-							PERF_CORR_IQ_SIZE, PERF_CORR_OQ_SIZE, PERF_CORR_SPAW_RATE, 
-							PERF_CORR_NUM_OUTPUT_SENT, PERF_CORR_NUM_INPUT_RECEIVED, PERF_CEP_PROXY_REQ_STARTED, 
-							PERF_CEP_PROXY_REQ_COMPLETED, PERF_CEP_PROXY_REQ_FAILED
-						]
+			fieldnames = [PERF_TIMESTAMP, PERF_MEMORY_CORR, PERF_TOTAL_MEMORY_USAGE, PERF_CORR_IQ_SIZE, PERF_CORR_OQ_SIZE, PERF_CORR_SPAW_RATE,
+							PERF_CORR_NUM_OUTPUT_SENT, PERF_CORR_NUM_INPUT_RECEIVED]
+
+			if not self.platform.isSmartrulesOnlyMicroservice():
+				fieldnames.extend([PERF_MEMORY_APCTRL, PERF_CEP_PROXY_REQ_STARTED, PERF_CEP_PROXY_REQ_COMPLETED, PERF_CEP_PROXY_REQ_FAILED])
+
 			csv_file = open(f'{self.output}/{OUTFILE_PERF_RAW_DATA}{suffix}.csv', 'w', encoding='utf8')
 			writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 			writer.writeheader()
@@ -391,25 +577,28 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 				# write data
 				data[PERF_TIMESTAMP] = time.time()
 				data[PERF_MEMORY_CORR] = num(corr_status.get('physicalMemoryMB', 0))
-				data[PERF_MEMORY_APCTRL] = num(apctrl_status.get('apama_ctrl_physical_mb', 0))
-				data[PERF_TOTAL_MEMORY_USAGE] = data[PERF_MEMORY_CORR] + data[PERF_MEMORY_APCTRL]
 				data[PERF_CORR_IQ_SIZE] = num(corr_status.get('numQueuedInput', 0)) # numInputQueuedInput
 				data[PERF_CORR_OQ_SIZE] = num(corr_status.get('numOutEventsQueued', 0))
 				data[PERF_CORR_NUM_OUTPUT_SENT] = num(corr_status.get('numOutEventsSent', 0))
 				data[PERF_CORR_NUM_INPUT_RECEIVED] = num(corr_status.get('numReceived', 0))
 				data[PERF_CORR_SPAW_RATE] = num(corr_status.get('swapPagesRead', 0)) + num(corr_status.get('swapPagesWrite', 0))
+				data[PERF_TOTAL_MEMORY_USAGE] = data[PERF_MEMORY_CORR]
 
-				cep_proxy_requests_started = 0
-				cep_proxy_requests_completed = 0
-				cep_proxy_requests_failed = 0
-				cep_proxy_request_counts = apctrl_status.get('cep_proxy_request_counts', {})
-				for key in cep_proxy_request_counts.keys():
-					cep_proxy_requests_started += num(cep_proxy_request_counts[key].get('requestsStarted', 0))
-					cep_proxy_requests_completed += num(cep_proxy_request_counts[key].get('requestsCompleted', 0))
-					cep_proxy_requests_failed += num(cep_proxy_request_counts[key].get('requestsFailed', 0))
-				data[PERF_CEP_PROXY_REQ_STARTED] = cep_proxy_requests_started
-				data[PERF_CEP_PROXY_REQ_COMPLETED] = cep_proxy_requests_completed
-				data[PERF_CEP_PROXY_REQ_FAILED] = cep_proxy_requests_failed
+				if not self.platform.isSmartrulesOnlyMicroservice():
+					data[PERF_MEMORY_APCTRL] = num(apctrl_status.get('apama_ctrl_physical_mb', 0))
+					data[PERF_TOTAL_MEMORY_USAGE] = data[PERF_MEMORY_CORR] + data[PERF_MEMORY_APCTRL]
+
+					cep_proxy_requests_started = 0
+					cep_proxy_requests_completed = 0
+					cep_proxy_requests_failed = 0
+					cep_proxy_request_counts = apctrl_status.get('cep_proxy_request_counts', {})
+					for key in cep_proxy_request_counts.keys():
+						cep_proxy_requests_started += num(cep_proxy_request_counts[key].get('requestsStarted', 0))
+						cep_proxy_requests_completed += num(cep_proxy_request_counts[key].get('requestsCompleted', 0))
+						cep_proxy_requests_failed += num(cep_proxy_request_counts[key].get('requestsFailed', 0))
+					data[PERF_CEP_PROXY_REQ_STARTED] = cep_proxy_requests_started
+					data[PERF_CEP_PROXY_REQ_COMPLETED] = cep_proxy_requests_completed
+					data[PERF_CEP_PROXY_REQ_FAILED] = cep_proxy_requests_failed
 
 				writer.writerow(data)
 				csv_file.flush()
@@ -432,9 +621,9 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		:param stopping: To check if thread should be stopped.
 		:param log: The logger.
 		"""
-		
+
 		url = '/service/cep/diagnostics/cpuUsageMillicores'
-		
+
 		# check if able to monitor CPU usage (REST url exposed + able to calculate CPU usage)
 		try:
 			cpu_usage = float(self.platform.getC8YConnection().do_get(url + '?sampleDurationMSec=10'))
@@ -469,10 +658,14 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		with open(f'{self.output}/{OUTFILE_PERF_RAW_DATA}{suffix}.csv', 'r', encoding='utf8') as csv_file:
 			csv_reader = csv.DictReader(csv_file)
 			for row in csv_reader:
-				for metric_name in [PERF_TOTAL_MEMORY_USAGE, PERF_MEMORY_CORR, PERF_MEMORY_APCTRL,
-						PERF_CORR_IQ_SIZE, PERF_CORR_OQ_SIZE, PERF_CORR_SPAW_RATE, 
-						PERF_CORR_NUM_OUTPUT_SENT, PERF_CORR_NUM_INPUT_RECEIVED, PERF_CEP_PROXY_REQ_STARTED, 
-						PERF_CEP_PROXY_REQ_COMPLETED, PERF_CEP_PROXY_REQ_FAILED]:
+				all_metrics = [PERF_MEMORY_CORR, PERF_TOTAL_MEMORY_USAGE, PERF_CORR_IQ_SIZE, PERF_CORR_OQ_SIZE, PERF_CORR_SPAW_RATE,
+						PERF_CORR_NUM_OUTPUT_SENT, PERF_CORR_NUM_INPUT_RECEIVED]
+
+				if not self.platform.isSmartrulesOnlyMicroservice():
+					all_metrics.extend([PERF_MEMORY_APCTRL, PERF_CEP_PROXY_REQ_STARTED,
+						PERF_CEP_PROXY_REQ_COMPLETED, PERF_CEP_PROXY_REQ_FAILED])
+
+				for metric_name in all_metrics:
 					datapoints.setdefault(metric_name, [])
 					datapoints[metric_name].append(float(row[metric_name]))
 
@@ -483,12 +676,16 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 			with open(cpu_perf_file, 'r', encoding='utf8') as csv_file:
 				csv_reader = csv.DictReader(csv_file)
 				for row in csv_reader:
-					datapoints[metric_name].append(float(row[metric_name])) 
+					datapoints[metric_name].append(float(row[metric_name]))
 
 		# Extract counter like values to a separate object. We capture difference between first and last value only for these.
 		counter_values = {}
-		for name in [PERF_CORR_NUM_INPUT_RECEIVED, PERF_CORR_NUM_OUTPUT_SENT, PERF_CEP_PROXY_REQ_STARTED, 
-						PERF_CEP_PROXY_REQ_COMPLETED, PERF_CEP_PROXY_REQ_FAILED]:
+		names = [PERF_CORR_NUM_INPUT_RECEIVED, PERF_CORR_NUM_OUTPUT_SENT]
+
+		if not self.platform.isSmartrulesOnlyMicroservice():
+			names.extend([PERF_CEP_PROXY_REQ_STARTED, PERF_CEP_PROXY_REQ_COMPLETED, PERF_CEP_PROXY_REQ_FAILED])
+
+		for name in names:
 			values = datapoints[name]
 			counter_values[name] = int(values[-1]) - int(values[0])
 			del datapoints[name]
@@ -504,6 +701,7 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		stats = {}
 		for name in datapoints.keys():
 			values = datapoints[name]
+			if len(values) <=0 : continue
 			stats[name] = {}
 			stats[name]['min'] = min(values)
 			stats[name]['max'] = max(values)
@@ -517,7 +715,8 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		self.write_text(f'{OUTFILE_PERF_STATS}{suffix}.json', json.dumps(stats, indent=2), encoding='utf8')
 
 		with open(f'{self.output}/{OUTFILE_PERF_STATS}{suffix}.csv', 'w', encoding='utf8') as csv_file:
-			columns = ['name'] + list(stats[PERF_TOTAL_MEMORY_USAGE].keys())
+			# PERF_MEMORY_CORR is present in both apama-ctrl and smartrules. So this works for both without any changes
+			columns = ['name'] + list(stats[PERF_MEMORY_CORR].keys())
 			writer = csv.DictWriter(csv_file, fieldnames=columns)
 			writer.writeheader()
 
@@ -674,12 +873,17 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		counters = self.read_json(f'{OUTFILE_PERF_COUNTERS}{suffix}.json')
 		for s in [PERF_CORR_NUM_INPUT_RECEIVED, PERF_CORR_NUM_OUTPUT_SENT]:
 			table_data[s] = counters[s]
-		column_names = list(table_data[PERF_TOTAL_MEMORY_USAGE].keys())
 
-		# prepare dictionary for html using more descriptive names for metrics 
-		for key in list(table_data.keys()):
-			table_data[METRICS_DESCRIPTION.get(key, key)] = table_data[key]
-			del table_data[key]
+		# Extracting the column names. PERF_MEMORY_CORR is present in both apama-ctrl and smartrules. So this
+		# works for both without any changes
+		column_names = list(table_data[PERF_MEMORY_CORR].keys())
+
+		# prepare dictionary for html using more descriptive names for metrics
+		for key in list(METRICS_DESCRIPTION.keys()):
+			if key in table_data:
+				table_data[METRICS_DESCRIPTION.get(key, key)] = table_data[key]
+				del table_data[key]
+
 		standard_perf_stats_table = self._dict_to_html_table(table_data, column_names)
 
 		## Generate HTML list of test configuration
@@ -709,8 +913,12 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 				oq = int(float(row[PERF_CORR_OQ_SIZE]))
 				# generate JavaScript code to create an array of data for a timestamp - [new Date(...), y1_value, y2_value, ...]
 				queue_data.append(f'[new Date({timestamp_milli}),{iq}, {oq}]')
-				memory = float(row[PERF_TOTAL_MEMORY_USAGE])
-				memory_data.append(f'[new Date({timestamp_milli}), {memory}, {float(row[PERF_MEMORY_APCTRL])}, {float(row[PERF_MEMORY_CORR])}]')
+
+				memory = float(row[PERF_MEMORY_CORR])
+				if not self.platform.isSmartrulesOnlyMicroservice():
+					memory = f'{memory}, {float(row[PERF_MEMORY_APCTRL])}, {float(row[PERF_TOTAL_MEMORY_USAGE])}'
+
+				memory_data.append(f'[new Date({timestamp_milli}), {memory}]')
 		queue_time_range = memory_time_range = format_time_range(start_time, end_time)
 
 		# generate data for cpu usage graphs
@@ -729,6 +937,10 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 					cpu_usage_data.append(f'[new Date({timestamp_milli}), {cpu_usage}]')
 		cpu_usage_time_range = format_time_range(start_time, end_time)
 
+		memory_labels = '"time", "Correlator (MB)"'
+		if not self.platform.isSmartrulesOnlyMicroservice():
+			memory_labels = f'{memory_labels}, "Apama Ctrl JVM (MB)", "Total (MB)"'
+
 		### Generate final report.html file by filling in various details into the table
 		variation_replacements = {
 			'TEST_TITLE': self.descriptor.title,
@@ -742,6 +954,7 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 			'CORRELATOR_QUEUES_DATA': ','.join(queue_data),
 			'CORRELATOR_QUEUES_TIMERANGE': queue_time_range,
 			'MEMORY_DATA': ','.join(memory_data),
+			'MEMORY_LABELS': memory_labels,
 			'MEMORY_TIMERANGE': memory_time_range,
 			'CPU_USAGE_DATA': ','.join(cpu_usage_data),
 			'CPU_USAGE_TIMERANGE': cpu_usage_time_range,
@@ -764,6 +977,23 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		variation_htmls = []
 		variation_links = []
 		env_details = self.read_json(f'{OUTFILE_ENV_DETAILS}.json')
+
+		memory_limit_val = env_details['Microservice Memory Limit']
+		memory_numeric = float(''.join(filter(str.isdigit, memory_limit_val)))
+		memory_unit = ''.join(filter(str.isalpha, memory_limit_val))
+
+		if memory_unit == 'Ti':
+			memory_limit_mb = f'"valueRange": [0, {memory_numeric * 1024 * 1024}]'
+		elif memory_unit == 'Gi':
+			memory_limit_mb = f'"valueRange": [0, {memory_numeric * 1024}]'
+		elif memory_unit == 'Mi':
+			memory_limit_mb = f'"valueRange": [0, {memory_numeric}]'
+		else:
+			memory_limit_mb = f'"includeZero": true'
+
+		cpu_limit_millis = float(env_details['Microservice CPU Limit'].split(' ')[0])
+		cpu_limit_millis = f'"valueRange": [0, {cpu_limit_millis * 1000}]'
+
 		for i,f in enumerate(files):
 			f = f.strip()
 			filename = os.path.basename(f)			
@@ -771,7 +1001,9 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 			variation_desc = replacements['VARIATION_DESCRIPTION']
 			replacements['VARIATION_ID'] = f'variation_{i}'
 			replacements['VARIATION_TITLE'] = variation_desc
-			
+			replacements['CPU_RANGE'] = cpu_limit_millis
+			replacements['MEMORY_RANGE'] = memory_limit_mb
+
 			variation_html = variation_template
 			for (key, value) in replacements.items():
 				variation_html = variation_html.replace(f'@{key}@', value)
@@ -822,9 +1054,10 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 		self.assertGrep(logFile, expr='(Java exit 137|exit code 137)', contains=False)
 
 		# Check that no request to /cep from cumulocity failed
-		for file in glob.glob(f'{self.output}/{OUTFILE_PERF_COUNTERS}*.json'):
-			perf_counters = self.read_json(file)
-			self.assertThat('num_failed_cep_requests == 0', num_failed_cep_requests=perf_counters[PERF_CEP_PROXY_REQ_FAILED])
+		if not self.platform.isSmartrulesOnlyMicroservice():
+			for file in glob.glob(f'{self.output}/{OUTFILE_PERF_COUNTERS}*.json'):
+				perf_counters = self.read_json(file)
+				self.assertThat('num_failed_cep_requests == 0', num_failed_cep_requests=perf_counters[PERF_CEP_PROXY_REQ_FAILED])
 
 		# Check that correlator was not swapping
 		for file in glob.glob(f'{self.output}/{OUTFILE_PERF_STATS}*.json'):
@@ -840,3 +1073,9 @@ class EPLAppsPerfTest(ApamaC8YBaseTest):
 				self.assertThat('mean_queue_size < max_queue_size * 0.8', mean_queue_size=stats['mean'], max_queue_size=max_size)
 				self._confirmStableQueueSize(queue, raw_perf_data)
 
+class EPLAppsPerfTest(ApamaC8YPerfBaseTest):
+	"""
+	Base class for EPL applications performance tests.
+
+	The class :class:`ApamaC8YPerfBaseTest` supersedes this class and should be used when writing new tests.
+	"""

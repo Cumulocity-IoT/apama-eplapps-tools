@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pysysproject>
+	<requires-pysys>1.5.0</requires-pysys>
+	<requires-python>3.6</requires-python>
+
+	<!-- MUST be set, point to the checkout of the EPL testing repository -->
+	<property name="EPL_TESTING_SDK" value="${env.EPL_TESTING_SDK}"/>
+	
+	<!-- Specify the tenant which will be used to run the tests.
+	     If your server URL does not specify the tenant (such as when using Cumulocity IoT Edge),
+	     then set that in the username with a /, for example, t1234567/myUserName.
+	 -->
+	<property name="CUMULOCITY_SERVER_URL" value="${env.CUMULOCITY_SERVER_URL}" default="https://mytenant.myorg.com" />
+
+	<!-- username and password must be provided for authentication.-->
+	<property name="CUMULOCITY_USERNAME" value="${env.CUMULOCITY_USERNAME}" default="myUserName" />
+	<property name="CUMULOCITY_PASSWORD" value="${env.CUMULOCITY_PASSWORD}" default="myPassword" />
+	
+	<property root="testRootDir"/>
+	<property environment="env"/>
+	<property osfamily="osfamily"/>
+
+	<!-- Used if using a local installation of Apama to run tests in a local correlator -->
+	<property name="APAMA_HOME" value="${env.APAMA_HOME}" default="(APAMA_HOME not set)"/>
+	<property name="APAMA_WORK" value="${env.APAMA_WORK}" default="(APAMA_WORK not set)"/>
+
+	<property name="defaultAbortOnError" value="true"/>
+	<property name="defaultIgnoreExitStatus" value="false"/>
+	<property name="defaultEnvironsTempDir" value="self.output"/>
+	<property name="redirectPrintToLogger" value="false"/>
+	<property name="verboseWaitForSignal" value="true"/>
+    <property name="supportMultipleModesPerRun" value="true"/>
+
+	<property name="shutdownApamaComponentsAfterTest" value="true"/>
+
+	<path value="${EPL_TESTING_SDK}/testframework"/>
+
+	<default-file-encodings>
+		<default-file-encoding pattern="run.log" encoding="utf-8"/>
+		
+		<default-file-encoding pattern="*.xml"  encoding="utf-8"/>
+		<default-file-encoding pattern="*.json" encoding="utf-8"/>
+		<default-file-encoding pattern="*.yaml" encoding="utf-8"/>
+		
+		<default-file-encoding pattern="*.log" encoding="utf-8"/>
+	</default-file-encodings>	
+
+</pysysproject>

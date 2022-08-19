@@ -42,6 +42,7 @@
 				"labelsSeparateLines": true, 
 				"highlightSeriesOpts": {"strokeWidth": 2}, 
 				"xlabel": "@CORRELATOR_QUEUES_TIMERANGE@",
+				"includeZero": true,
 				"legendFormatter":legendFormatter
 			});
 	charts_@VARIATION_ID@.push(g);
@@ -55,14 +56,16 @@
 </div>
 <script type="text/javascript">
 	var datapoints = [@MEMORY_DATA@];
+	var labels = [@MEMORY_LABELS@];
 	var g = new Dygraph(document.getElementById("chartdiv_memory_@VARIATION_ID@"), datapoints, {
-				"labels": ["time", "Total (MB)", "Apama Ctrl JVM (MB)", "Correlator (MB)"], 
+				"labels": labels,
 				"colors": ["red", "orange", "purple"], 
 				"labelsKMG2": true, 
 				"legend": "always", 
 				"labelsSeparateLines": true, 
 				"highlightSeriesOpts": {"strokeWidth": 2}, 
 				"xlabel": "@MEMORY_TIMERANGE@",
+				@MEMORY_RANGE@,
 				"legendFormatter":legendFormatter
 			});
 	charts_@VARIATION_ID@.push(g);
@@ -84,6 +87,7 @@
 				"labelsSeparateLines": true, 
 				"highlightSeriesOpts": {"strokeWidth": 2}, 
 				"xlabel": "@CPU_USAGE_TIMERANGE@",
+				@CPU_RANGE@,
 				"legendFormatter":legendFormatter
 			});
 	charts_@VARIATION_ID@.push(g);

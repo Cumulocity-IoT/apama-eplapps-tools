@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto" state="runnable">
+
+  <description>
+    <title>Performance test for the smart rule "On measurement explicit threshold create alarm"</title>
+    <purpose><![CDATA[
+      Check the performance of the smart rule "On measurement explicit threshold create alarm".
+]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group>performance</group>
+    </groups>
+  </classification>
+
+  <data>
+    <class name="PySysTest" module="run"/>
+  </data>
+  
+  <traceability>
+    <requirements>
+      <requirement id=""/>
+    </requirements>
+  </traceability>
+</pysystest>

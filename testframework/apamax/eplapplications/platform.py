@@ -1,5 +1,5 @@
 ## License
-# Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+# Copyright (c) 2020,2022 Software AG, Darmstadt, Germany and/or its licensors
 
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -9,10 +9,10 @@
 # either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-import time, math
-from datetime import date, datetime
-import os 
-from .connection import C8yConnection
+import time, math, threading, os, urllib, urllib.parse
+from datetime import datetime
+from .tenant import CumulocityTenant
+from  apamax.eplapplications.buildVersions import RELEASE_TRAIN_VERSION
 
 class CumulocityPlatform(object):
 	"""
@@ -26,12 +26,11 @@ class CumulocityPlatform(object):
 		* CUMULOCITY_PASSWORD
 
 	For use with the EPLApps class for uploading EPL applications:
-
 		self.platform = CumulocityPlatform(self)
 		eplapps = EPLApps(self.platform.getC8YConnection())
 		eplapps.deploy(self.input+'/test.mon', activate=True)
 		self.waitForGrep(self.platform.getApamaLogFile(), expr='Added monitor eplfiles.test')
-
+	
 	:param parent: The PySys test object using this platform object.
 	"""
 
@@ -48,20 +47,40 @@ class CumulocityPlatform(object):
 
 		self.parent=parent
 
-		(url, self._remoteTenantId, username, password) = self.getC8yConnectionDetails()
-		self.parent.log.info(f"Connecting to Cumulocity platform at {url} as user {username}")
-		self._c8yConn = C8yConnection(url, username, password)
-		self.parent.addCleanupFunction(self.shutdown)
+		(url, self._remoteTenantId, self.username, self.password) = self.getC8yConnectionDetails()
+		self.parent.log.info(f"Connecting to Cumulocity platform at {url} as user {self.username}")
 
-		if not self._remoteTenantId:
-			self._remoteTenantId = self._c8yConn.do_get('/tenant/currentTenant')['name']
+		self._tenant = CumulocityTenant(url, self.username, self.password, self._remoteTenantId)
+		self._c8yConn = self._tenant.getConnection()
+		try:
+			platform_version = self._c8yConn.do_get('/service/cep/diagnostics/componentVersion')['releaseTrainVersion']
+			if platform_version != RELEASE_TRAIN_VERSION:
+				self.parent.log.warning(f"Version mismatch, Apama microservice is version {platform_version} but you are using version {RELEASE_TRAIN_VERSION}.")
+		except Exception as e:
+			self.parent.log.warning("Could not get the platform version to compare version information - is apama-ctrl subscribed?")
+
+		self.parent.addCleanupFunction(self.shutdown)
+		if not self._remoteTenantId: self._remoteTenantId = self._tenant.getTenantId()
+
+		""" All tenants that can be used for testing """
+		self.__subscribedTenants = []
+
+		""" Protects initialisation and mutation of __subscribedTenants """
+		self.__lock = threading.Lock()
 
 		self._applicationId = None
 		self._instanceName = None
+		self._isMultiTenantMicroservice = False
+		self._microserviceName = ''
+
 		applications = self._c8yConn.do_get("/application/applications?pageSize=2000")["applications"]
+		
 		for application in applications:
 			if 'contextPath' in application and application['contextPath'].lower() == 'cep':
 				self._applicationId = application['id']
+				self._isMultiTenantMicroservice = application.get('manifest',{}).get('isolation', '') == 'MULTI_TENANT'
+				self._microserviceName = application['name']
+
 				instances = {}
 				try:
 					while len(instances) == 0:
@@ -76,6 +95,7 @@ class CumulocityPlatform(object):
 				except Exception as e:
 					self.parent.log.debug("Caught exception looking for platform subscription. Assuming that means it's a different application: %s" % e)
 
+		
 		if not self._instanceName or not self._applicationId:
 			raise Exception("Could not find the apama-ctrl service running in your tenant")
 			
@@ -89,7 +109,7 @@ class CumulocityPlatform(object):
 
 		logLineDeduplication = set()
 		nowtime = time.time()
-		now = datetime.fromtimestamp(nowtime);
+		now = datetime.fromtimestamp(nowtime)
 		utc_offset = (datetime.fromtimestamp(nowtime) - datetime.utcfromtimestamp(nowtime)).total_seconds()
 		off_hours = math.floor(utc_offset/3600)
 		off_minutes = math.floor((utc_offset%3600)/60)
@@ -120,3 +140,87 @@ class CumulocityPlatform(object):
 	def getApamaLogFile(self):
 		""" Return the path to the Apama log file within Cumulocity IoT."""
 		return os.path.join(self.parent.output, 'platform.log')
+
+	def getMicroserviceName(self):
+		""" Get the name of the Apama-ctrl microservice being tested. """
+		return self._microserviceName
+
+	# Check if microservice supports EPL apps (undocumented)
+	def supportsEPLApps(self):
+		return not ('apama-ctrl-smartrules' in self.getMicroserviceName())
+
+	# Check if microservice is smartrules-only microservice (undocumented)
+	def isSmartrulesOnlyMicroservice(self):
+		return 'apama-ctrl-smartrules' in self.getMicroserviceName()
+
+	# Check if microservice is multi-tenant (undocumented)
+	def isMultiTenantMicroservice(self):
+		return self._isMultiTenantMicroservice
+
+	def getTenant(self):
+		"""
+		Get the Cumulocity IoT tenant configured in the pysysproject.xml file.
+		:return: The Cumulocity IoT tenant.
+		:rtype: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
+		"""
+		return self._tenant
+
+	def getSubscribedTenants(self):
+		"""
+		Get list of Cumulocity IoT tenants subscribed to the Apama-ctrl microservice if testing against a
+		multi-tenant Apama-ctrl microservice.
+
+		If the Apama-ctrl microservice is per-tenant, it returns a list only containing the configured tenant.
+
+		:return: List of Cumulocity IoT tenants.
+		:rtype: list[:class:`~apamax.eplapplications.tenant.CumulocityTenant`]
+		"""
+		if not self._isMultiTenantMicroservice:
+			return [self.getTenant()]
+
+		PAGE_SIZE = 100  # By default, pageSize = 5 for querying to C8y
+		
+		def create_url(**params):
+			return f'/tenant/tenants?withApps=false&{urllib.parse.urlencode(params)}'
+
+		with self.__lock:
+
+			if len(self.__subscribedTenants) > 0:
+				return self.__subscribedTenants
+
+			# The configured tenant is subscribed
+			self.__subscribedTenants.append(self.getTenant())
+
+			try:
+				resp = self._c8yConn.do_get(create_url(withTotalPages=True,pageSize=PAGE_SIZE,currentPage=1),jsonResp=True)
+			except:
+				# Expected to raise an 403 forbidden error if tenant does not have any subtenants.
+				return self.__subscribedTenants
+
+			subTenants = []
+
+			if isinstance(resp, dict) and 'tenants' in resp and len(resp['tenants']) > 0:
+				subTenants += resp['tenants']
+				
+				TOTAL_PAGES = 1
+				# Make sure we retrieve all pages from query
+				if 'statistics' in resp and "totalPages" in resp['statistics']:
+					TOTAL_PAGES = resp['statistics']['totalPages']
+
+				if TOTAL_PAGES > 1:
+					for currentPage in range(2, TOTAL_PAGES + 1):
+						try:
+							resp = self._c8yConn.do_get(create_url(pageSize=PAGE_SIZE, currentPage=currentPage),jsonResp=True)
+						except: pass
+						
+						if isinstance(resp, dict) and 'tenants' in resp and len(resp['tenants']) > 0:
+							subTenants += resp['tenants']
+			
+			for tenant in subTenants:
+				if 'applications' in tenant and 'references' in tenant['applications']:
+					applications = tenant['applications']['references']
+					for app in applications:
+						if self._applicationId == app['application']['id']:
+							self.__subscribedTenants.append(CumulocityTenant(tenant["domain"], self.username, self.password, tenant["id"]))
+
+			return self.__subscribedTenants

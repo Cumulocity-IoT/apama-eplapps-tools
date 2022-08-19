@@ -41,7 +41,7 @@ You can create an empty PySys project by creating a new directory and copying in
 
 Creating a test
 ----------------
-See :doc:`Testing the performance of your EPL apps <performance-testing>` for details on creating and running performance tests.
+See :doc:`Testing the performance of your EPL apps and smart rules <performance-testing>` for details on creating and running performance tests.
 
 To create a test, you can either copy an existing test (such as one of our samples) and rename it, or by running:
 
@@ -96,7 +96,7 @@ Any other existing EPL apps, analytics builder models, devices, or historic data
 
 After the test has finished, any EPL apps that were uploaded to your tenant by the test are deactivated. 
 
-See :doc:`Testing the performance of your EPL apps <performance-testing>` for details on running performance tests.
+See :doc:`Testing the performance of your EPL apps and smart rules <performance-testing>` for details on running performance tests.
 
 Testing locally
 ===============
@@ -151,7 +151,7 @@ For anyone who already knows how to use PySys and wants to write Python code for
 
 In order to view documentation on classes for PySys helpers for EPL Apps please see: `PySys helpers <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/>`_
 
-See :doc:`Testing the performance of your EPL apps <performance-testing>` for details on writing performance tests.
+See :doc:`Testing the performance of your EPL apps and smart rules <performance-testing>` for details on writing performance tests.
 
 To run in Apama EPL Apps, your run.py should look something like this:
 

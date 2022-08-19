@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools 10.13.0.1 documentation</title>
+    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools 10.14.0.3 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -16,6 +16,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="apamax.eplapplications.smartrules" href="apamax.eplapplications.smartrules.html" />
     <link rel="prev" title="apamax.eplapplications.perf.publisher" href="apamax.eplapplications.perf.publisher.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,9 +29,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="apamax.eplapplications.smartrules.html" title="apamax.eplapplications.smartrules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="apamax.eplapplications.perf.publisher.html" title="apamax.eplapplications.perf.publisher"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li> 
       </ul>
@@ -59,14 +63,12 @@ and spool the logs from the platform locally.</p>
 <li><p>CUMULOCITY_PASSWORD</p></li>
 </ul>
 </dd>
-</dl>
-<p>For use with the EPLApps class for uploading EPL applications:</p>
-<blockquote>
-<div><p>self.platform = CumulocityPlatform(self)
+<dt>For use with the EPLApps class for uploading EPL applications:</dt><dd><p>self.platform = CumulocityPlatform(self)
 eplapps = EPLApps(self.platform.getC8YConnection())
 eplapps.deploy(self.input+’/test.mon’, activate=True)
 self.waitForGrep(self.platform.getApamaLogFile(), expr=’Added monitor eplfiles.test’)</p>
-</div></blockquote>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>parent</strong> – The PySys test object using this platform object.</p>
@@ -91,6 +93,36 @@ self.waitForGrep(self.platform.getApamaLogFile(), expr=’Added monitor eplfiles
 </dd></dl>
 
 <dl class="py method">
+<dt id="apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName">
+<code class="sig-name descname">getMicroserviceName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getMicroserviceName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the Apama-ctrl microservice being tested.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants">
+<code class="sig-name descname">getSubscribedTenants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getSubscribedTenants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of Cumulocity IoT tenants subscribed to the Apama-ctrl microservice if testing against a
+multi-tenant Apama-ctrl microservice.</p>
+<p>If the Apama-ctrl microservice is per-tenant, it returns a list only containing the configured tenant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Cumulocity IoT tenants.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.platform.CumulocityPlatform.getTenant">
+<code class="sig-name descname">getTenant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getTenant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Cumulocity IoT tenant configured in the pysysproject.xml file.
+:return: The Cumulocity IoT tenant.
+:rtype: <a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="apamax.eplapplications.platform.CumulocityPlatform.shutdown">
 <code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.shutdown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop spooling the log files when the test finishes.</p>
@@ -112,7 +144,7 @@ self.waitForGrep(self.platform.getApamaLogFile(), expr=’Added monitor eplfiles
 <li class="toctree-l1"><a class="reference internal" href="../using-eplapp.html">Using the eplapp.py command line tool</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../testing-epl.html">Writing tests for EPL apps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../using-pysys.html">Using PySys to test your EPL apps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../performance-testing.html">Testing the performance of your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apamax.html">PySys helpers for EPL apps</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="apamax.eplapplications.html">apamax.eplapplications</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.basetest.html">apamax.eplapplications.basetest</a></li>
@@ -124,6 +156,8 @@ self.waitForGrep(self.platform.getApamaLogFile(), expr=’Added monitor eplfiles
 <li class="toctree-l4"><a class="reference internal" href="#cumulocityplatform">CumulocityPlatform</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.smartrules.html">apamax.eplapplications.smartrules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.tenant.html">apamax.eplapplications.tenant</a></li>
 </ul>
 </li>
 </ul>
@@ -154,9 +188,12 @@ self.waitForGrep(self.platform.getApamaLogFile(), expr=’Added monitor eplfiles
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="apamax.eplapplications.smartrules.html" title="apamax.eplapplications.smartrules"
+             >next</a> |</li>
+        <li class="right" >
           <a href="apamax.eplapplications.perf.publisher.html" title="apamax.eplapplications.perf.publisher"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li> 
       </ul>

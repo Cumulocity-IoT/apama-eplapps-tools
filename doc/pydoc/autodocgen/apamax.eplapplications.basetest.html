@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.13.0.1 documentation</title>
+    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.14.0.3 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="apamax.eplapplications.html" title="apamax.eplapplications"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li> 
       </ul>
@@ -136,7 +136,7 @@
 
 <dl class="py method">
 <dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice">
-<code class="sig-name descname">createTestDevice</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">'PySysTestDevice'</span></em>, <em class="sig-param"><span class="n">children</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.createTestDevice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">createTestDevice</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">'PySysTestDevice'</span></em>, <em class="sig-param"><span class="n">children</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.createTestDevice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a Cumulocity IoT device for testing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -144,6 +144,7 @@
 <li><p><strong>name</strong> (<em>str</em>) – The name of the device. The name of the device is prefixed with <code class="xref py py-obj docutils literal notranslate"><span class="pre">PYSYS_</span></code> so that the framework can identify and clean up test devices.</p></li>
 <li><p><strong>type</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of the device.</p></li>
 <li><p><strong>children</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The list of device IDs to add them as children to the created device.</p></li>
+<li><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>, optional) – The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -157,7 +158,7 @@
 
 <dl class="py method">
 <dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms">
-<code class="sig-name descname">getAlarms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">status</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateFrom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateTo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getAlarms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getAlarms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">status</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateFrom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateTo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getAlarms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all alarms with matching parameters.</p>
 <p>For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">getAlarms</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;my_alarms&#39;</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="s1">&#39;2021-04-15 11:00:00.000Z&#39;</span><span class="p">,</span> 
@@ -172,6 +173,7 @@
 <li><p><strong>status</strong> (<em>str</em><em>, </em><em>optional</em>) – The status of the alarms to get. Get alarms of all status if not specified.</p></li>
 <li><p><strong>dateFrom</strong> (<em>str</em><em>, </em><em>optional</em>) – The start time of the alarm in the ISO format. If specified, only alarms that are created on or after this time are fetched.</p></li>
 <li><p><strong>dateTo</strong> (<em>str</em><em>, </em><em>optional</em>) – The end time of the alarm in the ISO format. If specified, only alarms that are created on or before this time are fetched.</p></li>
+<li><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>, optional) – The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.</p></li>
 <li><p><strong>**kwargs</strong> – All additional keyword arguments are treated as extra parameters for filtering alarms.</p></li>
 </ul>
 </dd>
@@ -186,7 +188,7 @@
 
 <dl class="py method">
 <dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations">
-<code class="sig-name descname">getOperations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">deviceId</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fragmentType</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateFrom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateTo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getOperations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getOperations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">deviceId</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fragmentType</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateFrom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateTo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getOperations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all operations with matching parameters.</p>
 <p>For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">getOperations</span><span class="p">(</span><span class="n">fragmentType</span><span class="o">=</span><span class="s1">&#39;my_ops&#39;</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="s1">&#39;2021-04-15 11:00:00.000Z&#39;</span><span class="p">,</span> 
@@ -200,6 +202,7 @@
 <li><p><strong>fragmentType</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of fragment that must be part of the operation.</p></li>
 <li><p><strong>dateFrom</strong> (<em>str</em><em>, </em><em>optional</em>) – The start time of the operation in the ISO format. If specified, only operations that are created on or after this time are fetched.</p></li>
 <li><p><strong>dateTo</strong> (<em>str</em><em>, </em><em>optional</em>) – The end time of the operation in the ISO format. If specified, only operations that are created on or before this time are fetched.</p></li>
+<li><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>, optional) – The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.</p></li>
 <li><p><strong>**kwargs</strong> – All additional keyword arguments are treated as extra parameters for filtering operations.</p></li>
 </ul>
 </dd>
@@ -240,8 +243,13 @@ then all the mon files in the project.EPL_APPS directory are returned.</p>
 
 <dl class="py method">
 <dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant">
-<code class="sig-name descname">prepareTenant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.prepareTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">prepareTenant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.prepareTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the tenant for a test by deleting all devices created by previous tests, and clearing all active alarms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>, optional) – The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -374,7 +382,7 @@ that were already allocated.</p>
 <li class="toctree-l1"><a class="reference internal" href="../using-eplapp.html">Using the eplapp.py command line tool</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../testing-epl.html">Writing tests for EPL apps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../using-pysys.html">Using PySys to test your EPL apps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../performance-testing.html">Testing the performance of your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apamax.html">PySys helpers for EPL apps</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="apamax.eplapplications.html">apamax.eplapplications</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">apamax.eplapplications.basetest</a><ul>
@@ -388,6 +396,8 @@ that were already allocated.</p>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.eplapps.html">apamax.eplapplications.eplapps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.perf.html">apamax.eplapplications.perf</a></li>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.platform.html">apamax.eplapplications.platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.smartrules.html">apamax.eplapplications.smartrules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.tenant.html">apamax.eplapplications.tenant</a></li>
 </ul>
 </li>
 </ul>
@@ -423,7 +433,7 @@ that were already allocated.</p>
         <li class="right" >
           <a href="apamax.eplapplications.html" title="apamax.eplapplications"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li> 
       </ul>

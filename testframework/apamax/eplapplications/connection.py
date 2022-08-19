@@ -1,5 +1,5 @@
 ## License
-# Copyright (c) 2020-2021 Software AG, Darmstadt, Germany and/or its licensors
+# Copyright (c) 2020-2022 Software AG, Darmstadt, Germany and/or its licensors
 
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -10,11 +10,14 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 import urllib, ssl, json, urllib.request, base64, logging
-from  apamax.eplapplications.buildVersions import RELEASE_TRAIN_VERSION
 
 class C8yConnection(object):
 	"""
 	Simple object to create connection to Cumulocity IoT and perform REST requests.
+
+	:param url: The Cumulocity IoT tenant url.
+	:param username: The username.
+	:param password: The password.
 	"""
 
 	def __init__(self, url, username, password):
@@ -29,12 +32,6 @@ class C8yConnection(object):
 		self.base_url = url
 		self.auth_header = "Basic " + base64.b64encode(bytes("%s:%s" % (username, password), "utf8")).decode()
 		self.logger = logging.getLogger("pysys.apamax.eplapplications.C8yConnection")
-		try:
-			platform_version = self.do_get('/service/cep/diagnostics/componentVersion')['releaseTrainVersion']
-			if platform_version != RELEASE_TRAIN_VERSION:
-				self.logger.warning(f"Version mismatch, Apama microservice is version {platform_version} but you are using version {RELEASE_TRAIN_VERSION}.")
-		except Exception as e:
-			self.logger.warning("Could not get the platform version to compare version information - is apama-ctrl subscribed?")
 
 	def request(self, method, path, body=None, headers=None, useLocationHeaderPostResp=True):
 		"""
@@ -55,6 +52,7 @@ class C8yConnection(object):
 		url = self.base_url[:-1] if self.base_url.endswith('/') else self.base_url
 		req = urllib.request.Request(url + path, data=body, headers=headers, method=method)
 		resp = self.urlopener.open(req)
+
 		if resp.getheader('Content-Type',
 								'') == 'text/html':  # we never ask for HTML, if we got it, this is probably the wrong URL (or we're very confused)
 			raise Exception(
@@ -93,9 +91,11 @@ class C8yConnection(object):
 		:param path: The path to resource.
 		:param body: The JSON body.
 		:param headers: The headers.
+		:param kwargs: Any additional kwargs to pass to the `request` method.
 		:return: Response body string.
 		"""
 		headers = headers or {}
 		headers['Content-Type'] = 'application/json'
+		headers["Accept"] = 'application/json'
 		body = json.dumps(body)
 		return self.request(method, path, body, headers, **kwargs)

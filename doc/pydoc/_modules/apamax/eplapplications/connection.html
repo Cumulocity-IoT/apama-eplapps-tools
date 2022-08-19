@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.connection &#8212; EPL Apps Tools 10.13.0.1 documentation</title>
+    <title>apamax.eplapplications.connection &#8212; EPL Apps Tools 10.14.0.3 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -38,7 +38,7 @@
             
   <h1>Source code for apamax.eplapplications.connection</h1><div class="highlight"><pre>
 <span></span><span class="c1">## License</span>
-<span class="c1"># Copyright (c) 2020-2021 Software AG, Darmstadt, Germany and/or its licensors</span>
+<span class="c1"># Copyright (c) 2020-2022 Software AG, Darmstadt, Germany and/or its licensors</span>
 
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this</span>
 <span class="c1"># file except in compliance with the License. You may obtain a copy of the License at</span>
@@ -49,11 +49,14 @@
 <span class="c1"># See the License for the specific language governing permissions and limitations under the License.</span>
 
 <span class="kn">import</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">ssl</span><span class="o">,</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">urllib.request</span><span class="o">,</span> <span class="nn">base64</span><span class="o">,</span> <span class="nn">logging</span>
-<span class="kn">from</span>  <span class="nn">apamax.eplapplications.buildVersions</span> <span class="kn">import</span> <span class="n">RELEASE_TRAIN_VERSION</span>
 
 <div class="viewcode-block" id="C8yConnection"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.connection.html#apamax.eplapplications.connection.C8yConnection">[docs]</a><span class="k">class</span> <span class="nc">C8yConnection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Simple object to create connection to Cumulocity IoT and perform REST requests.</span>
+
+<span class="sd">	:param url: The Cumulocity IoT tenant url.</span>
+<span class="sd">	:param username: The username.</span>
+<span class="sd">	:param password: The password.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
@@ -68,12 +71,6 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">url</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">auth_header</span> <span class="o">=</span> <span class="s2">&quot;Basic &quot;</span> <span class="o">+</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">),</span> <span class="s2">&quot;utf8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pysys.apamax.eplapplications.C8yConnection&quot;</span><span class="p">)</span>
-		<span class="k">try</span><span class="p">:</span>
-			<span class="n">platform_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/service/cep/diagnostics/componentVersion&#39;</span><span class="p">)[</span><span class="s1">&#39;releaseTrainVersion&#39;</span><span class="p">]</span>
-			<span class="k">if</span> <span class="n">platform_version</span> <span class="o">!=</span> <span class="n">RELEASE_TRAIN_VERSION</span><span class="p">:</span>
-				<span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Version mismatch, Apama microservice is version </span><span class="si">{</span><span class="n">platform_version</span><span class="si">}</span><span class="s2"> but you are using version </span><span class="si">{</span><span class="n">RELEASE_TRAIN_VERSION</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not get the platform version to compare version information - is apama-ctrl subscribed?&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="C8yConnection.request"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.connection.html#apamax.eplapplications.connection.C8yConnection.request">[docs]</a>	<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">useLocationHeaderPostResp</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -94,6 +91,7 @@
 		<span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span>
 		<span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span> <span class="o">+</span> <span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
 		<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">urlopener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+
 		<span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">getheader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span>
 								<span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;text/html&#39;</span><span class="p">:</span>  <span class="c1"># we never ask for HTML, if we got it, this is probably the wrong URL (or we&#39;re very confused)</span>
 			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
@@ -132,10 +130,12 @@
 <span class="sd">		:param path: The path to resource.</span>
 <span class="sd">		:param body: The JSON body.</span>
 <span class="sd">		:param headers: The headers.</span>
+<span class="sd">		:param kwargs: Any additional kwargs to pass to the `request` method.</span>
 <span class="sd">		:return: Response body string.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span> <span class="ow">or</span> <span class="p">{}</span>
 		<span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;application/json&#39;</span>
+		<span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Accept&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;application/json&#39;</span>
 		<span class="n">body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 </pre></div>
@@ -150,7 +150,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../using-eplapp.html">Using the eplapp.py command line tool</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../testing-epl.html">Writing tests for EPL apps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../using-pysys.html">Using PySys to test your EPL apps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../performance-testing.html">Testing the performance of your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
 </ul>
 
@@ -177,7 +177,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

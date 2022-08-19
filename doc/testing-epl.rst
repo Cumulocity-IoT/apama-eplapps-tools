@@ -15,7 +15,7 @@ The behavior of most EPL apps usually consists of receiving data, sending measur
 
 This can all be done using additional EPL apps that run parallel to the EPL app that we wish to test for correctness. This document will demonstrate some of the common processes involved in writing these additional EPL apps that test your existing EPL apps, while outlining some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK. 
 
-See the :doc:`Performance testing EPL apps <performance-testing>` document for writing performance tests.
+See the :doc:`Testing the performance of your EPL apps and smart rules <performance-testing>` document for writing performance tests.
 
 .. _device-simulator:
 

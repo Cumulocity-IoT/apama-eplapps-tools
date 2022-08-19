@@ -1,5 +1,5 @@
 ## License
-# Copyright (c) 2020-2021 Software AG, Darmstadt, Germany and/or its licensors
+# Copyright (c) 2020-2022 Software AG, Darmstadt, Germany and/or its licensors
 
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -15,9 +15,10 @@ from pysys.basetest import BaseTest
 import urllib.request
 import xml.etree.ElementTree as ET
 import os
-import urllib
+import urllib, urllib.parse
 import inspect
 import hashlib
+import json
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))))
 from apamax.eplapplications.eplapps import EPLApps
 from apamax.eplapplications.platform import CumulocityPlatform
@@ -172,17 +173,20 @@ class ApamaC8YBaseTest(BaseTest):
 					eplAppsPaths.append(os.path.join(self.project.EPL_APPS, eplApp))
 		return eplAppsPaths
 
-	def prepareTenant(self):
+	def prepareTenant(self, tenant=None):
 		"""
-			Prepares the tenant for a test by deleting all devices created by previous tests, and clearing all active alarms. 
+		Prepares the tenant for a test by deleting all devices created by previous tests, and clearing all active alarms.
+
+		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.
+		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		"""
 		self.log.info('Preparing tenant to run test(s)')
 		# Clear all active alarms
-		self._clearActiveAlarms()
+		self._clearActiveAlarms(tenant=tenant)
 		# Delete devices that were created by tests
-		self._deleteTestDevices()
+		self._deleteTestDevices(tenant=tenant)
 
-	def createTestDevice(self, name, type='PySysTestDevice', children=None):
+	def createTestDevice(self, name, type='PySysTestDevice', children=None, tenant=None):
 		"""
 		Creates a Cumulocity IoT device for testing.
 
@@ -191,23 +195,26 @@ class ApamaC8YBaseTest(BaseTest):
 		:type type: str, optional
 		:param children: The list of device IDs to add them as children to the created device.
 		:type children: list[str], optional
+		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.
+		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		:return: The ID of the device created.
 		:rtype: str
 		"""
+		connection = (tenant or self.platform.getTenant()).getConnection()
 		device = {
 			'name': f'{self.TEST_DEVICE_PREFIX}{name}',
 			'c8y_IsDevice': True,
 			'type': type,
 			'com_cumulocity_model_Agent': {}
 		}
-		id = self.platform.getC8YConnection().do_request_json('POST', '/inventory/managedObjects', device)
+		id = json.loads(connection.do_request_json('POST', '/inventory/managedObjects', device, useLocationHeaderPostResp=False))['id']
 		
 		children = children or []
 		for child in children:
-			self.platform.getC8YConnection().do_request_json('POST', f'/inventory/managedObjects/{id}/childDevices', {'managedObject': {'id': child}})
+			connection.do_request_json('POST', f'/inventory/managedObjects/{id}/childDevices', {'managedObject': {'id': child}})
 		return id
 
-	def getAlarms(self, source=None, type=None, status=None, dateFrom=None, dateTo=None, **kwargs):
+	def getAlarms(self, source=None, type=None, status=None, dateFrom=None, dateTo=None, tenant=None, **kwargs):
 		"""
 		Gets all alarms with matching parameters.
 
@@ -226,6 +233,8 @@ class ApamaC8YBaseTest(BaseTest):
 		:type dateFrom: str, optional
 		:param dateTo: The end time of the alarm in the ISO format. If specified, only alarms that are created on or before this time are fetched.
 		:type dateTo: str, optional
+		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.
+		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		:param \\**kwargs: All additional keyword arguments are treated as extra parameters for filtering alarms. 
 		:return: List of alarms.
 		:rtype: list[object]
@@ -244,9 +253,9 @@ class ApamaC8YBaseTest(BaseTest):
 		if kwargs:
 			queryParams.update(kwargs)
 			
-		return self._getCumulocityObjectCollection('/alarm/alarms', queryParams=queryParams, responseKey='alarms')
+		return self._getCumulocityObjectCollection('/alarm/alarms', queryParams=queryParams, responseKey='alarms',tenant=tenant)
 
-	def getOperations(self, deviceId=None, fragmentType=None, dateFrom=None, dateTo=None, **kwargs):
+	def getOperations(self, deviceId=None, fragmentType=None, dateFrom=None, dateTo=None, tenant=None, **kwargs):
 		"""
 		Gets all operations with matching parameters.
 
@@ -263,6 +272,8 @@ class ApamaC8YBaseTest(BaseTest):
 		:type dateFrom: str, optional
 		:param dateTo: The end time of the operation in the ISO format. If specified, only operations that are created on or before this time are fetched.
 		:type dateTo: str, optional
+		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.
+		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		:param \\**kwargs: All additional keyword arguments are treated as extra parameters for filtering operations.
 		:return: List of operations.
 		:rtype: list[object]
@@ -280,7 +291,7 @@ class ApamaC8YBaseTest(BaseTest):
 		if kwargs:
 			queryParams.update(kwargs)
 		
-		return self._getCumulocityObjectCollection('/devicecontrol/operations', queryParams=queryParams, responseKey='operations')
+		return self._getCumulocityObjectCollection('/devicecontrol/operations', queryParams=queryParams, responseKey='operations',tenant=tenant)
 
 	def copyWithReplace(self, sourceFile, targetFile, replacementDict, marker='@'):
 		"""
@@ -301,7 +312,7 @@ class ApamaC8YBaseTest(BaseTest):
 			return line
 		self.copy(sourceFile, targetFile, mappers=[mapper])
 		
-	def _getCumulocityObjectCollection(self, resourceUrl, queryParams, responseKey):
+	def _getCumulocityObjectCollection(self, resourceUrl, queryParams, responseKey, tenant=None):
 		"""
 			Gets all Cumulocity IoT object collection.
 
@@ -310,12 +321,16 @@ class ApamaC8YBaseTest(BaseTest):
 			:param str resourceUrl: The base url of the object to get. For example, /alarm/alarms.
 			:param dict[str,str] queryParams: The query parameters.
 			:param str responseKey: The key to use to get actual object list from the response JSON.
+			:param tenant: The Cumulocity IoT tenant.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 			:return: List of all object.
-			:rtype: list[object]
+			:rtype: list[dict]
 		"""
 		result = []
 		PAGE_SIZE = 100 	# By default, pageSize = 5 for querying to C8y
 		queryParams = queryParams or {}
+
+		connection = (tenant or self.platform.getTenant()).getConnection()
 		
 		def create_url(**params):
 			p = queryParams.copy()
@@ -325,44 +340,59 @@ class ApamaC8YBaseTest(BaseTest):
 			else:
 				return f'{resourceUrl}?{urllib.parse.urlencode(p)}'
 
-		resp = self.platform.getC8YConnection().do_get(create_url(pageSize=PAGE_SIZE, currentPage=1, withTotalPages=True))
+		resp = connection.do_get(create_url(pageSize=PAGE_SIZE, currentPage=1, withTotalPages=True))
 
 		result += resp[responseKey]
 		# Make sure we retrieve all pages from query
 		TOTAL_PAGES = resp['statistics']['totalPages']
 		if TOTAL_PAGES > 1:
 			for currentPage in range(2, TOTAL_PAGES + 1):
-				resp = self.platform.getC8YConnection().do_get(create_url(pageSize=PAGE_SIZE, currentPage=currentPage))
+				resp = connection.do_get(create_url(pageSize=PAGE_SIZE, currentPage=currentPage))
 				result += resp[responseKey]
 
 		return result
 
-	def _clearActiveAlarms(self):
+	def _clearActiveAlarms(self,tenant=None):
 		"""
-			Clears all active alarms as part of a pre-test tenant cleanup. 
+			Clears all active alarms as part of a pre-test tenant cleanup.
+
+			:param tenant: The Cumulocity IoT tenant.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		"""
 		self.log.info("Clearing active alarms")
-		self.platform.getC8YConnection().do_request_json('PUT', '/alarm/alarms?status=ACTIVE', {"status": "CLEARED"})
+		connection = (tenant or self.platform.getTenant()).getConnection()
+		connection.do_request_json('PUT', '/alarm/alarms?status=ACTIVE', {"status": "CLEARED"})
 
-	def _deleteTestDevices(self):
+	def _deleteTestDevices(self,tenant=None):
 		"""
 			Deletes all ManagedObjects that have name prefixed with "PYSYS_" and the 'c8y_isDevice' param as part of pre-test tenant cleanup.
+
+			:param tenant: The Cumulocity IoT tenant.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
+
 		"""
+		connection = (tenant or self.platform.getTenant()).getConnection()
 		self.log.info("Deleting old test devices")
 		testDevices = self._getCumulocityObjectCollection(f"/inventory/managedObjects", 
 						queryParams={'query':f"has(c8y_IsDevice) and name eq '{self.TEST_DEVICE_PREFIX}*'"},
-						responseKey='managedObjects')
+						responseKey='managedObjects',tenant=tenant)
 		# Deleting test devices
 		testDeviceIds = [device['id'] for device in testDevices]
 		for deviceId in testDeviceIds:
-			resp = self.platform.getC8YConnection().request('DELETE', f'/inventory/managedObjects/{deviceId}')
+			resp = connection.request('DELETE', f'/inventory/managedObjects/{deviceId}')
 
-	def _deleteTestEPLApps(self):
+	def _deleteTestEPLApps(self,tenant=None):
 		"""
 			Deletes all EPL apps with name prefixed by "PYSYS_" or "PYSYS_TEST"
 			as part of a pre-test tenant cleanup. 
+
+			:param tenant: The Cumulocity IoT tenant.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		"""
-		eplapps = EPLApps(self.platform.getC8YConnection())
+
+		if not self.platform.supportsEPLApps(): return
+		connection = (tenant or self.platform.getTenant()).getConnection()
+		eplapps = EPLApps(connection)
 		appsToDelete = []
 		allApps = eplapps.getEPLApps(False)
 		for eplApp in allApps:

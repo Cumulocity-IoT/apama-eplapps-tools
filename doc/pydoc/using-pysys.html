@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Using PySys to test your EPL apps &#8212; EPL Apps Tools 10.13.0.1 documentation</title>
+    <title>Using PySys to test your EPL apps &#8212; EPL Apps Tools 10.14.0.3 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -16,7 +16,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Testing the performance of your EPL apps" href="performance-testing.html" />
+    <link rel="next" title="Testing the performance of your EPL apps and smart rules" href="performance-testing.html" />
     <link rel="prev" title="Writing tests for EPL apps" href="testing-epl.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="performance-testing.html" title="Testing the performance of your EPL apps"
+          <a href="performance-testing.html" title="Testing the performance of your EPL apps and smart rules"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -74,7 +74,7 @@
 </div>
 <div class="section" id="creating-a-test">
 <h3>Creating a test<a class="headerlink" href="#creating-a-test" title="Permalink to this headline">¶</a></h3>
-<p>See <a class="reference internal" href="performance-testing.html"><span class="doc">Testing the performance of your EPL apps</span></a> for details on creating and running performance tests.</p>
+<p>See <a class="reference internal" href="performance-testing.html"><span class="doc">Testing the performance of your EPL apps and smart rules</span></a> for details on creating and running performance tests.</p>
 <p>To create a test, you can either copy an existing test (such as one of our samples) and rename it, or by running:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys make TestName
 </pre></div>
@@ -116,7 +116,7 @@
 </ul>
 <p>Any other existing EPL apps, analytics builder models, devices, or historic data in your tenant should be unaffected by the test run. However, to avoid any potential interference between your tests and other EPL apps that may be running in your tenant, it is recommended that you use a dedicated (clean) tenant for running your tests.</p>
 <p>After the test has finished, any EPL apps that were uploaded to your tenant by the test are deactivated.</p>
-<p>See <a class="reference internal" href="performance-testing.html"><span class="doc">Testing the performance of your EPL apps</span></a> for details on running performance tests.</p>
+<p>See <a class="reference internal" href="performance-testing.html"><span class="doc">Testing the performance of your EPL apps and smart rules</span></a> for details on running performance tests.</p>
 </div>
 </div>
 <div class="section" id="testing-locally">
@@ -159,7 +159,7 @@
 <h2>Advanced tests<a class="headerlink" href="#advanced-tests" title="Permalink to this headline">¶</a></h2>
 <p>For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.</p>
 <p>In order to view documentation on classes for PySys helpers for EPL Apps please see: <a class="reference external" href="https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/">PySys helpers</a></p>
-<p>See <a class="reference internal" href="performance-testing.html"><span class="doc">Testing the performance of your EPL apps</span></a> for details on writing performance tests.</p>
+<p>See <a class="reference internal" href="performance-testing.html"><span class="doc">Testing the performance of your EPL apps and smart rules</span></a> for details on writing performance tests.</p>
 <p>To run in Apama EPL Apps, your run.py should look something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apamax.eplapplications.basetest</span> <span class="kn">import</span> <span class="n">ApamaC8YBaseTest</span>
 <span class="k">class</span> <span class="nc">PySysTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
@@ -246,7 +246,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#advanced-tests">Advanced tests</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="performance-testing.html">Testing the performance of your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
 </ul>
 
@@ -274,12 +274,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="performance-testing.html" title="Testing the performance of your EPL apps"
+          <a href="performance-testing.html" title="Testing the performance of your EPL apps and smart rules"
              >next</a> |</li>
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.13.0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
