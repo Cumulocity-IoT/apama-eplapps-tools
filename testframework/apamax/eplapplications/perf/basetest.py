@@ -140,7 +140,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 		# Stop monitoring thread
 		if self.perfMonitorThread:
 			# Do not stop perf monitoring thread if testing against multi-tenant microservice
-			# and tenant is specified explicitly, because we need to monitor all tenants at once.
+			# and tenant is specified explicitly. because we need to monitor all tenants at once.
 			if not (self.platform.isMultiTenantMicroservice() and tenant is not None):
 				self.perfMonitorThread.stop()
 				self.perfMonitorThread.join()

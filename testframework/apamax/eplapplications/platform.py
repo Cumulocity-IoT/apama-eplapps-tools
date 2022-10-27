@@ -84,10 +84,8 @@ class CumulocityPlatform(object):
 				instances = {}
 				try:
 					while len(instances) == 0:
-						res = self._c8yConn.do_get("/inventory/managedObjects?type=c8y_Application_%s" % self._applicationId)
-						if len(res["managedObjects"]) == 0:
-							break # this means we got the wrong one
-						instances = res["managedObjects"][0]["c8y_Subscriptions"][self._remoteTenantId]["instances"].keys()
+						applicationStatus = self._c8yConn.do_get(f"/application/applications/{self._applicationId}/status?refresh=true")
+						instances = applicationStatus['c8y_Status']['instances']
 						time.sleep(1.0)
 					if len(instances) > 0:
 						self._instanceName = list(instances)[0]

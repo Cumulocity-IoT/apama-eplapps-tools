@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools 10.14.0.3 documentation</title>
+    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools 10.15.0.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.15.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -123,10 +123,8 @@
 				<span class="n">instances</span> <span class="o">=</span> <span class="p">{}</span>
 				<span class="k">try</span><span class="p">:</span>
 					<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-						<span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s2">&quot;/inventory/managedObjects?type=c8y_Application_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span><span class="p">)</span>
-						<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;managedObjects&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-							<span class="k">break</span> <span class="c1"># this means we got the wrong one</span>
-						<span class="n">instances</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;managedObjects&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;c8y_Subscriptions&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span><span class="p">][</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+						<span class="n">applicationStatus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/application/applications/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span><span class="si">}</span><span class="s2">/status?refresh=true&quot;</span><span class="p">)</span>
+						<span class="n">instances</span> <span class="o">=</span> <span class="n">applicationStatus</span><span class="p">[</span><span class="s1">&#39;c8y_Status&#39;</span><span class="p">][</span><span class="s1">&#39;instances&#39;</span><span class="p">]</span>
 						<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
 					<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 						<span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">instances</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -302,7 +300,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.14.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.15.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

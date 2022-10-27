@@ -8,7 +8,7 @@ Introduction
 
 PySys is a testing framework that provides a way to test your applications. 
 
-See `PySys Documentation <https://pysys-test.github.io/pysys-test/>`_ for details on installation and how the framework can be used and the facilities it contains. 
+See `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for details on installation and how the framework can be used and the facilities it contains.
 
 .. _test-in-cloud:
 
@@ -41,7 +41,7 @@ You can create an empty PySys project by creating a new directory and copying in
 
 Creating a test
 ----------------
-See :doc:`Testing the performance of your EPL apps and smart rules <performance-testing>` for details on creating and running performance tests.
+See `Testing the performance of your EPL apps and smart rules <performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules>`_ for details on creating and running performance tests.
 
 To create a test, you can either copy an existing test (such as one of our samples) and rename it, or by running:
 
@@ -51,7 +51,7 @@ To create a test, you can either copy an existing test (such as one of our sampl
 
 If you do this, the default PySys test case comes with a run.py file. For these tests, you should remove that file, it is not needed. If you do want to use it, see the '`Advanced tests`_' section below.
 
-A PySys test case comprises a directory with a unique name, containing a pysystest.xml and an Input directory containing your test EPL monitors. These should be written according to the :doc:`Writing tests for EPL apps <testing-epl>` document, for example, AlarmOnMeasurementThresholdTest.mon in the provided samples. In particular, they must terminate either by all the listeners terminating or with an explicit 'die' statement.
+A PySys test case comprises a directory with a unique name, containing a pysystest.xml and an Input directory containing your test EPL monitors. These should be written according to the `Writing tests for EPL apps <testing-epl.rst#writing-tests-for-epl-apps>`_ document, for example, AlarmOnMeasurementThresholdTest.mon in the provided samples. In particular, they must terminate either by all the listeners terminating or with an explicit 'die' statement.
 
 The test is configured through the pysystest.xml file. This contains the title and purpose, which you should use for a description of what your test does. You must also use it to specify how to run your test. To run a test using Apama EPL Apps in your Cumulocity IoT tenant, you must add the following block:
 
@@ -96,7 +96,7 @@ Any other existing EPL apps, analytics builder models, devices, or historic data
 
 After the test has finished, any EPL apps that were uploaded to your tenant by the test are deactivated. 
 
-See :doc:`Testing the performance of your EPL apps and smart rules <performance-testing>` for details on running performance tests.
+See `Testing the performance of your EPL apps and smart rules <performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules>`_ for details on running performance tests.
 
 Testing locally
 ===============
@@ -149,9 +149,9 @@ Advanced tests
 
 For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.
 
-In order to view documentation on classes for PySys helpers for EPL Apps please see: `PySys helpers <https://SoftwareAG.github.io/apama-eplapps-tools/doc/pydoc/>`_
+In order to view documentation on classes for PySys helpers for EPL Apps please see: `PySys helpers <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc/>`_
 
-See :doc:`Testing the performance of your EPL apps and smart rules <performance-testing>` for details on writing performance tests.
+See `Testing the performance of your EPL apps and smart rules <performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules>`_ for details on writing performance tests.
 
 To run in Apama EPL Apps, your run.py should look something like this:
 

@@ -24,7 +24,7 @@ class MeasurementCreator(ObjectCreator):
 		self.range_max = range_max
 		# The number of measurements between each alarm being triggered
 		self.measurements_per_alarm = int((measurement_input_rate * total_devices) / TARGET_ALARM_RATE)
-		self.count = {} # The number of measurements sent for each device
+		self.count = {} # number of measurements sent for each device
 
 	def createObject(self, device, time):
 		count = self.count.get(device, random.randint(0, self.measurements_per_alarm))

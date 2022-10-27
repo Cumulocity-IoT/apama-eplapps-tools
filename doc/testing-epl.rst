@@ -15,7 +15,7 @@ The behavior of most EPL apps usually consists of receiving data, sending measur
 
 This can all be done using additional EPL apps that run parallel to the EPL app that we wish to test for correctness. This document will demonstrate some of the common processes involved in writing these additional EPL apps that test your existing EPL apps, while outlining some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK. 
 
-See the :doc:`Testing the performance of your EPL apps and smart rules <performance-testing>` document for writing performance tests.
+See the `Testing the performance of your EPL apps and smart rules <performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules>`_ document for writing performance tests.
 
 .. _device-simulator:
 
@@ -23,7 +23,7 @@ Creating device simulators
 ===========================
 All measurements and alarms in Cumulocity IoT must be associated with a source. Devices in Cumulocity IoT are represented by managed objects, each of which has a unique identifier. When sending measurement or alarm events, the ``source`` field of these events must be set to a identifier of a managed object in Cumulocity IoT. Therefore, in order to send measurements from our test EPL app, it must create a ``ManagedObject`` device simulator to be the source of these measurements.
 
-If you are using the PySys framework to :ref:`run tests in the cloud <test-in-cloud>`, any devices created by your tests should be named with prefix "PYSYS\_", and have the ``c8y_IsDevice`` property. These indicators are what the framework uses to identify which devices should be deleted following a test. Note that deleting a device in Cumulocity IoT will also delete any alarms or measurements associated with that device so the cleanup from a test is done when another test is next run. 
+If you are using the PySys framework to `run tests in the cloud <using-pysys.rst#testing-in-the-cumulocity-iot-cloud>`_, any devices created by your tests should be named with prefix "PYSYS\_", and have the ``c8y_IsDevice`` property. These indicators are what the framework uses to identify which devices should be deleted following a test. Note that deleting a device in Cumulocity IoT will also delete any alarms or measurements associated with that device so the cleanup from a test is done when another test is next run. 
 
 To see how this can be done, have a look at the ``createNewDevice`` action below::
 
@@ -60,7 +60,7 @@ To see how this can be done, have a look at the ``createNewDevice`` action below
 		return reqId;
 	}
 
-This action initializes a ``ManagedObject`` (using the "PYSYS\_" naming prefix and adding the ``c8y_IsDevice`` property), before sending it using a ``withResponse`` action. It then confirms that it has been successfully created using listeners for ``ObjectCommitted`` and ``ObjectCommitFailed`` events. Whenever you are creating or updating an object in Cumulocity IoT and you want to verify that the change has been successful, it is recommended that you use the ``withResponse`` action in conjunction with ``ObjectCommitted`` and ``ObjectCommitFailed`` listeners (for more information, see the information on updating a managed object in the 'The Cumulocity IoT Transport Connectivity Plug-in' section of the `documentation <https://documentation.softwareag.com/apamadoc.htm>`_). Using this approach you can easily relay when the process has completed (which is done by sending an event, ``DeviceCreated``, in the example above), and in the event of an error you can cause the test to exit quickly.
+This action initializes a ``ManagedObject`` (using the "PYSYS\_" naming prefix and adding the ``c8y_IsDevice`` property), before sending it using a ``withResponse`` action. It then confirms that it has been successfully created using listeners for ``ObjectCommitted`` and ``ObjectCommitFailed`` events. Whenever you are creating or updating an object in Cumulocity IoT and you want to verify that the change has been successful, it is recommended that you use the ``withResponse`` action in conjunction with ``ObjectCommitted`` and ``ObjectCommitFailed`` listeners (for more information, see the information on updating a managed object in the 'The Cumulocity IoT Transport Connectivity Plug-in' section of the `documentation <https://documentation.softwareag.com/pam/10.15.0/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_the_cumulocity_connectivity_plug_in.html>`_). Using this approach you can easily relay when the process has completed (which is done by sending an event, ``DeviceCreated``, in the example above), and in the event of an error you can cause the test to exit quickly.
 
 
 Sending events to your EPL apps
@@ -135,7 +135,7 @@ To receive the alarm event, firstly we must subscribe to the relevant channel, `
 Querying Cumulocity IoT
 ========================
 
-An alternative approach to the one demonstrated in the '`Receiving events from your EPL apps`_' section involves querying Cumulocity IoT. With this approach you are able to retrieve historical data. It is possible to query Cumulocity IoT for alarms, events, measurements, operations, and managed objects. More information on querying can be found in 'The Cumulocity IoT Transport Connectivity Plug-in' section of the  `documentation <https://documentation.softwareag.com/apamadoc.htm>`_.  
+An alternative approach to the one demonstrated in the '`Receiving events from your EPL apps`_' section involves querying Cumulocity IoT. With this approach you are able to retrieve historical data. It is possible to query Cumulocity IoT for alarms, events, measurements, operations, and managed objects. More information on querying can be found in 'The Cumulocity IoT Transport Connectivity Plug-in' section of the  `documentation <https://documentation.softwareag.com/pam/10.15.0/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_the_cumulocity_connectivity_plug_in.html>`_.
 
 Using an example of a test that checks for an alarm, this would involve subscribing to the ``FindAlarmResponse.SUBSCRIBE_CHANNEL`` and using a ``FindAlarm`` event with ``FindAlarmResponse`` and ``FindAlarmResponseAck`` listeners::
 
@@ -197,7 +197,7 @@ Summary
 
 EPL test samples
 -----------------
-A sample EPL app and test can be found in the samples directory of the EPL Apps Tools SDK. Most of the EPL code snippets in this document are from the sample test, AlarmOnMeasurementThresholdTest, which can be found in the Input directory of any of the samples provided. This tests the sample EPL app, AlarmOnMeasurementThreshold, which can be found in the samples/apps directory of the SDK. Information on how to run the sample test can be found in the :doc:`Using PySys to test your EPL apps <using-pysys>` document.
+A sample EPL app and test can be found in the samples directory of the EPL Apps Tools SDK. Most of the EPL code snippets in this document are from the sample test, AlarmOnMeasurementThresholdTest, which can be found in the Input directory of any of the samples provided. This tests the sample EPL app, AlarmOnMeasurementThreshold, which can be found in the samples/apps directory of the SDK. Information on how to run the sample test can be found in the `Using PySys to test your EPL apps <using-pysys.rst#using-pysys-to-test-your-epl-apps>`_ document.
 
 
 
