@@ -130,29 +130,26 @@ class AnalyticsBuilderCLI:
 
 		self.commands = {
 			'deploy': AnalyticsBuilderCLI.Command(
-				name='deploy', description='Deploys an EPL (.mon) file to Apama EPL Apps in Cumulocity IoT',
+				name='deploy', description='Deploys a model (.json) file to Apama Analytics Builder in Cumulocity IoT',
 				usages=[
 					'analyticsbuilder.py deploy <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--file FILE> [option]*',
 					'analyticsbuilder.py deploy [--help]',
 					'analyticsbuilder.py deploy [--version]'
 				],
-				mandatoryOptionsMessage='Mandatory options for deploying a file to Apama EPL Apps:',
+				mandatoryOptionsMessage='Mandatory options for deploying a file to Apama Analytics Builder:',
 				mandatoryOptions=[
 					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
 					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
 					['-p', '--password', 'PASSWORD', 'your Cumulocity IoT password'],
-					['-f', '--file', 'FILE', 'the filepath to the .mon file to be deployed as an EPL app']
+					['-f', '--file', 'FILE', 'the filepath to the .json file to be deployed as an Analytics Builder model']
 				],
-				optionalOptionsMessage='Optional options for deploying a file to Apama EPL Apps:',
+				optionalOptionsMessage='Optional options for deploying a file to Apama Analytics Builder:',
 				optionalOptions=[
-					['-n', '--name', 'NAME', 'the name of the EPL app to be deployed. By default this is the name of the file specified'],
-					['-d', '--description', 'DESCRIPTION', 'description of the EPL app'],
-					['-i', '--inactive', '', 'deploy the EPL app in an \'inactive\' state (by default the state will be \'active\').'],
-					['-r', '--redeploy', '', 'overwrite the contents of an existing EPL app']
+					['-r', '--redeploy', ' ', 'overwrite the contents of an existing Analytics Builder model']
 				],
 				function=AnalyticsBuilder.deploy,
-				arguments={'inactive': False, 'redeploy': False}, 	# Only need to supply default option arguments
-				successMessage='EPL app was successfully deployed.'
+				arguments={'redeploy': False}, 	# Only need to supply default option arguments
+				successMessage='Analytics Builder model was successfully deployed.'
 			),
 			'delete': AnalyticsBuilderCLI.Command(
 				name='delete', description='Deletes an existing Analytics Builder model in Cumulocity IoT',

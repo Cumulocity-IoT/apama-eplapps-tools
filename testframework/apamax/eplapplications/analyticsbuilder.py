@@ -25,67 +25,48 @@ class AnalyticsBuilder:
 	def __init__(self, connection):
 		self.connection = connection
 
-	def deploy(self, file, name='', description=None, inactive=False, redeploy=False):
-	 	"""
-	 	Deploys a local mon file to Apama EPL Apps in Cumulocity IoT.
+	def deploy(self, file, redeploy=False):
+		"""
+		Deploys a local json file to Apama Analytics Builder in Cumulocity IoT.
 
-	 	:param file: Path to local mon file to be deployed as an EPL app.
-	 	:param name: Name of the EPL app to be uploaded (optional). By default this will be the name of the mon file being uploaded.
-	 	:param description: Description of the EPL app (optional).
-	 	:param inactive: Boolean of whether the app should be 'active' (inactive=False) or 'inactive' (inactive=True) when it is deployed.
-	 	:param redeploy: Boolean of whether we are overwriting an existing EPL app.
-	 	"""
-	 	# active = not inactive
-		# # Check EPL file specified is valid .mon file:
-		# if not os.path.exists(file):
-		# 	raise FileNotFoundError(f'Deploy failed. File \'{file}\' not found.')
-		# elif os.path.splitext(file)[1] != '.mon':
-		# 	raise TypeError(f'Deploy failed. \'{file}\' is not a valid .mon file.')
-		# # Check whether EPL app of that name already exists for tenant:
-		# try:
-		# 	existingEPLApps = self.getEPLApps()
-		# except Exception as err:
-		# 	raise OSError(f'Could not deploy EPL app. {err}')
-		# existingAppNames = [app['name'] for app in existingEPLApps]
-		# # If name option not specified, use name of the .mon file specified by default
-		# if name == '':
-		# 	# Removing file path (directories) up to name of file:
-		# 	filename = os.path.basename(file)
-		# 	name = filename[:filename.rfind('.mon')]
-		# if name in existingAppNames:
-		# 	if redeploy:
-		# 		try:
-		# 			updateArgs = {'file': file}
-		# 			if description is not None: updateArgs['description'] = description
-		# 			updateArgs['state'] = 'active' if active else 'inactive'
-		# 			self.update(name, **updateArgs)
-		# 			return
-		# 		except Exception as err:
-		# 			raise OSError(f'Unable to redeploy EPL app \'{name}\'. {err}')
-		# 	else:
-		# 		raise FileExistsError(f'Deploy failed. \'{name}\' already exists in Apama EPL Apps.')
-		# try:
-		# 	file_contents = self.__read_text_withBOM(file)
-		# except Exception as err:
-		# 	raise IOError(f"Deploy failed. {err}")
-		# try:
-		# 	body = {
-		# 		'name': name,
-		# 		'description': description or '',
-		# 		'state': 'active' if active else 'inactive',
-		# 		'contents': file_contents
-		# 	}
-		# 	responseBytes = self.connection.do_request_json('POST', '/service/cep/eplfiles', body, useLocationHeaderPostResp=False)
-		# 	response = json.loads(responseBytes)
-
-		# 	if active and len(response['errors']) > 0:
-		# 		self.delete(name)
-		# 		errorStrings = []
-		# 		for error in response['errors']:
-		# 			errorStrings.append(f"[{os.path.basename(file)}:{error['line']}] {error['text']}")
-		# 		raise ValueError('\n'.join(errorStrings))
-		# except Exception as err:
-		# 	raise OSError(f'Unable to deploy EPL app \'{name}\' using POST on {self.connection.base_url}/service/cep/eplfiles.\n{err}')
+		:param file: Path to local json file to be deployed as an Analytics Builder model.
+		:param redeploy: Boolean of whether we are overwriting an existing EPL app.
+		"""
+		# Check file specified is valid file:
+		if not os.path.exists(file):
+			raise FileNotFoundError(f'Deploy failed. File \'{file}\' not found.')
+		elif os.path.splitext(file)[1] != '.json':
+			raise TypeError(f'Deploy failed. \'{file}\' is not a valid .json file.')
+		# Check whether model of that name already exists for tenant:
+		try:
+			existingModels = self.getModels()
+		except Exception as err:
+			raise OSError(f'Could not deploy Analytics Builder model. {err}')
+		existingModelNames = [model['name'] for model in existingModels]
+		try:
+			file_contents = self.__read_text_withBOM(file)
+		except Exception as err:
+			raise IOError(f"Deploy failed. {err}")
+		model = json.loads(file_contents)
+		name =  model['name']
+		if name in existingModelNames:
+			if redeploy:
+				try:
+					updateArgs = {'file': file}
+					self.update(name, **updateArgs)
+					return
+				except Exception as err:
+					raise OSError(f'Unable to redeploy Analytics Builder model \'{name}\'. {err}')
+			else:
+				raise FileExistsError(f'Deploy failed. \'{name}\' already exists in Analytics Builder.')
+		try:
+			responseBytes = self.connection.do_request_json('POST', '/service/cep/analyticsbuilder', model, useLocationHeaderPostResp=False)
+			response = json.loads(responseBytes)
+			if len(response['runtimeError']) > 0:
+				self.delete(name)
+				raise ValueError(response['runtimeError'])
+		except Exception as err:
+			raise OSError(f'Unable to deploy Analytics Builder model \'{name}\' using POST on {self.connection.base_url}/service/cep/analyticsbuilder.\n{err}')
 
 
 	def update(self, name, new_name=None, file=None, description=None, state=None):
