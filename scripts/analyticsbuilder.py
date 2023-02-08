@@ -178,7 +178,7 @@ class AnalyticsBuilderCLI:
 					'analyticsbuilder.py list [--help]',
 					'analyticsbuilder.py list [--version]'
 				],
-				mandatoryOptionsMessage='Mandatory options for printing list of EPL apps in Cumulocity IoT:',
+				mandatoryOptionsMessage='Mandatory options for printing list of Analytics Builder models in Cumulocity IoT:',
 				mandatoryOptions=[
 					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
 					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
