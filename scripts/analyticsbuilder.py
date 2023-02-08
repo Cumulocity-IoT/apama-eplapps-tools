@@ -184,28 +184,29 @@ class AnalyticsBuilderCLI:
 				function=lambda *a, **kw: self.printModelList(AnalyticsBuilder.getModels(*a, **kw))
 			),
 			'update': AnalyticsBuilderCLI.Command(
-				name='update', description='Updates an existing EPL app in Cumulocity IoT',
+				name='update', description='Updates an existing Analytics Builder model in Cumulocity IoT',
 				usages=[
 					'analyticsbuilder.py update <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--name NAME> <options>+',
 					'analyticsbuilder.py update [--help]',
 					'analyticsbuilder.py update [--version]'
 				],
-				mandatoryOptionsMessage='Mandatory options for updating an EPL app in Cumulocity IoT:',
+				mandatoryOptionsMessage='Mandatory options for updating an Analytics Builder model in Cumulocity IoT:',
 				mandatoryOptions=[
 					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
 					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
 					['-p', '--password', 'PASSWORD', 'your Cumulocity IoT password'],
-					['-n', '--name', 'NAME', 'the name of the EPL app to be updated'],
+					['-n', '--name', 'NAME', 'the name of the Analytics Builder model to be updated'],
 				],
-				optionalOptionsMessage='Optional options for updating an EPL app (at least 1 is required):',
+				optionalOptionsMessage='Optional options for updating an Analytics Builder model (at least 1 is required):',
 				optionalOptions=[
-					['-w', '--new_name', 'NAME', 'the updated name of the EPL app'],
-					['-d', '--description', 'DESCRIPTION', 'the updated description of the EPL app'],
-					['-s', '--state', 'active/inactive', 'the updated state of the EPL app'],
-					['-f', '--file', 'FILE', 'path to the mon file containing the updated contents for the EPL app']
+					['-w', '--new_name', 'NAME', 'the updated name of the Analytics Builder model'],
+					['-d', '--description', 'DESCRIPTION', 'the updated description of the Analytics Builder model'],
+					['-s', '--state', 'active/inactive', 'the updated state of the Analytics Builder model'],
+					['-m', '--mode', 'draft/production/simulation/test', 'the updated state of the Analytics Builder model'],
+					['-f', '--file', 'FILE', 'path to the mon file containing the updated contents for the Analytics Builder model']
 				],
 				function=AnalyticsBuilder.update,
-				successMessage='EPL app was successfully updated.'
+				successMessage='Analytics Builder model was successfully updated.'
 			)
 		}
 

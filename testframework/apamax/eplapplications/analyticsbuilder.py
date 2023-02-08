@@ -69,59 +69,76 @@ class AnalyticsBuilder:
 			raise OSError(f'Unable to deploy Analytics Builder model \'{name}\' using POST on {self.connection.base_url}/service/cep/analyticsbuilder.\n{err}')
 
 
-	def update(self, name, new_name=None, file=None, description=None, state=None):
+	def update(self, name, new_name=None, file=None, description=None, mode=None, state=None):
 		"""
-		Updates an EPL app in Cumulocity IoT.
+		Updates an Analytics Builder model in Cumulocity IoT.
 
-		:param name: name of the EPL App to be updated.
-		:param new_name: the updated name of the EPL app (optional)
-		:param file: path to the local mon file containing the updated contents of the EPL app (optional)
-		:param description: the updated description of the EPL app (optional)
-		:param state: the updated state of the EPL app (optional)
+		:param name: name of the Analytics Builder model to be updated.
+		:param new_name: the updated name of the Analytics Builder model (optional)
+		:param file: path to the local json file containing the updated contents of the Analytics Builder model (optional)
+		:param description: the updated description of the Analytics Builder model (optional)
+		:param state: the updated state of the Analytics Builder model (optional)
 		"""
-	# 	if new_name is None and file is None and description is None and state is None:
-	# 		raise ValueError(f"Update failed. Please specify at least 1 field to update.")
-	# 	try:
-	# 		appId = self.getAppId(name)
-	# 	except FileNotFoundError as err:
-	# 		raise FileNotFoundError(f'Update failed. {err}')
-	# 	except Exception as err:
-	# 		raise OSError(f'Update failed. {err}')
+		if new_name is None and file is None and description is None and mode is None and state is None:
+			raise ValueError(f"Update failed. Please specify at least 1 field to update.")
+		try:
+			body = self.getModel(name)
+			modelId = body['id']
+		except FileNotFoundError as err:
+			raise FileNotFoundError(f'Update failed. {err}')
+		except Exception as err:
+			raise OSError(f'Update failed. {err}')
 
-	# 	body = {}
-	# 	if new_name is not None:
-	# 		body['name'] = new_name
-	# 	if description is not None:
-	# 		body['description'] = description
+		if file is not None:
+			# Check file is valid:
+			if not os.path.exists(file):
+				raise FileNotFoundError(f'Update failed. File \'{file}\' not found.')
+			elif os.path.splitext(file)[1] != '.json':
+				raise TypeError(f'Update failed. \'{file}\' is not a valid .json file.')
+			try:
+				body = json.loads(self.__read_text_withBOM(file))
+			except Exception as err:
+				raise IOError(f"Update failed. {err}")
 
-	# 	if state is not None:
-	# 		if state.lower() in ('active', 'inactive'):
-	# 			body['state'] = state.lower()
-	# 		else:
-	# 			raise ValueError(f'Update failed. Invalid argument, \'{state}\', specified for the --state option. State can either be \'active\' or \'inactive\'.')
+		if new_name is not None:
+			body['name'] = new_name
+		if description is not None:
+			body['description'] = description
 
-	# 	if file is not None:
-	# 		# Check file is valid:
-	# 		if not os.path.exists(file):
-	# 			raise FileNotFoundError(f'Update failed. File \'{file}\' not found.')
-	# 		elif os.path.splitext(file)[1] != '.mon':
-	# 			raise TypeError(f'Update failed. \'{file}\' is not a valid .mon file.')
-	# 		try:
-	# 			contents = self.__read_text_withBOM(file)
-	# 		except Exception as err:
-	# 			raise IOError(f"Update failed. {err}")
-	# 		body['contents'] = contents
-	# 	try:
-	# 		responseBytes = self.connection.do_request_json('PUT', f'/service/cep/eplfiles/{appId}', body)
-	# 		response = json.loads(responseBytes)
+		if mode is not None:
+			if mode.lower() in ('draft','production','simulation','test'):
+				body['mode'] = mode.upper()
+			else:
+				raise ValueError(f'Update failed. Invalid argument, \'{mode}\', specified for the --mode option. Mode can be one of draft/production/simulation/test')
 
-	# 		if len(response['errors']) > 0:
-	# 			errorStrings = []
-	# 			for error in response['errors']:
-	# 				errorStrings.append(f"[{response['name']}:{error['line']}] {error['text']}")
-	# 			raise ValueError('\n'.join(errorStrings))
-	# 	except Exception as err:
-	# 		raise ConnectionError(f'Unable to update EPL app \'{name}\' using PUT on {self.connection.base_url}/service/cep/eplfiles/{appId}.\n{err}')
+		if state is not None:
+			if state.lower() in ('active', 'inactive'):
+				body['state'] = state.upper()
+			else:
+				raise ValueError(f'Update failed. Invalid argument, \'{state}\', specified for the --state option. State can either be \'active\' or \'inactive\'.')
+		try:
+			responseBytes = self.connection.do_request_json('PUT', f'/service/cep/analyticsbuilder/{modelId}', body)
+			response = json.loads(responseBytes)
+
+			if len(response['runtimeError']) > 0:
+				self.delete(name)
+				raise ValueError(response['runtimeError'])
+		except Exception as err:
+			raise ConnectionError(f'Unable to update Analytics Builder model \'{name}\' using PUT on {self.connection.base_url}/service/cep/analyticsbuilder/{modelId}.\n{err}')
+
+	def getModel(self, modelName: str, jsonModelList=None):
+		"""
+		Gets the content of an Analytics Builder model for a given name. If no model with name exists, an exception is raised.
+
+		:param modelName: The name of the Analytics Builder model we wish to get the id of
+		:param jsonModelList: A json collection of Analytics Builder Models
+		:return: The id of the Analytics Builder Model
+		"""
+		jsonModelList = jsonModelList or self.getModels()
+		for model in jsonModelList:
+			if model['name'] == modelName:
+				return model
+		raise FileNotFoundError(f'Analytics Builder model \'{modelName}\' not found.')
 
 
 	def getModelId(self, modelName: str, jsonModelList=None):
