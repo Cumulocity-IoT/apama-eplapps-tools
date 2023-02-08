@@ -30,7 +30,7 @@ class AnalyticsBuilder:
 		Deploys a local json file to Apama Analytics Builder in Cumulocity IoT.
 
 		:param file: Path to local json file to be deployed as an Analytics Builder model.
-		:param redeploy: Boolean of whether we are overwriting an existing EPL app.
+		:param redeploy: Boolean of whether we are overwriting an existing Analytics Buílder model.
 		"""
 		# Check file specified is valid file:
 		if not os.path.exists(file):

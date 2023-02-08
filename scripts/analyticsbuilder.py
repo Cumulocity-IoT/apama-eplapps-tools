@@ -212,7 +212,7 @@ class AnalyticsBuilderCLI:
 
 	def main(self, args) -> int:
 		"""
-		Main method to parse the command line arguments and execute the command, interacting with Apama EPL Apps in C8Y.
+		Main method to parse the command line arguments and execute the command, interacting with Apama Analytics Buidler Model in C8Y.
 
 		:return: 0 if the command was executed successfully, or a non-zero error code otherwise.
 		"""
@@ -255,7 +255,7 @@ class AnalyticsBuilderCLI:
 			except FileExistsError as err:
 				msg = f'error: {err}'
 				if command.name == 'deploy':
-					msg += ' If you wish to overwrite this EPL app use the --redeploy option. Otherwise specify a unique name using the --name option'
+					msg += ' If you wish to overwrite this Analytics Builder model use the --redeploy option. Otherwise specify a unique name using the --name option'
 				print(msg)
 				return 4 	# File exists error
 			except FileNotFoundError as err:
@@ -372,11 +372,11 @@ class AnalyticsBuilderCLI:
 		"""
 		Prints a formatted list of Analytics Builder models.
 
-		:param modelJSON: A list of EPL apps in JSON form
+		:param modelJSON: A list of Analytics Builder models in JSON form
 		"""
 		modelString = '\nAnalytics Builder models:'
 		if modelJSON is None or len(modelJSON) == 0:
-			modelString += '\nNo EPL apps to display.'
+			modelString += '\nNo Analytics Builder models to display.'
 		else:
 			for model in modelJSON:
 				modelString += '\n'
