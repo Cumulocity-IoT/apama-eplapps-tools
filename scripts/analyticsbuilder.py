@@ -155,21 +155,21 @@ class AnalyticsBuilderCLI:
 				successMessage='EPL app was successfully deployed.'
 			),
 			'delete': AnalyticsBuilderCLI.Command(
-				name='delete', description='Deletes an existing EPL app in Cumulocity IoT',
+				name='delete', description='Deletes an existing Analytics Builder model in Cumulocity IoT',
 				usages=[
 					'analyticsbuilder.py delete <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--name NAME>',
 					'analyticsbuilder.py delete [--help]',
 					'analyticsbuilder.py delete [--version]'
 				],
-				mandatoryOptionsMessage='Mandatory options for deleting an EPL app:',
+				mandatoryOptionsMessage='Mandatory options for deleting an Analytics Builder model:',
 				mandatoryOptions=[
 					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
 					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
 					['-p', '--password', 'PASSWORD', 'your Cumulocity IoT password'],
-					['-n', '--name', 'NAME', 'the name of the EPL app to be deleted from Cumulocity IoT'],
+					['-n', '--name', 'NAME', 'the name of the Analytics Builder model to be deleted from Cumulocity IoT'],
 				],
 				function=AnalyticsBuilder.delete,
-				successMessage='EPL app was successfully deleted.'
+				successMessage='Analytics Builder model was successfully deleted.'
 			),
 			'list': AnalyticsBuilderCLI.Command(
 				name='list', description='Prints a list of your existing Analytics Builder models in Cumulocity IoT',

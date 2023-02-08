@@ -143,19 +143,19 @@ class AnalyticsBuilder:
 	# 		raise ConnectionError(f'Unable to update EPL app \'{name}\' using PUT on {self.connection.base_url}/service/cep/eplfiles/{appId}.\n{err}')
 
 
-	def getAppId(self, appName: str, jsonEPLAppsList=None):
+	def getModelId(self, modelName: str, jsonModelList=None):
 		"""
-		Gets the id of EPL app for a given EPL app name. If no EPL app with appname exists, an exception is raised.
+		Gets the id of an Analytics Builder model for a given name. If no model with name exists, an exception is raised.
 
-		:param appName: The name of the EPL app we wish to get the id of
-		:param jsonEPLAppsList: A json collection of EPL apps
-		:return: The id of the EPL app
+		:param modelName: The name of the Analytics Builder model we wish to get the id of
+		:param jsonModelList: A json collection of Analytics Builder Models
+		:return: The id of the Analytics Builder Model
 		"""
-	# 	jsonEPLAppsList = jsonEPLAppsList or self.getEPLApps()
-	# 	for app in jsonEPLAppsList:
-	# 		if app['name'] == appName:
-	# 			return app['id']
-	# 	raise FileNotFoundError(f'EPL app \'{appName}\' not found.')
+		jsonModelList = jsonModelList or self.getModels()
+		for model in jsonModelList:
+			if model['name'] == modelName:
+				return model['id']
+		raise FileNotFoundError(f'Analytics Builder model \'{modelName}\' not found.')
 
 	def getModels(self):
 		"""
@@ -169,30 +169,30 @@ class AnalyticsBuilder:
 
 	def delete(self, name: str):
 		"""
-		Deletes an EPL app in Cumulocity IoT.
+		Deletes an Analytics Builder model in Cumulocity IoT.
 
-		:param name: The name of the EPL app to be deleted.
+		:param name: The name of the Analytics Builder model to be deleted.
 		"""
-	# 	try:
-	# 		appId = self.getAppId(name)
-	# 	except FileNotFoundError as err:
-	# 		raise FileNotFoundError(f'Delete failed. {err}')
-	# 	except Exception as err:
-	# 		raise OSError(f'Delete failed. GET on {self.connection.base_url}/service/cep/eplfiles failed. {err}')
-	# 	try:
-	# 		self.connection.request('DELETE', f'/service/cep/eplfiles/{appId}')
-	# 	except Exception as err:
-	# 		raise OSError(f'Unable to delete EPL app \'{name}\' using DELETE on {self.connection.base_url}/service/cep/eplfiles. {err}')
+		try:
+			modelId = self.getModelId(name)
+		except FileNotFoundError as err:
+			raise FileNotFoundError(f'Delete failed. {err}')
+		except Exception as err:
+			raise OSError(f'Delete failed. GET on {self.connection.base_url}/service/cep/analyticsbuilder failed. {err}')
+		try:
+			self.connection.request('DELETE', f'/service/cep/analyticsbuilder/{modelId}')
+		except Exception as err:
+			raise OSError(f'Unable to delete Analytics Builder model \'{name}\' using DELETE on {self.connection.base_url}/service/cep/analyticsbuilder. {err}')
 	
-	# def __read_text_withBOM(self, path):
-	# 	"""
-	# 	Thin wrapper for Path(<path>).read_text() . It assumes the file is UTF-8 encoded if it starts with the UTF-8 BOM, despite the current locale.
-	# 	This method is used internally to make the tool behave consistently with many text editors and IDEs on Windows, which also honour the UTF-8 BOM.
-	# 	Such a file is rendered correctly, therefore it should also be deployed correctly, else user expectations are confounded.
+	def __read_text_withBOM(self, path):
+		"""
+		Thin wrapper for Path(<path>).read_text() . It assumes the file is UTF-8 encoded if it starts with the UTF-8 BOM, despite the current locale.
+		This method is used internally to make the tool behave consistently with many text editors and IDEs on Windows, which also honour the UTF-8 BOM.
+		Such a file is rendered correctly, therefore it should also be deployed correctly, else user expectations are confounded.
 
-	# 	:param path: The path to extract the text from
-	# 	"""
-	# 	if Path(path).read_bytes().startswith(codecs.BOM_UTF8):
-	# 		return Path(path).read_text(encoding="utf8")
-	# 	else:
-	# 		return Path(path).read_text()
+		:param path: The path to extract the text from
+		"""
+		if Path(path).read_bytes().startswith(codecs.BOM_UTF8):
+			return Path(path).read_text(encoding="utf8")
+		else:
+			return Path(path).read_text()
