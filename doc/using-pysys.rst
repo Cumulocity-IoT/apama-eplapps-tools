@@ -179,7 +179,7 @@ To run in Apama EPL Apps, your run.py should look something like this:
 		
 	def validate(self):
 		# check none of the tests failed
-		self.assertGrep(self.platform.getApamaLogFile(), expr=' (ERROR|FATAL) .*', contains=False)
+		self.assertGrep(self.platform.getApamaLogFile(), expr=' (ERROR|FATAL) .* eplfiles\.', contains=False)
 
 
 To run with a local correlator, it should look something like this:

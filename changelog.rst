@@ -2,6 +2,10 @@
 Change Log
 ============
 
+10.15.0.4
+----------
++ An issue where the rendered documentation pages were showing a 404 error when accessed has been resolved.
+
 10.14.0.0
 ----------
 

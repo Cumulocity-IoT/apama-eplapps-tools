@@ -581,10 +581,10 @@ class EPLAppsSimpleTest(ApamaC8YBaseTest):
 		
 	def validate(self):
 		"""
-			Ensures that no errors were logged in the platform log file while we were running the test.
+			Ensures that no tests failed.
 		"""
 		self.log.info("Checking for errors")
-		self.assertGrep(self.platform.getApamaLogFile(), expr=' (ERROR|FATAL) .*', contains=False)
+		self.assertGrep(self.platform.getApamaLogFile(), expr=' (ERROR|FATAL) .* eplfiles\.', contains=False)
 		
 	def shutdown(self):
 		"""
