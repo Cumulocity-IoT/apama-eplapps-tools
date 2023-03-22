@@ -22,7 +22,7 @@ This project is licensed under the Apache 2.0 license - see https://www.apache.o
 
 Apama EPL Apps Tools Version
 -------------------------
-This version of the SDK supports Apama EPL Apps Tools 10.16.0. 
+This version of the SDK supports Apama EPL Apps Tools 10.17.0. 
 
 Documentation
 -------------
@@ -39,7 +39,7 @@ To find out how to performance test your EPL apps look at `Performance testing E
 
 In order to view the documentation on classes for PySys helpers for Apama EPL Apps see: `PySys helpers <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc/autodocgen/apamax.eplapplications.html#module-apamax.eplapplications>`_.
 
-See `Apama Documentation <https://documentation.softwareag.com/pam/10.15.1/en/webhelp>`_, `Streaming Analytics guide <https://cumulocity.com/guides/apama>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
+See `Apama Documentation <https://documentation.softwareag.com/pam/10.15.2/en/webhelp>`_, `Streaming Analytics guide <https://cumulocity.com/guides/apama>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
 
 System requirements
 -------------------

@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.15.0.2 documentation</title>
+    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.17.0.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.15.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.17.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -577,14 +577,14 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span> <span class="o">=</span> <span class="n">EPLApps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">())</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="EPLAppsSimpleTest.prepareTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EPLAppsSimpleTest.prepareTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL apps which have been uploaded by tests, and clearing all active alarms. </span>
 <span class="sd">			</span>
 <span class="sd">			This is done first so that it is not possible for existing test apps to raise alarms or create devices.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestEPLApps</span><span class="p">()</span>
-		<span class="nb">super</span><span class="p">(</span><span class="n">EPLAppsSimpleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">()</span></div>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestEPLApps</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">EPLAppsSimpleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EPLAppsSimpleTest.execute"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -620,10 +620,10 @@
 		
 <div class="viewcode-block" id="EPLAppsSimpleTest.validate"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.validate">[docs]</a>	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Ensures that no errors were logged in the platform log file while we were running the test.</span>
+<span class="sd">			Ensures that no tests failed.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking for errors&quot;</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .*&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .* eplfiles\.&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 		
 <div class="viewcode-block" id="EPLAppsSimpleTest.shutdown"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.shutdown">[docs]</a>	<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -676,12 +676,12 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.15.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.17.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022 Software AG.
+        &#169; Copyright 2023 Software AG.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
     </div>
   </body>

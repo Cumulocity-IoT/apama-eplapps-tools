@@ -9,4 +9,4 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
-RELEASE_TRAIN_VERSION='10.16.0'
+RELEASE_TRAIN_VERSION='10.17.0'

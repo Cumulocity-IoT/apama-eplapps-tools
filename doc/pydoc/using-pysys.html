@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Using PySys to test your EPL apps &#8212; EPL Apps Tools 10.15.0.2 documentation</title>
+    <title>Using PySys to test your EPL apps &#8212; EPL Apps Tools 10.17.0.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.15.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.17.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -183,7 +183,7 @@
 
        <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
                <span class="c1"># check none of the tests failed</span>
-               <span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .*&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .* eplfiles\.&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To run with a local correlator, it should look something like this:</p>
@@ -279,11 +279,11 @@
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.15.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.17.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022 Software AG.
+        &#169; Copyright 2023 Software AG.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
     </div>
   </body>

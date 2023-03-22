@@ -216,7 +216,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 			return
 		self.log.info('Restarting Apama-ctrl microservice')
 		count1 = linecount(self.platform.getApamaLogFile(), 'Microservice restart Microservice .* is being restarted')
-		count2 = linecount(self.platform.getApamaLogFile(), 'httpServer-instance.*Started receiving messages')
+		count2 = linecount(self.platform.getApamaLogFile(), 'httpServer-.*Started receiving messages')
 		try:
 			self.platform.getC8YConnection().do_request_json('PUT', '/service/cep/restart', {})
 			self.log.info('Restart requested')
@@ -229,7 +229,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 		except Exception as ex:
 			raise Exception(f'Failed to restart Apama-ctrl: {ex}')
 		self.waitForGrep('platform.log', expr='Microservice restart Microservice .* is being restarted', condition=f'>={count1+1}')
-		self.waitForGrep('platform.log', expr='httpServer-instance.*Started receiving messages', condition=f'>={count2+1}', timeout=TIMEOUTS['WaitForProcess'])
+		self.waitForGrep('platform.log', expr='httpServer-.*Started receiving messages', condition=f'>={count2+1}', timeout=TIMEOUTS['WaitForProcess'])
 		self.log.info('Apama-ctrl microservice is successfully restarted')
 
 	def _deactivateTestEPLApps(self):

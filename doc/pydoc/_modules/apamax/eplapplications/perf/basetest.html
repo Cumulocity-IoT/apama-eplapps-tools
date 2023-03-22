@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.perf.basetest &#8212; EPL Apps Tools 10.15.0.2 documentation</title>
+    <title>apamax.eplapplications.perf.basetest &#8212; EPL Apps Tools 10.17.0.1 documentation</title>
     <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools 10.15.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools 10.17.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -255,7 +255,7 @@
 			<span class="k">return</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Restarting Apama-ctrl microservice&#39;</span><span class="p">)</span>
 		<span class="n">count1</span> <span class="o">=</span> <span class="n">linecount</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="s1">&#39;Microservice restart Microservice .* is being restarted&#39;</span><span class="p">)</span>
-		<span class="n">count2</span> <span class="o">=</span> <span class="n">linecount</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="s1">&#39;httpServer-instance.*Started receiving messages&#39;</span><span class="p">)</span>
+		<span class="n">count2</span> <span class="o">=</span> <span class="n">linecount</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="s1">&#39;httpServer-.*Started receiving messages&#39;</span><span class="p">)</span>
 		<span class="k">try</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;/service/cep/restart&#39;</span><span class="p">,</span> <span class="p">{})</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Restart requested&#39;</span><span class="p">)</span>
@@ -268,7 +268,7 @@
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to restart Apama-ctrl: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;platform.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;Microservice restart Microservice .* is being restarted&#39;</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;&gt;=</span><span class="si">{</span><span class="n">count1</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;platform.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;httpServer-instance.*Started receiving messages&#39;</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;&gt;=</span><span class="si">{</span><span class="n">count2</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">TIMEOUTS</span><span class="p">[</span><span class="s1">&#39;WaitForProcess&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;platform.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;httpServer-.*Started receiving messages&#39;</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;&gt;=</span><span class="si">{</span><span class="n">count2</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">TIMEOUTS</span><span class="p">[</span><span class="s1">&#39;WaitForProcess&#39;</span><span class="p">])</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Apama-ctrl microservice is successfully restarted&#39;</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_deactivateTestEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1157,12 +1157,12 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools 10.15.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools 10.17.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022 Software AG.
+        &#169; Copyright 2023 Software AG.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
     </div>
   </body>
