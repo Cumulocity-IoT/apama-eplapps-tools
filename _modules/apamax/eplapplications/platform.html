@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools 10.17.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.17.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for apamax.eplapplications.platform</h1><div class="highlight"><pre>
+<span></span><span class="c1">## License</span>
+<span class="c1"># Copyright (c) 2020,2022 Software AG, Darmstadt, Germany and/or its licensors</span>
+
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this</span>
+<span class="c1"># file except in compliance with the License. You may obtain a copy of the License at</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software distributed under the</span>
+<span class="c1"># License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,</span>
+<span class="c1"># either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">threading</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">urllib.parse</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">.tenant</span> <span class="kn">import</span> <span class="n">CumulocityTenant</span>
+<span class="kn">from</span>  <span class="nn">apamax.eplapplications.buildVersions</span> <span class="kn">import</span> <span class="n">RELEASE_TRAIN_VERSION</span>
+
+<div class="viewcode-block" id="CumulocityPlatform"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform">[docs]</a><span class="k">class</span> <span class="nc">CumulocityPlatform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Class to create a connection to the Cumulocity IoT platform configured in pysysproject.xml</span>
+<span class="sd">	and spool the logs from the platform locally.</span>
+
+<span class="sd">	Requires the following properties to be set in pysysproject.xml:</span>
+<span class="sd">		* CUMULOCITY_SERVER_URL</span>
+<span class="sd">		* CUMULOCITY_TENANT</span>
+<span class="sd">		* CUMULOCITY_USERNAME</span>
+<span class="sd">		* CUMULOCITY_PASSWORD</span>
+
+<span class="sd">	For use with the EPLApps class for uploading EPL applications:</span>
+<span class="sd">		self.platform = CumulocityPlatform(self)</span>
+<span class="sd">		eplapps = EPLApps(self.platform.getC8YConnection())</span>
+<span class="sd">		eplapps.deploy(self.input+&#39;/test.mon&#39;, activate=True)</span>
+<span class="sd">		self.waitForGrep(self.platform.getApamaLogFile(), expr=&#39;Added monitor eplfiles.test&#39;)</span>
+<span class="sd">	</span>
+<span class="sd">	:param parent: The PySys test object using this platform object.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CumulocityPlatform.getC8yConnectionDetails"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getC8yConnectionDetails">[docs]</a>	<span class="k">def</span> <span class="nf">getC8yConnectionDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Return the (url, tenantid, username, password) defined in the pysysproject.xml)</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_SERVER_URL</span><span class="p">,</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_USERNAME</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;/&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_USERNAME</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_USERNAME</span><span class="p">,</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_PASSWORD</span><span class="p">)</span></div>
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span>
+
+		<span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getC8yConnectionDetails</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connecting to Cumulocity platform at </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> as user </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">_tenant</span> <span class="o">=</span> <span class="n">CumulocityTenant</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tenant</span><span class="o">.</span><span class="n">getConnection</span><span class="p">()</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">platform_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/service/cep/diagnostics/componentVersion&#39;</span><span class="p">)[</span><span class="s1">&#39;releaseTrainVersion&#39;</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">platform_version</span> <span class="o">!=</span> <span class="n">RELEASE_TRAIN_VERSION</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Version mismatch, Apama microservice is version </span><span class="si">{</span><span class="n">platform_version</span><span class="si">}</span><span class="s2"> but you are using version </span><span class="si">{</span><span class="n">RELEASE_TRAIN_VERSION</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not get the platform version to compare version information - is apama-ctrl subscribed?&quot;</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">addCleanupFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">)</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tenant</span><span class="o">.</span><span class="n">getTenantId</span><span class="p">()</span>
+
+		<span class="sd">&quot;&quot;&quot; All tenants that can be used for testing &quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span> <span class="o">=</span> <span class="p">[]</span>
+
+		<span class="sd">&quot;&quot;&quot; Protects initialisation and mutation of __subscribedTenants &quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_isMultiTenantMicroservice</span> <span class="o">=</span> <span class="kc">False</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_microserviceName</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+		<span class="n">applications</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s2">&quot;/application/applications?pageSize=2000&quot;</span><span class="p">)[</span><span class="s2">&quot;applications&quot;</span><span class="p">]</span>
+		
+		<span class="k">for</span> <span class="n">application</span> <span class="ow">in</span> <span class="n">applications</span><span class="p">:</span>
+			<span class="k">if</span> <span class="s1">&#39;contextPath&#39;</span> <span class="ow">in</span> <span class="n">application</span> <span class="ow">and</span> <span class="n">application</span><span class="p">[</span><span class="s1">&#39;contextPath&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;cep&#39;</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span> <span class="o">=</span> <span class="n">application</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_isMultiTenantMicroservice</span> <span class="o">=</span> <span class="n">application</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;manifest&#39;</span><span class="p">,{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;isolation&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;MULTI_TENANT&#39;</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_microserviceName</span> <span class="o">=</span> <span class="n">application</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+
+				<span class="n">instances</span> <span class="o">=</span> <span class="p">{}</span>
+				<span class="k">try</span><span class="p">:</span>
+					<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+						<span class="n">applicationStatus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/application/applications/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span><span class="si">}</span><span class="s2">/status?refresh=true&quot;</span><span class="p">)</span>
+						<span class="n">instances</span> <span class="o">=</span> <span class="n">applicationStatus</span><span class="p">[</span><span class="s1">&#39;c8y_Status&#39;</span><span class="p">][</span><span class="s1">&#39;instances&#39;</span><span class="p">]</span>
+						<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+					<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+						<span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">instances</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+						<span class="k">break</span>
+				<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Caught exception looking for platform subscription. Assuming that means it&#39;s a different application: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+
+		
+		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not find the apama-ctrl service running in your tenant&quot;</span><span class="p">)</span>
+			
+		<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">startBackgroundThread</span><span class="p">(</span><span class="s2">&quot;spooling&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logSpoolingThread</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;platform.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">_logSpoolingThread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stopping</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; When doing non-local testing, this method implements a thread that is responsible for regularly grabbing</span>
+<span class="sd">			the latest microservice log snippets, and writing it to a single appending log file &quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__spoolLogs</span> <span class="o">=</span> <span class="kc">True</span>
+
+		<span class="n">logLineDeduplication</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+		<span class="n">nowtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+		<span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">nowtime</span><span class="p">)</span>
+		<span class="n">utc_offset</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">nowtime</span><span class="p">)</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">nowtime</span><span class="p">))</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+		<span class="n">off_hours</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">utc_offset</span><span class="o">/</span><span class="mi">3600</span><span class="p">)</span>
+		<span class="n">off_minutes</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">utc_offset</span><span class="o">%</span><span class="mi">3600</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span><span class="p">)</span>
+
+		<span class="n">startdate</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S&quot;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;%2B&#39;</span><span class="o">+</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:02}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">off_hours</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="o">+</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:02}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">off_minutes</span><span class="p">))</span>
+		<span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">__spoolLogs</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">stopping</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+			<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s2">&quot;/application/applications/</span><span class="si">%s</span><span class="s2">/logs/</span><span class="si">%s</span><span class="s2">?dateFrom=</span><span class="si">%s</span><span class="s2">&amp;dateTo=2099-01-01T00:00:00</span><span class="si">%%</span><span class="s2">2B01:00&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span><span class="p">,</span> <span class="n">startdate</span><span class="p">),</span> <span class="n">jsonResp</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+				<span class="n">logLatest</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+				<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;platform.log&#39;</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
+					<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">logLatest</span><span class="p">:</span>
+						<span class="k">if</span> <span class="n">line</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">logLineDeduplication</span><span class="p">:</span>
+							<span class="n">logfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+					<span class="n">logLineDeduplication</span> <span class="o">=</span> <span class="n">logLineDeduplication</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">logLatest</span><span class="p">)</span>
+			<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+				<span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Exception while spooling logs:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+<div class="viewcode-block" id="CumulocityPlatform.shutdown"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.shutdown">[docs]</a>	<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; Stop spooling the log files when the test finishes. &quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__spoolLogs</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="CumulocityPlatform.getC8YConnection"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection">[docs]</a>	<span class="k">def</span> <span class="nf">getC8YConnection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; Return the C8yConnection object for this platform. &quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span></div>
+
+<div class="viewcode-block" id="CumulocityPlatform.getApamaLogFile"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile">[docs]</a>	<span class="k">def</span> <span class="nf">getApamaLogFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; Return the path to the Apama log file within Cumulocity IoT.&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;platform.log&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CumulocityPlatform.getMicroserviceName"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName">[docs]</a>	<span class="k">def</span> <span class="nf">getMicroserviceName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; Get the name of the Apama-ctrl microservice being tested. &quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microserviceName</span></div>
+
+	<span class="c1"># Check if microservice supports EPL apps (undocumented)</span>
+	<span class="k">def</span> <span class="nf">supportsEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="s1">&#39;apama-ctrl-smartrules&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getMicroserviceName</span><span class="p">())</span>
+
+	<span class="c1"># Check if microservice is smartrules-only microservice (undocumented)</span>
+	<span class="k">def</span> <span class="nf">isSmartrulesOnlyMicroservice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="s1">&#39;apama-ctrl-smartrules&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getMicroserviceName</span><span class="p">()</span>
+
+	<span class="c1"># Check if microservice is multi-tenant (undocumented)</span>
+	<span class="k">def</span> <span class="nf">isMultiTenantMicroservice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isMultiTenantMicroservice</span>
+
+<div class="viewcode-block" id="CumulocityPlatform.getTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getTenant">[docs]</a>	<span class="k">def</span> <span class="nf">getTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Get the Cumulocity IoT tenant configured in the pysysproject.xml file.</span>
+<span class="sd">		:return: The Cumulocity IoT tenant.</span>
+<span class="sd">		:rtype: :class:`~apamax.eplapplications.tenant.CumulocityTenant`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tenant</span></div>
+
+<div class="viewcode-block" id="CumulocityPlatform.getSubscribedTenants"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants">[docs]</a>	<span class="k">def</span> <span class="nf">getSubscribedTenants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Get list of Cumulocity IoT tenants subscribed to the Apama-ctrl microservice if testing against a</span>
+<span class="sd">		multi-tenant Apama-ctrl microservice.</span>
+
+<span class="sd">		If the Apama-ctrl microservice is per-tenant, it returns a list only containing the configured tenant.</span>
+
+<span class="sd">		:return: List of Cumulocity IoT tenants.</span>
+<span class="sd">		:rtype: list[:class:`~apamax.eplapplications.tenant.CumulocityTenant`]</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isMultiTenantMicroservice</span><span class="p">:</span>
+			<span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">getTenant</span><span class="p">()]</span>
+
+		<span class="n">PAGE_SIZE</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># By default, pageSize = 5 for querying to C8y</span>
+		
+		<span class="k">def</span> <span class="nf">create_url</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">):</span>
+			<span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;/tenant/tenants?withApps=false&amp;</span><span class="si">{</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+
+		<span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
+
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span>
+
+			<span class="c1"># The configured tenant is subscribed</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getTenant</span><span class="p">())</span>
+
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="n">create_url</span><span class="p">(</span><span class="n">withTotalPages</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">pageSize</span><span class="o">=</span><span class="n">PAGE_SIZE</span><span class="p">,</span><span class="n">currentPage</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">jsonResp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+			<span class="k">except</span><span class="p">:</span>
+				<span class="c1"># Expected to raise an 403 forbidden error if tenant does not have any subtenants.</span>
+				<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span>
+
+			<span class="n">subTenants</span> <span class="o">=</span> <span class="p">[]</span>
+
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;tenants&#39;</span> <span class="ow">in</span> <span class="n">resp</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">resp</span><span class="p">[</span><span class="s1">&#39;tenants&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="n">subTenants</span> <span class="o">+=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;tenants&#39;</span><span class="p">]</span>
+				
+				<span class="n">TOTAL_PAGES</span> <span class="o">=</span> <span class="mi">1</span>
+				<span class="c1"># Make sure we retrieve all pages from query</span>
+				<span class="k">if</span> <span class="s1">&#39;statistics&#39;</span> <span class="ow">in</span> <span class="n">resp</span> <span class="ow">and</span> <span class="s2">&quot;totalPages&quot;</span> <span class="ow">in</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;statistics&#39;</span><span class="p">]:</span>
+					<span class="n">TOTAL_PAGES</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;statistics&#39;</span><span class="p">][</span><span class="s1">&#39;totalPages&#39;</span><span class="p">]</span>
+
+				<span class="k">if</span> <span class="n">TOTAL_PAGES</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+					<span class="k">for</span> <span class="n">currentPage</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">TOTAL_PAGES</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+						<span class="k">try</span><span class="p">:</span>
+							<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="n">create_url</span><span class="p">(</span><span class="n">pageSize</span><span class="o">=</span><span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">currentPage</span><span class="o">=</span><span class="n">currentPage</span><span class="p">),</span><span class="n">jsonResp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+						<span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+						
+						<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;tenants&#39;</span> <span class="ow">in</span> <span class="n">resp</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">resp</span><span class="p">[</span><span class="s1">&#39;tenants&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+							<span class="n">subTenants</span> <span class="o">+=</span> <span class="n">resp</span><span class="p">[</span><span class="s1">&#39;tenants&#39;</span><span class="p">]</span>
+			
+			<span class="k">for</span> <span class="n">tenant</span> <span class="ow">in</span> <span class="n">subTenants</span><span class="p">:</span>
+				<span class="k">if</span> <span class="s1">&#39;applications&#39;</span> <span class="ow">in</span> <span class="n">tenant</span> <span class="ow">and</span> <span class="s1">&#39;references&#39;</span> <span class="ow">in</span> <span class="n">tenant</span><span class="p">[</span><span class="s1">&#39;applications&#39;</span><span class="p">]:</span>
+					<span class="n">applications</span> <span class="o">=</span> <span class="n">tenant</span><span class="p">[</span><span class="s1">&#39;applications&#39;</span><span class="p">][</span><span class="s1">&#39;references&#39;</span><span class="p">]</span>
+					<span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">applications</span><span class="p">:</span>
+						<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span> <span class="o">==</span> <span class="n">app</span><span class="p">[</span><span class="s1">&#39;application&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]:</span>
+							<span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CumulocityTenant</span><span class="p">(</span><span class="n">tenant</span><span class="p">[</span><span class="s2">&quot;domain&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">tenant</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]))</span>
+
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing-epl.html">Writing tests for EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.17.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023 Software AG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+    </div>
+  </body>
+</html>
