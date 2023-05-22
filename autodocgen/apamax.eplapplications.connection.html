@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>apamax.eplapplications.connection &#8212; EPL Apps Tools 10.18.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="apamax.eplapplications.eplapps" href="apamax.eplapplications.eplapps.html" />
+    <link rel="prev" title="apamax.eplapplications.buildVersions" href="apamax.eplapplications.buildVersions.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.eplapps.html" title="apamax.eplapplications.eplapps"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.buildVersions.html" title="apamax.eplapplications.buildVersions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-apamax.eplapplications.connection">
+<span id="apamax-eplapplications-connection"></span><h1>apamax.eplapplications.connection<a class="headerlink" href="#module-apamax.eplapplications.connection" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="c8yconnection">
+<h2>C8yConnection<a class="headerlink" href="#c8yconnection" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="apamax.eplapplications.connection.C8yConnection">
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.connection.</code><code class="sig-name descname">C8yConnection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">password</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Simple object to create connection to Cumulocity IoT and perform REST requests.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> – The Cumulocity IoT tenant url.</p></li>
+<li><p><strong>username</strong> – The username.</p></li>
+<li><p><strong>password</strong> – The password.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="apamax.eplapplications.connection.C8yConnection.do_get">
+<code class="sig-name descname">do_get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">headers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">jsonResp</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.do_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.do_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform GET request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – The path to the resource.</p></li>
+<li><p><strong>params</strong> – The query params.</p></li>
+<li><p><strong>headers</strong> – The headers.</p></li>
+<li><p><strong>jsonResp</strong> – Response is JSON.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The body of the response. If JSON output is expected then parse the JSON string to python object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.connection.C8yConnection.do_request_json">
+<code class="sig-name descname">do_request_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">body</span></em>, <em class="sig-param"><span class="n">headers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.do_request_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.do_request_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform REST request (POST/GET mainly) with JSON body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> – The REST method.</p></li>
+<li><p><strong>path</strong> – The path to resource.</p></li>
+<li><p><strong>body</strong> – The JSON body.</p></li>
+<li><p><strong>headers</strong> – The headers.</p></li>
+<li><p><strong>kwargs</strong> – Any additional kwargs to pass to the <a class="reference internal" href="#apamax.eplapplications.connection.C8yConnection.request" title="apamax.eplapplications.connection.C8yConnection.request"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code></a> method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response body string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.connection.C8yConnection.request">
+<code class="sig-name descname">request</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">body</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">headers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">useLocationHeaderPostResp</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an HTTP request. In case of POST request, return the id of the created resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> – The method.</p></li>
+<li><p><strong>path</strong> – The path of the resource.</p></li>
+<li><p><strong>body</strong> – The body for the request.</p></li>
+<li><p><strong>headers</strong> – The headers for the request.</p></li>
+<li><p><strong>useLocationHeaderPostResp</strong> – Whether or not to attempt to use the
+‘Location’ header in the response to return the ID of the resource that was created by a POST request.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Body of the response. In case of POST request, id of the resource specified by the Location header.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing-epl.html">Writing tests for EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="apamax.html">PySys helpers for EPL apps</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="apamax.eplapplications.html">apamax.eplapplications</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.basetest.html">apamax.eplapplications.basetest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.buildVersions.html">apamax.eplapplications.buildVersions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">apamax.eplapplications.connection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c8yconnection">C8yConnection</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.eplapps.html">apamax.eplapplications.eplapps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.perf.html">apamax.eplapplications.perf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.platform.html">apamax.eplapplications.platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.smartrules.html">apamax.eplapplications.smartrules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.tenant.html">apamax.eplapplications.tenant</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.eplapps.html" title="apamax.eplapplications.eplapps"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.buildVersions.html" title="apamax.eplapplications.buildVersions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023 Software AG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+    </div>
+  </body>
+</html>

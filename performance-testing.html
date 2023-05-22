@@ -1,0 +1,540 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Testing the performance of your EPL apps and smart rules &#8212; EPL Apps Tools 10.18.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PySys helpers for EPL apps" href="autodocgen/apamax.html" />
+    <link rel="prev" title="Using PySys to test your EPL apps" href="using-pysys.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="autodocgen/apamax.html" title="PySys helpers for EPL apps"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="using-pysys.html" title="Using PySys to test your EPL apps"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.18.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="testing-the-performance-of-your-epl-apps-and-smart-rules">
+<h1>Testing the performance of your EPL apps and smart rules<a class="headerlink" href="#testing-the-performance-of-your-epl-apps-and-smart-rules" title="Permalink to this headline">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Description</dt>
+<dd class="field-odd"><p>Guide for using the PySys framework to test the performance of your EPL apps and smart rules.</p>
+</dd>
+</dl>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>An EPL app or a smart rule can be either tested against real devices or simulated devices with simulated data. Thus writing a performance test will generally involve:</p>
+<ul class="simple">
+<li><p>Creating a test.</p></li>
+<li><p>Defining the test options.</p></li>
+<li><p>Preparing the Cumulocity IoT tenant.</p></li>
+<li><p>Creating device simulators (if applicable).</p></li>
+<li><p>Deploying EPL apps.</p></li>
+<li><p>Deploying smart rules.</p></li>
+<li><p>Sending measurements, events or alarms.</p></li>
+<li><p>Monitoring the performance.</p></li>
+<li><p>Generating the performance reports.</p></li>
+<li><p>Writing a test for a multi-tenant microservice.</p></li>
+</ul>
+<p>This document demonstrates the common process involved in writing a performance test for your existing EPL apps and smart rules. The performance tests described in the document use the EPL apps SDK based on the PySys test framework. See the <a class="reference external" href="https://pysys-test.github.io/pysys-test">PySys documentation</a>  for details on the installation, and how the framework can be used and the facilities it contains. Set up the EPL apps SDK by following the steps mentioned in <a class="reference external" href="using-pysys.rst#testing-in-the-cumulocity-iot-cloud">Testing in the Cumulocity IoT cloud</a>.</p>
+</div>
+<div class="section" id="writing-a-performance-test">
+<h2>Writing a performance test<a class="headerlink" href="#writing-a-performance-test" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-a-test">
+<h3>Creating a test<a class="headerlink" href="#creating-a-test" title="Permalink to this headline">¶</a></h3>
+<p>A PySys test case comprises a directory with a unique name, containing a pysystest.xml file and an Input directory containing your application-specific resources.</p>
+<p>To create the test, you can either copy an existing test (such as one from the samples-performance or smartrules-performance directory) and rename it, or by running the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys make TestName
+</pre></div>
+</div>
+<p>The run.py file of the test contains the main logic of the test. The <code class="docutils literal notranslate"><span class="pre">PySysTest</span></code> class of a performance test should extend the <code class="docutils literal notranslate"><span class="pre">apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest</span></code> class which provides convenient methods for performance monitoring and reporting.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apamax.eplapplications.perf.basetest</span> <span class="kn">import</span> <span class="n">ApamaC8YPerfBaseTest</span>
+
+<span class="k">class</span> <span class="nc">PySysTest</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PySysTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-the-test-options">
+<h3>Defining the test options<a class="headerlink" href="#defining-the-test-options" title="Permalink to this headline">¶</a></h3>
+<p>A test may define options such as test duration, or measurement types that you might want to change or override when running the test. To define an option, define a static attribute on the test class and provide a default value. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PySysTest</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">):</span>
+    <span class="c1"># Can be overridden at runtime, for example:</span>
+    <span class="c1"># pysys run -XmyTestDuration=10</span>
+    <span class="n">myTestDuration</span> <span class="o">=</span> <span class="mf">60.0</span>
+
+    <span class="c1"># The type of measurements the app listens for.</span>
+    <span class="n">measurementType</span> <span class="o">=</span> <span class="s1">&#39;type_device_temperature&#39;</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Using measurementType = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">measurementType</span><span class="si">}</span><span class="s1"> and myTestDuration = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">myTestDuration</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<p>Once the default value is defined with a static attribute, you can override the value when you run your test using the <code class="docutils literal notranslate"><span class="pre">-X</span></code> option:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys run -XmyTestDuration<span class="o">=</span><span class="m">10</span> -XmeasurementType<span class="o">=</span><span class="s2">&quot;MyMeasurement&quot;</span>
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="https://pysys-test.github.io/pysys-test/pysys/UserGuide.html#configuring-and-overriding-test-options">PySys test options</a> in the PySys documentation for details on configuring and overriding test options.</p>
+</div>
+<div class="section" id="preparing-the-cumulocity-iot-tenant">
+<h3>Preparing the Cumulocity IoT tenant<a class="headerlink" href="#preparing-the-cumulocity-iot-tenant" title="Permalink to this headline">¶</a></h3>
+<p>The performance test must make sure that the Cumulocity IoT tenant used for testing the EPL app or smart rule is prepared. This is done by calling the <code class="docutils literal notranslate"><span class="pre">prepareTenant</span></code> method before the EPL apps or smart rules are deployed.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">prepareTenant</span></code> method performs the following actions:</p>
+<ul class="simple">
+<li><p>Deletes any test devices created by previous tests (which are identified by the device name having the prefix “PYSYS_”) from your tenant.</p></li>
+<li><p>Deletes any test EPL apps (which have “PYSYS_” prefix in their name) and smart rules that have previously been uploaded by the framework from your tenant.</p></li>
+<li><p>Clears all active alarms in your tenant.</p></li>
+<li><p>Optionally, restarts the Apama-ctrl microservice.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">prepareTenant</span></code> method must be called at the start of the test before any EPL apps or smart rules are deployed. If the test is testing the same EPL app or smart rule with different configurations, then the tenant must be prepared before each iteration.</p>
+<p>It is recommended to restart the Apama-ctrl microservice when preparing a tenant so that resources like memory are not influenced by any previous test runs.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">prepareTenant</span></code> method does not delete any of the user-uploaded EPL apps and smart rules, or user-created devices. The user should disable any user-uploaded EPL apps or smart rules which can interfere with the performance test, for example, by producing or updating data that are consumed by the EPL apps or smart rules being tested. It may be prudent to disable all existing EPL apps or smart rules from the tenant for accurate performance numbers.</p>
+</div>
+<div class="section" id="creating-device-simulators">
+<h3>Creating device simulators<a class="headerlink" href="#creating-device-simulators" title="Permalink to this headline">¶</a></h3>
+<p>If the test needs to use simulated devices, then they can be easily created within the test. A device can be created by calling the <code class="docutils literal notranslate"><span class="pre">createTestDevice</span></code> method.</p>
+<p>All created devices are prefixed with “PYSYS_” for identifying the devices that have been created from the test and keeping them distinct from user-created devices. Due to the prefix, all devices created using the <code class="docutils literal notranslate"><span class="pre">createTestDevice</span></code> method are deleted when the <code class="docutils literal notranslate"><span class="pre">prepareTenant</span></code> method is called.</p>
+<p>If devices are created without using the <code class="docutils literal notranslate"><span class="pre">createTestDevice</span></code> method, then make sure to have the device names prefixed with “PYSYS_” so that they can be deleted when a tenant is prepared for a performance test run.</p>
+</div>
+<div class="section" id="deploying-epl-apps">
+<h3>Deploying EPL apps<a class="headerlink" href="#deploying-epl-apps" title="Permalink to this headline">¶</a></h3>
+<p>EPL apps can be deployed by using the <code class="docutils literal notranslate"><span class="pre">deploy</span></code> method of the <code class="docutils literal notranslate"><span class="pre">EPLApps</span></code> class. The field <code class="docutils literal notranslate"><span class="pre">eplapps</span></code> of type <code class="docutils literal notranslate"><span class="pre">EPLApps</span></code> is available for performance tests.</p>
+<p>The performance test may need to customize EPL apps for performance testing, for example, defining the threshold limit, or the type of measurements to listen for. The performance test may also test EPL apps for multiple values of some parameters in a single test or across multiple tests. One approach to customize EPL apps for testing is to use placeholder replacement strings in EPL apps and then replace the strings with actual values before deploying them to Cumulocity IoT. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">monitor</span> <span class="n">MySimpleApp</span> <span class="p">{</span>
+    <span class="n">constant</span> <span class="nb">float</span> <span class="n">THRESHOLD</span> <span class="o">:=</span> <span class="nd">@MEASUREMENT_THRESHOLD</span><span class="o">@</span><span class="p">;</span>
+    <span class="n">constant</span> <span class="n">string</span> <span class="n">MEAS_TYPE</span> <span class="o">:=</span> <span class="s2">&quot;@MEASUREMENT_TYPE@&quot;</span><span class="p">;</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the above example app, the values of the <code class="docutils literal notranslate"><span class="pre">THRESHOLD</span></code> and <code class="docutils literal notranslate"><span class="pre">MEAS_TYPE</span></code> constants are placeholder strings that need to be replaced by the performance test. It is recommended to surround the replacement strings with some marker characters so that they are distinct from normal strings.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">copyWithReplace</span></code> method creates a copy of the source file by replacing the placeholder strings with the replacement values.</p>
+<p>For example, the above EPL app can be configured and deployed as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a dictionary with replacement strings.</span>
+<span class="n">appConfiguration</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;MEASUREMENT_THRESHOLD&#39;</span><span class="p">:</span> <span class="s1">&#39;100.0&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MEASUREMENT_TYPE&#39;</span><span class="p">:</span> <span class="s1">&#39;myMeasurements&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="c1"># Replace placeholder strings with replacement values and create</span>
+<span class="c1"># a copy of the EPL app to the test&#39;s output directory.</span>
+<span class="c1"># Specify that the marker character for placeholder strings is &#39;@&#39;</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">copyWithReplace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_APPS</span><span class="p">,</span> <span class="s1">&#39;MyApp.mon&#39;</span><span class="p">),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;MyApp.mon&#39;</span><span class="p">),</span> <span class="n">replacementDict</span><span class="o">=</span><span class="n">appConfiguration</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
+
+<span class="c1"># Deploy the EPL app with replaced values.</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;MyApp.mon&quot;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;PYSYS_MyApp&#39;</span><span class="p">,</span> <span class="n">redeploy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Application under test, injected by test framework&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Replacement values can also come from test options so that they can be overridden when running tests. See <a class="reference internal" href="#defining-the-test-options">Defining the test options</a> for more details.</p>
+<p><strong>Note:</strong> It is recommended to prefix the names of the EPL apps with “PYSYS_” when deploying them. This allows all EPL apps deployed during the tests to be disabled at the end of the test and deleted when preparing the tenant for a test run.</p>
+</div>
+<div class="section" id="deploying-smart-rules">
+<h3>Deploying smart rules<a class="headerlink" href="#deploying-smart-rules" title="Permalink to this headline">¶</a></h3>
+<p>Smart rules can be deployed by using the <code class="docutils literal notranslate"><span class="pre">deploy</span></code> method of the <code class="docutils literal notranslate"><span class="pre">SmartRule</span></code> class object. The <code class="docutils literal notranslate"><span class="pre">Smartrule</span></code> object can be built by using the <code class="docutils literal notranslate"><span class="pre">build_&lt;smartrulename&gt;</span></code> method of the <code class="docutils literal notranslate"><span class="pre">SmartRulesManager</span></code> class.
+The field <code class="docutils literal notranslate"><span class="pre">smartRulesManager</span></code> of type <code class="docutils literal notranslate"><span class="pre">SmartRulesManager</span></code> object is available for performance tests.</p>
+<p>For example, the <code class="docutils literal notranslate"><span class="pre">onMeasurementExplicitThresholdCreateAlarm</span></code> smart rule can be configured and deployed as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Deploy the sample app.</span>
+<span class="n">smartRule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smartRulesManager</span><span class="o">.</span><span class="n">build_onMeasurementExplicitThresholdCreateAlarm</span><span class="p">(</span>
+    <span class="n">fragment</span><span class="o">=</span> <span class="s2">&quot;MyFragment&quot;</span><span class="p">,</span>
+    <span class="n">series</span><span class="o">=</span><span class="s2">&quot;MySeries&quot;</span><span class="p">,</span>
+    <span class="n">rangeMin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">rangeMax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">alarmType</span><span class="o">=</span><span class="s2">&quot;MyAlarm&quot;</span><span class="p">,</span>
+    <span class="n">alarmText</span><span class="o">=</span><span class="s2">&quot;This is my smart rule alarm&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">smartRule</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> The names of the smart rules are by default prefixed with “PYSYS_”. This allows all smart rules deployed during the tests to be disabled at the end of the test and deleted when preparing the tenant for a test run.</p>
+</div>
+<div class="section" id="sending-measurements">
+<h3>Sending measurements<a class="headerlink" href="#sending-measurements" title="Permalink to this headline">¶</a></h3>
+<p>A performance test can either use real-time measurements from real devices or simulated measurements from simulated devices. To generate simulated measurements, the test can start measurement simulators to publish simulated measurements to Cumulocity IoT at a specified rate which are then consumed by the EPL apps or smart rules being tested.</p>
+<p>Different tests may have different requirements for the measurements being published. For example, a test may want to customize the type of measurements or range of measurement values. To support such requirements, the framework requires tests to define a measurement creator class to create measurements of desired types. A measurement simulator uses a measurement creator object to create measurements to publish to Cumulocity IoT.</p>
+<p>The following example shows a test defining a measurement creator class to create measurements within a configurable range:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the &#39;creator.py&#39; file in the test Input directory.</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">apamax.eplapplications.perf</span> <span class="kn">import</span> <span class="n">ObjectCreator</span>
+
+<span class="k">class</span> <span class="nc">MyMeasurementCreator</span><span class="p">(</span><span class="n">ObjectCreator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">lowerBound</span><span class="p">,</span> <span class="n">upperBound</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowerBound</span> <span class="o">=</span> <span class="n">lowerBound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upperBound</span> <span class="o">=</span> <span class="n">upperBound</span>
+
+    <span class="k">def</span> <span class="nf">createObject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s1">&#39;my_measurement&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">device</span> <span class="p">},</span>
+            <span class="s1">&#39;my_fragment&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;my_series&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lowerBound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upperBound</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+<p>Once the measurement creator class is defined, the test can start a measurement simulator process to generate measurements for specified devices with a specified rate per device by calling the <code class="docutils literal notranslate"><span class="pre">startMeasurementSimulator</span></code> method. The test needs to pass the path to the Python file containing the measurement creator class, the name of the measurement creator class, and the values for the constructor parameters.</p>
+<p>For example, a test can use the above measurement creator class to generate measurements in the range of 50.0 to 100.0:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the run.py file of the test</span>
+<span class="k">class</span> <span class="nc">PySysTest</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startMeasurementSimulator</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;12345&#39;</span><span class="p">,</span> <span class="s1">&#39;12346&#39;</span><span class="p">],</span>         <span class="c1"># Device IDs</span>
+            <span class="mi">1</span><span class="p">,</span>                          <span class="c1"># The rate of measurements to publish per device per second</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="si">}</span><span class="s1">/creator.py&#39;</span><span class="p">,</span> <span class="c1"># The Python file path containing the MyMeasurementCreator class</span>
+            <span class="s1">&#39;MyMeasurementCreator&#39;</span><span class="p">,</span>     <span class="c1"># The name of the measurement class</span>
+            <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>                  <span class="c1"># The constructor parameters for the MyMeasurementCreator class</span>
+        <span class="p">)</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sending-events">
+<h3>Sending events<a class="headerlink" href="#sending-events" title="Permalink to this headline">¶</a></h3>
+<p>A performance test that consumes events can either use real-time events from real devices or simulated events from simulated devices. To generate simulated events, the test can start event simulators to publish simulated events to Cumulocity IoT at a specified rate which are then consumed by the EPL apps or smart rules being tested.</p>
+<p>Different tests may have different requirements for the events being published. For example, a test may want to customize the type of events. To support such requirements, the framework requires tests to define an event creator class to create events of desired types. An event simulator uses an event creator object to create events to publish to Cumulocity IoT.</p>
+<p>The following example shows a test defining an event creator class to create position update events within a configurable range of longitude and latitude:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the &#39;creator.py&#39; file in the test Input directory.</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">apamax.eplapplications.perf</span> <span class="kn">import</span> <span class="n">ObjectCreator</span>
+
+<span class="k">class</span> <span class="nc">MyEventCreator</span><span class="p">(</span><span class="n">ObjectCreator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lang_upper_bound</span><span class="p">,</span> <span class="n">lang_lower_bound</span><span class="p">,</span> <span class="n">lat_upper_bound</span><span class="p">,</span> <span class="n">lat_lower_bound</span> <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MyEventCreator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lang_upper_bound</span> <span class="o">=</span> <span class="n">lang_upper_bound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lang_lower_bound</span> <span class="o">=</span> <span class="n">lang_lower_bound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat_upper_bound</span>  <span class="o">=</span> <span class="n">lat_upper_bound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat_lower_bound</span>  <span class="o">=</span> <span class="n">lat_lower_bound</span>
+
+    <span class="k">def</span> <span class="nf">createObject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;MyEventType&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Event Generated&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">device</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;c8y_Position&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;lng&#39;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lang_lower_bound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lang_upper_bound</span><span class="p">),</span>
+                <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lat_lower_bound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat_upper_bound</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+<p>Once the event creator class is defined, the test can start an event simulator process to generate events for specified devices with a specified rate per device by calling the <code class="docutils literal notranslate"><span class="pre">startEventSimulator</span></code> method. The test needs to pass the path to the Python file containing the event creator class, the name of the event creator class, and the values for the constructor parameters.</p>
+<p>For example, a test can use the above event creator class to generate position update events in the specified range:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the run.py file of the test</span>
+<span class="k">class</span> <span class="nc">PySysTest</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startEventSimulator</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;12345&#39;</span><span class="p">,</span> <span class="s1">&#39;12346&#39;</span><span class="p">],</span>         <span class="c1"># Device IDs</span>
+            <span class="mi">1</span><span class="p">,</span>                          <span class="c1"># The rate of events to publish per device per second</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="si">}</span><span class="s1">/creator.py&#39;</span><span class="p">,</span> <span class="c1"># The Python file path containing the MyEventCreator class</span>
+            <span class="s1">&#39;MyEventCreator&#39;</span><span class="p">,</span>           <span class="c1"># The name of the event creator class</span>
+            <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="o">.</span> <span class="mf">10.0</span><span class="p">]</span>      <span class="c1"># The constructor parameters for the MyEventCreator class</span>
+        <span class="p">)</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sending-alarms">
+<h3>Sending alarms<a class="headerlink" href="#sending-alarms" title="Permalink to this headline">¶</a></h3>
+<p>A performance test that consumes alarms can either use real-time alarms from real devices or simulated alarms from simulated devices. To generate simulated alarms, the test can start alarm simulators to publish simulated alarms to Cumulocity IoT at a specified rate which are then consumed by the EPL apps or smart rules being tested.</p>
+<p>Different tests may have different requirements for the alarms being published. For example, a test may want to customize the type of alarms. To support such requirements, the framework requires tests to define an alarm creator class to create alarms of desired types. An alarm simulator uses an alarm creator object to create alarms to publish to Cumulocity IoT.</p>
+<p>The following example shows a test defining an alarm creator class to create alarms:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the &#39;creator.py&#39; file in the test Input directory.</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">apamax.eplapplications.perf</span> <span class="kn">import</span> <span class="n">ObjectCreator</span>
+
+<span class="k">class</span> <span class="nc">MyAlarmsCreator</span><span class="p">(</span><span class="n">ObjectCreator</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">createObject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+         <span class="k">return</span> <span class="p">{</span>
+                <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">device</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;my_alarm&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;My alarm&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;severity&#39;</span><span class="p">:</span> <span class="s1">&#39;MAJOR&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;ACTIVE&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+                <span class="p">}</span>
+</pre></div>
+</div>
+<p>Once the alarm creator class is defined, the test can start an alarm simulator process to generate alarms for specified devices with a specified rate per device by calling the <code class="docutils literal notranslate"><span class="pre">startAlarmSimulator</span></code> method. The test needs to pass the path to the Python file containing the alarm creator class, the name of the alarm creator class, and the values for the constructor parameters.</p>
+<p>For example, a test can use the above alarm creator class to generate alarms of MAJOR severity:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the run.py file of the test</span>
+<span class="k">class</span> <span class="nc">PySysTest</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startAlarmSimulator</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;12345&#39;</span><span class="p">,</span> <span class="s1">&#39;12346&#39;</span><span class="p">],</span>         <span class="c1"># Device IDs</span>
+            <span class="mi">1</span><span class="p">,</span>                          <span class="c1"># The rate of alarms to publish per device per second</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="si">}</span><span class="s1">/creator.py&#39;</span><span class="p">,</span> <span class="c1"># The Python file path containing the MyAlarmsCreator class</span>
+            <span class="s1">&#39;MyAlarmsCreator&#39;</span><span class="p">,</span>          <span class="c1"># The name of the alarm creator class</span>
+            <span class="p">[]</span>                          <span class="c1"># The constructor parameters for the MyAlarmsCreator class</span>
+        <span class="p">)</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="monitoring-the-performance">
+<h3>Monitoring the performance<a class="headerlink" href="#monitoring-the-performance" title="Permalink to this headline">¶</a></h3>
+<p>The framework provides support for monitoring standard resource metrics of the Apama-ctrl microservice. The performance monitoring can be started by calling the <code class="docutils literal notranslate"><span class="pre">startPerformanceMonitoring</span></code> method.</p>
+<p>The framework repeatedly collects the following raw resource metrics:</p>
+<ul class="simple">
+<li><p>Aggregate physical memory usage of the microservice (combination of the memory used by the JVM helper and the Apama correlator process).</p></li>
+<li><p>Aggregate CPU usage of the microservice in the most recent period.</p></li>
+<li><p>Size of the correlator input queue.</p></li>
+<li><p>Size of the correlator output queue.</p></li>
+<li><p>The total number of events received by the correlator during the entire test.</p></li>
+<li><p>The total number of events sent from the correlator during the entire test.</p></li>
+</ul>
+<p>The CPU usage of the microservice is the total CPU usage of the whole container as reported by the OS for the cgroup of the entire container.</p>
+<p>These metrics are then analyzed (mean, median, etc.) and used for graphing when the performance report is generated at the end of the test.</p>
+<p>The test should wait for some time for performance metrics to be gathered before generating the performance report. It is a good practice to define the duration as a test option so that it can be configured easily when running a performance test.</p>
+</div>
+<div class="section" id="generating-the-performance-reports">
+<h3>Generating the performance reports<a class="headerlink" href="#generating-the-performance-reports" title="Permalink to this headline">¶</a></h3>
+<p>Once the test has waited for the specified duration for the performance metrics to be collected, it must call the <code class="docutils literal notranslate"><span class="pre">generateHTMLReport</span></code> method to enable the generation of the performance report in the HTML format. The performance report (report.html) is generated at the end of the test in the test’s output directory.</p>
+<p>If the test is testing the same EPL app or smart rule with different configurations, then the <code class="docutils literal notranslate"><span class="pre">generateHTMLReport</span></code> method must be called at the end of each iteration. The performance report contains the result of each iteration.</p>
+<p>Test configuration details can also be included in the report. The test should provide the values of all test options and test-controlled variables so that they are visible in the report.</p>
+<p>In addition to the standard performance metrics, the HTML report can also contain additional performance metrics provided by the test, such as the number of alarms raised.</p>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">generateHTMLReport</span><span class="p">(</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Performance of MyExample app&#39;</span><span class="p">,</span>
+    <span class="c1"># Test configurations and their values</span>
+    <span class="n">testConfigurationDetails</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;Test duration (secs)&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+        <span class="s1">&#39;Measurement rate&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="c1"># Extra performance metrics to include in the report.</span>
+    <span class="n">extraPerformanceMetrics</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;Alarms raised&#39;</span><span class="p">:</span> <span class="n">alarms_raised</span><span class="p">,</span>
+        <span class="s1">&#39;Alarms cleared&#39;</span><span class="p">:</span> <span class="n">alarms_cleared</span><span class="p">,</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="writing-a-test-for-a-multi-tenant-microservice">
+<h2>Writing a test for a multi-tenant microservice<a class="headerlink" href="#writing-a-test-for-a-multi-tenant-microservice" title="Permalink to this headline">¶</a></h2>
+<p><strong>Note:</strong> EPL apps are currently not supported in multi-tenant microservices.</p>
+<p>Writing a performance test for a multi-tenant microservice is similar to writing a test for a per-tenant microservice, with a few changes to handle multiple tenants.</p>
+<p>The test can get a list of tenants subscribed to the multi-tenant Apama-ctrl microservice by calling the <code class="docutils literal notranslate"><span class="pre">getSubscribedTenants</span></code> method of the <code class="docutils literal notranslate"><span class="pre">CumulocityPlatform</span></code> object. Once the test has acquired the list of tenants to test, prepare each tenant and deploy smart rules to them by passing the tenant object to method calls. If simulated data is required, create simulated devices and start simulators for each tenant by passing the tenant object to method calls.</p>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start performance monitoring</span>
+<span class="n">perfMonitor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">startPerformanceMonitoring</span><span class="p">()</span>
+
+<span class="c1"># Get subscribed tenants</span>
+<span class="n">tenants</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getSubscribedTenants</span><span class="p">()</span>
+
+<span class="c1"># For each tenant, prepare it and deploy smart rule</span>
+<span class="k">for</span> <span class="n">tenant</span> <span class="ow">in</span> <span class="n">tenants</span><span class="p">:</span>
+    <span class="c1"># Prepare tenant</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">(</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span>
+
+    <span class="c1"># Create SmartRulesManager for each tenant to deploy smart rules</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">SmartRulesManager</span><span class="p">(</span><span class="n">tenant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
+
+    <span class="c1"># Create smart rule</span>
+    <span class="n">rule</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">build_onMeasurementExplicitThresholdCreateAlarm</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="c1"># Deploy smart rule</span>
+    <span class="n">rule</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">useSimulatedData</span><span class="p">:</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createTestDevice</span><span class="p">(</span><span class="s1">&#39;my_device&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startMeasurementSimulator</span><span class="p">(</span><span class="n">devices</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">],</span> <span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># Wait for enough performance data to be gathered</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testDuration</span><span class="p">)</span>
+
+<span class="c1"># Stop performance monitoring</span>
+<span class="n">perfMonitor</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See the OnExplicitThresholdCreateAlarm_MultiTenant sample in the smartrules-performance directory of the EPL Apps Tools SDK for a full example.</p>
+<p><strong>Note:</strong> In the case of multi-tenant microservices, the test framework assumes that the tenant configured in the pysysproject.xml file is an enterprise or management tenant which owns the microservice and is also subscribed to it along with some of its subtenants. It also assumes that the credentials configured in the pysysproject.xml file are valid for all subtenants. If different credentials are required for tenants, the test must create <code class="docutils literal notranslate"><span class="pre">CumulocityTenant</span></code> objects individually with the correct credentials.</p>
+</div>
+<div class="section" id="running-the-performance-test">
+<h2>Running the performance test<a class="headerlink" href="#running-the-performance-test" title="Permalink to this headline">¶</a></h2>
+<p>Performance tests can only be run using a Cumulocity IoT tenant with EPL apps and smart rules enabled. Set up the framework to use a Cumulocity IoT tenant by following the steps mentioned in <a class="reference external" href="using-pysys.rst#testing-in-the-cumulocity-iot-cloud">Testing in the Cumulocity IoT cloud</a>.</p>
+<p>When running a test, test options can be overridden by using the <code class="docutils literal notranslate"><span class="pre">-X</span></code> argument. See <a class="reference internal" href="#defining-the-test-options">Defining the test options</a> for details on defining and providing test options.</p>
+<p>For example, to change the test duration of the <code class="docutils literal notranslate"><span class="pre">AlarmOnThreshold</span></code> test, run the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys run -XtestDuration<span class="o">=</span><span class="m">180</span> AlarmOnThreshold
+</pre></div>
+</div>
+<p>At the end of the test, a basic validation of the test run is performed. See <a class="reference external" href="https://softwareag.github.io/apama-eplapps-tools">PySys helpers</a> in the EPL Apps Tools documentation for details on validations performed.</p>
+</div>
+<div class="section" id="performance-report">
+<h2>Performance report<a class="headerlink" href="#performance-report" title="Permalink to this headline">¶</a></h2>
+<p>At the end of a performance test, an HTML report is generated in the test’s output directory. When running multiple iterations of the same EPL app or smart rules with different configurations, the results of each iteration are included in the report. The report contains metadata about the microservice and Cumulocity IoT environment, test-specific configurations, performance summary, and graphs.</p>
+<p>The report contains the following metadata about the microservice and the Cumulocity IoT environment:</p>
+<ul class="simple">
+<li><p>Cumulocity IoT tenant URL</p></li>
+<li><p>Cumulocity IoT platform version</p></li>
+<li><p>Apama-ctrl microservice name</p></li>
+<li><p>Apama-ctrl microservice version (product code PAQ)</p></li>
+<li><p>Apama platform version  (product code PAM)</p></li>
+<li><p>Microservice resource limits</p></li>
+</ul>
+<p>The report also contains test-specific configurations specified when calling the <code class="docutils literal notranslate"><span class="pre">generateHTMLReport</span></code> method. This usually contains all possible test-controlled variables.</p>
+<p>The report contains min, max, mean, median, 75th percentile, 90th percentile, 95th percentile, and 99th percentile of the following standard performance metrics:</p>
+<ul class="simple">
+<li><p>Total physical memory consumption of the microservice (MB)</p></li>
+<li><p>JVM helper physical memory consumption (MB)</p></li>
+<li><p>Apama correlator physical memory consumption (MB)</p></li>
+<li><p>Correlator input queue size</p></li>
+<li><p>Correlator output queue size</p></li>
+<li><p>Correlator swap rate</p></li>
+<li><p>Total CPU usage of the whole container (milliCPU)</p></li>
+</ul>
+<p>Additionally, the report contains the following standard performance metrics and any extra performance metrics supplied by the test:</p>
+<ul class="simple">
+<li><p>Total number of events received into the Apama correlator</p></li>
+<li><p>Total number of events sent from the Apama correlator</p></li>
+</ul>
+<p>The report also contains the following graphs over the duration of the test:</p>
+<ul class="simple">
+<li><p>Correlator input queue and output queue size</p></li>
+<li><p>Total microservice memory consumption, JVM helper memory consumption, and Apama correlator memory consumption</p></li>
+<li><p>Microservice CPU usage</p></li>
+</ul>
+<p>The summary of the various performance metrics and graphs provides an overview of how the microservice performed during the test run and how it varies for different configurations and workloads.</p>
+</div>
+<div class="section" id="sample-epl-apps-and-tests">
+<h2>Sample EPL apps and tests<a class="headerlink" href="#sample-epl-apps-and-tests" title="Permalink to this headline">¶</a></h2>
+<p>Multiple sample EPL apps and tests can be found in the samples-performance directory of the EPL Apps Tools SDK. The structure of the samples-performance directory is as follows:</p>
+<div class="line-block">
+<div class="line">+–samples-performance</div>
+<div class="line">+—–pysysdirconfig.xml</div>
+<div class="line">+—–pysysproject.xml</div>
+<div class="line">+—–apps/</div>
+<div class="line">+—–correctness/</div>
+<div class="line">+—–performance/</div>
+</div>
+<p>The apps directory contains multiple sample apps for performance testing. The correctness directory contains basic correctness tests of the sample apps. It is recommended to always test your EPL apps for correctness before testing them for performance. See <a class="reference external" href="using-pysys.rst#using-pysys-to-test-your-epl-apps">Using PySys to test your EPL apps</a> for details on testing EPL apps for correctness. The performance directory contains performance tests for each sample app. These tests can be run as explained in <a class="reference internal" href="#running-the-performance-test">Running the performance test</a>.</p>
+</div>
+<div class="section" id="sample-smart-rule-performance-tests">
+<h2>Sample smart rule performance tests<a class="headerlink" href="#sample-smart-rule-performance-tests" title="Permalink to this headline">¶</a></h2>
+<p>Multiple sample smart rule performance tests can be found in the smartrules-performance directory of the EPL Apps Tools SDK.</p>
+<p>The tests can be run as explained in <a class="reference internal" href="#running-the-performance-test">Running the performance test</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing-epl.html">Writing tests for EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Testing the performance of your EPL apps and smart rules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-a-performance-test">Writing a performance test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-test">Creating a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-the-test-options">Defining the test options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-the-cumulocity-iot-tenant">Preparing the Cumulocity IoT tenant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-device-simulators">Creating device simulators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploying-epl-apps">Deploying EPL apps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploying-smart-rules">Deploying smart rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sending-measurements">Sending measurements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sending-events">Sending events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sending-alarms">Sending alarms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#monitoring-the-performance">Monitoring the performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generating-the-performance-reports">Generating the performance reports</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-a-test-for-a-multi-tenant-microservice">Writing a test for a multi-tenant microservice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-performance-test">Running the performance test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-report">Performance report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sample-epl-apps-and-tests">Sample EPL apps and tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sample-smart-rule-performance-tests">Sample smart rule performance tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="autodocgen/apamax.html" title="PySys helpers for EPL apps"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="using-pysys.html" title="Using PySys to test your EPL apps"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools 10.18.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023 Software AG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+    </div>
+  </body>
+</html>
