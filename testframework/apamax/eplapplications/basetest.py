@@ -98,6 +98,7 @@ class ApamaC8YBaseTest(BaseTest):
 		apama_project.addBundle("Correlator Management")
 		apama_project.addBundle("JSON Support")
 		apama_project.addBundle("Time Format")
+		apama_project.addBundle("Functional EPL Library")
 		apama_project.addBundle("The MemoryStore")
 		return apama_project
 
@@ -538,14 +539,14 @@ class EPLAppsSimpleTest(ApamaC8YBaseTest):
 		self.eplapps = EPLApps(self.platform.getC8YConnection())
 		self.prepareTenant()
 
-	def prepareTenant(self):
+	def prepareTenant(self,tenant=None):
 		"""
 			Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL apps which have been uploaded by tests, and clearing all active alarms. 
 			
 			This is done first so that it is not possible for existing test apps to raise alarms or create devices.
 		"""
-		self._deleteTestEPLApps()
-		super(EPLAppsSimpleTest, self).prepareTenant()
+		self._deleteTestEPLApps(tenant)
+		super(EPLAppsSimpleTest, self).prepareTenant(tenant)
 
 	def execute(self):
 		"""

@@ -418,7 +418,7 @@ For example, to change the test duration of the ``AlarmOnThreshold`` test, run t
     
     pysys run -XtestDuration=180 AlarmOnThreshold
 
-At the end of the test, a basic validation of the test run is performed. See `PySys helpers <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc/>`_ in the EPL Apps Tools documentation for details on validations performed.
+At the end of the test, a basic validation of the test run is performed. See `PySys helpers <https://softwareag.github.io/apama-eplapps-tools>`_ in the EPL Apps Tools documentation for details on validations performed.
 
 
 Performance report

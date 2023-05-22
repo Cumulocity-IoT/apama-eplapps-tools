@@ -22,24 +22,24 @@ This project is licensed under the Apache 2.0 license - see https://www.apache.o
 
 Apama EPL Apps Tools Version
 -------------------------
-This version of the SDK supports Apama EPL Apps Tools 10.16.0. 
+This version of the SDK supports Apama EPL Apps Tools 10.18.0. 
 
 Documentation
 -------------
 
-Complete documentation for Apama EPL Apps Tools can be found `here <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc>`_.
+Complete documentation for Apama EPL Apps Tools can be found `here <https://softwareag.github.io/apama-eplapps-tools>`_.
 
-`Using the eplapp.py command line tool <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc/using-eplapp>`_ is the guide which shows you how to use this tool to perform REST requests to Apama EPL Apps in Cumulocity IoT.
+`Using the eplapp.py command line tool <https://softwareag.github.io/apama-eplapps-tools/using-eplapp>`_ is the guide which shows you how to use this tool to perform REST requests to Apama EPL Apps in Cumulocity IoT.
 
-You can read up on how to use PySys to test your EPL apps in `Using PySys to test EPL apps <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc/using-pysys>`_.
+You can read up on how to use PySys to test your EPL apps in `Using PySys to test EPL apps <https://softwareag.github.io/apama-eplapps-tools/using-pysys>`_.
 
-To find out how to write a test for your EPL apps look at `Writing tests for EPL apps <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc/testing-epl>`_.
+To find out how to write a test for your EPL apps look at `Writing tests for EPL apps <https://softwareag.github.io/apama-eplapps-tools/testing-epl>`_.
 
-To find out how to performance test your EPL apps look at `Performance testing EPL apps <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc/performance-testing>`_.
+To find out how to performance test your EPL apps look at `Performance testing EPL apps <https://softwareag.github.io/apama-eplapps-tools/performance-testing>`_.
 
-In order to view the documentation on classes for PySys helpers for Apama EPL Apps see: `PySys helpers <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc/autodocgen/apamax.eplapplications.html#module-apamax.eplapplications>`_.
+In order to view the documentation on classes for PySys helpers for Apama EPL Apps see: `PySys helpers <https://softwareag.github.io/apama-eplapps-tools/autodocgen/apamax.eplapplications.html#module-apamax.eplapplications>`_.
 
-See `Apama Documentation <https://documentation.softwareag.com/pam/10.15.2/en/webhelp>`_, `Streaming Analytics guide <https://cumulocity.com/guides/apama>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
+See `Apama Documentation <https://documentation.softwareag.com/pam/10.15.3/en/webhelp>`_, `Streaming Analytics guide <https://cumulocity.com/guides/10.18.0/streaming-analytics>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
 
 System requirements
 -------------------

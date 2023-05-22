@@ -1,0 +1,24 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto" state="runnable">
+
+  <description>
+    <title>Run a test of an EPL application inside Cumulocity IoT against multi-tenant microservice</title>
+    <purpose><![CDATA[
+		Basic test of an EPL application, running the app and tests inside EPL apps in Cumulocity IoT.
+    This test expects the tenants to be subscribed to the required application before running the test.
+]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group></group>
+    </groups>
+  </classification>
+
+  <traceability>
+    <requirements>
+      <requirement id=""/>     
+    </requirements>
+  </traceability>
+</pysystest>

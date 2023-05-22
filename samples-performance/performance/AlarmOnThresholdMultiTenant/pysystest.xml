@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto" state="runnable">
+
+  <description>
+    <title>Performance test of AlarmOnMeasurementThreshold app against multiTenant microservice</title>
+    <purpose><![CDATA[
+      Performance test of the AlarmOnMeasurementThreshold app.
+]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group>performance</group>
+    </groups>
+  </classification>
+
+  <data>
+    <class name="PySysTest" module="run"/>
+  </data>
+  
+  <traceability>
+    <requirements>
+      <requirement id=""/>
+    </requirements>
+  </traceability>
+</pysystest>

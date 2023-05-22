@@ -149,7 +149,7 @@ Advanced tests
 
 For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.
 
-In order to view documentation on classes for PySys helpers for EPL Apps please see: `PySys helpers <https://softwareag.github.io/apama-eplapps-tools/doc/pydoc/>`_
+In order to view documentation on classes for PySys helpers for EPL Apps please see: `PySys helpers <https://softwareag.github.io/apama-eplapps-tools>`_
 
 See `Testing the performance of your EPL apps and smart rules <performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules>`_ for details on writing performance tests.
 
