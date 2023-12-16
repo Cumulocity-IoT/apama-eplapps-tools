@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>apamax.eplapplications.eplapps &#8212; EPL Apps Tools  documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for apamax.eplapplications.eplapps</h1><div class="highlight"><pre>
+<span></span><span class="c1">## License</span>
+<span class="c1"># Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors</span>
+
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this</span>
+<span class="c1"># file except in compliance with the License. You may obtain a copy of the License at</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software distributed under the</span>
+<span class="c1"># License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,</span>
+<span class="c1"># either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+
+<div class="viewcode-block" id="EPLApps"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps">[docs]</a><span class="k">class</span> <span class="nc">EPLApps</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Class for interacting with Apama EPL Apps in Cumulocity IoT.</span>
+
+<span class="sd">		:param connection: A C8yConnection object for the connection to the platform.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">connection</span>
+
+<div class="viewcode-block" id="EPLApps.deploy"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.deploy">[docs]</a>	<span class="k">def</span> <span class="nf">deploy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inactive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">redeploy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Deploys a local mon file to Apama EPL Apps in Cumulocity IoT.</span>
+
+<span class="sd">		:param file: Path to local mon file to be deployed as an EPL app.</span>
+<span class="sd">		:param name: Name of the EPL app to be uploaded (optional). By default this will be the name of the mon file being uploaded.</span>
+<span class="sd">		:param description: Description of the EPL app (optional).</span>
+<span class="sd">		:param inactive: Boolean of whether the app should be &#39;active&#39; (inactive=False) or &#39;inactive&#39; (inactive=True) when it is deployed.</span>
+<span class="sd">		:param redeploy: Boolean of whether we are overwriting an existing EPL app.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">active</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">inactive</span>
+		<span class="c1"># Check EPL file specified is valid .mon file:</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Deploy failed. File </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;.mon&#39;</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Deploy failed. </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> is not a valid .mon file.&#39;</span><span class="p">)</span>
+		<span class="c1"># Check whether EPL app of that name already exists for tenant:</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">existingEPLApps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getEPLApps</span><span class="p">()</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not deploy EPL app. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="n">existingAppNames</span> <span class="o">=</span> <span class="p">[</span><span class="n">app</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">existingEPLApps</span><span class="p">]</span>
+		<span class="c1"># If name option not specified, use name of the .mon file specified by default</span>
+		<span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+			<span class="c1"># Removing file path (directories) up to name of file:</span>
+			<span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+			<span class="n">name</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[:</span><span class="n">filename</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">&#39;.mon&#39;</span><span class="p">)]</span>
+		<span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">existingAppNames</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">redeploy</span><span class="p">:</span>
+				<span class="k">try</span><span class="p">:</span>
+					<span class="n">updateArgs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">file</span><span class="p">}</span>
+					<span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">updateArgs</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+					<span class="n">updateArgs</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;active&#39;</span> <span class="k">if</span> <span class="n">active</span> <span class="k">else</span> <span class="s1">&#39;inactive&#39;</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">updateArgs</span><span class="p">)</span>
+					<span class="k">return</span>
+				<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+					<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to redeploy EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1">. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Deploy failed. </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> already exists in Apama EPL Apps.&#39;</span><span class="p">)</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">file_contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__read_text_withBOM</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Deploy failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+				<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+				<span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="s1">&#39;active&#39;</span> <span class="k">if</span> <span class="n">active</span> <span class="k">else</span> <span class="s1">&#39;inactive&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;contents&#39;</span><span class="p">:</span> <span class="n">file_contents</span>
+			<span class="p">}</span>
+			<span class="n">responseBytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;/service/cep/eplfiles&#39;</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">useLocationHeaderPostResp</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+			<span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">responseBytes</span><span class="p">)</span>
+
+			<span class="k">if</span> <span class="n">active</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+				<span class="n">errorStrings</span> <span class="o">=</span> <span class="p">[]</span>
+				<span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">]:</span>
+					<span class="n">errorStrings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">error</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">error</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errorStrings</span><span class="p">))</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to deploy EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> using POST on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles.</span><span class="se">\n</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EPLApps.update"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.update">[docs]</a>	<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">new_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Updates an EPL app in Cumulocity IoT.</span>
+
+<span class="sd">		:param name: name of the EPL App to be updated.</span>
+<span class="sd">		:param new_name: the updated name of the EPL app (optional)</span>
+<span class="sd">		:param file: path to the local mon file containing the updated contents of the EPL app (optional)</span>
+<span class="sd">		:param description: the updated description of the EPL app (optional)</span>
+<span class="sd">		:param state: the updated state of the EPL app (optional)</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="n">new_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">description</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Update failed. Please specify at least 1 field to update.&quot;</span><span class="p">)</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">appId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getAppId</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Update failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Update failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+		<span class="n">body</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="k">if</span> <span class="n">new_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">body</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_name</span>
+		<span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">body</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+
+		<span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">,</span> <span class="s1">&#39;inactive&#39;</span><span class="p">):</span>
+				<span class="n">body</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Update failed. Invalid argument, </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1">, specified for the --state option. State can either be </span><span class="se">\&#39;</span><span class="s1">active</span><span class="se">\&#39;</span><span class="s1"> or </span><span class="se">\&#39;</span><span class="s1">inactive</span><span class="se">\&#39;</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="c1"># Check file is valid:</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+				<span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Update failed. File </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
+			<span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;.mon&#39;</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Update failed. </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> is not a valid .mon file.&#39;</span><span class="p">)</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__read_text_withBOM</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+			<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Update failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+			<span class="n">body</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contents</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">responseBytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/service/cep/eplfiles/</span><span class="si">{</span><span class="n">appId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+			<span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">responseBytes</span><span class="p">)</span>
+
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="n">errorStrings</span> <span class="o">=</span> <span class="p">[]</span>
+				<span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">]:</span>
+					<span class="n">errorStrings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">error</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">error</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errorStrings</span><span class="p">))</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to update EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> using PUT on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles/</span><span class="si">{</span><span class="n">appId</span><span class="si">}</span><span class="s1">.</span><span class="se">\n</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EPLApps.getAppId"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.getAppId">[docs]</a>	<span class="k">def</span> <span class="nf">getAppId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">jsonEPLAppsList</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Gets the id of EPL app for a given EPL app name. If no EPL app with appname exists, an exception is raised.</span>
+
+<span class="sd">		:param appName: The name of the EPL app we wish to get the id of</span>
+<span class="sd">		:param jsonEPLAppsList: A json collection of EPL apps</span>
+<span class="sd">		:return: The id of the EPL app</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">jsonEPLAppsList</span> <span class="o">=</span> <span class="n">jsonEPLAppsList</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">getEPLApps</span><span class="p">()</span>
+		<span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">jsonEPLAppsList</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">app</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">appName</span><span class="p">:</span>
+				<span class="k">return</span> <span class="n">app</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+		<span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">appName</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> not found.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EPLApps.getEPLApps"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.getEPLApps">[docs]</a>	<span class="k">def</span> <span class="nf">getEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">includeContents</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		:param includeContents: Fetches the EPL files with their contents if True. This is an optional query parameter.</span>
+<span class="sd">		:return: A json object of all the user&#39;s EPL apps in Cumulocity IoT.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/service/cep/eplfiles?contents=</span><span class="si">{</span><span class="n">includeContents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)[</span><span class="s1">&#39;eplfiles&#39;</span><span class="p">]</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;GET on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EPLApps.delete"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.delete">[docs]</a>	<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Deletes an EPL app in Cumulocity IoT.</span>
+
+<span class="sd">		:param name: The name of the EPL app to be deleted.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">appId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getAppId</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Delete failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Delete failed. GET on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles failed. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/service/cep/eplfiles/</span><span class="si">{</span><span class="n">appId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to delete EPL app </span><span class="se">\&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\&#39;</span><span class="s1"> using DELETE on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s1">/service/cep/eplfiles. </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+	
+	<span class="k">def</span> <span class="nf">__read_text_withBOM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Thin wrapper for Path(&lt;path&gt;).read_text() . It assumes the file is UTF-8 encoded if it starts with the UTF-8 BOM, despite the current locale.</span>
+<span class="sd">		This method is used internally to make the tool behave consistently with many text editors and IDEs on Windows, which also honour the UTF-8 BOM.</span>
+<span class="sd">		Such a file is rendered correctly, therefore it should also be deployed correctly, else user expectations are confounded.</span>
+
+<span class="sd">		:param path: The path to extract the text from</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">BOM_UTF8</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing-epl.html">Writing tests for EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023 Software AG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+    </div>
+  </body>
+</html>

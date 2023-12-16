@@ -1,0 +1,480 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>apamax.eplapplications.perf.basetest &#8212; EPL Apps Tools  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="apamax.eplapplications.perf.publisher" href="apamax.eplapplications.perf.publisher.html" />
+    <link rel="prev" title="apamax.eplapplications.perf" href="apamax.eplapplications.perf.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.perf.publisher.html" title="apamax.eplapplications.perf.publisher"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.perf.html" title="apamax.eplapplications.perf"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="apamax.eplapplications.perf.html" accesskey="U">apamax.eplapplications.perf</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-apamax.eplapplications.perf.basetest">
+<span id="apamax-eplapplications-perf-basetest"></span><h1>apamax.eplapplications.perf.basetest<a class="headerlink" href="#module-apamax.eplapplications.perf.basetest" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="objectcreator">
+<h2>ObjectCreator<a class="headerlink" href="#objectcreator" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="apamax.eplapplications.perf.basetest.ObjectCreator">
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.perf.basetest.</code><code class="sig-name descname">ObjectCreator</code><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ObjectCreator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ObjectCreator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for object creator implementation.</p>
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ObjectCreator.createObject">
+<code class="sig-name descname">createObject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">device</span></em>, <em class="sig-param"><span class="n">time</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ObjectCreator.createObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ObjectCreator.createObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an object to publish.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device</strong> (<em>str</em>) – The ID of the device to create an object for.</p></li>
+<li><p><strong>time</strong> (<em>str</em>) – The source time to use for the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new object instance to publish.</p>
+</dd>
+</dl>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create and return a measurement object</span>
+<span class="k">return</span> <span class="p">{</span>
+    <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s1">&#39;my_measurement&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">device</span> <span class="p">},</span>
+    <span class="s1">&#39;my_fragment&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;my_series&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="apamac8yperfbasetest">
+<h2>ApamaC8YPerfBaseTest<a class="headerlink" href="#apamac8yperfbasetest" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest">
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.perf.basetest.</code><code class="sig-name descname">ApamaC8YPerfBaseTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="apamax.eplapplications.basetest.ApamaC8YBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.basetest.ApamaC8YBaseTest</span></code></a></p>
+<p>Base class for performance tests for EPL apps and smart rules.</p>
+<p>Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):</p>
+<ul class="simple">
+<li><p>EPL_TESTING_SDK</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="apamax.eplapplications.eplapps.html#module-apamax.eplapplications.eplapps" title="apamax.eplapplications.eplapps"><strong>eplapps</strong></a> (<a class="reference internal" href="apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps" title="apamax.eplapplications.eplapps.EPLApps"><code class="xref py py-class docutils literal notranslate"><span class="pre">EPLApps</span></code></a>) – The object for deploying and undeploying EPL apps.</p></li>
+<li><p><strong>smartRulesManager</strong> (<a class="reference internal" href="apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager" title="apamax.eplapplications.smartrules.SmartRulesManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRulesManager</span></code></a>) – The object for managing smart rules.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.generateHTMLReport">
+<code class="sig-name descname">generateHTMLReport</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">testConfigurationDetails</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extraPerformanceMetrics</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.generateHTMLReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.generateHTMLReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an HTML report of the performance result. The report is generated at the end of the test.</p>
+<p>When testing for multiple variations, multiple HTML reports are combined into a single HTML report.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>description</strong> (<em>str</em>) – A brief description of the test.</p></li>
+<li><p><strong>testConfigurationDetails</strong> (<em>dict</em><em>, </em><em>list</em><em>, </em><em>str</em><em>, </em><em>optional</em>) – Details of the test configuration to include in the report.</p></li>
+<li><p><strong>extraPerformanceMetrics</strong> (<em>dict</em><em>, </em><em>list</em><em>, </em><em>str</em><em>, </em><em>optional</em>) – Extra application-specific performance metrics to include in the report.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.prepareTenant">
+<code class="sig-name descname">prepareTenant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">restartMicroservice</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.prepareTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares the tenant for a performance test by deleting all devices created by previous tests, deleting all EPL test applications, and clearing all active alarms.</p>
+<p>This must be called by the test before the application is deployed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>restartMicroservice</strong> (<em>bool</em>) – Restart the Apama-ctrl microservice.</p></li>
+<li><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>, optional) – The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.read_json">
+<code class="sig-name descname">read_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fileName</span></em>, <em class="sig-param"><span class="n">fileDirectory</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.read_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.read_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a JSON file and returns its content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileName</strong> (<em>str</em>) – Name of the file.</p></li>
+<li><p><strong>fileDirectory</strong> (<em>str</em><em>, </em><em>optional</em>) – Directory of the file. Use test output directory if not specified.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The decoded content of the file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.restartApamaMicroservice">
+<code class="sig-name descname">restartApamaMicroservice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.restartApamaMicroservice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.restartApamaMicroservice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restarts the Apama-ctrl microservice and waits for it to come back up.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains setup actions to be executed before the test is executed.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">setup</span></code> method may be overridden by individual test classes, or (more commonly) in a custom <code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTest</span></code> 
+subclass that provides common functionality for multiple individual tests. However before implementing a custom 
+<code class="docutils literal notranslate"><span class="pre">BaseTest</span></code> subclass with its own <code class="docutils literal notranslate"><span class="pre">setup()</span></code> method, consider whether the PySys concept of test plugins would meet 
+your needs.</p>
+<p>If you do override this method, be sure to call <code class="docutils literal notranslate"><span class="pre">super(BASETEST_CLASS_HERE,</span> <span class="pre">self).setup()</span></code> to allow the 
+setup commands from the base test to run.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">setup</span></code> throws an exception, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">cleanup</span></code> method will still be called, to clean up any resources 
+that were already allocated.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startAlarmSimulator">
+<code class="sig-name descname">startAlarmSimulator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">devices</span></em>, <em class="sig-param"><span class="n">perDeviceRate</span></em>, <em class="sig-param"><span class="n">creatorFile</span></em>, <em class="sig-param"><span class="n">creatorClassName</span></em>, <em class="sig-param"><span class="n">creatorParams</span></em>, <em class="sig-param"><span class="n">duration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">processingMode</span><span class="o">=</span><span class="default_value">'CEP'</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.startAlarmSimulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startAlarmSimulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts an alarm simulator process to publish simulated alarms to Cumulocity IoT.</p>
+<p>The simulator uses an instance of the provided alarm creator class to create new alarms to send, 
+allowing the test to publish alarms of different types.
+The simulator looks up the specified class in the specified Python file and creates a new instance of the class
+using the provided parameters. The alarm creator class must extend the <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ObjectCreator" title="apamax.eplapplications.perf.basetest.ObjectCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.perf.basetest.ObjectCreator</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>devices</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of device IDs to generate alarms for.</p></li>
+<li><p><strong>perDeviceRate</strong> (<em>float</em>) – The rate of alarms to publish per device.</p></li>
+<li><p><strong>creatorFile</strong> (<em>str</em>) – The path to the Python file containing the alarm creator class.</p></li>
+<li><p><strong>creatorClassName</strong> (<em>str</em>) – The name of the alarm creator class that extends the <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ObjectCreator" title="apamax.eplapplications.perf.basetest.ObjectCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.perf.basetest.ObjectCreator</span></code></a> class.</p></li>
+<li><p><strong>creatorParams</strong> (<em>list</em>) – The list of parameters to pass to the constructor of the alarm creator class to create a new instance.</p></li>
+<li><p><strong>processingMode</strong> (<em>str</em>) – Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.</p></li>
+<li><p><strong>duration</strong> (<em>float</em><em>, </em><em>optional</em>) – The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.</p></li>
+<li><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>) – The Cumulocity IoT tenant. If no tenant is specified, alarms are published to the tenant configured in the pysysproject.xml file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The process handle of the simulator process.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pysys.process.Process</span></code></p>
+</dd>
+</dl>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># In a &#39;creator.py&#39; file in test input directory.</span>
+<span class="k">class</span> <span class="nc">MyAlarmCreator</span><span class="p">(</span><span class="n">ObjectCreator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">createObject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+                    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">device</span>
+                    <span class="p">},</span>
+                    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;my_alarm&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;My alarm&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;severity&#39;</span><span class="p">:</span> <span class="s1">&#39;MAJOR&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;ACTIVE&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+                <span class="p">}</span>
+
+<span class="o">...</span>
+
+<span class="c1"># In the test</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">startAlarmSimulator</span><span class="p">(</span>
+        <span class="p">[</span><span class="s1">&#39;12345&#39;</span><span class="p">],</span>                  <span class="c1"># device IDs</span>
+        <span class="mf">0.01</span><span class="p">,</span>                       <span class="c1"># rate of alarms to publish</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="si">}</span><span class="s1">/creator.py&#39;</span><span class="p">,</span> <span class="c1"># Python file path</span>
+        <span class="s1">&#39;MyAlarmCreator&#39;</span><span class="p">,</span>           <span class="c1"># class name</span>
+        <span class="p">[],</span>                         <span class="c1"># constructor parameters for MyAlarmCreator class</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startEventSimulator">
+<code class="sig-name descname">startEventSimulator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">devices</span></em>, <em class="sig-param"><span class="n">perDeviceRate</span></em>, <em class="sig-param"><span class="n">creatorFile</span></em>, <em class="sig-param"><span class="n">creatorClassName</span></em>, <em class="sig-param"><span class="n">creatorParams</span></em>, <em class="sig-param"><span class="n">duration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">processingMode</span><span class="o">=</span><span class="default_value">'CEP'</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.startEventSimulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startEventSimulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts an event simulator process to publish simulated events to Cumulocity IoT.</p>
+<p>The simulator uses an instance of the provided event creator class to create new events to send, 
+allowing the test to publish events of different types and sizes.
+The simulator looks up the specified class in the specified Python file and creates a new instance of the class
+using the provided parameters. The event creator class must extend the <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ObjectCreator" title="apamax.eplapplications.perf.basetest.ObjectCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.perf.basetest.ObjectCreator</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>devices</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of device IDs to generate events for.</p></li>
+<li><p><strong>perDeviceRate</strong> (<em>float</em>) – The rate of events to publish per device.</p></li>
+<li><p><strong>creatorFile</strong> (<em>str</em>) – The path to the Python file containing the event creator class.</p></li>
+<li><p><strong>creatorClassName</strong> (<em>str</em>) – The name of the event creator class that extends the <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ObjectCreator" title="apamax.eplapplications.perf.basetest.ObjectCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.perf.basetest.ObjectCreator</span></code></a> class.</p></li>
+<li><p><strong>creatorParams</strong> (<em>list</em>) – The list of parameters to pass to the constructor of the event creator class to create a new instance.</p></li>
+<li><p><strong>processingMode</strong> (<em>str</em>) – Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.</p></li>
+<li><p><strong>duration</strong> (<em>float</em><em>, </em><em>optional</em>) – The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.</p></li>
+<li><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>) – The Cumulocity IoT tenant. If no tenant is specified, events are published to the tenant configured in the pysysproject.xml file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The process handle of the simulator process.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pysys.process.Process</span></code></p>
+</dd>
+</dl>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># In a &#39;creator.py&#39; file in test input directory.</span>
+<span class="k">class</span> <span class="nc">MyEventCreator</span><span class="p">(</span><span class="n">ObjectCreator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">createObject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+                    <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+                    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;pos_update_event&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;Position update&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">device</span>
+                    <span class="p">},</span>
+                    <span class="s1">&#39;c8y_Position&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;lng&#39;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+                        <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+<span class="o">...</span>
+
+<span class="c1"># In the test</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">startEventSimulator</span><span class="p">(</span>
+        <span class="p">[</span><span class="s1">&#39;12345&#39;</span><span class="p">],</span>                  <span class="c1"># device IDs</span>
+        <span class="mi">1</span><span class="p">,</span>                          <span class="c1"># rate of events to publish</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="si">}</span><span class="s1">/creator.py&#39;</span><span class="p">,</span> <span class="c1"># Python file path</span>
+        <span class="s1">&#39;MyEventCreator&#39;</span><span class="p">,</span>           <span class="c1"># class name</span>
+        <span class="p">[],</span>                         <span class="c1"># constructor parameters for MyEventCreator class</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startMeasurementSimulator">
+<code class="sig-name descname">startMeasurementSimulator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">devices</span></em>, <em class="sig-param"><span class="n">perDeviceRate</span></em>, <em class="sig-param"><span class="n">creatorFile</span></em>, <em class="sig-param"><span class="n">creatorClassName</span></em>, <em class="sig-param"><span class="n">creatorParams</span></em>, <em class="sig-param"><span class="n">duration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">processingMode</span><span class="o">=</span><span class="default_value">'CEP'</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.startMeasurementSimulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startMeasurementSimulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a measurement simulator process to publish simulated measurements to Cumulocity IoT.</p>
+<p>The simulator uses an instance of the provided measurement creator class to create new measurements to send, 
+allowing the test to publish measurements of different types and sizes.
+The simulator looks up the specified class in the specified Python file and creates a new instance of the class
+using the provided parameters. The measurement creator class must extend the <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ObjectCreator" title="apamax.eplapplications.perf.basetest.ObjectCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.perf.basetest.ObjectCreator</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>devices</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of device IDs to generate measurements for.</p></li>
+<li><p><strong>perDeviceRate</strong> (<em>float</em>) – The rate of measurements to publish per device.</p></li>
+<li><p><strong>creatorFile</strong> (<em>str</em>) – The path to the Python file containing the measurement creator class.</p></li>
+<li><p><strong>creatorClassName</strong> (<em>str</em>) – The name of the measurement creator class that extends the <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ObjectCreator" title="apamax.eplapplications.perf.basetest.ObjectCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.perf.basetest.ObjectCreator</span></code></a> class.</p></li>
+<li><p><strong>creatorParams</strong> (<em>list</em>) – The list of parameters to pass to the constructor of the measurement creator class to create a new instance.</p></li>
+<li><p><strong>processingMode</strong> (<em>str</em>) – Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.</p></li>
+<li><p><strong>duration</strong> (<em>float</em><em>, </em><em>optional</em>) – The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.</p></li>
+<li><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>) – The Cumulocity IoT tenant. If no tenant is specified, measurements are published to the tenant configured in the pysysproject.xml file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The process handle of the simulator process.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pysys.process.Process</span></code></p>
+</dd>
+</dl>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># In a &#39;creator.py&#39; file in test input directory.</span>
+<span class="k">class</span> <span class="nc">MyMeasurementCreator</span><span class="p">(</span><span class="n">ObjectCreator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">lowerBound</span><span class="p">,</span> <span class="n">upperBound</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowerBound</span> <span class="o">=</span> <span class="n">lowerBound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upperBound</span> <span class="o">=</span> <span class="n">upperBound</span>
+    <span class="k">def</span> <span class="nf">createObject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s1">&#39;my_measurement&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">device</span> <span class="p">},</span>
+            <span class="s1">&#39;my_fragment&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;my_series&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lowerBound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upperBound</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+<span class="o">...</span>
+
+<span class="c1"># In the test</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">startMeasurementSimulator</span><span class="p">(</span>
+        <span class="p">[</span><span class="s1">&#39;12345&#39;</span><span class="p">],</span>                  <span class="c1"># device IDs</span>
+        <span class="mi">1</span><span class="p">,</span>                          <span class="c1"># rate of measurements to publish</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="si">}</span><span class="s1">/creator.py&#39;</span><span class="p">,</span> <span class="c1"># Python file path</span>
+        <span class="s1">&#39;MyMeasurementCreator&#39;</span><span class="p">,</span>     <span class="c1"># class name</span>
+        <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>                   <span class="c1"># constructor parameters for MyMeasurementCreator class</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startPerformanceMonitoring">
+<code class="sig-name descname">startPerformanceMonitoring</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pollingInterval</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.startPerformanceMonitoring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startPerformanceMonitoring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a performance monitoring thread that periodically gathers and logs various metrics and publishes 
+performance statistics at the end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pollingInterval</strong> (<em>float</em><em>, </em><em>optional</em>) – The polling interval to get performance data. Defaults to 2 seconds.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The background thread.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pysys.utils.threadutils.BackgroundThread</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs standard validations of the test run.</p>
+<p>The following validations are performed.</p>
+<ul class="simple">
+<li><p>Ensures no errors logged from EPL apps under test</p></li>
+<li><p>Microservice did not terminate because of high memory usage.</p></li>
+<li><p>Microservice’s memory usage remained below 90% of available memory.</p></li>
+<li><p>Correlator was not swapping memory.</p></li>
+</ul>
+<p>The test should define its own <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.validate" title="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a> method for performing any application-specific validation. Ensure that
+the test calls the super implementation of the <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.validate" title="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a> method, using <code class="xref py py-obj docutils literal notranslate"><span class="pre">super(PySysTest,</span> <span class="pre">self).validate()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="eplappsperftest">
+<h2>EPLAppsPerfTest<a class="headerlink" href="#eplappsperftest" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="apamax.eplapplications.perf.basetest.EPLAppsPerfTest">
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.perf.basetest.</code><code class="sig-name descname">EPLAppsPerfTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#EPLAppsPerfTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.EPLAppsPerfTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest" title="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest</span></code></a></p>
+<p>Base class for EPL applications performance tests.</p>
+<p>The class <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest" title="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApamaC8YPerfBaseTest</span></code></a> supersedes this class and should be used when writing new tests.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing-epl.html">Writing tests for EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="apamax.html">PySys helpers for EPL apps</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="apamax.eplapplications.html">apamax.eplapplications</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.basetest.html">apamax.eplapplications.basetest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.connection.html">apamax.eplapplications.connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.eplapps.html">apamax.eplapplications.eplapps</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="apamax.eplapplications.perf.html">apamax.eplapplications.perf</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">apamax.eplapplications.perf.basetest</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#objectcreator">ObjectCreator</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#apamac8yperfbasetest">ApamaC8YPerfBaseTest</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#eplappsperftest">EPLAppsPerfTest</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="apamax.eplapplications.perf.publisher.html">apamax.eplapplications.perf.publisher</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.platform.html">apamax.eplapplications.platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.smartrules.html">apamax.eplapplications.smartrules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.tenant.html">apamax.eplapplications.tenant</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.perf.publisher.html" title="apamax.eplapplications.perf.publisher"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.perf.html" title="apamax.eplapplications.perf"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="apamax.eplapplications.perf.html" >apamax.eplapplications.perf</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023 Software AG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+    </div>
+  </body>
+</html>
