@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.perf.basetest &#8212; EPL Apps Tools 10.18.0.4 documentation</title>
+    <title>apamax.eplapplications.perf.basetest &#8212; EPL Apps Tools  documentation</title>
     <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools 10.18.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -187,13 +187,24 @@
 		<span class="k">if</span> <span class="n">restartMicroservice</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">_restartApamaMicroserviceImpl</span><span class="p">()</span></div>
 
+	<span class="k">def</span> <span class="nf">_deleteMeasurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Clears all measurements that we raised on teant as part of a pre-test tenant cleanup.</span>
+
+<span class="sd">			:param tenant: The Cumulocity IoT tenant.</span>
+<span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Clearing measurements of type type_device_temperature&quot;</span><span class="p">)</span>
+		<span class="n">connection</span> <span class="o">=</span> <span class="p">(</span><span class="n">tenant</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getTenant</span><span class="p">())</span><span class="o">.</span><span class="n">getConnection</span><span class="p">()</span>
+		<span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="s1">&#39;/measurement/measurements?type=type_device_temperature&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
 	<span class="k">def</span> <span class="nf">_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Performs common cleanup during test shutdown, like stopping performance monitoring thread, deactivating EPL test apps, and generating final HTML report.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_disableTestSmartRules</span><span class="p">()</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_deactivateTestEPLApps</span><span class="p">()</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_generateFinalHTMLReport</span><span class="p">()</span>
@@ -880,7 +891,7 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
 		
 		<span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perfMonitorSuffix</span><span class="p">()</span>
 
@@ -1074,7 +1085,7 @@
 
 <span class="sd">			The following validations are performed.</span>
 
-<span class="sd">			- No errors in the microservice log.</span>
+<span class="sd">			- Ensures no errors logged from EPL apps under test</span>
 <span class="sd">			- Microservice did not terminate because of high memory usage.</span>
 <span class="sd">			- Microservice&#39;s memory usage remained below 90% of available memory.</span>
 <span class="sd">			- Correlator was not swapping memory.</span>
@@ -1084,7 +1095,7 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">logFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">()</span>
 
-		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .*&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .* eplfiles\.&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 		<span class="c1"># Check that microservice did not use more than 90% of available memory</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;apama_highmemoryusage.*Apama is using 90. of available memory&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1157,7 +1168,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools 10.18.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

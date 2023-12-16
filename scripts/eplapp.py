@@ -16,8 +16,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'testframework'))
 from apamax.eplapplications import C8yConnection, EPLApps
 
-from apamax.eplapplications.buildVersions import RELEASE_TRAIN_VERSION
-TOOL_VERSION_DESCRIPTION = f'Cumulocity IoT Apama EPL Apps command line tool version {RELEASE_TRAIN_VERSION}'
+TOOL_VERSION_DESCRIPTION = f'Cumulocity IoT Apama EPL Apps command line tool'
 
 class EPLAppsCLI:
 	"""Class for interacting with Apama EPL Apps in Cumulocity using a CLI"""
@@ -219,7 +218,6 @@ class EPLAppsCLI:
 		:return: 0 if the command was executed successfully, or a non-zero error code otherwise.
 		"""
 		try:
-			RELEASE_TRAIN_VERSION='10.18.0'
 			optlist, commands = self.parseCommandLineArgs(args)
 		except Exception as err:
 			print(f'error: Could not parse command line options. {err}')

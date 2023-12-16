@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2022 Software AG, Darmstadt, Germany and/or its licensors
+ Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
 
  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  file except in compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
 
 /**
 * This EPL app listens for all measurements of a specified type with
-* a specified fragment and series that are received on the tenant and raises an alarm if a measurement value 
+* a specified fragment and series that are received on the tenant and raises an alarm if a measurement value
 * exceeds the specified threshold against the same tenant in a multi-tenant environment.
 */
 
@@ -30,31 +30,31 @@ using com.apama.cumulocity.TenantSubscriptionNotifier;
 monitor AlarmOnMeasurementThresholdMultiTenant  {
 
     /** The measurement type to listen for. */
-    constant string MEASUREMENT_TYPE := "myMeasurementType";
+    constant string MEASUREMENT_TYPE := "@MEASUREMENT_TYPE@";
 
     /** The measurement fragment to listen for. */
-    constant string FRAGMENT := "myFragment";
+    constant string FRAGMENT := "@MEASUREMENT_FRAGMENT@";
 
     /** The measurement series to listen for. */
-    constant string SERIES := "mySeries";
+    constant string SERIES := "@MEASUREMENT_SERIES@";
 
     /** The threshold value. Raise an alarm if a measurement value exceeds this value. */
-    constant float MEASUREMENT_THRESHOLD := 100.0;
+    constant float MEASUREMENT_THRESHOLD := 90.0;
 
     /** The type of alarm to raise when a measurement value exceeds the threshold value. */
     constant string ALARM_TYPE := "ThresholdExceededAlarm";
 
     /** The severity of the alarm to raise. */
     constant string ALARM_SEVERITY := "MINOR";
-    
-    /** The connection object for the tenant. 
+
+    /** The connection object for the tenant.
     *   It is used to get correct channels for sending and receiving events.
     */
     SharedConnection connection;
 
     action onload() {
 
-        /* Create a new instance of the TenantSubscriptionNotifier 
+        /* Create a new instance of the TenantSubscriptionNotifier
         *  to get notifications of tenant subscriptions and unsubscriptions.
         *  For more details see, https://documentation.softwareag.com/pam/10.15.4/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_cumulocity_working_with_multi_tenant_deployments.html
         */
@@ -62,19 +62,19 @@ monitor AlarmOnMeasurementThresholdMultiTenant  {
 
     }
 
-    /** An action which is called back when a tenant is subscribed. 
+    /** An action which is called back when a tenant is subscribed.
     *
     *   @param tenant The TenantDetails event.
     */
     action ontenantSubscribed(TenantDetails tenant) {
-        
+
         /* Create a connection object for this tenant so that we can send events to
         *  this tenant and receive events from it.
         *  For more information on supported connection types, see
         *  https://documentation.softwareag.com/pam/10.15.4/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_cumulocity_optimizing_requests_to_cumulocity_iot_with_concurrent_connections.html
         */
         connection := SharedConnection.createForTenant(tenant);
-        
+
         // Subscribe to Measurement.SUBSCRIBE_CHANNEL to receive all measurements.
         monitor.subscribe(connection.getChannel(Measurement.SUBSCRIBE_CHANNEL));
 
@@ -99,7 +99,7 @@ monitor AlarmOnMeasurementThresholdMultiTenant  {
         }
     }
 
-    /** An action which is called back when a tenant is unsubscribed. 
+    /** An action which is called back when a tenant is unsubscribed.
     *
     *   @param tenantId the ID of the tenant.
     */

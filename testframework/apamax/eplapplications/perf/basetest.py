@@ -148,13 +148,24 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 		if restartMicroservice:
 			self._restartApamaMicroserviceImpl()
 
+	def _deleteMeasurements(self,tenant=None):
+		"""
+			Clears all measurements that we raised on teant as part of a pre-test tenant cleanup.
+
+			:param tenant: The Cumulocity IoT tenant.
+			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
+		"""
+		self.log.info("Clearing measurements of type type_device_temperature")
+		connection = (tenant or self.platform.getTenant()).getConnection()
+		connection.do_request_json('DELETE', '/measurement/measurements?type=type_device_temperature', {})
+
 	def _shutdown(self):
 		"""
 		Performs common cleanup during test shutdown, like stopping performance monitoring thread, deactivating EPL test apps, and generating final HTML report.
 		"""
 		if self.perfMonitorThread:
 			self.perfMonitorThread.stop()
-			self.perfMonitorThread.join()
+			self.perfMonitorThread.join(10*60)
 		self._disableTestSmartRules()
 		self._deactivateTestEPLApps()
 		self._generateFinalHTMLReport()
@@ -841,7 +852,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 		"""
 		if self.perfMonitorThread.is_alive():
 			self.perfMonitorThread.stop()
-			self.perfMonitorThread.join()
+			self.perfMonitorThread.join(10*60)
 		
 		suffix = self._perfMonitorSuffix()
 
@@ -1035,7 +1046,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 
 			The following validations are performed.
 
-			- No errors in the microservice log.
+			- Ensures no errors logged from EPL apps under test
 			- Microservice did not terminate because of high memory usage.
 			- Microservice's memory usage remained below 90% of available memory.
 			- Correlator was not swapping memory.
@@ -1045,7 +1056,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 		"""
 		logFile = self.platform.getApamaLogFile()
 
-		self.assertGrep(logFile, expr=' (ERROR|FATAL) .*', contains=False)
+		self.assertGrep(logFile, expr=' (ERROR|FATAL) .* eplfiles\.', contains=False)
 
 		# Check that microservice did not use more than 90% of available memory
 		self.assertGrep(logFile, expr='apama_highmemoryusage.*Apama is using 90. of available memory', contains=False)

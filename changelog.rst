@@ -2,6 +2,10 @@
 Change Log
 ============
 
+24.0.0
+-------
++ The EPL Apps tools test framework now moves to a continuous delivery (CD) model.
+
 10.15.0.4
 ----------
 + An issue where the rendered documentation pages were showing a 404 error when accessed has been resolved.

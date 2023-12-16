@@ -140,6 +140,7 @@ class DataPublisher(object):
 
 	def do_send(self, body):
 		"""Send event(s) to Cumulocity IOT."""
+
 		headers = {
 					'Content-Type': self.content_type,
 					'X-Cumulocity-Processing-Mode': self.processing_mode
@@ -197,8 +198,9 @@ class DataPublisher(object):
 					if obj:
 						batch.append(obj)
 					
-					device_index += 1
-
+					#device_index += 1
+					device_index = (device_index+1) % len(self.devices)
+					# print(device_index)
 				if self.supportsBatchSend:
 					if len(batch) > 0:
 						self.do_send({self.type_name: batch})
@@ -216,9 +218,10 @@ class DataPublisher(object):
 					logged_time = time.time()
 
 			# sleep if we have some time remaining before the next batch
-			sleep_duration = now_time + send_interval - time.time()
-			if sleep_duration > 0:
-				time.sleep(sleep_duration)
+			timeForNextEventToSend = start_time + (total_sent+1)/per_sec_total
+			timeToSleep = timeForNextEventToSend - time.time()
+			if timeToSleep > 0:
+				time.sleep(timeToSleep)
 			
 
 def main():

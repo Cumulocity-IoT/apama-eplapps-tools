@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools 10.18.0.4 documentation</title>
+    <title>apamax.eplapplications.platform &#8212; EPL Apps Tools  documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.18.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,7 +51,6 @@
 <span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">threading</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">urllib.parse</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">.tenant</span> <span class="kn">import</span> <span class="n">CumulocityTenant</span>
-<span class="kn">from</span>  <span class="nn">apamax.eplapplications.buildVersions</span> <span class="kn">import</span> <span class="n">RELEASE_TRAIN_VERSION</span>
 
 <div class="viewcode-block" id="CumulocityPlatform"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform">[docs]</a><span class="k">class</span> <span class="nc">CumulocityPlatform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
@@ -93,10 +92,12 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tenant</span><span class="o">.</span><span class="n">getConnection</span><span class="p">()</span>
 		<span class="k">try</span><span class="p">:</span>
 			<span class="n">platform_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/service/cep/diagnostics/componentVersion&#39;</span><span class="p">)[</span><span class="s1">&#39;releaseTrainVersion&#39;</span><span class="p">]</span>
-			<span class="k">if</span> <span class="n">platform_version</span> <span class="o">!=</span> <span class="n">RELEASE_TRAIN_VERSION</span><span class="p">:</span>
-				<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Version mismatch, Apama microservice is version </span><span class="si">{</span><span class="n">platform_version</span><span class="si">}</span><span class="s2"> but you are using version </span><span class="si">{</span><span class="n">RELEASE_TRAIN_VERSION</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+			<span class="c1"># Check that this is not a legacy/non-CD version. Example: Older / non-CD versions has a version number like 10.18.0, 10.16.0 .., </span>
+			<span class="c1"># where as CD versions usually start with 2 digit year number, example: 24.0.0</span>
+			<span class="k">if</span> <span class="n">platform_version</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;10.&quot;</span><span class="p">):</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;It is recommended to use the </span><span class="se">\&#39;</span><span class="s2">main</span><span class="se">\&#39;</span><span class="s2"> branch for the current release or switch to the appropriate branch for Long-term support or Maintenance releases.&quot;</span><span class="p">)</span>
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not get the platform version to compare version information - is apama-ctrl subscribed?&quot;</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not get the platform version to check version information - is apama-ctrl subscribed?&quot;</span><span class="p">)</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">addCleanupFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">)</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tenant</span><span class="o">.</span><span class="n">getTenantId</span><span class="p">()</span>
@@ -300,7 +301,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools 10.18.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">EPL Apps Tools  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

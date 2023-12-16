@@ -12,7 +12,6 @@
 import time, math, threading, os, urllib, urllib.parse
 from datetime import datetime
 from .tenant import CumulocityTenant
-from  apamax.eplapplications.buildVersions import RELEASE_TRAIN_VERSION
 
 class CumulocityPlatform(object):
 	"""
@@ -54,10 +53,12 @@ class CumulocityPlatform(object):
 		self._c8yConn = self._tenant.getConnection()
 		try:
 			platform_version = self._c8yConn.do_get('/service/cep/diagnostics/componentVersion')['releaseTrainVersion']
-			if platform_version != RELEASE_TRAIN_VERSION:
-				self.parent.log.warning(f"Version mismatch, Apama microservice is version {platform_version} but you are using version {RELEASE_TRAIN_VERSION}.")
+			# Check that this is not a legacy/non-CD version. Example: Older / non-CD versions has a version number like 10.18.0, 10.16.0 .., 
+			# where as CD versions usually start with 2 digit year number, example: 24.0.0
+			if platform_version.startswith("10."):
+				self.parent.log.warning("It is recommended to use the \'main\' branch for the current release or switch to the appropriate branch for Long-term support or Maintenance releases.")
 		except Exception as e:
-			self.parent.log.warning("Could not get the platform version to compare version information - is apama-ctrl subscribed?")
+			self.parent.log.warning("Could not get the platform version to check version information - is apama-ctrl subscribed?")
 
 		self.parent.addCleanupFunction(self.shutdown)
 		if not self._remoteTenantId: self._remoteTenantId = self._tenant.getTenantId()
