@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.18.0.4 documentation</title>
+    <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools 10.18.0.5 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="apamax.eplapplications.html" title="apamax.eplapplications"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li> 
       </ul>
@@ -51,7 +51,7 @@
 <h2>ApamaC8YBaseTest<a class="headerlink" href="#apamac8ybasetest" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest">
-<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.basetest.</code><code class="sig-name descname">ApamaC8YBaseTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.basetest.</code><code class="sig-name descname">ApamaC8YBaseTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pysys.basetest.BaseTest</span></code></p>
 <p>Base test for EPL applications tests.</p>
 <p>Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):</p>
@@ -273,7 +273,7 @@ that were already allocated.</p>
 <h2>LocalCorrelatorSimpleTest<a class="headerlink" href="#localcorrelatorsimpletest" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest">
-<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.basetest.</code><code class="sig-name descname">LocalCorrelatorSimpleTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.basetest.</code><code class="sig-name descname">LocalCorrelatorSimpleTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="apamax.eplapplications.basetest.ApamaC8YBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.basetest.ApamaC8YBaseTest</span></code></a></p>
 <p>Base test for running test with no run.py with local correlator connected to Cumulocity IoT.</p>
 <dl class="py method">
@@ -323,7 +323,7 @@ that were already allocated.</p>
 <h2>EPLAppsSimpleTest<a class="headerlink" href="#eplappssimpletest" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="apamax.eplapplications.basetest.EPLAppsSimpleTest">
-<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.basetest.</code><code class="sig-name descname">EPLAppsSimpleTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.basetest.</code><code class="sig-name descname">EPLAppsSimpleTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="apamax.eplapplications.basetest.ApamaC8YBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.basetest.ApamaC8YBaseTest</span></code></a></p>
 <p>Base test for running test with no run.py on EPL apps running in Cumulocity IoT.</p>
 <dl class="py method">
@@ -433,7 +433,7 @@ that were already allocated.</p>
         <li class="right" >
           <a href="apamax.eplapplications.html" title="apamax.eplapplications"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li> 
       </ul>

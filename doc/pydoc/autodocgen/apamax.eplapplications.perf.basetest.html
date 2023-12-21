@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>apamax.eplapplications.perf.basetest &#8212; EPL Apps Tools 10.18.0.4 documentation</title>
+    <title>apamax.eplapplications.perf.basetest &#8212; EPL Apps Tools 10.18.0.5 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="apamax.eplapplications.perf.html" title="apamax.eplapplications.perf"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="apamax.eplapplications.perf.html" accesskey="U">apamax.eplapplications.perf</a> &#187;</li> 
@@ -93,7 +93,7 @@
 <h2>ApamaC8YPerfBaseTest<a class="headerlink" href="#apamac8yperfbasetest" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest">
-<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.perf.basetest.</code><code class="sig-name descname">ApamaC8YPerfBaseTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.perf.basetest.</code><code class="sig-name descname">ApamaC8YPerfBaseTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#ApamaC8YPerfBaseTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="apamax.eplapplications.basetest.ApamaC8YBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.basetest.ApamaC8YBaseTest</span></code></a></p>
 <p>Base class for performance tests for EPL apps and smart rules.</p>
 <p>Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):</p>
@@ -392,7 +392,7 @@ the test calls the super implementation of the <a class="reference internal" hre
 <h2>EPLAppsPerfTest<a class="headerlink" href="#eplappsperftest" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="apamax.eplapplications.perf.basetest.EPLAppsPerfTest">
-<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.perf.basetest.</code><code class="sig-name descname">EPLAppsPerfTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#EPLAppsPerfTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.EPLAppsPerfTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.perf.basetest.</code><code class="sig-name descname">EPLAppsPerfTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/perf/basetest.html#EPLAppsPerfTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.perf.basetest.EPLAppsPerfTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest" title="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest</span></code></a></p>
 <p>Base class for EPL applications performance tests.</p>
 <p>The class <a class="reference internal" href="#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest" title="apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApamaC8YPerfBaseTest</span></code></a> supersedes this class and should be used when writing new tests.</p>
@@ -467,7 +467,7 @@ the test calls the super implementation of the <a class="reference internal" hre
         <li class="right" >
           <a href="apamax.eplapplications.perf.html" title="apamax.eplapplications.perf"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools 10.18.0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="apamax.eplapplications.perf.html" >apamax.eplapplications.perf</a> &#187;</li> 

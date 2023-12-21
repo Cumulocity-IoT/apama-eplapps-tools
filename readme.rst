@@ -39,7 +39,7 @@ To find out how to performance test your EPL apps look at `Performance testing E
 
 In order to view the documentation on classes for PySys helpers for Apama EPL Apps see: `PySys helpers <https://softwareag.github.io/apama-eplapps-tools/autodocgen/apamax.eplapplications.html#module-apamax.eplapplications>`_.
 
-See `Apama Documentation <https://documentation.softwareag.com/pam/10.15.3/en/webhelp>`_, `Streaming Analytics guide <https://cumulocity.com/guides/10.17.0/streaming-analytics>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
+See `Apama Documentation <https://documentation.softwareag.com/pam/10.15.4/en/webhelp>`_, `Streaming Analytics guide <https://cumulocity.com/guides/10.18.0/streaming-analytics>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
 
 System requirements
 -------------------
