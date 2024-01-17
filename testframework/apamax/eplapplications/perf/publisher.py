@@ -19,7 +19,7 @@ import json
 import sys, os
 import importlib.util
 import urllib.error
-from datetime import datetime
+from datetime import datetime, timezone
 from apamax.eplapplications.connection import C8yConnection
 from apamax.eplapplications.perf import ObjectCreator
 
@@ -132,11 +132,7 @@ class DataPublisher(object):
 			:return: Timestamp string.
 			:rtype: str
 		"""
-		t = datetime.utcnow()
-		if t.microsecond == 0:
-			return t.isoformat() + '.000Z'
-		else:
-			return t.isoformat()[:-3] + 'Z'
+		return datetime.now(timezone.utc).isoformat(timespec='milliseconds').replace('+00:00', 'Z')
 
 	def do_send(self, body):
 		"""Send event(s) to Cumulocity IOT."""

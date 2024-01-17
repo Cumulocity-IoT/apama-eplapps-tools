@@ -23,7 +23,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 from apamax.eplapplications.eplapps import EPLApps
 from apamax.eplapplications.platform import CumulocityPlatform
 from apamax.eplapplications.connection import C8yConnection
-from datetime import datetime
+from datetime import datetime, timezone
 
 APPLICATION_NAME = 'pysys-test-application'
 APPLICATION_KEY = 'pysys-test-key'
@@ -415,13 +415,10 @@ class ApamaC8YBaseTest(BaseTest):
 			:rtype: str
 		"""
 		if timestamp is not None:
-			t = datetime.utcfromtimestamp(timestamp)
+			t = datetime.fromtimestamp(timestamp, timezone.utc)
 		else:
-			t = datetime.utcnow()
-		if t.microsecond == 0:
-			return t.isoformat() + '.000Z'
-		else:
-			return t.isoformat()[:-3] + 'Z'
+			t = datetime.now(timezone.utc)
+		return t.isoformat(timespec='milliseconds').replace('+00:00', 'Z')
 
 class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 	""" 

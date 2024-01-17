@@ -10,7 +10,7 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 import time, math, threading, os, urllib, urllib.parse
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from .tenant import CumulocityTenant
 
 class CumulocityPlatform(object):
@@ -107,17 +107,15 @@ class CumulocityPlatform(object):
 		self.__spoolLogs = True
 
 		logLineDeduplication = set()
-		nowtime = time.time()
-		now = datetime.fromtimestamp(nowtime)
-		utc_offset = (datetime.fromtimestamp(nowtime) - datetime.utcfromtimestamp(nowtime)).total_seconds()
-		off_hours = math.floor(utc_offset/3600)
-		off_minutes = math.floor((utc_offset%3600)/60)
+		now = datetime.now(timezone.utc)
+		sec = timedelta(seconds=1)
+		dateTimeParams = { 'dateTo': (now + timedelta(days=365)).isoformat(timespec='milliseconds').replace('+00:00', 'Z') }
 
-		startdate = now.strftime("%Y-%m-%dT%H:%M:%S")+'%2B'+("{:02}".format(off_hours))+":"+("{:02}".format(off_minutes))
 		while self.__spoolLogs and not stopping.is_set():
-			time.sleep(2.0)
+			dateTimeParams['dateFrom'] = (now - sec).isoformat(timespec='milliseconds').replace('+00:00', 'Z')
+			requestStart = datetime.now(timezone.utc)
 			try:
-				resp = self._c8yConn.do_get("/application/applications/%s/logs/%s?dateFrom=%s&dateTo=2099-01-01T00:00:00%%2B01:00" % (self._applicationId, self._instanceName, startdate), jsonResp=False)
+				resp = self._c8yConn.do_get("/application/applications/%s/logs/%s?%s" % (self._applicationId, self._instanceName, urllib.parse.urlencode(dateTimeParams)), jsonResp=False)
 				logLatest = resp.decode('utf8').split("\n")
 
 				with open(os.path.join(self.parent.output, 'platform.log'), 'a', encoding='utf8') as logfile:
@@ -127,6 +125,7 @@ class CumulocityPlatform(object):
 					logLineDeduplication = logLineDeduplication.union(logLatest)
 			except Exception as e:
 				log.error("Exception while spooling logs:" + str(e))
+			now = requestStart
 
 	def shutdown(self):
 		""" Stop spooling the log files when the test finishes. """
