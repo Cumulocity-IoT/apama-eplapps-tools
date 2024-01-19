@@ -108,24 +108,23 @@ class CumulocityPlatform(object):
 
 		logLineDeduplication = set()
 		now = datetime.now(timezone.utc)
-		sec = timedelta(seconds=1)
-		dateTimeParams = { 'dateTo': (now + timedelta(days=365)).isoformat(timespec='milliseconds').replace('+00:00', 'Z') }
+		dateRange = urllib.parse.urlencode({
+			'dateFrom': now.isoformat(timespec='milliseconds'),
+			'dateTo': (now + timedelta(days=365)).isoformat(timespec='milliseconds')
+		})
 
 		while self.__spoolLogs and not stopping.is_set():
-			dateTimeParams['dateFrom'] = (now - sec).isoformat(timespec='milliseconds').replace('+00:00', 'Z')
-			requestStart = datetime.now(timezone.utc)
 			try:
-				resp = self._c8yConn.do_get("/application/applications/%s/logs/%s?%s" % (self._applicationId, self._instanceName, urllib.parse.urlencode(dateTimeParams)), jsonResp=False)
+				resp = self._c8yConn.do_get("/application/applications/%s/logs/%s?%s" % (self._applicationId, self._instanceName, dateRange), jsonResp=False)
 				logLatest = resp.decode('utf8').split("\n")
 
 				with open(os.path.join(self.parent.output, 'platform.log'), 'a', encoding='utf8') as logfile:
 					for line in logLatest:
 						if line not in logLineDeduplication:
 							logfile.write(line + "\n")
-					logLineDeduplication = logLineDeduplication.union(logLatest)
+							logLineDeduplication.add(line)
 			except Exception as e:
 				log.error("Exception while spooling logs:" + str(e))
-			now = requestStart
 
 	def shutdown(self):
 		""" Stop spooling the log files when the test finishes. """
