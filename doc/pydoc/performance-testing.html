@@ -65,7 +65,7 @@
 <li><p>Generating the performance reports.</p></li>
 <li><p>Writing a test for a multi-tenant microservice.</p></li>
 </ul>
-<p>This document demonstrates the common process involved in writing a performance test for your existing EPL apps and smart rules. The performance tests described in the document use the EPL apps SDK based on the PySys test framework. See the <a class="reference external" href="https://pysys-test.github.io/pysys-test">PySys documentation</a>  for details on the installation, and how the framework can be used and the facilities it contains. Set up the EPL apps SDK by following the steps mentioned in <a class="reference external" href="using-pysys.rst#testing-in-the-cumulocity-iot-cloud">Testing in the Cumulocity IoT cloud</a>.</p>
+<p>This document demonstrates the common process involved in writing a performance test for your existing EPL apps and smart rules. The performance tests described in the document use the EPL apps SDK based on the PySys test framework. See the <a class="reference external" href="https://pysys-test.github.io/pysys-test">PySys documentation</a>  for details on the installation, and how the framework can be used and the facilities it contains. Set up the EPL apps SDK by following the steps mentioned in <a class="reference external" href="using-pysys.html#testing-in-the-cumulocity-iot-cloud">Testing in the Cumulocity IoT cloud</a>.</p>
 </div>
 <div class="section" id="writing-a-performance-test">
 <h2>Writing a performance test<a class="headerlink" href="#writing-a-performance-test" title="Permalink to this headline">¶</a></h2>
@@ -399,7 +399,7 @@ The field <code class="docutils literal notranslate"><span class="pre">smartRule
 </div>
 <div class="section" id="running-the-performance-test">
 <h2>Running the performance test<a class="headerlink" href="#running-the-performance-test" title="Permalink to this headline">¶</a></h2>
-<p>Performance tests can only be run using a Cumulocity IoT tenant with EPL apps and smart rules enabled. Set up the framework to use a Cumulocity IoT tenant by following the steps mentioned in <a class="reference external" href="using-pysys.rst#testing-in-the-cumulocity-iot-cloud">Testing in the Cumulocity IoT cloud</a>.</p>
+<p>Performance tests can only be run using a Cumulocity IoT tenant with EPL apps and smart rules enabled. Set up the framework to use a Cumulocity IoT tenant by following the steps mentioned in <a class="reference external" href="using-pysys.html#testing-in-the-cumulocity-iot-cloud">Testing in the Cumulocity IoT cloud</a>.</p>
 <p>When running a test, test options can be overridden by using the <code class="docutils literal notranslate"><span class="pre">-X</span></code> argument. See <a class="reference internal" href="#defining-the-test-options">Defining the test options</a> for details on defining and providing test options.</p>
 <p>For example, to change the test duration of the <code class="docutils literal notranslate"><span class="pre">AlarmOnThreshold</span></code> test, run the following:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys run -XtestDuration<span class="o">=</span><span class="m">180</span> AlarmOnThreshold
@@ -454,7 +454,7 @@ The field <code class="docutils literal notranslate"><span class="pre">smartRule
 <div class="line">+—–correctness/</div>
 <div class="line">+—–performance/</div>
 </div>
-<p>The apps directory contains multiple sample apps for performance testing. The correctness directory contains basic correctness tests of the sample apps. It is recommended to always test your EPL apps for correctness before testing them for performance. See <a class="reference external" href="using-pysys.rst#using-pysys-to-test-your-epl-apps">Using PySys to test your EPL apps</a> for details on testing EPL apps for correctness. The performance directory contains performance tests for each sample app. These tests can be run as explained in <a class="reference internal" href="#running-the-performance-test">Running the performance test</a>.</p>
+<p>The apps directory contains multiple sample apps for performance testing. The correctness directory contains basic correctness tests of the sample apps. It is recommended to always test your EPL apps for correctness before testing them for performance. See <a class="reference external" href="using-pysys.html#using-pysys-to-test-your-epl-apps">Using PySys to test your EPL apps</a> for details on testing EPL apps for correctness. The performance directory contains performance tests for each sample app. These tests can be run as explained in <a class="reference internal" href="#running-the-performance-test">Running the performance test</a>.</p>
 </div>
 <div class="section" id="sample-smart-rule-performance-tests">
 <h2>Sample smart rule performance tests<a class="headerlink" href="#sample-smart-rule-performance-tests" title="Permalink to this headline">¶</a></h2>
@@ -533,7 +533,7 @@ The field <code class="docutils literal notranslate"><span class="pre">smartRule
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023 Software AG.
+        &#169; Copyright 2024 Software AG.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
     </div>
   </body>

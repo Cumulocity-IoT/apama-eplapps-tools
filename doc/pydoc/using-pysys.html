@@ -74,13 +74,13 @@
 </div>
 <div class="section" id="creating-a-test">
 <h3>Creating a test<a class="headerlink" href="#creating-a-test" title="Permalink to this headline">¶</a></h3>
-<p>See <a class="reference external" href="performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on creating and running performance tests.</p>
+<p>See <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on creating and running performance tests.</p>
 <p>To create a test, you can either copy an existing test (such as one of our samples) and rename it, or by running:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys make TestName
 </pre></div>
 </div>
 <p>If you do this, the default PySys test case comes with a run.py file. For these tests, you should remove that file, it is not needed. If you do want to use it, see the ‘<a class="reference internal" href="#advanced-tests">Advanced tests</a>’ section below.</p>
-<p>A PySys test case comprises a directory with a unique name, containing a pysystest.xml and an Input directory containing your test EPL monitors. These should be written according to the <a class="reference external" href="testing-epl.rst#writing-tests-for-epl-apps">Writing tests for EPL apps</a> document, for example, AlarmOnMeasurementThresholdTest.mon in the provided samples. In particular, they must terminate either by all the listeners terminating or with an explicit ‘die’ statement.</p>
+<p>A PySys test case comprises a directory with a unique name, containing a pysystest.xml and an Input directory containing your test EPL monitors. These should be written according to the <a class="reference external" href="testing-epl.html#writing-tests-for-epl-apps">Writing tests for EPL apps</a> document, for example, AlarmOnMeasurementThresholdTest.mon in the provided samples. In particular, they must terminate either by all the listeners terminating or with an explicit ‘die’ statement.</p>
 <p>The test is configured through the pysystest.xml file. This contains the title and purpose, which you should use for a description of what your test does. You must also use it to specify how to run your test. To run a test using Apama EPL Apps in your Cumulocity IoT tenant, you must add the following block:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;data&gt;</span>
   <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;EPLAppsSimpleTest&quot;</span> <span class="na">module=</span><span class="s">&quot;${EPL_TESTING_SDK}/testframework/apamax/eplapplications/basetest&quot;</span><span class="nt">/&gt;</span>
@@ -116,7 +116,7 @@
 </ul>
 <p>Any other existing EPL apps, analytics builder models, devices, or historic data in your tenant should be unaffected by the test run. However, to avoid any potential interference between your tests and other EPL apps that may be running in your tenant, it is recommended that you use a dedicated (clean) tenant for running your tests.</p>
 <p>After the test has finished, any EPL apps that were uploaded to your tenant by the test are deactivated.</p>
-<p>See <a class="reference external" href="performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on running performance tests.</p>
+<p>See <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on running performance tests.</p>
 </div>
 </div>
 <div class="section" id="testing-locally">
@@ -159,7 +159,7 @@
 <h2>Advanced tests<a class="headerlink" href="#advanced-tests" title="Permalink to this headline">¶</a></h2>
 <p>For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.</p>
 <p>In order to view documentation on classes for PySys helpers for EPL Apps please see: <a class="reference external" href="https://softwareag.github.io/apama-eplapps-tools">PySys helpers</a> .</p>
-<p>See <a class="reference external" href="performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on writing performance tests.</p>
+<p>See <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on writing performance tests.</p>
 <p>To run in Apama EPL Apps, your run.py should look something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apamax.eplapplications.basetest</span> <span class="kn">import</span> <span class="n">ApamaC8YBaseTest</span>
 <span class="k">class</span> <span class="nc">PySysTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
@@ -283,7 +283,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023 Software AG.
+        &#169; Copyright 2024 Software AG.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
     </div>
   </body>
