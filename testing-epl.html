@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Writing tests for EPL apps &#8212; EPL Apps Tools  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using PySys to test your EPL apps" href="using-pysys.html" />
+    <link rel="prev" title="Using the eplapp.py command line tool" href="using-eplapp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="using-pysys.html" title="Using PySys to test your EPL apps"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="using-eplapp.html" title="Using the eplapp.py command line tool"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="writing-tests-for-epl-apps">
+<h1>Writing tests for EPL apps<a class="headerlink" href="#writing-tests-for-epl-apps" title="Permalink to this headline">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Description</dt>
+<dd class="field-odd"><p>Guide to writing tests in EPL for your EPL apps.</p>
+</dd>
+</dl>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The behavior of most EPL apps usually consists of receiving data, sending measurements, and raising alarms. Thus to test that an EPL app produces the correct behavior will generally involve:</p>
+<ul class="simple">
+<li><p>Creating device simulators.</p></li>
+<li><p>Sending mock data to Cumulocity IoT.</p></li>
+<li><p>Listening for events that the EPL app should produce.</p></li>
+<li><p>Querying Cumulocity IoT for any objects created by the EPL app.</p></li>
+</ul>
+<p>This can all be done using additional EPL apps that run parallel to the EPL app that we wish to test for correctness. This document will demonstrate some of the common processes involved in writing these additional EPL apps that test your existing EPL apps, while outlining some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK.</p>
+<p>See the <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> document for writing performance tests.</p>
+</div>
+<div class="section" id="creating-device-simulators">
+<span id="device-simulator"></span><h2>Creating device simulators<a class="headerlink" href="#creating-device-simulators" title="Permalink to this headline">¶</a></h2>
+<p>All measurements and alarms in Cumulocity IoT must be associated with a source. Devices in Cumulocity IoT are represented by managed objects, each of which has a unique identifier. When sending measurement or alarm events, the <code class="docutils literal notranslate"><span class="pre">source</span></code> field of these events must be set to a identifier of a managed object in Cumulocity IoT. Therefore, in order to send measurements from our test EPL app, it must create a <code class="docutils literal notranslate"><span class="pre">ManagedObject</span></code> device simulator to be the source of these measurements.</p>
+<p>If you are using the PySys framework to <a class="reference external" href="using-pysys.html#testing-in-the-cumulocity-iot-cloud">run tests in the cloud</a>, any devices created by your tests should be named with prefix “PYSYS_”, and have the <code class="docutils literal notranslate"><span class="pre">c8y_IsDevice</span></code> property. These indicators are what the framework uses to identify which devices should be deleted following a test. Note that deleting a device in Cumulocity IoT will also delete any alarms or measurements associated with that device so the cleanup from a test is done when another test is next run.</p>
+<p>To see how this can be done, have a look at the <code class="docutils literal notranslate"><span class="pre">createNewDevice</span></code> action below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">action</span> <span class="n">createNewDevice</span><span class="p">(</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span> <span class="n">returns</span> <span class="n">integer</span>
+<span class="p">{</span>
+        <span class="n">ManagedObject</span> <span class="n">mo</span> <span class="o">:=</span> <span class="n">new</span> <span class="n">ManagedObject</span><span class="p">;</span>
+        <span class="n">mo</span><span class="o">.</span><span class="n">type</span> <span class="o">:=</span> <span class="n">DEVICE_TYPE</span><span class="p">;</span>
+
+        <span class="o">//</span> <span class="n">Any</span> <span class="n">devices</span> <span class="k">with</span> <span class="n">naming</span> <span class="n">prefix</span> <span class="s2">&quot;PYSYS_&quot;</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">c8y_IsDevice</span> <span class="nb">property</span>
+        <span class="o">//</span> <span class="n">will</span> <span class="n">be</span> <span class="n">cleaned</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">tenant</span> <span class="n">by</span> <span class="n">the</span> <span class="n">test</span> <span class="n">framework</span>
+        <span class="n">mo</span><span class="o">.</span><span class="n">name</span> <span class="o">:=</span> <span class="s2">&quot;PYSYS_&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">;</span>
+        <span class="n">mo</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;c8y_IsDevice&quot;</span><span class="p">,</span> <span class="n">new</span> <span class="n">dictionary</span><span class="o">&lt;</span><span class="nb">any</span><span class="p">,</span> <span class="nb">any</span><span class="o">&gt;</span><span class="p">);</span>
+
+        <span class="o">//</span> <span class="n">Create</span> <span class="n">a</span> <span class="n">ManagedObject</span> <span class="ow">in</span> <span class="n">Cumulocity</span> <span class="n">IoT</span> <span class="ow">and</span> <span class="n">receive</span> <span class="n">a</span> <span class="n">response</span> <span class="n">event</span> <span class="n">confirming</span> <span class="n">the</span> <span class="n">change</span>
+        <span class="n">integer</span> <span class="n">reqId</span> <span class="o">:=</span> <span class="n">Util</span><span class="o">.</span><span class="n">generateReqId</span><span class="p">();</span>
+        <span class="n">send</span> <span class="n">mo</span><span class="o">.</span><span class="n">withResponse</span><span class="p">(</span><span class="n">reqId</span><span class="p">,</span> <span class="n">new</span> <span class="n">dictionary</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">to</span> <span class="n">ManagedObject</span><span class="o">.</span><span class="n">SEND_CHANNEL</span><span class="p">;</span>
+
+        <span class="o">//</span> <span class="n">Listener</span> <span class="k">for</span> <span class="n">when</span> <span class="n">device</span> <span class="n">has</span> <span class="n">been</span> <span class="n">created</span>
+        <span class="n">on</span> <span class="n">ObjectCommitted</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span>
+         <span class="ow">and</span> <span class="ow">not</span> <span class="n">ObjectCommitFailed</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="n">ManagedObject</span> <span class="n">device</span> <span class="o">:=</span> <span class="o">&lt;</span><span class="n">ManagedObject</span><span class="o">&gt;</span> <span class="n">resp</span><span class="o">.</span><span class="n">object</span><span class="p">;</span>
+                <span class="n">log</span> <span class="s2">&quot;New simulator device created &quot;</span> <span class="o">+</span> <span class="n">device</span><span class="o">.</span><span class="n">id</span> <span class="n">at</span> <span class="n">INFO</span><span class="p">;</span>
+                <span class="n">send</span> <span class="n">DeviceCreated</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">reqId</span><span class="p">)</span> <span class="n">to</span> <span class="s2">&quot;TEST_CHANNEL&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">//</span> <span class="n">Listener</span> <span class="k">for</span> <span class="k">if</span> <span class="n">creation</span> <span class="n">of</span> <span class="n">device</span> <span class="n">fails</span>
+        <span class="n">on</span> <span class="n">ObjectCommitFailed</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span>
+         <span class="ow">and</span> <span class="ow">not</span> <span class="n">ObjectCommitted</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="n">log</span> <span class="s2">&quot;Unable to create simulator device, reason : &quot;</span> <span class="o">+</span> <span class="n">resp</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span> <span class="n">at</span> <span class="n">ERROR</span><span class="p">;</span>
+                <span class="o">//</span> <span class="n">Cause</span> <span class="n">test</span> <span class="n">to</span> <span class="n">fail</span> <span class="n">early</span><span class="p">,</span> <span class="n">rather</span> <span class="n">than</span> <span class="n">wait</span> <span class="k">for</span> <span class="n">timeout</span>
+                <span class="n">die</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">reqId</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This action initializes a <code class="docutils literal notranslate"><span class="pre">ManagedObject</span></code> (using the “PYSYS_” naming prefix and adding the <code class="docutils literal notranslate"><span class="pre">c8y_IsDevice</span></code> property), before sending it using a <code class="docutils literal notranslate"><span class="pre">withResponse</span></code> action. It then confirms that it has been successfully created using listeners for <code class="docutils literal notranslate"><span class="pre">ObjectCommitted</span></code> and <code class="docutils literal notranslate"><span class="pre">ObjectCommitFailed</span></code> events. Whenever you are creating or updating an object in Cumulocity IoT and you want to verify that the change has been successful, it is recommended that you use the <code class="docutils literal notranslate"><span class="pre">withResponse</span></code> action in conjunction with <code class="docutils literal notranslate"><span class="pre">ObjectCommitted</span></code> and <code class="docutils literal notranslate"><span class="pre">ObjectCommitFailed</span></code> listeners (for more information, see the information on updating a managed object in the ‘The Cumulocity IoT Transport Connectivity Plug-in’ section of the <a class="reference external" href="https://documentation.softwareag.com/pam/10.15.4/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_the_cumulocity_connectivity_plug_in.html">documentation</a>). Using this approach you can easily relay when the process has completed (which is done by sending an event, <code class="docutils literal notranslate"><span class="pre">DeviceCreated</span></code>, in the example above), and in the event of an error you can cause the test to exit quickly.</p>
+</div>
+<div class="section" id="sending-events-to-your-epl-apps">
+<h2>Sending events to your EPL apps<a class="headerlink" href="#sending-events-to-your-epl-apps" title="Permalink to this headline">¶</a></h2>
+<p>If your EPL app listens for measurements (or any other kind of event), your test EPL app will need to send it some mock data, covering all edge cases we want to test, to verify that it responds correctly. Look at the <code class="docutils literal notranslate"><span class="pre">sendMeasurement</span></code> action defined below. It takes the identifier of a managed object (which is returned when we create a new device) and a measurement value as arguments:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">action</span> <span class="n">sendMeasurement</span><span class="p">(</span><span class="n">string</span> <span class="n">source</span><span class="p">,</span> <span class="nb">float</span> <span class="n">value</span><span class="p">)</span> <span class="n">returns</span> <span class="n">integer</span>
+<span class="p">{</span>
+        <span class="n">Measurement</span> <span class="n">m</span> <span class="o">:=</span> <span class="n">new</span> <span class="n">Measurement</span><span class="p">;</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">source</span> <span class="o">:=</span> <span class="n">source</span><span class="p">;</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">time</span> <span class="o">:=</span> <span class="n">currentTime</span><span class="p">;</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">type</span> <span class="o">:=</span> <span class="n">MEASUREMENT_TYPE</span><span class="p">;</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">getOrAddDefault</span><span class="p">(</span><span class="n">VALUE_FRAGMENT_TYPE</span><span class="p">)</span><span class="o">.</span><span class="n">getOrAddDefault</span><span class="p">(</span><span class="n">VALUE_SERIES_TYPE</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">:=</span> <span class="n">value</span><span class="p">;</span>
+
+        <span class="n">integer</span> <span class="n">reqId</span> <span class="o">:=</span> <span class="n">Util</span><span class="o">.</span><span class="n">generateReqId</span><span class="p">();</span>
+        <span class="n">send</span> <span class="n">m</span><span class="o">.</span><span class="n">withResponse</span><span class="p">(</span><span class="n">reqId</span><span class="p">,</span> <span class="n">new</span> <span class="n">dictionary</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">to</span> <span class="n">Measurement</span><span class="o">.</span><span class="n">SEND_CHANNEL</span><span class="p">;</span>
+
+        <span class="o">//</span> <span class="n">Listener</span> <span class="k">for</span> <span class="k">if</span> <span class="n">creation</span> <span class="n">of</span> <span class="n">measurement</span> <span class="n">fails</span>
+        <span class="n">on</span> <span class="n">ObjectCommitFailed</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span>
+         <span class="ow">and</span> <span class="ow">not</span> <span class="n">ObjectCommitted</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="n">log</span> <span class="s2">&quot;Unable to create measurement, reason : &quot;</span> <span class="o">+</span> <span class="n">resp</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span> <span class="n">at</span> <span class="n">ERROR</span><span class="p">;</span>
+                <span class="o">//</span> <span class="n">Cause</span> <span class="n">test</span> <span class="n">to</span> <span class="n">fail</span> <span class="n">early</span><span class="p">,</span> <span class="n">rather</span> <span class="n">than</span> <span class="n">wait</span> <span class="k">for</span> <span class="n">timeout</span>
+                <span class="n">die</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">log</span> <span class="s2">&quot;Sending measurement with value &quot;</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span> <span class="n">at</span> <span class="n">INFO</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">reqId</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Similarly to the <code class="docutils literal notranslate"><span class="pre">createNewDevice</span></code> action, in this example we send the measurement using a <code class="docutils literal notranslate"><span class="pre">withResponse</span></code> action and define a <code class="docutils literal notranslate"><span class="pre">ObjectCommitFailed</span></code> listener, so that if there is an error creating the measurement in Cumulocity IoT we can cause the test to exit quickly instead of waiting for it to time out.</p>
+</div>
+<div class="section" id="receiving-events-from-your-epl-apps">
+<h2>Receiving events from your EPL apps<a class="headerlink" href="#receiving-events-from-your-epl-apps" title="Permalink to this headline">¶</a></h2>
+<p>If your EPL app outputs events of any kind, your test app will need to listen for those events to verify that the expected events are being produced. Your tests should construct listeners for both possibilites: one for if an event <em>is</em> produced by the EPL app being tested; and another for if an event is <em>not</em> produced.</p>
+<p>Below is a section of a test that listens for an alarm event after a measurement is sent to Cumulocity IoT:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">on</span> <span class="n">DeviceCreated</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">createNewDevice</span><span class="p">(</span><span class="s2">&quot;DeviceSimulator&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">device</span>
+<span class="p">{</span>
+        <span class="o">//</span> <span class="n">Send</span> <span class="n">measurement</span> <span class="ow">and</span> <span class="n">check</span> <span class="n">to</span> <span class="n">see</span> <span class="n">whether</span> <span class="n">an</span> <span class="n">alarm</span> <span class="ow">is</span> <span class="n">raised</span>
+        <span class="n">monitor</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">Alarm</span><span class="o">.</span><span class="n">SUBSCRIBE_CHANNEL</span><span class="p">);</span>
+        <span class="n">integer</span> <span class="n">measurementReqId</span> <span class="o">:=</span> <span class="n">sendMeasurement</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">deviceId</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+
+        <span class="o">//</span> <span class="n">Listener</span> <span class="k">for</span> <span class="k">if</span> <span class="n">alarm</span> <span class="ow">is</span> <span class="n">raised</span> <span class="n">within</span> <span class="n">timeout</span>
+        <span class="n">on</span> <span class="n">Alarm</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">device</span><span class="o">.</span><span class="n">deviceId</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">ALARM_TYPE</span><span class="p">)</span>
+         <span class="ow">and</span> <span class="ow">not</span> <span class="n">wait</span><span class="p">(</span><span class="n">ALARM_WAIT_TIMEOUT</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="k">if</span> <span class="n">expectingAlarm</span> <span class="p">{</span>
+                        <span class="n">log</span> <span class="n">ALARM_TYPE</span> <span class="o">+</span> <span class="s2">&quot; raised - PASS&quot;</span> <span class="n">at</span> <span class="n">INFO</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">log</span> <span class="n">ALARM_TYPE</span> <span class="o">+</span> <span class="s2">&quot; raised when none was expected - FAIL&quot;</span> <span class="n">at</span> <span class="n">ERROR</span><span class="p">;</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="o">//</span> <span class="n">Listener</span> <span class="k">for</span> <span class="k">if</span> <span class="n">alarm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">raised</span> <span class="n">within</span> <span class="n">timeout</span>
+        <span class="n">on</span> <span class="n">wait</span><span class="p">(</span><span class="n">ALARM_WAIT_TIMEOUT</span><span class="p">)</span>
+         <span class="ow">and</span> <span class="ow">not</span> <span class="n">Alarm</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">device</span><span class="o">.</span><span class="n">deviceId</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">ALARM_TYPE</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="k">if</span> <span class="n">expectingAlarm</span> <span class="p">{</span>
+                        <span class="n">log</span> <span class="n">ALARM_TYPE</span> <span class="o">+</span> <span class="s2">&quot; not raised when one was expected - FAIL&quot;</span> <span class="n">at</span> <span class="n">ERROR</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">log</span> <span class="n">ALARM_TYPE</span> <span class="o">+</span> <span class="s2">&quot; not raised - PASS&quot;</span> <span class="n">at</span> <span class="n">INFO</span><span class="p">;</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To receive the alarm event, firstly we must subscribe to the relevant channel, <code class="docutils literal notranslate"><span class="pre">Alarm.SUBSCRIBE_CHANNEL</span></code>. We then constuct two listeners, one for each possible outcome: the first is for if an alarm <em>is</em> raised by the measurement; and the second listens for if an alarm event is <em>not</em> raised (within a defined timeout period).</p>
+</div>
+<div class="section" id="querying-cumulocity-iot">
+<h2>Querying Cumulocity IoT<a class="headerlink" href="#querying-cumulocity-iot" title="Permalink to this headline">¶</a></h2>
+<p>An alternative approach to the one demonstrated in the ‘<a class="reference internal" href="#receiving-events-from-your-epl-apps">Receiving events from your EPL apps</a>’ section involves querying Cumulocity IoT. With this approach you are able to retrieve historical data. It is possible to query Cumulocity IoT for alarms, events, measurements, operations, and managed objects. More information on querying can be found in ‘The Cumulocity IoT Transport Connectivity Plug-in’ section of the  <a class="reference external" href="https://documentation.softwareag.com/pam/10.15.4/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_the_cumulocity_connectivity_plug_in.html">documentation</a>.</p>
+<p>Using an example of a test that checks for an alarm, this would involve subscribing to the <code class="docutils literal notranslate"><span class="pre">FindAlarmResponse.SUBSCRIBE_CHANNEL</span></code> and using a <code class="docutils literal notranslate"><span class="pre">FindAlarm</span></code> event with <code class="docutils literal notranslate"><span class="pre">FindAlarmResponse</span></code> and <code class="docutils literal notranslate"><span class="pre">FindAlarmResponseAck</span></code> listeners:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">on</span> <span class="n">DeviceCreated</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">createNewDevice</span><span class="p">(</span><span class="s2">&quot;DeviceSimulator&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">device</span>
+<span class="p">{</span>
+        <span class="n">monitor</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">FindAlarmResponse</span><span class="o">.</span><span class="n">SUBSCRIBE_CHANNEL</span><span class="p">);</span>
+        <span class="n">integer</span> <span class="n">reqId</span> <span class="o">:=</span> <span class="n">Util</span><span class="o">.</span><span class="n">generateReqId</span><span class="p">();</span>
+
+        <span class="o">//</span> <span class="n">Send</span> <span class="n">measurement</span> <span class="ow">and</span> <span class="n">check</span> <span class="n">to</span> <span class="n">see</span> <span class="n">whether</span> <span class="n">an</span> <span class="n">alarm</span> <span class="ow">is</span> <span class="n">raised</span>
+        <span class="n">integer</span> <span class="n">measurementReqId</span> <span class="o">:=</span> <span class="n">sendMeasurement</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">deviceId</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+        <span class="n">on</span> <span class="n">ObjectCommitted</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">measurementReqId</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="n">ObjectCommitFailed</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">measurementReqId</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="n">send</span> <span class="n">FindAlarm</span><span class="p">(</span><span class="n">reqId</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">deviceId</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">ALARM_TYPE</span><span class="p">,</span> <span class="s2">&quot;resolved&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">})</span> <span class="n">to</span> <span class="n">FindAlarm</span><span class="o">.</span><span class="n">SEND_CHANNEL</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="o">//</span> <span class="n">Listener</span> <span class="k">for</span> <span class="k">if</span> <span class="n">alarm</span> <span class="n">has</span> <span class="n">been</span> <span class="n">raised</span>
+        <span class="n">on</span> <span class="n">FindAlarmResponse</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">FindAlarmResponseAck</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">expectingAlarm</span> <span class="p">{</span>
+                        <span class="n">log</span> <span class="n">ALARM_TYPE</span> <span class="o">+</span> <span class="s2">&quot; raised - PASS&quot;</span> <span class="n">at</span> <span class="n">INFO</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">log</span> <span class="n">ALARM_TYPE</span> <span class="o">+</span> <span class="s2">&quot; raised when none was expected - FAIL&quot;</span> <span class="n">at</span> <span class="n">ERROR</span><span class="p">;</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="o">//</span> <span class="n">Listener</span> <span class="k">for</span> <span class="k">if</span> <span class="n">alarm</span> <span class="n">has</span> <span class="ow">not</span> <span class="n">been</span> <span class="n">raised</span>
+        <span class="n">on</span> <span class="n">FindAlarmResponseAck</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">FindAlarmResponse</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">reqId</span><span class="p">){</span>
+                <span class="k">if</span> <span class="n">expectingAlarm</span> <span class="p">{</span>
+                        <span class="n">log</span> <span class="n">ALARM_TYPE</span> <span class="o">+</span> <span class="s2">&quot; not raised when one was expected - FAIL&quot;</span> <span class="n">at</span> <span class="n">ERROR</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">log</span> <span class="n">ALARM_TYPE</span> <span class="o">+</span> <span class="s2">&quot; not raised - PASS&quot;</span> <span class="n">at</span> <span class="n">INFO</span><span class="p">;</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that with this approach you will need to ensure that the <code class="docutils literal notranslate"><span class="pre">FindAlarm</span></code> event is sent after the alarm has appeared in Cumulocity IoT.</p>
+</div>
+<div class="section" id="reporting-test-outcomes">
+<h2>Reporting test outcomes<a class="headerlink" href="#reporting-test-outcomes" title="Permalink to this headline">¶</a></h2>
+<p>As a general rule, messages from a passing test should be logged at <code class="docutils literal notranslate"><span class="pre">INFO</span></code>, and messages from a failure should be logged at <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>. Look at the EPL snippets in the ‘<a class="reference internal" href="#receiving-events-from-your-epl-apps">Receiving events from your EPL apps</a>’ and ‘<a class="reference internal" href="#querying-cumulocity-iot">Querying Cumulocity IoT</a>’ sections to see examples of how the test outcome should be reported. Any messages logged at <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> will automatically raise a MAJOR alarm in Cumulocity IoT, alerting you to the test failure. You will need to use this convention of logging failures at <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> if you are using the PySys framework to run your tests, as the framework determines whether a test has passed or failed based on whether there are any messages logged at <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> (or <code class="docutils literal notranslate"><span class="pre">FATAL</span></code>) in the correlator log after the test has completed.</p>
+</div>
+<div class="section" id="exiting-the-test">
+<h2>Exiting the test<a class="headerlink" href="#exiting-the-test" title="Permalink to this headline">¶</a></h2>
+<p>The test framework will wait until all test cases have terminated before completing. It’s important to either have your test explicitly <code class="docutils literal notranslate"><span class="pre">die</span></code>, or arrange that when your test finishes all listeners have terminated, since this will also cause your test case to exit. In the EPL examples above, notice how if an unexpected error occurs (for example, if sending a measurement or creating a device fails), then the <code class="docutils literal notranslate"><span class="pre">die</span></code> statement is used to exit the test early, rather than waiting for it to time out. If your test has defined any listeners for multiple events using the <code class="docutils literal notranslate"><span class="pre">on</span> <span class="pre">all</span></code> operator, then you will need to include a <code class="docutils literal notranslate"><span class="pre">die</span></code> statement after the test code has been executed.</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>EPL apps can be tested using other EPL apps that run alongside the app being tested for correctness.</p></li>
+<li><p>If your test needs to send measurements or raise alarms, use managed objects to create device simulators to act as the source. If using the PySys framework to test your EPL apps in the cloud, prefix your device <code class="docutils literal notranslate"><span class="pre">name</span></code> with “PYSYS_” and add <code class="docutils literal notranslate"><span class="pre">c8y_IsDevice</span></code> to the managed object’s <code class="docutils literal notranslate"><span class="pre">params</span></code> for the framework to clean up devices created by the test.</p></li>
+<li><p>If your EPL app receives input data, your test should send it some mock data (covering all edge cases) to see that it responds correctly.</p></li>
+<li><p>If your EPL app produces output events, use listeners for those events or query Cumulocity IoT in your test EPL apps to verify the output.</p></li>
+<li><p>Log test passes at <code class="docutils literal notranslate"><span class="pre">INFO</span></code> and test failures at <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>.</p></li>
+<li><p>Make sure there are no active listeners in your tests when they have finished executing.</p></li>
+</ul>
+<div class="section" id="epl-test-samples">
+<h3>EPL test samples<a class="headerlink" href="#epl-test-samples" title="Permalink to this headline">¶</a></h3>
+<p>A sample EPL app and test can be found in the samples directory of the EPL Apps Tools SDK. Most of the EPL code snippets in this document are from the sample test, AlarmOnMeasurementThresholdTest, which can be found in the Input directory of any of the samples provided. This tests the sample EPL app, AlarmOnMeasurementThreshold, which can be found in the samples/apps directory of the SDK. Information on how to run the sample test can be found in the <a class="reference external" href="using-pysys.html#using-pysys-to-test-your-epl-apps">Using PySys to test your EPL apps</a> document.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Writing tests for EPL apps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-device-simulators">Creating device simulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sending-events-to-your-epl-apps">Sending events to your EPL apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#receiving-events-from-your-epl-apps">Receiving events from your EPL apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-cumulocity-iot">Querying Cumulocity IoT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reporting-test-outcomes">Reporting test outcomes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exiting-the-test">Exiting the test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#epl-test-samples">EPL test samples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="using-pysys.html" title="Using PySys to test your EPL apps"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="using-eplapp.html" title="Using the eplapp.py command line tool"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024 Software AG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+    </div>
+  </body>
+</html>

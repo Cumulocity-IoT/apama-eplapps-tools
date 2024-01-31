@@ -1,0 +1,1180 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>apamax.eplapplications.perf.basetest &#8212; EPL Apps Tools  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for apamax.eplapplications.perf.basetest</h1><div class="highlight"><pre>
+<span></span><span class="c1">## License</span>
+<span class="c1"># Copyright (c) 2020-2022 Software AG, Darmstadt, Germany and/or its licensors</span>
+
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this</span>
+<span class="c1"># file except in compliance with the License. You may obtain a copy of the License at</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software distributed under the</span>
+<span class="c1"># License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,</span>
+<span class="c1"># either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">pysys.constants</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">urllib.error</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">pathlib</span><span class="o">,</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">statistics</span>
+<span class="kn">from</span> <span class="nn">pysys.utils.linecount</span> <span class="kn">import</span> <span class="n">linecount</span>
+<span class="kn">from</span> <span class="nn">apamax.eplapplications.basetest</span> <span class="kn">import</span> <span class="n">ApamaC8YBaseTest</span>
+<span class="kn">from</span> <span class="nn">apamax.eplapplications.eplapps</span> <span class="kn">import</span> <span class="n">EPLApps</span>
+<span class="kn">from</span> <span class="nn">apamax.eplapplications.smartrules</span> <span class="kn">import</span> <span class="n">SmartRulesManager</span>
+
+<span class="c1"># constants for performance metrics strings.</span>
+<span class="n">PERF_TIMESTAMP</span> <span class="o">=</span> <span class="s1">&#39;timestamp&#39;</span>
+<span class="n">PERF_TOTAL_MEMORY_USAGE</span> <span class="o">=</span> <span class="s1">&#39;total_memory_usage&#39;</span>
+<span class="n">PERF_MEMORY_CORR</span> <span class="o">=</span> <span class="s1">&#39;memory_usage_corr&#39;</span>
+<span class="n">PERF_MEMORY_APCTRL</span> <span class="o">=</span> <span class="s1">&#39;memory_usage_apctrl&#39;</span>
+<span class="n">PERF_CORR_IQ_SIZE</span> <span class="o">=</span> <span class="s1">&#39;correlator_iq_size&#39;</span>
+<span class="n">PERF_CORR_OQ_SIZE</span> <span class="o">=</span> <span class="s1">&#39;correlator_oq_size&#39;</span>
+<span class="n">PERF_CORR_SPAW_RATE</span> <span class="o">=</span> <span class="s1">&#39;correlator_swap_read_write&#39;</span>
+<span class="n">PERF_CORR_NUM_OUTPUT_SENT</span> <span class="o">=</span> <span class="s1">&#39;correlator_num_output_sent&#39;</span>
+<span class="n">PERF_CORR_NUM_INPUT_RECEIVED</span> <span class="o">=</span> <span class="s1">&#39;correlator_num_input_received&#39;</span>
+<span class="n">PERF_CEP_PROXY_REQ_STARTED</span> <span class="o">=</span> <span class="s1">&#39;cep_proxy_requests_started&#39;</span>
+<span class="n">PERF_CEP_PROXY_REQ_COMPLETED</span> <span class="o">=</span> <span class="s1">&#39;cep_proxy_requests_completed&#39;</span>
+<span class="n">PERF_CEP_PROXY_REQ_FAILED</span> <span class="o">=</span> <span class="s1">&#39;cep_proxy_requests_failed&#39;</span>
+<span class="n">PERF_CPU_USAGE_MILLI</span> <span class="o">=</span> <span class="s1">&#39;cpu_usage_milli&#39;</span>
+
+<span class="c1"># Description of metrics. Order is important as it determines the order of fields in the final HTML report table</span>
+<span class="n">METRICS_DESCRIPTION</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="n">PERF_TOTAL_MEMORY_USAGE</span><span class="p">:</span> <span class="s1">&#39;Total Memory Usage (MB)&#39;</span><span class="p">,</span>
+	<span class="n">PERF_MEMORY_CORR</span><span class="p">:</span> <span class="s1">&#39;Correlator Memory Usage (MB)&#39;</span><span class="p">,</span>
+	<span class="n">PERF_MEMORY_APCTRL</span><span class="p">:</span> <span class="s1">&#39;Apama-ctrl Memory Usage (MB)&#39;</span><span class="p">,</span>
+	<span class="n">PERF_CORR_IQ_SIZE</span><span class="p">:</span> <span class="s1">&#39;Correlator Input Queue Size&#39;</span><span class="p">,</span>
+	<span class="n">PERF_CORR_OQ_SIZE</span><span class="p">:</span> <span class="s1">&#39;Correlator Output Queue Size&#39;</span><span class="p">,</span>
+	<span class="n">PERF_CORR_SPAW_RATE</span><span class="p">:</span> <span class="s1">&#39;Correlator Swapping Rate&#39;</span><span class="p">,</span>
+	<span class="n">PERF_CPU_USAGE_MILLI</span><span class="p">:</span> <span class="s1">&#39;CPU Usage (millicpu)&#39;</span><span class="p">,</span>
+	<span class="n">PERF_CORR_NUM_INPUT_RECEIVED</span><span class="p">:</span> <span class="s1">&#39;Number of Inputs Received&#39;</span><span class="p">,</span>
+	<span class="n">PERF_CORR_NUM_OUTPUT_SENT</span><span class="p">:</span> <span class="s1">&#39;Number of Outputs Sent&#39;</span><span class="p">,</span>
+	<span class="n">PERF_CEP_PROXY_REQ_STARTED</span><span class="p">:</span> <span class="s1">&#39;CEP Requests Started&#39;</span><span class="p">,</span>
+	<span class="n">PERF_CEP_PROXY_REQ_COMPLETED</span><span class="p">:</span> <span class="s1">&#39;CEP Requests Completed&#39;</span><span class="p">,</span>
+	<span class="n">PERF_CEP_PROXY_REQ_FAILED</span><span class="p">:</span> <span class="s1">&#39;CEP Requests Failed&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># constants for output files</span>
+<span class="n">OUTFILE_PERF_RAW_DATA</span> <span class="o">=</span> <span class="s1">&#39;perf_raw_data&#39;</span>
+<span class="n">OUTFILE_PERF_CPU_USAGE</span> <span class="o">=</span> <span class="s1">&#39;perf_cpuusage&#39;</span>
+<span class="n">OUTFILE_PERF_STATS</span> <span class="o">=</span> <span class="s1">&#39;perf_statistics&#39;</span>
+<span class="n">OUTFILE_PERF_COUNTERS</span> <span class="o">=</span> <span class="s1">&#39;perf_counters&#39;</span>
+<span class="n">OUTFILE_ENV_DETAILS</span> <span class="o">=</span> <span class="s1">&#39;env_details&#39;</span>
+
+<div class="viewcode-block" id="ObjectCreator"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ObjectCreator">[docs]</a><span class="k">class</span> <span class="nc">ObjectCreator</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Base class for object creator implementation.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ObjectCreator.createObject"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ObjectCreator.createObject">[docs]</a>	<span class="k">def</span> <span class="nf">createObject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Creates an object to publish.</span>
+
+<span class="sd">			:param str device: The ID of the device to create an object for.</span>
+<span class="sd">			:param str time: The source time to use for the object.</span>
+<span class="sd">			:return: A new object instance to publish.</span>
+<span class="sd">			</span>
+<span class="sd">			For example::</span>
+<span class="sd">			</span>
+<span class="sd">			    # Create and return a measurement object</span>
+<span class="sd">			    return {</span>
+<span class="sd">			        &#39;time&#39;: time,</span>
+<span class="sd">			        &quot;type&quot;: &#39;my_measurement&#39;,</span>
+<span class="sd">			        &quot;source&quot;: { &quot;id&quot;: device },</span>
+<span class="sd">			        &#39;my_fragment&#39;: {</span>
+<span class="sd">			            &#39;my_series&#39;: {</span>
+<span class="sd">			                &quot;value&quot;: random.uniform(0, 100)</span>
+<span class="sd">			            }</span>
+<span class="sd">			        }</span>
+<span class="sd">			    }</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not Implemeted&#39;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest">[docs]</a><span class="k">class</span> <span class="nc">ApamaC8YPerfBaseTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Base class for performance tests for EPL apps and smart rules.</span>
+
+<span class="sd">	Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):</span>
+
+<span class="sd">	- EPL_TESTING_SDK</span>
+
+<span class="sd">	:ivar eplapps: The object for deploying and undeploying EPL apps.</span>
+<span class="sd">	:vartype eplapps: :class:`~apamax.eplapplications.eplapps.EPLApps`</span>
+<span class="sd">	:ivar smartRulesManager: The object for managing smart rules.</span>
+<span class="sd">	:vartype smartRulesManager: :class:`~apamax.eplapplications.smartrules.SmartRulesManager`</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.setup"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">addCleanupFunction</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shutdown</span><span class="p">())</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span> <span class="o">=</span> <span class="n">EPLApps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">())</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">smartRulesManager</span> <span class="o">=</span> <span class="n">SmartRulesManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getTenant</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span> <span class="o">=</span> <span class="kc">None</span> 	<span class="c1"># Current performance monitoring thread</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorCount</span> <span class="o">=</span> <span class="mi">0</span>		<span class="c1"># Number of time performance monitoring is started</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">simulators</span> <span class="o">=</span> <span class="p">{}</span>			<span class="c1"># All simulators per tenant</span></div>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.prepareTenant"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">restartMicroservice</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Prepares the tenant for a performance test by deleting all devices created by previous tests, deleting all EPL test applications, and clearing all active alarms.</span>
+
+<span class="sd">			This must be called by the test before the application is deployed.</span>
+
+<span class="sd">			:param bool restartMicroservice: Restart the Apama-ctrl microservice.</span>
+<span class="sd">			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.</span>
+<span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">tenantId</span> <span class="o">=</span> <span class="p">(</span><span class="n">tenant</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getTenant</span><span class="p">())</span><span class="o">.</span><span class="n">getTenantId</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Preparing tenant </span><span class="si">{</span><span class="n">tenantId</span><span class="si">}</span><span class="s1"> to run performance test&#39;</span><span class="p">)</span>
+
+		<span class="c1"># Stop any running simulators</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_stopSimulators</span><span class="p">(</span><span class="n">tenantId</span><span class="p">)</span>
+
+		<span class="c1"># Delete existing EPL test apps</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestEPLApps</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span>
+		
+		<span class="c1"># Clear all active alarms</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_clearActiveAlarms</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span>
+		
+		<span class="c1"># Delete devices that were created by tests</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestDevices</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span>
+		
+		<span class="c1"># Delete all smartrules created by the tests</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestSmartRules</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span>
+
+		<span class="c1"># Stop monitoring thread</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="p">:</span>
+			<span class="c1"># Do not stop perf monitoring thread if testing against multi-tenant microservice</span>
+			<span class="c1"># and tenant is specified explicitly. because we need to monitor all tenants at once.</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isMultiTenantMicroservice</span><span class="p">()</span> <span class="ow">and</span> <span class="n">tenant</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+		<span class="k">if</span> <span class="n">restartMicroservice</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_restartApamaMicroserviceImpl</span><span class="p">()</span></div>
+
+	<span class="k">def</span> <span class="nf">_deleteMeasurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Clears all measurements that we raised on teant as part of a pre-test tenant cleanup.</span>
+
+<span class="sd">			:param tenant: The Cumulocity IoT tenant.</span>
+<span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Clearing measurements of type type_device_temperature&quot;</span><span class="p">)</span>
+		<span class="n">connection</span> <span class="o">=</span> <span class="p">(</span><span class="n">tenant</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getTenant</span><span class="p">())</span><span class="o">.</span><span class="n">getConnection</span><span class="p">()</span>
+		<span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="s1">&#39;/measurement/measurements?type=type_device_temperature&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
+	<span class="k">def</span> <span class="nf">_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Performs common cleanup during test shutdown, like stopping performance monitoring thread, deactivating EPL test apps, and generating final HTML report.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_disableTestSmartRules</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_deactivateTestEPLApps</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_generateFinalHTMLReport</span><span class="p">()</span>
+		<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_stopSimulators</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">_stopSimulators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tenantId</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; Stop running simulators for the specified tenant ID. &quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="n">tenantId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulators</span><span class="p">:</span>
+			<span class="n">simulators</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulators</span><span class="p">[</span><span class="n">tenantId</span><span class="p">]</span>
+			<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">simulators</span><span class="p">:</span>
+				<span class="k">try</span><span class="p">:</span>
+					<span class="n">s</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+				<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to stop simulator: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">simulators</span><span class="p">[</span><span class="n">tenantId</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+	<span class="k">def</span> <span class="nf">_deleteTestEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_deleteTestEPLApps</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">_disableTestSmartRules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; As part of test cleanup, disable smart rules created by the framework for all tenants.&quot;&quot;&quot;</span>
+		<span class="k">for</span> <span class="n">tenant</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getSubscribedTenants</span><span class="p">():</span>
+			<span class="n">sm</span> <span class="o">=</span> <span class="n">SmartRulesManager</span><span class="p">(</span><span class="n">tenant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
+			<span class="n">rules</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">getAllSmartRules</span><span class="p">(</span><span class="n">withLocalRules</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">_isTestSmartRule</span><span class="p">():</span>
+					<span class="n">rule</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+					<span class="n">rule</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+	<span class="k">def</span> <span class="nf">_deleteTestSmartRules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Delete smart rules created by the framework.</span>
+<span class="sd">		</span>
+<span class="sd">		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, smart rules are deleted from the tenant configured in the pysysproject.xml file.</span>
+<span class="sd">		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Clearing test smart rules&quot;</span><span class="p">)</span>
+		<span class="n">sm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smartRulesManager</span>
+		<span class="k">if</span> <span class="n">tenant</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">sm</span> <span class="o">=</span> <span class="n">SmartRulesManager</span><span class="p">(</span><span class="n">tenant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
+		
+		<span class="n">existingSmartRules</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">getAllSmartRules</span><span class="p">(</span><span class="n">withLocalRules</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">existingSmartRules</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">_isTestSmartRule</span><span class="p">():</span>
+				<span class="n">rule</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.restartApamaMicroservice"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.restartApamaMicroservice">[docs]</a>	<span class="k">def</span> <span class="nf">restartApamaMicroservice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Restarts the Apama-ctrl microservice and waits for it to come back up.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_restartApamaMicroserviceImpl</span><span class="p">()</span></div>
+
+	<span class="k">def</span> <span class="nf">_restartApamaMicroserviceImpl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; Restarts Apama-ctrl microservice and wait for it to come back up. &quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isSmartrulesOnlyMicroservice</span><span class="p">():</span>
+			<span class="c1"># We cannot restart smartrules microservice</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot restart </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getMicroserviceName</span><span class="p">()</span><span class="si">}</span><span class="s1"> microservice as it is not supported.&#39;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Restarting Apama-ctrl microservice&#39;</span><span class="p">)</span>
+		<span class="n">count1</span> <span class="o">=</span> <span class="n">linecount</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="s1">&#39;Microservice restart Microservice .* is being restarted&#39;</span><span class="p">)</span>
+		<span class="n">count2</span> <span class="o">=</span> <span class="n">linecount</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="s1">&#39;httpServer-.*Started receiving messages&#39;</span><span class="p">)</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;/service/cep/restart&#39;</span><span class="p">,</span> <span class="p">{})</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Restart requested&#39;</span><span class="p">)</span>
+		<span class="k">except</span> <span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span><span class="p">)</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+			<span class="n">statuscode</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">statuscode</span> <span class="o">//</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">50</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Restart requested&#39;</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to restart Apama-ctrl: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to restart Apama-ctrl: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;platform.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;Microservice restart Microservice .* is being restarted&#39;</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;&gt;=</span><span class="si">{</span><span class="n">count1</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;platform.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;httpServer-.*Started receiving messages&#39;</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;&gt;=</span><span class="si">{</span><span class="n">count2</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">TIMEOUTS</span><span class="p">[</span><span class="s1">&#39;WaitForProcess&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Apama-ctrl microservice is successfully restarted&#39;</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">_deactivateTestEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Deactivates all EPL test apps as part of test cleanup.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">supportsEPLApps</span><span class="p">():</span>
+			<span class="n">eplapps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span><span class="o">.</span><span class="n">getEPLApps</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+			<span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">eplapps</span><span class="p">:</span>
+				<span class="n">name</span> <span class="o">=</span> <span class="n">app</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+				<span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EPL_APP_PREFIX</span><span class="p">):</span>
+					<span class="k">try</span><span class="p">:</span>
+						<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;inactive&#39;</span><span class="p">)</span>
+					<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+						<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to deactivate app </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startMeasurementSimulator"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startMeasurementSimulator">[docs]</a>	<span class="k">def</span> <span class="nf">startMeasurementSimulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Starts a measurement simulator process to publish simulated measurements to Cumulocity IoT.</span>
+
+<span class="sd">			The simulator uses an instance of the provided measurement creator class to create new measurements to send, </span>
+<span class="sd">			allowing the test to publish measurements of different types and sizes.</span>
+<span class="sd">			The simulator looks up the specified class in the specified Python file and creates a new instance of the class</span>
+<span class="sd">			using the provided parameters. The measurement creator class must extend the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.</span>
+
+<span class="sd">			:param list[str] devices: List of device IDs to generate measurements for.</span>
+<span class="sd">			:param float perDeviceRate: The rate of measurements to publish per device.</span>
+<span class="sd">			:param str creatorFile: The path to the Python file containing the measurement creator class.</span>
+<span class="sd">			:param str creatorClassName: The name of the measurement creator class that extends the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.</span>
+<span class="sd">			:param list creatorParams: The list of parameters to pass to the constructor of the measurement creator class to create a new instance.</span>
+<span class="sd">			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.</span>
+<span class="sd">			:param duration: The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.</span>
+<span class="sd">			:type duration: float, optional</span>
+<span class="sd">			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, measurements are published to the tenant configured in the pysysproject.xml file.</span>
+<span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`</span>
+<span class="sd">			:return: The process handle of the simulator process.</span>
+<span class="sd">			:rtype: L{pysys.process.Process}</span>
+
+<span class="sd">			For example::</span>
+
+<span class="sd">				# In a &#39;creator.py&#39; file in test input directory.</span>
+<span class="sd">				class MyMeasurementCreator(ObjectCreator):</span>
+<span class="sd">				    def __init__(lowerBound, upperBound):</span>
+<span class="sd">				        self.lowerBound = lowerBound</span>
+<span class="sd">				        self.upperBound = upperBound</span>
+<span class="sd">				    def createObject(self, device, time):</span>
+<span class="sd">				        return {</span>
+<span class="sd">				            &#39;time&#39;: time,</span>
+<span class="sd">				            &quot;type&quot;: &#39;my_measurement&#39;,</span>
+<span class="sd">				            &quot;source&quot;: { &quot;id&quot;: device },</span>
+<span class="sd">				            &#39;my_fragment&#39;: {</span>
+<span class="sd">				                &#39;my_series&#39;: {</span>
+<span class="sd">				                    &quot;value&quot;: random.uniform(self.lowerBound, self.upperBound)</span>
+<span class="sd">				                }</span>
+<span class="sd">				            }</span>
+<span class="sd">		 		        }</span>
+<span class="sd">				</span>
+<span class="sd">				...</span>
+
+<span class="sd">				# In the test</span>
+<span class="sd">				self.startMeasurementSimulator(</span>
+<span class="sd">				        [&#39;12345&#39;],                  # device IDs</span>
+<span class="sd">				        1,                          # rate of measurements to publish</span>
+<span class="sd">				        f&#39;{self.input}/creator.py&#39;, # Python file path</span>
+<span class="sd">				        &#39;MyMeasurementCreator&#39;,     # class name</span>
+<span class="sd">				        [10, 50],                   # constructor parameters for MyMeasurementCreator class</span>
+<span class="sd">				    )</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startPublisher</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="s1">&#39;/measurement/measurements&#39;</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">processingMode</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startEventSimulator"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startEventSimulator">[docs]</a>	<span class="k">def</span> <span class="nf">startEventSimulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Starts an event simulator process to publish simulated events to Cumulocity IoT.</span>
+
+<span class="sd">			The simulator uses an instance of the provided event creator class to create new events to send, </span>
+<span class="sd">			allowing the test to publish events of different types and sizes.</span>
+<span class="sd">			The simulator looks up the specified class in the specified Python file and creates a new instance of the class</span>
+<span class="sd">			using the provided parameters. The event creator class must extend the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.</span>
+
+<span class="sd">			:param list[str] devices: List of device IDs to generate events for.</span>
+<span class="sd">			:param float perDeviceRate: The rate of events to publish per device.</span>
+<span class="sd">			:param str creatorFile: The path to the Python file containing the event creator class.</span>
+<span class="sd">			:param str creatorClassName: The name of the event creator class that extends the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.</span>
+<span class="sd">			:param list creatorParams: The list of parameters to pass to the constructor of the event creator class to create a new instance.</span>
+<span class="sd">			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.</span>
+<span class="sd">			:param duration: The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.</span>
+<span class="sd">			:type duration: float, optional</span>
+<span class="sd">			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, events are published to the tenant configured in the pysysproject.xml file.</span>
+<span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`</span>
+<span class="sd">			:return: The process handle of the simulator process.</span>
+<span class="sd">			:rtype: L{pysys.process.Process}</span>
+
+<span class="sd">			For example::</span>
+
+<span class="sd">				# In a &#39;creator.py&#39; file in test input directory.</span>
+<span class="sd">				class MyEventCreator(ObjectCreator):</span>
+<span class="sd">				    def createObject(self, device, time):</span>
+<span class="sd">				        return {</span>
+<span class="sd">				                    &#39;time&#39;: time,</span>
+<span class="sd">				                    &#39;type&#39;: &#39;pos_update_event&#39;,</span>
+<span class="sd">				                    &#39;text&#39;: &#39;Position update&#39;,</span>
+<span class="sd">				                    &#39;source&#39;: {</span>
+<span class="sd">				                        &#39;id&#39;: device</span>
+<span class="sd">				                    },</span>
+<span class="sd">				                    &#39;c8y_Position&#39;: {</span>
+<span class="sd">				                        &#39;lng&#39;: random.uniform(0, 10),</span>
+<span class="sd">				                        &#39;lat&#39;: random.uniform(0, 10)</span>
+<span class="sd">				                    }</span>
+<span class="sd">				                }</span>
+<span class="sd">				</span>
+<span class="sd">				...</span>
+
+<span class="sd">				# In the test</span>
+<span class="sd">				self.startEventSimulator(</span>
+<span class="sd">				        [&#39;12345&#39;],                  # device IDs</span>
+<span class="sd">				        1,                          # rate of events to publish</span>
+<span class="sd">				        f&#39;{self.input}/creator.py&#39;, # Python file path</span>
+<span class="sd">				        &#39;MyEventCreator&#39;,           # class name</span>
+<span class="sd">				        [],                         # constructor parameters for MyEventCreator class</span>
+<span class="sd">				    )</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startPublisher</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="s1">&#39;/event/events&#39;</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">processingMode</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span></div>
+	
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startAlarmSimulator"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startAlarmSimulator">[docs]</a>	<span class="k">def</span> <span class="nf">startAlarmSimulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Starts an alarm simulator process to publish simulated alarms to Cumulocity IoT.</span>
+
+<span class="sd">			The simulator uses an instance of the provided alarm creator class to create new alarms to send, </span>
+<span class="sd">			allowing the test to publish alarms of different types.</span>
+<span class="sd">			The simulator looks up the specified class in the specified Python file and creates a new instance of the class</span>
+<span class="sd">			using the provided parameters. The alarm creator class must extend the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.</span>
+
+<span class="sd">			:param list[str] devices: List of device IDs to generate alarms for.</span>
+<span class="sd">			:param float perDeviceRate: The rate of alarms to publish per device.</span>
+<span class="sd">			:param str creatorFile: The path to the Python file containing the alarm creator class.</span>
+<span class="sd">			:param str creatorClassName: The name of the alarm creator class that extends the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.</span>
+<span class="sd">			:param list creatorParams: The list of parameters to pass to the constructor of the alarm creator class to create a new instance.</span>
+<span class="sd">			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.</span>
+<span class="sd">			:param duration: The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.</span>
+<span class="sd">			:type duration: float, optional</span>
+<span class="sd">			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, alarms are published to the tenant configured in the pysysproject.xml file.</span>
+<span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`</span>
+<span class="sd">			:return: The process handle of the simulator process.</span>
+<span class="sd">			:rtype: L{pysys.process.Process}</span>
+
+<span class="sd">			For example::</span>
+
+<span class="sd">				# In a &#39;creator.py&#39; file in test input directory.</span>
+<span class="sd">				class MyAlarmCreator(ObjectCreator):</span>
+<span class="sd">				    def createObject(self, device, time):</span>
+<span class="sd">				        return {</span>
+<span class="sd">				                    &#39;source&#39;: {</span>
+<span class="sd">				                        &#39;id&#39;: device</span>
+<span class="sd">				                    },</span>
+<span class="sd">				                    &#39;type&#39;: &#39;my_alarm&#39;,</span>
+<span class="sd">				                    &#39;text&#39;: &#39;My alarm&#39;,</span>
+<span class="sd">				                    &#39;severity&#39;: &#39;MAJOR&#39;,</span>
+<span class="sd">				                    &#39;status&#39;: &#39;ACTIVE&#39;,</span>
+<span class="sd">				                    &#39;time&#39;: time,</span>
+<span class="sd">				                }</span>
+<span class="sd">				</span>
+<span class="sd">				...</span>
+
+<span class="sd">				# In the test</span>
+<span class="sd">				self.startAlarmSimulator(</span>
+<span class="sd">				        [&#39;12345&#39;],                  # device IDs</span>
+<span class="sd">				        0.01,                       # rate of alarms to publish</span>
+<span class="sd">				        f&#39;{self.input}/creator.py&#39;, # Python file path</span>
+<span class="sd">				        &#39;MyAlarmCreator&#39;,           # class name</span>
+<span class="sd">				        [],                         # constructor parameters for MyAlarmCreator class</span>
+<span class="sd">				    )</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startPublisher</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="s1">&#39;/alarm/alarms&#39;</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">processingMode</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span></div>
+
+	<span class="k">def</span> <span class="nf">_startPublisher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">resourceUrl</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Starts a publisher process to publish simulated data to Cumulocity IoT using provided object creator class.</span>
+
+<span class="sd">			:param list[str] devices: List of device IDs.</span>
+<span class="sd">			:param float perDeviceRate: The rate of objects to publish per device.</span>
+<span class="sd">			:param str resourceUrl: The resource url, for example /measurement/measurements.</span>
+<span class="sd">			:param str creatorFile: The path to the Python file containing object creator class.</span>
+<span class="sd">			:param str creatorClassName: The name of the object creator class.</span>
+<span class="sd">			:param list creatorParams: The list of parameters to pass to constructor of the object creator class.</span>
+<span class="sd">			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT and QUIESCENT.</span>
+<span class="sd">			:param duration: The duration (in seconds) to run simulators for. If no duration specified then it runs until either stopped or end of the test.</span>
+<span class="sd">			:type duration: float, optional</span>
+<span class="sd">			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, data is published to the tenant configured in the pysysproject.xml file.</span>
+<span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`</span>
+<span class="sd">			:return: The publisher object which can be stopped by calling stop() method on it.</span>
+<span class="sd">			:rtype: L{pysys.process.Process}</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">tenant</span> <span class="o">=</span> <span class="n">tenant</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getTenant</span><span class="p">()</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+			<span class="n">devices</span> <span class="o">=</span> <span class="p">[</span><span class="n">devices</span><span class="p">]</span>
+		<span class="n">object_creator_info</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="s1">&#39;className&#39;</span><span class="p">:</span> <span class="n">creatorClassName</span><span class="p">,</span>
+			<span class="s1">&#39;constructorParams&#39;</span><span class="p">:</span> <span class="n">creatorParams</span><span class="p">,</span>
+			<span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">creatorFile</span>
+		<span class="p">}</span>
+		<span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDefaultEnvirons</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">)</span>
+		<span class="n">test_framework_root</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="si">}</span><span class="s1">/testframework&#39;</span>
+		<span class="n">pythonpath</span> <span class="o">=</span> <span class="n">test_framework_root</span>
+		<span class="c1"># Add python path from parent</span>
+		<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="n">env</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">]:</span>
+			<span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PYTHONPATH&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+				<span class="n">pythonpath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pythonpath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="si">}{</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PYTHONPATH&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+
+		<span class="n">env</span><span class="p">[</span><span class="s1">&#39;PYTHONPATH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pythonpath</span>
+		<span class="n">env</span><span class="p">[</span><span class="s1">&#39;PYTHONDONTWRITEBYTECODE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;true&#39;</span>
+
+		<span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span> <span class="o">=</span> <span class="n">tenant</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">tenant</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">tenant</span><span class="o">.</span><span class="n">password</span>
+		<span class="n">script_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;publisher.py&#39;</span><span class="p">))</span>
+		<span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="n">script_path</span><span class="p">,</span>
+			<span class="s1">&#39;--base_url&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span>
+			<span class="s1">&#39;--username&#39;</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span>
+			<span class="s1">&#39;--password&#39;</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span>
+			<span class="s1">&#39;--devices&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">devices</span><span class="p">),</span>
+			<span class="s1">&#39;--per_device_rate&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">perDeviceRate</span><span class="p">),</span> 
+			<span class="s1">&#39;--resource_url&#39;</span><span class="p">,</span> <span class="n">resourceUrl</span><span class="p">,</span>
+			<span class="s1">&#39;--processing_mode&#39;</span><span class="p">,</span> <span class="n">processingMode</span><span class="p">,</span>
+			<span class="s1">&#39;--object_creator_info&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">object_creator_info</span><span class="p">),</span>
+		<span class="p">]</span>
+
+		<span class="k">if</span> <span class="n">duration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">arguments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;--duration&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">duration</span><span class="p">)])</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/simulators&#39;</span><span class="p">)</span>
+		<span class="n">stdouterr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">allocateUniqueStdOutErr</span><span class="p">(</span><span class="s1">&#39;simulators/publisher&#39;</span><span class="p">)</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">startPython</span><span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="n">stdouterr</span><span class="o">=</span><span class="n">stdouterr</span><span class="p">,</span> <span class="n">disableCoverage</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">environs</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">tenant</span><span class="o">.</span><span class="n">getTenantId</span><span class="p">(),</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="n">stdouterr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;Started publishing Cumulocity&#39;</span><span class="p">,</span> <span class="n">errorExpr</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ERROR &#39;</span><span class="p">,</span> <span class="s1">&#39;DataPublisher failed&#39;</span><span class="p">])</span>
+		<span class="k">return</span> <span class="n">p</span>
+	
+	<span class="k">def</span> <span class="nf">_perfMonitorSuffix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noSuffixForFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Gets suffix to add to generated files.</span>
+
+<span class="sd">		:param noSuffixForFirst: Do not generate suffix if first perf monitoring thread is running, defaults to True</span>
+<span class="sd">		:type noSuffixForFirst: bool, optional</span>
+<span class="sd">		:return: The suffix string.</span>
+<span class="sd">		:rtype: str</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorCount</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">noSuffixForFirst</span><span class="p">:</span>
+			<span class="k">return</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorCount</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="s1">&#39;&#39;</span>
+	
+	<span class="k">def</span> <span class="nf">_getEnvironmentDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Gets environment details in which test is running.</span>
+
+<span class="sd">			Used for HTML report.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">paq_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/service/cep/diagnostics/componentVersion&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;componentVersion&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;unknown&gt;&#39;</span><span class="p">)</span>
+		<span class="n">apamaCtrlStatus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/service/cep/diagnostics/apamaCtrlStatus&#39;</span><span class="p">)</span>
+		<span class="n">microservice_name</span> <span class="o">=</span> <span class="n">apamaCtrlStatus</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;microservice_name&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;unknown&gt;&#39;</span><span class="p">)</span>
+		<span class="n">c8y_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">base_url</span>
+		<span class="n">c8y_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/tenant/system/options/system/version&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;unknown&gt;&#39;</span><span class="p">)</span>
+		<span class="n">diagnostic_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/service/cep/diagnostics/info&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span><span class="s1">&#39;application/json&#39;</span><span class="p">})</span>
+		<span class="n">pam_version</span> <span class="o">=</span> <span class="n">diagnostic_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;productVersion&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;unknown&gt;&#39;</span><span class="p">)</span>
+		<span class="n">uptime</span> <span class="o">=</span> <span class="n">diagnostic_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;uptime&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;unknown&gt;&#39;</span><span class="p">)</span>
+		<span class="n">app_manifest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/application/applicationsByName/</span><span class="si">{</span><span class="n">microservice_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="n">microservice_resources</span> <span class="o">=</span> <span class="n">app_manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;applications&#39;</span><span class="p">,</span> <span class="p">[{}])[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;manifest&#39;</span><span class="p">][</span><span class="s1">&#39;resources&#39;</span><span class="p">]</span>
+		<span class="n">cpu_limit</span> <span class="o">=</span> <span class="n">microservice_resources</span><span class="p">[</span><span class="s1">&#39;cpu&#39;</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">cpu_limit</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+			<span class="n">cpu_limit</span> <span class="o">+=</span> <span class="s1">&#39; core&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">cpu_limit</span> <span class="o">+=</span> <span class="s1">&#39; cores&#39;</span>
+
+		<span class="n">env</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="s1">&#39;Cumulocity IoT Tenant&#39;</span><span class="p">:</span> <span class="n">c8y_url</span><span class="p">,</span>
+			<span class="s1">&#39;Cumulocity IoT Version&#39;</span><span class="p">:</span> <span class="n">c8y_version</span><span class="p">,</span>
+			<span class="s1">&#39;Microservice name&#39;</span><span class="p">:</span> <span class="n">microservice_name</span><span class="p">,</span>
+			<span class="s1">&#39;Microservice CPU Limit&#39;</span><span class="p">:</span> <span class="n">cpu_limit</span><span class="p">,</span>
+			<span class="s1">&#39;Microservice Memory Limit&#39;</span><span class="p">:</span> <span class="n">microservice_resources</span><span class="p">[</span><span class="s1">&#39;memory&#39;</span><span class="p">],</span>
+			<span class="s1">&#39;Apama Version&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;PAM </span><span class="si">{</span><span class="n">pam_version</span><span class="si">}</span><span class="s1">, PAQ </span><span class="si">{</span><span class="n">paq_version</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+		<span class="p">}</span>
+
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">up</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">uptime</span><span class="p">)</span>
+			<span class="n">uptime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">up</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+			<span class="k">pass</span>
+
+		<span class="n">env</span><span class="p">[</span><span class="s1">&#39;Uptime (secs)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uptime</span>
+		<span class="k">return</span> <span class="n">env</span>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startPerformanceMonitoring"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startPerformanceMonitoring">[docs]</a>	<span class="k">def</span> <span class="nf">startPerformanceMonitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pollingInterval</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Starts a performance monitoring thread that periodically gathers and logs various metrics and publishes </span>
+<span class="sd">			performance statistics at the end.</span>
+
+<span class="sd">			:param pollingInterval: The polling interval to get performance data. Defaults to 2 seconds.</span>
+<span class="sd">			:type pollingInterval: float, optional</span>
+<span class="sd">			:return: The background thread.</span>
+<span class="sd">			:rtype: L{pysys.utils.threadutils.BackgroundThread}</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorCount</span> <span class="o">+=</span> <span class="mi">1</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_ENV_DETAILS</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">):</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_ENV_DETAILS</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getEnvironmentDetails</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">startBackgroundThread</span><span class="p">(</span><span class="s2">&quot;perf_monitoring_thread&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitorPerformance</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;pollingInterval&#39;</span><span class="p">:</span><span class="n">pollingInterval</span><span class="p">})</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span></div>
+
+	<span class="k">def</span> <span class="nf">_monitorPerformance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stopping</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">pollingInterval</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Implements performance gathering thread.</span>
+<span class="sd">			</span>
+<span class="sd">			:param stopping: To check if thread should be stopped.</span>
+<span class="sd">			:param log: The logger.</span>
+<span class="sd">			:param pollingInterval: The polling interval to get performance data.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Started gathering performance metrics&#39;</span><span class="p">)</span>
+		<span class="n">cpu_monitoring_thread</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">startBackgroundThread</span><span class="p">(</span><span class="s2">&quot;cpu_monitoring_thread&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_cpu_usage_impl</span><span class="p">)</span>
+		<span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perfMonitorSuffix</span><span class="p">()</span>
+		<span class="k">def</span> <span class="nf">num</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+				<span class="k">return</span> <span class="n">f</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+			<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+				<span class="k">return</span> <span class="mi">0</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">PERF_TIMESTAMP</span><span class="p">,</span> <span class="n">PERF_MEMORY_CORR</span><span class="p">,</span> <span class="n">PERF_TOTAL_MEMORY_USAGE</span><span class="p">,</span> <span class="n">PERF_CORR_IQ_SIZE</span><span class="p">,</span> <span class="n">PERF_CORR_OQ_SIZE</span><span class="p">,</span> <span class="n">PERF_CORR_SPAW_RATE</span><span class="p">,</span>
+							<span class="n">PERF_CORR_NUM_OUTPUT_SENT</span><span class="p">,</span> <span class="n">PERF_CORR_NUM_INPUT_RECEIVED</span><span class="p">]</span>
+
+			<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isSmartrulesOnlyMicroservice</span><span class="p">():</span>
+				<span class="n">fieldnames</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">PERF_MEMORY_APCTRL</span><span class="p">,</span> <span class="n">PERF_CEP_PROXY_REQ_STARTED</span><span class="p">,</span> <span class="n">PERF_CEP_PROXY_REQ_COMPLETED</span><span class="p">,</span> <span class="n">PERF_CEP_PROXY_REQ_FAILED</span><span class="p">])</span>
+
+			<span class="n">csv_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_RAW_DATA</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+			<span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
+			<span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+			<span class="k">while</span> <span class="ow">not</span> <span class="n">stopping</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+				<span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+				<span class="c1"># gather performance data</span>
+				<span class="c1"># 1) get correlator status</span>
+				<span class="n">corr_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/service/cep/diagnostics/correlator/status&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span><span class="s1">&#39;application/json&#39;</span><span class="p">})</span>
+
+				<span class="c1"># 2) get apama-ctrl status</span>
+				<span class="n">apctrl_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s1">&#39;/service/cep/diagnostics/apamaCtrlStatus&#39;</span><span class="p">)</span>
+
+				<span class="c1"># write data</span>
+				<span class="n">data</span><span class="p">[</span><span class="n">PERF_TIMESTAMP</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+				<span class="n">data</span><span class="p">[</span><span class="n">PERF_MEMORY_CORR</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="n">corr_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;physicalMemoryMB&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+				<span class="n">data</span><span class="p">[</span><span class="n">PERF_CORR_IQ_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="n">corr_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;numQueuedInput&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1"># numInputQueuedInput</span>
+				<span class="n">data</span><span class="p">[</span><span class="n">PERF_CORR_OQ_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="n">corr_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;numOutEventsQueued&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+				<span class="n">data</span><span class="p">[</span><span class="n">PERF_CORR_NUM_OUTPUT_SENT</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="n">corr_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;numOutEventsSent&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+				<span class="n">data</span><span class="p">[</span><span class="n">PERF_CORR_NUM_INPUT_RECEIVED</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="n">corr_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;numReceived&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+				<span class="n">data</span><span class="p">[</span><span class="n">PERF_CORR_SPAW_RATE</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="n">corr_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;swapPagesRead&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">+</span> <span class="n">num</span><span class="p">(</span><span class="n">corr_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;swapPagesWrite&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+				<span class="n">data</span><span class="p">[</span><span class="n">PERF_TOTAL_MEMORY_USAGE</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">PERF_MEMORY_CORR</span><span class="p">]</span>
+
+				<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isSmartrulesOnlyMicroservice</span><span class="p">():</span>
+					<span class="n">data</span><span class="p">[</span><span class="n">PERF_MEMORY_APCTRL</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="n">apctrl_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;apama_ctrl_physical_mb&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+					<span class="n">data</span><span class="p">[</span><span class="n">PERF_TOTAL_MEMORY_USAGE</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">PERF_MEMORY_CORR</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">PERF_MEMORY_APCTRL</span><span class="p">]</span>
+
+					<span class="n">cep_proxy_requests_started</span> <span class="o">=</span> <span class="mi">0</span>
+					<span class="n">cep_proxy_requests_completed</span> <span class="o">=</span> <span class="mi">0</span>
+					<span class="n">cep_proxy_requests_failed</span> <span class="o">=</span> <span class="mi">0</span>
+					<span class="n">cep_proxy_request_counts</span> <span class="o">=</span> <span class="n">apctrl_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cep_proxy_request_counts&#39;</span><span class="p">,</span> <span class="p">{})</span>
+					<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">cep_proxy_request_counts</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+						<span class="n">cep_proxy_requests_started</span> <span class="o">+=</span> <span class="n">num</span><span class="p">(</span><span class="n">cep_proxy_request_counts</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;requestsStarted&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+						<span class="n">cep_proxy_requests_completed</span> <span class="o">+=</span> <span class="n">num</span><span class="p">(</span><span class="n">cep_proxy_request_counts</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;requestsCompleted&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+						<span class="n">cep_proxy_requests_failed</span> <span class="o">+=</span> <span class="n">num</span><span class="p">(</span><span class="n">cep_proxy_request_counts</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;requestsFailed&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+					<span class="n">data</span><span class="p">[</span><span class="n">PERF_CEP_PROXY_REQ_STARTED</span><span class="p">]</span> <span class="o">=</span> <span class="n">cep_proxy_requests_started</span>
+					<span class="n">data</span><span class="p">[</span><span class="n">PERF_CEP_PROXY_REQ_COMPLETED</span><span class="p">]</span> <span class="o">=</span> <span class="n">cep_proxy_requests_completed</span>
+					<span class="n">data</span><span class="p">[</span><span class="n">PERF_CEP_PROXY_REQ_FAILED</span><span class="p">]</span> <span class="o">=</span> <span class="n">cep_proxy_requests_failed</span>
+
+				<span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+				<span class="n">csv_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="n">stopping</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+					<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">pollingInterval</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+			<span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Exception while gathering performance data: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Exception while gathering performance data: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">__traceback__</span><span class="p">)</span>
+		<span class="k">finally</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">csv_file</span><span class="p">:</span> <span class="n">csv_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+			<span class="n">cpu_monitoring_thread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+			<span class="n">cpu_monitoring_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_generatePerfStatistics</span><span class="p">()</span>
+			<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished performance monitoring&#39;</span><span class="p">)</span>
+	
+	<span class="k">def</span> <span class="nf">_monitor_cpu_usage_impl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stopping</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Implements CPU usage monitoring thread.</span>
+<span class="sd">		</span>
+<span class="sd">		:param stopping: To check if thread should be stopped.</span>
+<span class="sd">		:param log: The logger.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;/service/cep/diagnostics/cpuUsageMillicores&#39;</span>
+
+		<span class="c1"># check if able to monitor CPU usage (REST url exposed + able to calculate CPU usage)</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">cpu_usage</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="n">url</span> <span class="o">+</span> <span class="s1">&#39;?sampleDurationMSec=10&#39;</span><span class="p">))</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+			<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Unable to monitor CPU usage&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+
+		<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Started gathering CPU usage&#39;</span><span class="p">)</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="n">url</span> <span class="o">+</span> <span class="s1">&#39;?sampleDurationMSec=2000&#39;</span>
+		<span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perfMonitorSuffix</span><span class="p">()</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_CPU_USAGE</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+			<span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">,</span> <span class="n">PERF_CPU_USAGE_MILLI</span><span class="p">])</span>
+			<span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+			<span class="k">while</span> <span class="ow">not</span> <span class="n">stopping</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+				<span class="k">try</span><span class="p">:</span>
+					<span class="n">cpu_usage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">()</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+					<span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span>
+						<span class="s1">&#39;timestamp&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+						<span class="n">PERF_CPU_USAGE_MILLI</span><span class="p">:</span> <span class="n">cpu_usage</span>
+						<span class="p">})</span>
+					<span class="n">csv_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+				<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+					<span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unable to get cpu usage: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+	<span class="k">def</span> <span class="nf">_generatePerfStatistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Generates performance statistics.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perfMonitorSuffix</span><span class="p">()</span>
+		<span class="c1"># read data points</span>
+		<span class="n">datapoints</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_RAW_DATA</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+			<span class="n">csv_reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv_reader</span><span class="p">:</span>
+				<span class="n">all_metrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">PERF_MEMORY_CORR</span><span class="p">,</span> <span class="n">PERF_TOTAL_MEMORY_USAGE</span><span class="p">,</span> <span class="n">PERF_CORR_IQ_SIZE</span><span class="p">,</span> <span class="n">PERF_CORR_OQ_SIZE</span><span class="p">,</span> <span class="n">PERF_CORR_SPAW_RATE</span><span class="p">,</span>
+						<span class="n">PERF_CORR_NUM_OUTPUT_SENT</span><span class="p">,</span> <span class="n">PERF_CORR_NUM_INPUT_RECEIVED</span><span class="p">]</span>
+
+				<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isSmartrulesOnlyMicroservice</span><span class="p">():</span>
+					<span class="n">all_metrics</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">PERF_MEMORY_APCTRL</span><span class="p">,</span> <span class="n">PERF_CEP_PROXY_REQ_STARTED</span><span class="p">,</span>
+						<span class="n">PERF_CEP_PROXY_REQ_COMPLETED</span><span class="p">,</span> <span class="n">PERF_CEP_PROXY_REQ_FAILED</span><span class="p">])</span>
+
+				<span class="k">for</span> <span class="n">metric_name</span> <span class="ow">in</span> <span class="n">all_metrics</span><span class="p">:</span>
+					<span class="n">datapoints</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">metric_name</span><span class="p">,</span> <span class="p">[])</span>
+					<span class="n">datapoints</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]))</span>
+
+		<span class="n">cpu_perf_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_CPU_USAGE</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.csv&#39;</span>
+		<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cpu_perf_file</span><span class="p">):</span>
+			<span class="n">metric_name</span> <span class="o">=</span> <span class="n">PERF_CPU_USAGE_MILLI</span>
+			<span class="n">datapoints</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">metric_name</span><span class="p">,</span> <span class="p">[])</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cpu_perf_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+				<span class="n">csv_reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv_reader</span><span class="p">:</span>
+					<span class="n">datapoints</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]))</span>
+
+		<span class="c1"># Extract counter like values to a separate object. We capture difference between first and last value only for these.</span>
+		<span class="n">counter_values</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">PERF_CORR_NUM_INPUT_RECEIVED</span><span class="p">,</span> <span class="n">PERF_CORR_NUM_OUTPUT_SENT</span><span class="p">]</span>
+
+		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isSmartrulesOnlyMicroservice</span><span class="p">():</span>
+			<span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">PERF_CEP_PROXY_REQ_STARTED</span><span class="p">,</span> <span class="n">PERF_CEP_PROXY_REQ_COMPLETED</span><span class="p">,</span> <span class="n">PERF_CEP_PROXY_REQ_FAILED</span><span class="p">])</span>
+
+		<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+			<span class="n">values</span> <span class="o">=</span> <span class="n">datapoints</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+			<span class="n">counter_values</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+			<span class="k">del</span> <span class="n">datapoints</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">OUTFILE_PERF_COUNTERS</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">counter_values</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">OUTFILE_PERF_RAW_DATA</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">datapoints</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+
+		<span class="k">def</span> <span class="nf">percentile</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">percent</span><span class="p">):</span> <span class="c1"># calculate percentile</span>
+			<span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+			<span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">size</span> <span class="o">*</span> <span class="n">percent</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+		
+		<span class="c1"># calculate statistics</span>
+		<span class="n">stats</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">datapoints</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+			<span class="n">values</span> <span class="o">=</span> <span class="n">datapoints</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">&lt;=</span><span class="mi">0</span> <span class="p">:</span> <span class="k">continue</span>
+			<span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+			<span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+			<span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+			<span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+			<span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;median&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+			<span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;75th_percentile&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">percentile</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span>
+			<span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;90th_percentile&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">percentile</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+			<span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;95th_percentile&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">percentile</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">95</span><span class="p">)</span>
+			<span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;99th_percentile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">percentile</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">99</span><span class="p">)</span>
+		
+		<span class="bp">self</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">OUTFILE_PERF_STATS</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_STATS</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+			<span class="c1"># PERF_MEMORY_CORR is present in both apama-ctrl and smartrules. So this works for both without any changes</span>
+			<span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="n">PERF_MEMORY_CORR</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+			<span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+			<span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+
+			<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+				<span class="n">row</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="n">name</span><span class="p">}</span>
+				<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+					<span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+				<span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.read_json"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.read_json">[docs]</a>	<span class="k">def</span> <span class="nf">read_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">fileDirectory</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Reads a JSON file and returns its content.</span>
+
+<span class="sd">			:param fileName: Name of the file.</span>
+<span class="sd">			:type fileName: str</span>
+<span class="sd">			:param fileDirectory: Directory of the file. Use test output directory if not specified.</span>
+<span class="sd">			:type fileDirectory: str, optional</span>
+<span class="sd">			:return: The decoded content of the file.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">fileDirectory</span> <span class="o">=</span> <span class="n">fileDirectory</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span>
+		<span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">fileDirectory</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">))</span></div>
+
+	<span class="k">def</span> <span class="nf">_confirmStableQueueSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue_name</span><span class="p">,</span> <span class="n">perf_data</span><span class="p">,</span> <span class="n">noise_floor</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ratio_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">discard_fraction</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Checks that the queue sizes are stable or coming down. Logs warning if queue sizes are still increasing.</span>
+
+<span class="sd">			:param: queue_name: The name of the correlator queue.</span>
+<span class="sd">			:param: perf_data: The raw performance data.</span>
+<span class="sd">			:param: noise_floor: Skip analysis if difference between queue sizes at end compared to start is less than this.</span>
+<span class="sd">			:param: ratio_threshold: Log error if ration of slopes of graph is second half versus first half is more than this.</span>
+<span class="sd">			:param: discard_fraction: The amount of data to discard at the beginning and the end before performing analysis.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">values</span> <span class="o">=</span> <span class="n">perf_data</span><span class="p">[</span><span class="s1">&#39;correlator_iq_size&#39;</span> <span class="k">if</span> <span class="n">queue_name</span> <span class="o">==</span> <span class="s1">&#39;input&#39;</span> <span class="k">else</span> <span class="s1">&#39;correlator_oq_size&#39;</span><span class="p">]</span>
+		<span class="n">discard_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">*</span><span class="n">discard_fraction</span><span class="p">)</span>
+		<span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">discard_size</span><span class="p">:</span><span class="o">-</span><span class="n">discard_size</span><span class="p">]</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Not enough datapoints to analyse queue growth&#39;</span><span class="p">)</span>
+			<span class="k">return</span>
+
+		<span class="c1"># Check that queue size graph flattens off, or at least starts to flatten off</span>
+		<span class="c1"># calculate the segment averages</span>
+		<span class="n">left</span>  <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.35</span><span class="p">)]</span>
+		<span class="n">left</span>  <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">left</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+		<span class="n">mid</span>   <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.35</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.65</span><span class="p">)]</span>
+		<span class="n">mid</span>   <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">mid</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span>
+		<span class="n">right</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.65</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.95</span><span class="p">)]</span>
+		<span class="n">right</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">right</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+
+		<span class="c1"># Easy case - it&#39;s going downwards for a large part of the graph, or the change is beneath the noise floor</span>
+		<span class="k">if</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">noise_floor</span> <span class="ow">or</span> <span class="n">right</span> <span class="o">-</span> <span class="n">mid</span> <span class="o">&lt;=</span> <span class="n">noise_floor</span><span class="p">:</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="n">mid</span> <span class="o">-</span> <span class="n">left</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">right</span> <span class="o">-</span> <span class="n">mid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">return</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">slope_ratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">mid</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mid</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+			<span class="n">slope_ratio</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+		
+		<span class="c1"># if slope is not coming down fast enough then most probably queue is going to get full</span>
+		<span class="n">mean_size_towards_end</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.85</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.95</span><span class="p">)])</span>
+		<span class="k">if</span> <span class="n">slope_ratio</span> <span class="o">&gt;</span> <span class="n">ratio_threshold</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Correlator </span><span class="si">{</span><span class="n">queue_name</span><span class="si">}</span><span class="s1"> queue was increasing continuously. It probably would have been full eventually. Mean queue size towards the end was </span><span class="si">{</span><span class="n">mean_size_towards_end</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="n">slope_ratio</span> <span class="o">&gt;</span> <span class="mf">0.2</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Correlator </span><span class="si">{</span><span class="n">queue_name</span><span class="si">}</span><span class="s1"> queue was increasing slowly. It probably would have been full eventually. Mean queue size towards the end was </span><span class="si">{</span><span class="n">mean_size_towards_end</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="c1"># test is not failed because it might be false positive</span>
+
+	<span class="k">def</span> <span class="nf">_to_html_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Generates a HTML list to be embedded in an HTML page from provided values.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+				<span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&lt;li&gt;&lt;span class=&quot;key&quot;&gt;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">: &lt;/span&gt;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&lt;/li&gt;&#39;</span>
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+				<span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&lt;li&gt;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&lt;/li&gt;&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&lt;li&gt;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/li&gt;&#39;</span>
+		<span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;ul&gt;</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s1">&lt;/ul&gt;&#39;</span>
+	
+	<span class="k">def</span> <span class="nf">_dict_to_html_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">column_names</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Generates a HTML table to be embedded in an HTML page from provided dictionary.</span>
+<span class="sd">		:param: values: Dictionary of values.</span>
+<span class="sd">		:param: column_names: Name of the columns to use.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;&lt;tr&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#39;</span>
+		<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">:</span>
+			<span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&lt;th scope=&quot;col&quot;&gt;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&lt;/th&gt;&#39;</span>
+		<span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&lt;/tr&gt;&#39;</span>
+
+		<span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span> <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s1">0.2f</span><span class="si">}</span><span class="s1">&#39;</span>
+			<span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+		<span class="k">for</span> <span class="n">metric_name</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;</span><span class="si">{</span><span class="n">metric_name</span><span class="si">}</span><span class="s1">&lt;/th&gt;&#39;</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+				<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">:</span>
+					<span class="n">val</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+					<span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&lt;td&gt;</span><span class="si">{</span><span class="n">format_value</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/td&gt;&#39;</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&lt;td&gt;</span><span class="si">{</span><span class="n">format_value</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/td&gt;&#39;</span>
+			<span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/tr&gt;&#39;</span>
+
+		<span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;table&gt;</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s1">&lt;/table&gt;&#39;</span>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.generateHTMLReport"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.generateHTMLReport">[docs]</a>	<span class="k">def</span> <span class="nf">generateHTMLReport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">testConfigurationDetails</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extraPerformanceMetrics</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Generates an HTML report of the performance result. The report is generated at the end of the test.</span>
+
+<span class="sd">		When testing for multiple variations, multiple HTML reports are combined into a single HTML report.</span>
+<span class="sd">		</span>
+<span class="sd">		:param description: A brief description of the test.</span>
+<span class="sd">		:type description: str</span>
+<span class="sd">		:param testConfigurationDetails: Details of the test configuration to include in the report.</span>
+<span class="sd">		:type testConfigurationDetails: dict, list, str, optional</span>
+<span class="sd">		:param extraPerformanceMetrics: Extra application-specific performance metrics to include in the report.</span>
+<span class="sd">		:type extraPerformanceMetrics: dict, list, str, optional</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+		
+		<span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perfMonitorSuffix</span><span class="p">()</span>
+
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_STATS</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">):</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_generatePerfStatistics</span><span class="p">()</span>
+
+		<span class="c1"># method to generate textual representation of a time range</span>
+		<span class="k">def</span> <span class="nf">format_time_range</span><span class="p">(</span><span class="n">timestamp1</span><span class="p">,</span> <span class="n">timestamp2</span><span class="p">):</span>
+			<span class="kn">import</span> <span class="nn">datetime</span>
+			<span class="n">datetime1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp1</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+			<span class="n">datetime2</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp2</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+			
+			<span class="n">format1</span> <span class="o">=</span> <span class="n">datetime1</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%a</span><span class="s1"> %Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; UTC&#39;</span>
+			<span class="k">if</span> <span class="n">datetime1</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="o">==</span><span class="n">datetime2</span><span class="o">.</span><span class="n">date</span><span class="p">():</span>
+				<span class="n">format2</span> <span class="o">=</span> <span class="n">datetime2</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">format2</span> <span class="o">=</span> <span class="n">datetime2</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%a</span><span class="s1"> %Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; UTC&#39;</span>
+
+			<span class="n">delta</span> <span class="o">=</span> <span class="n">datetime2</span> <span class="o">-</span> <span class="n">datetime1</span>
+			<span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span><span class="o">-</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="n">delta</span><span class="o">.</span><span class="n">microseconds</span><span class="p">)</span>
+			<span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">format1</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">format2</span><span class="si">}</span><span class="s1"> (=</span><span class="si">{</span><span class="n">delta</span><span class="si">}</span><span class="s1">)&#39;</span>
+		
+		<span class="c1">### Now generate codes, html fragments to fill in the template to generate final report</span>
+
+		<span class="c1">## Generate HTML for table of standard performance statistics</span>
+		<span class="c1"># Read statistics in a single dict</span>
+		<span class="n">table_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">OUTFILE_PERF_STATS</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">)</span>
+		<span class="c1"># add counter type data to the table as well</span>
+		<span class="n">counters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">OUTFILE_PERF_COUNTERS</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PERF_CORR_NUM_INPUT_RECEIVED</span><span class="p">,</span> <span class="n">PERF_CORR_NUM_OUTPUT_SENT</span><span class="p">]:</span>
+			<span class="n">table_data</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">counters</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+
+		<span class="c1"># Extracting the column names. PERF_MEMORY_CORR is present in both apama-ctrl and smartrules. So this</span>
+		<span class="c1"># works for both without any changes</span>
+		<span class="n">column_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">table_data</span><span class="p">[</span><span class="n">PERF_MEMORY_CORR</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+		<span class="c1"># prepare dictionary for html using more descriptive names for metrics</span>
+		<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">METRICS_DESCRIPTION</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+			<span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">table_data</span><span class="p">:</span>
+				<span class="n">table_data</span><span class="p">[</span><span class="n">METRICS_DESCRIPTION</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="n">table_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+				<span class="k">del</span> <span class="n">table_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+		<span class="n">standard_perf_stats_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict_to_html_table</span><span class="p">(</span><span class="n">table_data</span><span class="p">,</span> <span class="n">column_names</span><span class="p">)</span>
+
+		<span class="c1">## Generate HTML list of test configuration</span>
+		<span class="n">test_config_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_html_list</span><span class="p">(</span><span class="n">testConfigurationDetails</span><span class="p">)</span>
+
+		<span class="c1">## Generate HTML for any additional performance metrics</span>
+		<span class="n">additional_perf_statistics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_html_list</span><span class="p">(</span><span class="n">extraPerformanceMetrics</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">extraPerformanceMetrics</span><span class="p">:</span>
+			<span class="n">additional_perf_statistics</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;h4&gt;App Specific Performance Statistics&lt;/h4&gt;</span><span class="si">{</span><span class="n">additional_perf_statistics</span><span class="si">}</span><span class="s1">&#39;</span>
+
+		<span class="c1">## Generate HTML for graphs</span>
+		<span class="c1"># generate data for memory and queue_size graphs</span>
+		<span class="n">queue_data</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">memory_data</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">cpu_usage_data</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">start_time</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+		<span class="n">end_time</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_RAW_DATA</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+			<span class="n">csv_reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv_reader</span><span class="p">:</span>
+				<span class="n">timestamp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">PERF_TIMESTAMP</span><span class="p">])</span>
+				<span class="k">if</span> <span class="n">start_time</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+					<span class="n">start_time</span> <span class="o">=</span> <span class="n">timestamp</span>
+				<span class="n">end_time</span> <span class="o">=</span> <span class="n">timestamp</span>
+				<span class="n">timestamp_milli</span> <span class="o">=</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="n">timestamp</span>
+				<span class="n">iq</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">PERF_CORR_IQ_SIZE</span><span class="p">]))</span>
+				<span class="n">oq</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">PERF_CORR_OQ_SIZE</span><span class="p">]))</span>
+				<span class="c1"># generate JavaScript code to create an array of data for a timestamp - [new Date(...), y1_value, y2_value, ...]</span>
+				<span class="n">queue_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[new Date(</span><span class="si">{</span><span class="n">timestamp_milli</span><span class="si">}</span><span class="s1">),</span><span class="si">{</span><span class="n">iq</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">oq</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
+
+				<span class="n">memory</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">PERF_MEMORY_CORR</span><span class="p">])</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isSmartrulesOnlyMicroservice</span><span class="p">():</span>
+					<span class="n">memory</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">memory</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">PERF_MEMORY_APCTRL</span><span class="p">])</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">PERF_TOTAL_MEMORY_USAGE</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span>
+
+				<span class="n">memory_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[new Date(</span><span class="si">{</span><span class="n">timestamp_milli</span><span class="si">}</span><span class="s1">), </span><span class="si">{</span><span class="n">memory</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
+		<span class="n">queue_time_range</span> <span class="o">=</span> <span class="n">memory_time_range</span> <span class="o">=</span> <span class="n">format_time_range</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+
+		<span class="c1"># generate data for cpu usage graphs</span>
+		<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_CPU_USAGE</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">):</span>
+			<span class="n">start_time</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+			<span class="n">end_time</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_CPU_USAGE</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+				<span class="n">csv_reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv_reader</span><span class="p">:</span>
+					<span class="n">timestamp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">PERF_TIMESTAMP</span><span class="p">])</span>
+					<span class="k">if</span> <span class="n">start_time</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+						<span class="n">start_time</span> <span class="o">=</span> <span class="n">timestamp</span>
+					<span class="n">end_time</span> <span class="o">=</span> <span class="n">timestamp</span>
+					<span class="n">timestamp_milli</span> <span class="o">=</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="n">timestamp</span>
+					<span class="n">cpu_usage</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">PERF_CPU_USAGE_MILLI</span><span class="p">])</span>
+					<span class="n">cpu_usage_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[new Date(</span><span class="si">{</span><span class="n">timestamp_milli</span><span class="si">}</span><span class="s1">), </span><span class="si">{</span><span class="n">cpu_usage</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
+		<span class="n">cpu_usage_time_range</span> <span class="o">=</span> <span class="n">format_time_range</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+
+		<span class="n">memory_labels</span> <span class="o">=</span> <span class="s1">&#39;&quot;time&quot;, &quot;Correlator (MB)&quot;&#39;</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isSmartrulesOnlyMicroservice</span><span class="p">():</span>
+			<span class="n">memory_labels</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">memory_labels</span><span class="si">}</span><span class="s1">, &quot;Apama Ctrl JVM (MB)&quot;, &quot;Total (MB)&quot;&#39;</span>
+
+		<span class="c1">### Generate final report.html file by filling in various details into the table</span>
+		<span class="n">variation_replacements</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="s1">&#39;TEST_TITLE&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+			<span class="s1">&#39;VARIATION_DESCRIPTION&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+			<span class="s1">&#39;VARIATION_TITLE&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+			<span class="s1">&#39;VARIATION_LINKS&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;VARIATION_ID&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;TEST_CONFIGURATION&#39;</span><span class="p">:</span> <span class="n">test_config_list</span><span class="p">,</span>
+			<span class="s1">&#39;STATS_TABLE&#39;</span><span class="p">:</span> <span class="n">standard_perf_stats_table</span><span class="p">,</span>
+			<span class="s1">&#39;ADDITIONAL_PERF_STATISTICS&#39;</span><span class="p">:</span> <span class="n">additional_perf_statistics</span><span class="p">,</span>
+			<span class="s1">&#39;CORRELATOR_QUEUES_DATA&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">queue_data</span><span class="p">),</span>
+			<span class="s1">&#39;CORRELATOR_QUEUES_TIMERANGE&#39;</span><span class="p">:</span> <span class="n">queue_time_range</span><span class="p">,</span>
+			<span class="s1">&#39;MEMORY_DATA&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">memory_data</span><span class="p">),</span>
+			<span class="s1">&#39;MEMORY_LABELS&#39;</span><span class="p">:</span> <span class="n">memory_labels</span><span class="p">,</span>
+			<span class="s1">&#39;MEMORY_TIMERANGE&#39;</span><span class="p">:</span> <span class="n">memory_time_range</span><span class="p">,</span>
+			<span class="s1">&#39;CPU_USAGE_DATA&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cpu_usage_data</span><span class="p">),</span>
+			<span class="s1">&#39;CPU_USAGE_TIMERANGE&#39;</span><span class="p">:</span> <span class="n">cpu_usage_time_range</span><span class="p">,</span>
+		<span class="p">}</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;html_report_data</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_perfMonitorSuffix</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">variation_replacements</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span></div>
+
+	<span class="k">def</span> <span class="nf">_generateFinalHTMLReport</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Generates a final HTML report.</span>
+
+<span class="sd">		Combines multiple HTML reports into one.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">template_dir</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_TESTING_SDK</span><span class="si">}</span><span class="s1">/testframework/resources&#39;</span>
+		<span class="n">variation_template</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">template_dir</span><span class="si">}</span><span class="s1">/template_perf_details.html&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+
+		<span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/html_report_data*.json&#39;</span><span class="p">)</span>
+		<span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
+		<span class="n">variation_htmls</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">variation_links</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">env_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">OUTFILE_ENV_DETAILS</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">)</span>
+
+		<span class="n">memory_limit_val</span> <span class="o">=</span> <span class="n">env_details</span><span class="p">[</span><span class="s1">&#39;Microservice Memory Limit&#39;</span><span class="p">]</span>
+		<span class="n">memory_numeric</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">,</span> <span class="n">memory_limit_val</span><span class="p">)))</span>
+		<span class="n">memory_unit</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">isalpha</span><span class="p">,</span> <span class="n">memory_limit_val</span><span class="p">))</span>
+
+		<span class="k">if</span> <span class="n">memory_unit</span> <span class="o">==</span> <span class="s1">&#39;Ti&#39;</span><span class="p">:</span>
+			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">memory_numeric</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="si">}</span><span class="s1">]&#39;</span>
+		<span class="k">elif</span> <span class="n">memory_unit</span> <span class="o">==</span> <span class="s1">&#39;Gi&#39;</span><span class="p">:</span>
+			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">memory_numeric</span> <span class="o">*</span> <span class="mi">1024</span><span class="si">}</span><span class="s1">]&#39;</span>
+		<span class="k">elif</span> <span class="n">memory_unit</span> <span class="o">==</span> <span class="s1">&#39;Mi&#39;</span><span class="p">:</span>
+			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">memory_numeric</span><span class="si">}</span><span class="s1">]&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;includeZero&quot;: true&#39;</span>
+
+		<span class="n">cpu_limit_millis</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">env_details</span><span class="p">[</span><span class="s1">&#39;Microservice CPU Limit&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+		<span class="n">cpu_limit_millis</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">cpu_limit_millis</span> <span class="o">*</span> <span class="mi">1000</span><span class="si">}</span><span class="s1">]&#39;</span>
+
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+			<span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+			<span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>			
+			<span class="n">replacements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+			<span class="n">variation_desc</span> <span class="o">=</span> <span class="n">replacements</span><span class="p">[</span><span class="s1">&#39;VARIATION_DESCRIPTION&#39;</span><span class="p">]</span>
+			<span class="n">replacements</span><span class="p">[</span><span class="s1">&#39;VARIATION_ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;variation_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span>
+			<span class="n">replacements</span><span class="p">[</span><span class="s1">&#39;VARIATION_TITLE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variation_desc</span>
+			<span class="n">replacements</span><span class="p">[</span><span class="s1">&#39;CPU_RANGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpu_limit_millis</span>
+			<span class="n">replacements</span><span class="p">[</span><span class="s1">&#39;MEMORY_RANGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">memory_limit_mb</span>
+
+			<span class="n">variation_html</span> <span class="o">=</span> <span class="n">variation_template</span>
+			<span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">replacements</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+				<span class="n">variation_html</span> <span class="o">=</span> <span class="n">variation_html</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;@</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">@&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="n">variation_html</span> <span class="o">=</span> <span class="s1">&#39;&lt;br/&gt;&lt;a class=&quot;backtotoplink&quot; href=&quot;#top_of_the_page&quot;&gt;Back to top&lt;/a&gt;&lt;br/&gt;&lt;hr/&gt;&#39;</span> <span class="o">+</span> <span class="n">variation_html</span>
+			<span class="n">variation_htmls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variation_html</span><span class="p">)</span>
+			<span class="n">variation_links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;#test_variation_variation_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">variation_desc</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="p">)</span>
+		
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="k">if</span> <span class="s1">&#39;Uptime (secs)&#39;</span> <span class="ow">in</span> <span class="n">env_details</span><span class="p">:</span>
+				<span class="c1"># don&#39;t need to log uptime in combined report</span>
+				<span class="k">del</span> <span class="n">env_details</span><span class="p">[</span><span class="s1">&#39;Uptime (secs)&#39;</span><span class="p">]</span>
+
+		<span class="n">variation_links_html</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">variation_links</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="k">else</span> <span class="sa">f</span><span class="s1">&#39;&lt;h2&gt;Variation List&lt;/h2&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_html_list</span><span class="p">(</span><span class="n">variation_links</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+
+		<span class="n">replacements</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="s1">&#39;TEST_TITLE&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptor</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+			<span class="s1">&#39;ENVIRONMENT_DETAILS&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_html_list</span><span class="p">(</span><span class="n">env_details</span><span class="p">),</span>
+			<span class="s1">&#39;VARIATION_DATA&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">variation_htmls</span><span class="p">),</span>
+			<span class="s1">&#39;VARIATION_LINKS&#39;</span><span class="p">:</span> <span class="n">variation_links_html</span><span class="p">,</span>
+		<span class="p">}</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">copyWithReplace</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">template_dir</span><span class="si">}</span><span class="s1">/template_perf_report.html&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/report.html&#39;</span><span class="p">,</span> <span class="n">replacements</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Generated performance report </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;report.html&quot;</span><span class="p">))</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.validate"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.validate">[docs]</a>	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Performs standard validations of the test run.</span>
+
+<span class="sd">			The following validations are performed.</span>
+
+<span class="sd">			- Ensures no errors logged from EPL apps under test</span>
+<span class="sd">			- Microservice did not terminate because of high memory usage.</span>
+<span class="sd">			- Microservice&#39;s memory usage remained below 90% of available memory.</span>
+<span class="sd">			- Correlator was not swapping memory.</span>
+
+<span class="sd">			The test should define its own `validate` method for performing any application-specific validation. Ensure that</span>
+<span class="sd">			the test calls the super implementation of the `validate` method, using `super(PySysTest, self).validate()`.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">logFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">()</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .* eplfiles\.&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+		<span class="c1"># Check that microservice did not use more than 90% of available memory</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;apama_highmemoryusage.*Apama is using 90. of available memory&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+		
+		<span class="c1"># Check that microservice did not exit because of high memory usage</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(Java exit 137|exit code 137)&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+		<span class="c1"># Check that no request to /cep from cumulocity failed</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isSmartrulesOnlyMicroservice</span><span class="p">():</span>
+			<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_COUNTERS</span><span class="si">}</span><span class="s1">*.json&#39;</span><span class="p">):</span>
+				<span class="n">perf_counters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">assertThat</span><span class="p">(</span><span class="s1">&#39;num_failed_cep_requests == 0&#39;</span><span class="p">,</span> <span class="n">num_failed_cep_requests</span><span class="o">=</span><span class="n">perf_counters</span><span class="p">[</span><span class="n">PERF_CEP_PROXY_REQ_FAILED</span><span class="p">])</span>
+
+		<span class="c1"># Check that correlator was not swapping</span>
+		<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">OUTFILE_PERF_STATS</span><span class="si">}</span><span class="s1">*.json&#39;</span><span class="p">):</span>
+			<span class="n">perf_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">assertThat</span><span class="p">(</span><span class="s1">&#39;correlator_swap_read_write == 0&#39;</span><span class="p">,</span> <span class="n">correlator_swap_read_write</span><span class="o">=</span><span class="n">perf_stats</span><span class="p">[</span><span class="n">PERF_CORR_SPAW_RATE</span><span class="p">][</span><span class="s1">&#39;min&#39;</span><span class="p">])</span>
+
+			<span class="c1"># check that mean and median size of input and output queue are reasonable</span>
+			<span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">OUTFILE_PERF_STATS</span><span class="p">,</span> <span class="n">OUTFILE_PERF_RAW_DATA</span><span class="p">)</span>
+			<span class="n">raw_perf_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+			<span class="k">for</span> <span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">max_size</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="mi">20_000</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="mi">10_000</span><span class="p">)]:</span>
+				<span class="n">stats</span> <span class="o">=</span> <span class="n">perf_stats</span><span class="p">[</span><span class="n">PERF_CORR_IQ_SIZE</span> <span class="k">if</span> <span class="n">queue</span> <span class="o">==</span> <span class="s1">&#39;input&#39;</span> <span class="k">else</span> <span class="n">PERF_CORR_OQ_SIZE</span><span class="p">]</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">assertThat</span><span class="p">(</span><span class="s1">&#39;median_queue_size &lt; max_queue_size * 0.8&#39;</span><span class="p">,</span> <span class="n">median_queue_size</span><span class="o">=</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;median&#39;</span><span class="p">],</span> <span class="n">max_queue_size</span><span class="o">=</span><span class="n">max_size</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">assertThat</span><span class="p">(</span><span class="s1">&#39;mean_queue_size &lt; max_queue_size * 0.8&#39;</span><span class="p">,</span> <span class="n">mean_queue_size</span><span class="o">=</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">],</span> <span class="n">max_queue_size</span><span class="o">=</span><span class="n">max_size</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_confirmStableQueueSize</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">raw_perf_data</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="EPLAppsPerfTest"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.EPLAppsPerfTest">[docs]</a><span class="k">class</span> <span class="nc">EPLAppsPerfTest</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Base class for EPL applications performance tests.</span>
+
+<span class="sd">	The class :class:`ApamaC8YPerfBaseTest` supersedes this class and should be used when writing new tests.</span>
+<span class="sd">	&quot;&quot;&quot;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../../index.html">Table of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../testing-epl.html">Writing tests for EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">EPL Apps Tools  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024 Software AG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+    </div>
+  </body>
+</html>
