@@ -64,7 +64,7 @@ class ApamaC8YBaseTest(BaseTest):
 			conn = C8yConnection(url, username, password)
 			res = conn.do_get(f'/application/applicationsByName/{APPLICATION_NAME}')
 			if len(res['applications']) == 0:
-				conn.do_request_json('POST', '/application/applications', body={"name":APPLICATION_NAME,"key":APPLICATION_KEY,"externalUrl":"http://www.softwareag.com","manifest":{},"type":"EXTERNAL"})
+				conn.do_request_json('POST', '/application/applications', body={"name":APPLICATION_NAME,"key":APPLICATION_KEY,"externalUrl":"http://www.softwareag.com","manifest":{},"type":"EXTERNAL","noAppSwitcher":True})
 				return APPLICATION_KEY
 			else:
 				return res['applications'][0]['key']
