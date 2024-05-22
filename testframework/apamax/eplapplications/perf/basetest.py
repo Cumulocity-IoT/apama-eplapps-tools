@@ -787,7 +787,10 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 			slope_ratio = float("inf")
 		
 		# if slope is not coming down fast enough then most probably queue is going to get full
-		mean_size_towards_end = statistics.mean(values[int(len(values) * 0.85) : int(len(values) * 0.95)])
+		end_values = values[int(len(values) * 0.85) : int(len(values) * 0.95)]	# portion of last 15% values
+		if len(end_values) < 2:	# use last 2 values if the portion contains less than 2 values
+			end_values = values[-2:]
+		mean_size_towards_end = statistics.mean(end_values)
 		if slope_ratio > ratio_threshold:
 			self.log.error(f'Correlator {queue_name} queue was increasing continuously. It probably would have been full eventually. Mean queue size towards the end was {mean_size_towards_end}')
 		elif slope_ratio > 0.2:
