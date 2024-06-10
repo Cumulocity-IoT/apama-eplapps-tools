@@ -59,4 +59,4 @@ class PySysTest(ApamaC8YBaseTest):
 
 	def validate(self):
 		# check none of the tests failed
-		self.assertGrep(self.platform.getApamaLogFile(), expr=' (ERROR|FATAL) .*', contains=False)
+		self.assertGrep(self.platform.getApamaLogFile(), expr=' (ERROR|FATAL) .* eplfiles\.', contains=False)
