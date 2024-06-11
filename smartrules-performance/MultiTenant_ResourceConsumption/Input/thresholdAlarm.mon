@@ -56,7 +56,7 @@ monitor AlarmOnMeasurementThresholdMultiTenant  {
 
         /* Create a new instance of the TenantSubscriptionNotifier
         *  to get notifications of tenant subscriptions and unsubscriptions.
-        *  For more details see, https://documentation.softwareag.com/pam/10.15.4/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_cumulocity_working_with_multi_tenant_deployments.html
+        *  For more details see, https://documentation.softwareag.com/pam/10.15.4.2/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_cumulocity_working_with_multi_tenant_deployments.html
         */
         TenantSubscriptionNotifier notifier := TenantSubscriptionNotifier.create().onSubscription(ontenantSubscribed).onUnsubscription(ontenantUnSubscribed);
 
@@ -71,7 +71,7 @@ monitor AlarmOnMeasurementThresholdMultiTenant  {
         /* Create a connection object for this tenant so that we can send events to
         *  this tenant and receive events from it.
         *  For more information on supported connection types, see
-        *  https://documentation.softwareag.com/pam/10.15.4/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_cumulocity_optimizing_requests_to_cumulocity_iot_with_concurrent_connections.html
+        *  https://documentation.softwareag.com/pam/10.15.4.2/en/webhelp/pam-webhelp/index.html#page/pam-webhelp%2Fco-ConApaAppToExtCom_cumulocity_optimizing_requests_to_cumulocity_iot_with_concurrent_connections.html
         */
         connection := SharedConnection.createForTenant(tenant);
 
