@@ -90,9 +90,14 @@ class ApamaC8YBaseTest(BaseTest):
 		apama_project = ProjectHelper(self, name)
 		apama_project.create(existingProject) 
 
+		n2 = getattr(self.project, 'CUMULOCITY_NOTIFICATIONS_2', 'false')
+
 		# need to have a version independent addition or this will need to be maintained.
 		apama_project.addBundle("Automatic onApplicationInitialized")
-		apama_project.addBundle("Cumulocity IoT > Cumulocity Client")
+		if n2 == 'false':
+			apama_project.addBundle("Cumulocity IoT > Cumulocity Client")
+		else:
+			apama_project.addBundle("Cumulocity IoT > Cumulocity Notifications 2.0")
 		apama_project.addBundle("Cumulocity IoT > Event Definitions for Cumulocity")
 		apama_project.addBundle("Cumulocity IoT > Utilities for Cumulocity")
 		apama_project.addBundle("Correlator Management")
@@ -115,32 +120,55 @@ class ApamaC8YBaseTest(BaseTest):
 			<property name="CUMULOCITY_TENANT" value=""/>
 			<property name="CUMULOCITY_MEASUREMENT_FORMAT" value=""/>
 		"""
+		def create_properties_file(output_name, dest_file, properties):
+			"""Creates a local properties file and copies it to the destination."""
+			with open(os.path.join(self.output, output_name), "w", encoding='utf8') as propfile:
+				propfile.write('\ufeff\n')
+				for prop, value in properties.items():
+					propfile.write(f"{prop}={value}\n")
+			self.copy(output_name, apamaProject.configDir() + dest_file)
+
+		if params is None:
+			params = {}
+
+		n2 = getattr(self.project, 'CUMULOCITY_NOTIFICATIONS_2', 'false')
+
 		# we create a properties file at this point that will get copied into the project 
-		paramImpl = {}
-		paramImpl["CUMULOCITY_USERNAME"] = self.project.CUMULOCITY_USERNAME
-		paramImpl["CUMULOCITY_PASSWORD"] = self.project.CUMULOCITY_PASSWORD
-		paramImpl["CUMULOCITY_APPKEY"] = self.createAppKey(self.project.CUMULOCITY_SERVER_URL, self.project.CUMULOCITY_USERNAME, self.project.CUMULOCITY_PASSWORD)
-		paramImpl["CUMULOCITY_SERVER_URL"] = self.project.CUMULOCITY_SERVER_URL
-		paramImpl["CUMULOCITY_AUTHORITY_FILE"] = getattr(self.project, 'CUMULOCITY_AUTHORITY_FILE', '')
-		paramImpl["CUMULOCITY_MEASUREMENT_FORMAT"] = getattr(self.project, 'CUMULOCITY_MEASUREMENT_FORMAT', 'BOTH')
-		paramImpl['CUMULOCITY_TENANT'] = getattr(self.project, 'CUMULOCITY_TENANT', '')
-		paramImpl['CUMULOCITY_FORCE_INITIAL_HOST'] = getattr(self.project, 'CUMULOCITY_FORCE_INITIAL_HOST', 'true')
-		paramImpl['CUMULOCITY_PROXY_HOST']=''
-		paramImpl['CUMULOCITY_PROXY_PORT']=''
-		paramImpl['CUMULOCITY_PROXY_USERNAME']=''
-		paramImpl['CUMULOCITY_PROXY_PASSWORD']=''
-		if params is not None:	
-			for prop in params:
-				paramImpl[prop] = params[prop]
-		
-		propFileName = os.path.join(self.output, "CumulocityIoT.properties")
-		destFileName = "/connectivity/CumulocityClient/CumulocityIoT.properties"
-		#create a local props file 
-		with open(propFileName, "w", encoding='utf8') as propfile:
-			propfile.write('\ufeff\n')
-			for prop in paramImpl:
-				propfile.write(prop + "=" + paramImpl[prop] + '\n')
-		self.copy(propFileName, apamaProject.configDir() + destFileName)
+		paramImpl = {
+			"CUMULOCITY_USERNAME": self.project.CUMULOCITY_USERNAME,
+			"CUMULOCITY_PASSWORD": self.project.CUMULOCITY_PASSWORD,
+			"CUMULOCITY_APPKEY": self.createAppKey(self.project.CUMULOCITY_SERVER_URL, self.project.CUMULOCITY_USERNAME, self.project.CUMULOCITY_PASSWORD),
+			"CUMULOCITY_SERVER_URL": self.project.CUMULOCITY_SERVER_URL,
+			"CUMULOCITY_AUTHORITY_FILE": getattr(self.project, 'CUMULOCITY_AUTHORITY_FILE', ''),
+			"CUMULOCITY_MEASUREMENT_FORMAT": getattr(self.project, 'CUMULOCITY_MEASUREMENT_FORMAT', 'BOTH'),
+			"CUMULOCITY_TENANT": getattr(self.project, 'CUMULOCITY_TENANT', ''),
+			"CUMULOCITY_FORCE_INITIAL_HOST": getattr(self.project, 'CUMULOCITY_FORCE_INITIAL_HOST', 'true'),
+			"CUMULOCITY_PROXY_HOST": '',
+			"CUMULOCITY_PROXY_PORT": '',
+			"CUMULOCITY_PROXY_USERNAME": '',
+			"CUMULOCITY_PROXY_PASSWORD": ''
+		}
+
+		paramImpl.update(params)
+
+		if n2 == 'false':
+			create_properties_file("CumulocityIoT.properties", "/connectivity/CumulocityClient/CumulocityIoT.properties", paramImpl)
+		else:	
+			create_properties_file("CumulocityIoT.properties", "/connectivity/CumulocityNotifications2.0/CumulocityIoTREST.properties", paramImpl)
+
+			n2props = {
+				"CUMULOCITY_NOTIFICATIONS_SUBSCRIBER_NAME": "streamingAnalytics",
+				"CUMULOCITY_NOTIFICATIONS_SUBSCRIPTION_NAME": "streamingAnalytics",
+				"CUMULOCITY_NOTIFICATIONS_SUBSCRIPTION_TYPE": "KeyShared",
+				"CUMULOCITY_NOTIFICATIONS_NUMBER_CLIENTS": "1",
+				"CUMULOCITY_NOTIFICATIONS_MAX_BUFFERSIZE": "1000",
+				"CUMULOCITY_NOTIFICATIONS_MAX_BATCHSIZE": "1000",
+				"CUMULOCITY_NOTIFICATIONS_AUTO_START": "True",
+				"CUMULOCITY_NOTIFICATIONS_SERVICE_URL": getattr(self.project, 'CUMULOCITY_NOTIFICATIONS_SERVICE_URL', 'pulsar://pulsar-proxy')
+			}
+
+			n2props.update(params)
+			create_properties_file("CumulocityNotifications2.properties", "/connectivity/CumulocityNotifications2.0/CumulocityNotifications2.properties", n2props)
 
 	def getTestSubjectEPLApps(self):
 		"""
@@ -453,6 +481,8 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 
 		# Wait for our EPL App test subjects to be added
 		correlator.flush()
+
+		self.waitForGrep('c8y-correlator.log', expr="Connected to Cumulocity IoT")
 
 		# Inject test mon files from Input directory to correlator
 		inputFiles = os.listdir(self.input)

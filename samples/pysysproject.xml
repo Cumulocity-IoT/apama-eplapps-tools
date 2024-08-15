@@ -18,6 +18,12 @@
 	<!-- username and password must be provided for authentication.-->
 	<property name="CUMULOCITY_USERNAME" value="${env.CUMULOCITY_USERNAME}" default="myUserName" />
 	<property name="CUMULOCITY_PASSWORD" value="${env.CUMULOCITY_PASSWORD}" default="myPassword" />
+
+	<!-- Whether Notifications 2.0 is enabled. By default, it is disabled. -->
+	<property name="CUMULOCITY_NOTIFICATIONS_2" value="${env.CUMULOCITY_NOTIFICATIONS_2}" default="false" />
+
+	<!-- The Cumulocity Notifications 2.0 Service URL -->
+	<property name="CUMULOCITY_NOTIFICATIONS_SERVICE_URL" value="${env.CUMULOCITY_NOTIFICATIONS_SERVICE_URL}" default="pulsar://pulsar-proxy" />
 	
 	<property root="testRootDir"/>
 	<property environment="env"/>

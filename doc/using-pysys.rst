@@ -117,6 +117,24 @@ In order to run your test with a local correlator, you must specify a different 
 
 Setting which EPL app to run the test on works as before.
 
+Notifications 2.0
+--------------------
+The EPL apps test framework supports using the new Notifications 2.0 API for receiving notifications from Cumulocity IoT. By default, this is disabled.
+
+See `the release note <https://documentation.softwareag.com/pam/10.15.5/en/webhelp/pam-webhelp/#page/pam-webhelp%2Fco-ApaRelNot_10155_iot_bundles.html>`_ for more information about the Notifications 2.0 integration.
+
+To enable it within the EPL apps test framework, add the following elements to your PySys Project XML:
+
+.. code-block:: xml
+
+	<!-- Whether Notifications 2.0 is enabled. By default, it is disabled. -->
+	<property name="CUMULOCITY_NOTIFICATIONS_2" value="${env.CUMULOCITY_NOTIFICATIONS_2}" default="true" />
+
+	<!-- The Cumulocity Notifications 2.0 Service URL -->
+	<property name="CUMULOCITY_NOTIFICATIONS_SERVICE_URL" value="${env.CUMULOCITY_NOTIFICATIONS_SERVICE_URL}" default="pulsar://pulsar-proxy" />
+
+
+
 Running the test
 -----------------
 

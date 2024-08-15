@@ -14,8 +14,6 @@ from pysys.constants import *
 from apama.basetest import ApamaBaseTest
 from apama.correlator import CorrelatorHelper
 from apamax.eplapplications.basetest import ApamaC8YBaseTest
-import subprocess
-import os 
 
 class PySysTest(ApamaC8YBaseTest):
 
@@ -24,17 +22,18 @@ class PySysTest(ApamaC8YBaseTest):
 		# create a project with C8Y bundles
 		project = self.createProject("c8y-basic")
 		self.addC8YPropertiesToProject(project)
-		
-		# copy EPL app to be tested to the project's monitors dir
-		self.copy(self.project.EPL_APPS+"/AlarmOnMeasurementThreshold.mon", project.monitorsDir()+"/AlarmOnMeasurementThreshold.mon")
-		# copy EPL test file from Input dir to project's monitors dir 
-		self.copy(self.input+"/AlarmOnMeasurementThresholdTest.mon", project.monitorsDir()+"/AlarmOnMeasurementThresholdTest.mon")
-		
+			
 		project.deploy()
 
 		# start local correlator
 		correlator = CorrelatorHelper(self, name='c8y-correlator')
 		correlator.start(logfile='c8y-correlator.log', config=project.deployedDir())
+
+		self.waitForGrep('c8y-correlator.log', expr="Connected to Cumulocity IoT")
+	
+		# Inject our EPL files into the correlator.
+		correlator.injectEPL([self.project.EPL_APPS+"/AlarmOnMeasurementThreshold.mon", self.input+"/AlarmOnMeasurementThresholdTest.mon"])
+		
 		
 		# wait for all events to be processed
 		correlator.flush()
