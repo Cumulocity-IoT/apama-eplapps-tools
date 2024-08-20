@@ -130,6 +130,19 @@
 </pre></div>
 </div>
 <p>Setting which EPL app to run the test on works as before.</p>
+<div class="section" id="notifications-2-0">
+<h3>Notifications 2.0<a class="headerlink" href="#notifications-2-0" title="Permalink to this headline">¶</a></h3>
+<p>The EPL apps test framework supports using the new Notifications 2.0 API for receiving notifications from Cumulocity IoT. By default, this is disabled.</p>
+<p>See <a class="reference external" href="https://documentation.softwareag.com/pam/10.15.5/en/webhelp/pam-webhelp/#page/pam-webhelp%2Fco-ApaRelNot_10155_iot_bundles.html">the release note</a> for more information about the Notifications 2.0 integration.</p>
+<p>To enable it within the EPL apps test framework, add the following elements to your PySys Project XML:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Whether Notifications 2.0 is enabled. By default, it is disabled. --&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;CUMULOCITY_NOTIFICATIONS_2&quot;</span> <span class="na">value=</span><span class="s">&quot;${env.CUMULOCITY_NOTIFICATIONS_2}&quot;</span> <span class="na">default=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!-- The Cumulocity Notifications 2.0 Service URL --&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;CUMULOCITY_NOTIFICATIONS_SERVICE_URL&quot;</span> <span class="na">value=</span><span class="s">&quot;${env.CUMULOCITY_NOTIFICATIONS_SERVICE_URL}&quot;</span> <span class="na">default=</span><span class="s">&quot;pulsar://pulsar-proxy&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="id2">
 <h3>Running the test<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>To run the test using a local correlator requires the APAMA_HOME project property to be set as the path to your installation of Apama. This can be done by simply running the test in an Apama command prompt or by explicitly setting the APAMA_HOME environment variable.</p>
@@ -240,6 +253,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#testing-locally">Testing locally</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#notifications-2-0">Notifications 2.0</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id2">Running the test</a></li>
 </ul>
 </li>
