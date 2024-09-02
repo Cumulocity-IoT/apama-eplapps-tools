@@ -1,0 +1,199 @@
+/*
+ Copyright (c) 2024 Software AG, Darmstadt, Germany and/or its licensors
+
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ file except in compliance with the License. You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the
+ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.
+*/
+
+using com.apama.cumulocity.Measurement;
+using com.apama.cumulocity.ManagedObject;
+using com.apama.cumulocity.ObjectCommitted;
+using com.apama.cumulocity.ObjectCommitFailed;
+using com.apama.cumulocity.Util;
+using com.apama.cumulocity.Alarm;
+
+using com.apama.cumulocity.TenantDetails;
+using com.apama.cumulocity.TenantSubscriptionNotifier;
+using com.apama.connectivity.ApplicationInitialized;
+
+
+event DeviceCreated {
+	string deviceId;
+	integer reqId;
+}
+
+monitor AlarmOnMeasurementThresholdTest {
+
+	constant string VALUE_FRAGMENT_TYPE := "myFragment";
+	constant string VALUE_SERIES_TYPE := "mySeries";
+	constant string DEVICE_TYPE := "testDevice";
+	constant string TEST_DEVICE_PREFIX := "PYSYS_";
+	constant string MEASUREMENT_TYPE := "myMeasurementType";
+	constant string ALARM_TYPE := "ThresholdExceededAlarm";
+
+	constant float MEASUREMENT_THRESHOLD := 100.0;
+	constant float NOT_EXPECTING_ALARM_WAIT_TIMEOUT := 10.0;
+	constant float EXPECTING_ALARM_WAIT_TIMEOUT := 45.0;
+
+	string prefix := "";
+
+	action onload()
+	{
+		// Create a new instance of the TenantSubscriptionNotifier to get notifications of tenant subscriptions
+		TenantSubscriptionNotifier notifier := TenantSubscriptionNotifier.create().onSubscription(ontenantSubscribed);
+	}
+
+	/** Callback received when a new tenant is subscribed for the microservice. */
+	action ontenantSubscribed(TenantDetails tenant) {
+
+		prefix := tenant.tenantId + " : ";
+
+		monitor.subscribe(tenant.getChannel(Measurement.SUBSCRIBE_CHANNEL));
+		monitor.subscribe(tenant.getChannel(Alarm.SUBSCRIBE_CHANNEL));
+		on all Measurement() as m {
+			log prefix + "Received "+ m.toString();
+		}
+		on all Alarm() as a {
+			log prefix + "Received "+ a.toString();
+		}
+  
+		// the c8y transport takes little bit time for hostReady
+		on wait(3.0) {
+ 		
+			// Check that an alarm is not raised when a measurement value below the threshold is sent
+			spawn runThresholdTestCase(MEASUREMENT_THRESHOLD - 10.0, false, "belowThresholdTest", tenant);
+
+			// Check that an alarm is raised when a measurement value above the threshold is sent
+			spawn runThresholdTestCase(MEASUREMENT_THRESHOLD + 10.0, true, "aboveThresholdTest", tenant);
+
+		}		
+	}
+	/**
+	Creates a new device, sends a measurement from this device, 
+	and then checks to see whether a resulting alarm is raised.
+	Test failures are logged at ERROR; test passes are logged at INFO.
+	@param value The value of the measurement to be sent. 
+	@param expectingAlarm Whether we expect an alarm to be raised for the given measurement value.
+	@param testName The name of the test case.
+	*/
+	action runThresholdTestCase(float value, boolean expectingAlarm, string testName,TenantDetails tenant)
+	{	
+		monitor.subscribe(tenant.getChannel("TEST_CHANNEL"));
+		// Create a device to be the source of our measurements
+		on DeviceCreated(reqId=createNewDevice("AlarmOnMeasurementThresholdTestDevice",tenant)) as device 
+		{	
+			// Send measurement and check to see whether an alarm is raised 
+			monitor.subscribe(tenant.getChannel(Alarm.SUBSCRIBE_CHANNEL));
+			integer measurementReqId := sendMeasurement(device.deviceId, value, tenant);
+
+			// Define how long we wait for alarm depending on whether one is expected
+			float alarmWaitTimeout := NOT_EXPECTING_ALARM_WAIT_TIMEOUT;
+			if expectingAlarm {
+				alarmWaitTimeout := EXPECTING_ALARM_WAIT_TIMEOUT;
+			}
+
+			// Listener for if alarm is raised within timeout
+			on Alarm(source=device.deviceId, type=ALARM_TYPE) as a and not wait(alarmWaitTimeout) 
+			{
+				if expectingAlarm {
+					log prefix + testName + ": "+ ALARM_TYPE + " raised - PASS" at INFO;
+				} else {
+					log prefix + testName + ": "+ ALARM_TYPE + " raised when none was expected - FAIL" at ERROR;
+				}
+				die;
+			}
+			// Listener for if alarm is not raised within timeout
+			on wait(alarmWaitTimeout) and not Alarm(source=device.deviceId, type=ALARM_TYPE) 
+			{
+				if expectingAlarm {
+					log prefix + testName + ": "+ ALARM_TYPE + " not raised when one was expected - FAIL" at ERROR;
+				} else {
+					log prefix + testName + ": "+ ALARM_TYPE + " not raised - PASS" at INFO;
+				}
+				die;
+			}
+		}
+	}
+
+	/**
+	Creates a device simulator to be the source of the measurement. 
+	@param name The name of our device simulator.
+	@returns The reqId of the ManagedObject event sent to create a device.
+	*/
+	action createNewDevice(string name, TenantDetails tenant) returns integer 
+	{
+		
+		monitor.subscribe(tenant.getChannel(ManagedObject.SUBSCRIBE_CHANNEL));
+		
+		ManagedObject mo := new ManagedObject;
+		mo.type := DEVICE_TYPE;
+		
+		// Any devices with naming prefix "PYSYS_" and the c8y_IsDevice property 
+		// will be cleaned from the tenant by the test framework  
+		mo.name := TEST_DEVICE_PREFIX + name; 
+		mo.params.add("c8y_IsDevice", new dictionary<any, any>);
+
+		// Create a ManagedObject in Cumulocity IoT and receive a response event confirming the change
+		integer reqId := Util.generateReqId();
+		send mo.withChannelResponse(reqId, new dictionary<string, string>) to tenant.getChannel(ManagedObject.SEND_CHANNEL);
+
+		// Listener for when device has been created
+		on ObjectCommitted(reqId=reqId) as resp
+		and not ObjectCommitFailed(reqId=reqId)
+		{
+			ManagedObject device := <ManagedObject> resp.object; 
+			log prefix + "New simulator device created " + device.id at INFO;
+			send DeviceCreated(device.id, reqId) to tenant.getChannel("TEST_CHANNEL");
+		}
+		// Listener for if creation of device fails
+		on ObjectCommitFailed(reqId=reqId) as resp
+		and not ObjectCommitted(reqId=reqId)
+		{
+			log prefix + "Unable to create simulator device, reason : " + resp.toString() at ERROR;
+			// Cause test to fail early, rather than wait for timeout
+			die;
+		}
+		return reqId;
+	}
+
+	/**
+	Sends a measurement with a given value to Cumulocity IoT.  
+	@param source The id of the ManagedObject that is the source of the measurement. 
+	@param value The value of the measurement to be sent.
+	@returns The reqId of the measurement event.
+	*/
+	action sendMeasurement(string source, float value, TenantDetails tenant) returns integer
+	{
+		monitor.subscribe(tenant.getChannel(Measurement.SUBSCRIBE_CHANNEL));
+		Measurement m := new Measurement;
+		m.source := source;
+		m.time := currentTime;
+		m.type := MEASUREMENT_TYPE;
+		m.measurements.getOrAddDefault(VALUE_FRAGMENT_TYPE).getOrAddDefault(VALUE_SERIES_TYPE).value := value;
+		
+		integer reqId := Util.generateReqId();
+		send m.withChannelResponse(reqId, new dictionary<string, string>) to tenant.getChannel(Measurement.SEND_CHANNEL);
+
+		// Listener for if creation of measurement fails
+		on ObjectCommitFailed(reqId=reqId) as resp
+		and not ObjectCommitted(reqId=reqId) 
+		{
+			log prefix + "Unable to create measurement, reason : " + resp.toString() at ERROR;
+			// Cause test to fail early, rather than wait for timeout
+			die; 
+		}
+
+		log prefix + "Sending measurement with value " + value.toString() at INFO;
+		return reqId;
+	}
+
+	action ondie() {
+		log prefix + "Test Done !!";
+	}	
+}
+

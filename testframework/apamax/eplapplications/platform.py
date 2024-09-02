@@ -73,6 +73,7 @@ class CumulocityPlatform(object):
 		self._instanceName = None
 		self._isMultiTenantMicroservice = False
 		self._microserviceName = ''
+		self.__applicationOwnerTenantId = self._remoteTenantId
 
 		applications = self._c8yConn.do_get("/application/applications?pageSize=2000")["applications"]
 		
@@ -81,6 +82,7 @@ class CumulocityPlatform(object):
 				self._applicationId = application['id']
 				self._isMultiTenantMicroservice = application.get('manifest',{}).get('isolation', '') == 'MULTI_TENANT'
 				self._microserviceName = application['name']
+				self.__applicationOwnerTenantId = application.get('owner',{}).get('tenant',{}).get('id')
 
 				instances = {}
 				try:
@@ -94,12 +96,19 @@ class CumulocityPlatform(object):
 				except Exception as e:
 					self.parent.log.debug("Caught exception looking for platform subscription. Assuming that means it's a different application: %s" % e)
 
-		
-		if not self._instanceName or not self._applicationId:
+		self.isBootstrapTenant = True
+		# This means that the tenant is not the bootstrap tenant for the multi-tenant microservice.
+		if self._isMultiTenantMicroservice and self.__applicationOwnerTenantId != self._remoteTenantId:
+			self.isBootstrapTenant = False
+   
+		# self._instanceName used for log spooling only. so validate for isBootstrapTenant
+		if (self.isBootstrapTenant and not self._instanceName) or not self._applicationId:
 			raise Exception("Could not find the apama-ctrl service running in your tenant")
-			
-		self.parent.startBackgroundThread("spooling", self._logSpoolingThread)
-		self.parent.waitForGrep('platform.log', expr='.')
+
+		# The log spooling must be done only for the bootstrap tenant in case of multi-tenant microservice.
+		if self.isBootstrapTenant:
+			self.parent.startBackgroundThread("spooling", self._logSpoolingThread)
+			self.parent.waitForGrep('platform.log', expr='.')
 
 	def _logSpoolingThread(self, stopping, log):
 		""" When doing non-local testing, this method implements a thread that is responsible for regularly grabbing

@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="yes"?>
+<pysystest type="auto" state="runnable">
+
+  <description>
+    <title>Run a test of project package (with an EPL application) using a local correlator for a child tenant</title>
+    <purpose><![CDATA[
+        Make sure the EPL app project is deployed from the local correlator and 
+        connected to the Cumulocity IoT platform. It should work without any errors from any child tenant.
+    ]]>
+    </purpose>
+  </description>
+
+  <classification>
+    <groups>
+      <group></group>
+    </groups>
+  </classification>
+
+  <data>
+    <class name="PySysTest" module="run"/>
+  </data>
+  
+  <traceability>
+    <requirements>
+      <requirement id=""/>     
+    </requirements>
+  </traceability>
+</pysystest>
