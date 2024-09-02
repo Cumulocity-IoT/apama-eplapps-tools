@@ -112,6 +112,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_isMultiTenantMicroservice</span> <span class="o">=</span> <span class="kc">False</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_microserviceName</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__applicationOwnerTenantId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span>
 
 		<span class="n">applications</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="s2">&quot;/application/applications?pageSize=2000&quot;</span><span class="p">)[</span><span class="s2">&quot;applications&quot;</span><span class="p">]</span>
 		
@@ -120,6 +121,7 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span> <span class="o">=</span> <span class="n">application</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">_isMultiTenantMicroservice</span> <span class="o">=</span> <span class="n">application</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;manifest&#39;</span><span class="p">,{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;isolation&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;MULTI_TENANT&#39;</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">_microserviceName</span> <span class="o">=</span> <span class="n">application</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">__applicationOwnerTenantId</span> <span class="o">=</span> <span class="n">application</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;owner&#39;</span><span class="p">,{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tenant&#39;</span><span class="p">,{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
 
 				<span class="n">instances</span> <span class="o">=</span> <span class="p">{}</span>
 				<span class="k">try</span><span class="p">:</span>
@@ -133,12 +135,19 @@
 				<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 					<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Caught exception looking for platform subscription. Assuming that means it&#39;s a different application: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
 
-		
-		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span><span class="p">:</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">isBootstrapTenant</span> <span class="o">=</span> <span class="kc">True</span>
+		<span class="c1"># This means that the tenant is not the bootstrap tenant for the multi-tenant microservice.</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isMultiTenantMicroservice</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__applicationOwnerTenantId</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">isBootstrapTenant</span> <span class="o">=</span> <span class="kc">False</span>
+   
+		<span class="c1"># self._instanceName used for log spooling only. so validate for isBootstrapTenant</span>
+		<span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isBootstrapTenant</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not find the apama-ctrl service running in your tenant&quot;</span><span class="p">)</span>
-			
-		<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">startBackgroundThread</span><span class="p">(</span><span class="s2">&quot;spooling&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logSpoolingThread</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;platform.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+		<span class="c1"># The log spooling must be done only for the bootstrap tenant in case of multi-tenant microservice.</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isBootstrapTenant</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">startBackgroundThread</span><span class="p">(</span><span class="s2">&quot;spooling&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logSpoolingThread</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;platform.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_logSpoolingThread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stopping</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot; When doing non-local testing, this method implements a thread that is responsible for regularly grabbing</span>
