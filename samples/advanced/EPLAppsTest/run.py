@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 from pysys.constants import *
-from apamax.eplapplications import CumulocityPlatform, EPLApps
+from apamax.eplapplications import EPLApps
 from apamax.eplapplications.basetest import ApamaC8YBaseTest
 import os 
 
@@ -19,8 +19,7 @@ class PySysTest(ApamaC8YBaseTest):
 
 	def execute(self):
 
-		# connect to the platform
-		self.platform = CumulocityPlatform(self)
+		# Interacting with Apama EPL Apps in Cumulocity IoT
 		eplapps = EPLApps(self.platform.getC8YConnection())
 
 		# deploy the application

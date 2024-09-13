@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 from pysys.constants import *
-from apamax.eplapplications import CumulocityPlatform, EPLApps
+from apamax.eplapplications import EPLApps
 from apamax.eplapplications.basetest import ApamaC8YBaseTest
 import os 
 
@@ -28,8 +28,7 @@ class PySysTest(ApamaC8YBaseTest):
 			# Prepare the tenant for the test run.
 			self.prepareTenant(tenant=tenant)
 
-		# connect to the platform
-		self.platform = CumulocityPlatform(self)
+		# Interacting with Apama EPL Apps in Cumulocity IoT
 		eplapps = EPLApps(self.platform.getC8YConnection())
 
 		# deploy the application
@@ -44,8 +43,9 @@ class PySysTest(ApamaC8YBaseTest):
 		self.addCleanupFunction(lambda: eplapps.delete('PYSYS_TestCase'))
 		self.addCleanupFunction(lambda: eplapps.delete('PYSYS_AppUnderTest'))
 
-		# for each tenant 2 test cases, each case carries 2 test scenarios.
-		self.waitForGrep(self.platform.getApamaLogFile(),expr="Test Done !!",condition = f"=={len(self.tenants)*4}")
+		# for each tenant and each case carries 2 test scenarios.
+		# PAB-4293 fixed now.
+		self.waitForGrep(self.platform.getApamaLogFile(),expr="Test Done !!",condition = f"=={len(self.tenants)*2}")
 				
 	def validate(self):
 		# check none of the tests failed
