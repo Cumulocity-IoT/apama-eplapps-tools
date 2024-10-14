@@ -244,7 +244,8 @@ then all the mon files in the project.EPL_APPS directory are returned.</p>
 <dl class="py method">
 <dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant">
 <code class="sig-name descname">prepareTenant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.prepareTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prepares the tenant for a test by deleting all devices created by previous tests, and clearing all active alarms.</p>
+<dd><p>Prepares the tenant for a test by deleting all devices created by previous tests and clearing all active alarms.
+However, you can disable the default behavior of clearing all active alarms by setting the <code class="xref py py-obj docutils literal notranslate"><span class="pre">clearAllActiveAlarmsDuringTenantPreparation</span></code> property to <code class="xref py py-obj docutils literal notranslate"><span class="pre">false</span></code> in the PySys project configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>, optional) – The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.</p>

@@ -243,7 +243,8 @@
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.prepareTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Prepares the tenant for a test by deleting all devices created by previous tests, and clearing all active alarms.</span>
+<span class="sd">		Prepares the tenant for a test by deleting all devices created by previous tests and clearing all active alarms.</span>
+<span class="sd">		However, you can disable the default behavior of clearing all active alarms by setting the `clearAllActiveAlarmsDuringTenantPreparation` property to `false` in the PySys project configuration.</span>
 
 <span class="sd">		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.</span>
 <span class="sd">		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
@@ -427,6 +428,11 @@
 <span class="sd">			:param tenant: The Cumulocity IoT tenant.</span>
 <span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
 <span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># EPL Apps tools doesn&#39;t cleanup all alarms on tenant by default</span>
+		<span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s1">&#39;clearAllActiveAlarmsDuringTenantPreparation&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;false&#39;</span><span class="p">:</span> 
+			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Skipping the alarm cleanup operation due to property clearAllActiveAlarmsDuringTenantPreparation is false&#39;</span><span class="p">)</span>
+			<span class="k">return</span>
+
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Clearing active alarms&quot;</span><span class="p">)</span>
 		<span class="n">connection</span> <span class="o">=</span> <span class="p">(</span><span class="n">tenant</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getTenant</span><span class="p">())</span><span class="o">.</span><span class="n">getConnection</span><span class="p">()</span>
 		<span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;/alarm/alarms?status=ACTIVE&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;CLEARED&quot;</span><span class="p">})</span>
