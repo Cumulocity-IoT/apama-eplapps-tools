@@ -37,7 +37,9 @@ Or for Windows:
 
 In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples and samples-performance directories of this GitHub repository.
 
-You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains essential configuration necessary for testing with Apama and Cumulocity.
+You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains the essential configuration necessary for testing with Apama and Cumulocity IoT.
+
+You can set the `clearAllActiveAlarmsDuringTenantPreparation` property to `false` in the pysysproject.xml file to disable the default behavior of clearing all active alarms.
 
 Creating a test
 ----------------
@@ -167,7 +169,7 @@ Advanced tests
 
 For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.
 
-In order to view documentation on classes for PySys helpers for EPL Apps please see: `PySys helpers <https://softwareag.github.io/apama-eplapps-tools>`_ .
+In order to view documentation on classes for PySys helpers for EPL Apps please see: `PySys helpers <https://cumulocity-iot.github.io/apama-eplapps-tools>`_ .
 
 See `Testing the performance of your EPL apps and smart rules <performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules>`_ for details on writing performance tests.
 

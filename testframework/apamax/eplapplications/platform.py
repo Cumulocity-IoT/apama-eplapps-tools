@@ -227,6 +227,7 @@ class CumulocityPlatform(object):
 					applications = tenant['applications']['references']
 					for app in applications:
 						if self._applicationId == app['application']['id']:
-							self.__subscribedTenants.append(CumulocityTenant(tenant["domain"], self.username, self.password, tenant["id"]))
+							username = (tenant["id"] + '/' + self.username.split('/')[1]) if '/' in self.username else self.username
+							self.__subscribedTenants.append(CumulocityTenant(tenant["domain"], username, self.password, tenant["id"]))
 
 			return self.__subscribedTenants

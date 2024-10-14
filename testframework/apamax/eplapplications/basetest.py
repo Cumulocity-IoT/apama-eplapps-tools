@@ -204,7 +204,8 @@ class ApamaC8YBaseTest(BaseTest):
 
 	def prepareTenant(self, tenant=None):
 		"""
-		Prepares the tenant for a test by deleting all devices created by previous tests, and clearing all active alarms.
+		Prepares the tenant for a test by deleting all devices created by previous tests and clearing all active alarms.
+		However, you can disable the default behavior of clearing all active alarms by setting the `clearAllActiveAlarmsDuringTenantPreparation` property to `false` in the PySys project configuration.
 
 		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.
 		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
@@ -388,6 +389,11 @@ class ApamaC8YBaseTest(BaseTest):
 			:param tenant: The Cumulocity IoT tenant.
 			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		"""
+		# EPL Apps tools doesn't cleanup all alarms on tenant by default
+		if getattr(self.project, 'clearAllActiveAlarmsDuringTenantPreparation', 'true').lower() == 'false': 
+			self.log.info(f'Skipping the alarm cleanup operation due to property clearAllActiveAlarmsDuringTenantPreparation is false')
+			return
+
 		self.log.info("Clearing active alarms")
 		connection = (tenant or self.platform.getTenant()).getConnection()
 		connection.do_request_json('PUT', '/alarm/alarms?status=ACTIVE', {"status": "CLEARED"})

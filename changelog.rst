@@ -2,9 +2,13 @@
 Change Log
 ===========
 
+25.283.0
+---------
++ By default, the EPL Apps Tools test framework clears all alarms on the tenant during startup. This behavior can now be disabled by setting the `clearAllActiveAlarmsDuringTenantPreparation` property to `false` in the PySys project configuration.
+
 25.219.0
 ---------
-+ The EPL Apps tools test framework supports Notifications 2.0 for receiving notifications from Cumulocity IoT.
++ The EPL Apps Tools test framework supports Notifications 2.0 for receiving notifications from Cumulocity IoT.
 
 24.0.0
 -------

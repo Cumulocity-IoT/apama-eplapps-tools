@@ -70,7 +70,8 @@
 </pre></div>
 </div>
 <p>In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples and samples-performance directories of this GitHub repository.</p>
-<p>You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains essential configuration necessary for testing with Apama and Cumulocity.</p>
+<p>You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains the essential configuration necessary for testing with Apama and Cumulocity IoT.</p>
+<p>You can set the <code class="xref py py-obj docutils literal notranslate"><span class="pre">clearAllActiveAlarmsDuringTenantPreparation</span></code> property to <code class="xref py py-obj docutils literal notranslate"><span class="pre">false</span></code> in the pysysproject.xml file to disable the default behavior of clearing all active alarms.</p>
 </div>
 <div class="section" id="creating-a-test">
 <h3>Creating a test<a class="headerlink" href="#creating-a-test" title="Permalink to this headline">¶</a></h3>
@@ -171,7 +172,7 @@
 <div class="section" id="advanced-tests">
 <h2>Advanced tests<a class="headerlink" href="#advanced-tests" title="Permalink to this headline">¶</a></h2>
 <p>For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.</p>
-<p>In order to view documentation on classes for PySys helpers for EPL Apps please see: <a class="reference external" href="https://softwareag.github.io/apama-eplapps-tools">PySys helpers</a> .</p>
+<p>In order to view documentation on classes for PySys helpers for EPL Apps please see: <a class="reference external" href="https://cumulocity-iot.github.io/apama-eplapps-tools">PySys helpers</a> .</p>
 <p>See <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on writing performance tests.</p>
 <p>To run in Apama EPL Apps, your run.py should look something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apamax.eplapplications.basetest</span> <span class="kn">import</span> <span class="n">ApamaC8YBaseTest</span>
