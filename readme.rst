@@ -12,8 +12,8 @@ to simply write tests for your EPL apps and to run them automatically.
 Disclaimer
 ----------
 These tools are provided as-is and without warranty or support. They do not 
-constitute part of the Software AG product suite. Users are free to use, fork and modify them, 
-subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee 
+constitute part of the Cumulocity GmbH product suite. Users are free to use, fork and modify them, 
+subject to the license agreement. While Cumulocity GmbH welcomes contributions, we cannot guarantee 
 to include every contribution in the main project.
 
 Licensing
