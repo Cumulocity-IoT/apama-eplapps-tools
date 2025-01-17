@@ -45,7 +45,7 @@ System requirements
 -------------------
 This SDK requires an installation of Python 3.7+ and will run on either Windows or Linux.
 
-The EPL apps test framework requires you to have an installation of PySys. See `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for details. If you want the option of running tests locally, you will also need an installation of the latest Apama, which can be obtained from `Apama Downloads <https://apamacommunity.com/downloads>`_. If you choose to install Apama, you may skip the manual installation of Python and PySys as both are shipped with Apama.
+The EPL apps test framework requires you to have an installation of PySys. See `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for details. If you want the option of running tests locally, you will also need an installation of the latest Apama, which can be obtained from `Apama Downloads <https://download.cumulocity.com/Apama>`_. If you choose to install Apama, you may skip the manual installation of Python and PySys as both are shipped with Apama.
 
 
 Repository structure
