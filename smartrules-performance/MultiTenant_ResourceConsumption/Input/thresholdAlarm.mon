@@ -56,7 +56,7 @@ monitor AlarmOnMeasurementThresholdMultiTenant  {
 
         /* Create a new instance of the TenantSubscriptionNotifier
         *  to get notifications of tenant subscriptions and unsubscriptions.
-        *  For more details see, https://cumulocity.com/apama/docs/latest/standard-connectivity-plugins/the-cumulocity-iot-transport-connectivity-plug-in/#working-with-multi-tenant-deployments
+        *  For more details see, https://cumulocity.com/apama/docs/10.15/standard-connectivity-plugins/the-cumulocity-iot-transport-connectivity-plug-in/#working-with-multi-tenant-deployments
         */
         TenantSubscriptionNotifier notifier := TenantSubscriptionNotifier.create().onSubscription(ontenantSubscribed).onUnsubscription(ontenantUnSubscribed);
 
@@ -71,7 +71,7 @@ monitor AlarmOnMeasurementThresholdMultiTenant  {
         /* Create a connection object for this tenant so that we can send events to
         *  this tenant and receive events from it.
         *  For more information on supported connection types, see
-        *  https://cumulocity.com/apama/docs/latest/standard-connectivity-plugins/the-cumulocity-iot-transport-connectivity-plug-in/#optimizing-requests-to-cumulocity-iot-with-concurrent-connections
+        *  https://cumulocity.com/apama/docs/10.15/standard-connectivity-plugins/the-cumulocity-iot-transport-connectivity-plug-in/#optimizing-requests-to-cumulocity-iot-with-concurrent-connections
         */
         connection := SharedConnection.createForTenant(tenant);
 

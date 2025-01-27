@@ -123,7 +123,7 @@ Notifications 2.0
 --------------------
 The EPL apps test framework supports using the new Notifications 2.0 API for receiving notifications from Cumulocity IoT. By default, this is disabled.
 
-See `the release note <https://cumulocity.com/apama/docs/latest/change-logs/#10.15/cumulocity-10155-clientbundledeprecated>`_ for more information about the Notifications 2.0 integration.
+See `the release note <https://cumulocity.com/apama/docs/10.15/change-logs/#10.15/cumulocity-10155-clientbundledeprecated>`_ for more information about the Notifications 2.0 integration.
 
 To enable it within the EPL apps test framework, add the following elements to your PySys Project XML:
 
