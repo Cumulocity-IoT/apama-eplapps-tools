@@ -87,7 +87,7 @@ class CumulocityPlatform(object):
 				instances = {}
 				try:
 					while len(instances) == 0:
-						applicationStatus = self._c8yConn.do_get(f"/application/applications/{self._applicationId}/status?refresh=true")
+						applicationStatus = self._c8yConn.do_get(f"/application/applications/{self._applicationId}/status{'' if self._isMultiTenantMicroservice else '?refresh=true'}")
 						instances = applicationStatus['c8y_Status']['instances']
 						time.sleep(1.0)
 					if len(instances) > 0:
