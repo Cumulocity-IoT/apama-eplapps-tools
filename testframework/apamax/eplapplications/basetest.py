@@ -1,6 +1,5 @@
 ## License
-# Copyright (c) 2020-2022 Software AG, Darmstadt, Germany and/or its licensors
-
+# Copyright (c) 2020-present Cumulocity GmbH, Duesseldorf, Germany and/or its affiliates and/or their licensors.
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
 # http://www.apache.org/licenses/LICENSE-2.0
@@ -64,7 +63,7 @@ class ApamaC8YBaseTest(BaseTest):
 			conn = C8yConnection(url, username, password)
 			res = conn.do_get(f'/application/applicationsByName/{APPLICATION_NAME}')
 			if len(res['applications']) == 0:
-				conn.do_request_json('POST', '/application/applications', body={"name":APPLICATION_NAME,"key":APPLICATION_KEY,"externalUrl":"http://www.softwareag.com","manifest":{},"type":"EXTERNAL","noAppSwitcher":True})
+				conn.do_request_json('POST', '/application/applications', body={"name":APPLICATION_NAME,"key":APPLICATION_KEY,"externalUrl":"http://www.cumulocity.com","manifest":{},"type":"EXTERNAL","noAppSwitcher":True})
 				return APPLICATION_KEY
 			else:
 				return res['applications'][0]['key']

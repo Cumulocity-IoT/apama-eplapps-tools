@@ -38,8 +38,7 @@
             
   <h1>Source code for apamax.eplapplications.perf.basetest</h1><div class="highlight"><pre>
 <span></span><span class="c1">## License</span>
-<span class="c1"># Copyright (c) 2020-2022 Software AG, Darmstadt, Germany and/or its licensors</span>
-
+<span class="c1"># Copyright (c) 2020-present Cumulocity GmbH, Duesseldorf, Germany and/or its affiliates and/or their licensors.</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this</span>
 <span class="c1"># file except in compliance with the License. You may obtain a copy of the License at</span>
 <span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
@@ -826,7 +825,10 @@
 			<span class="n">slope_ratio</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
 		
 		<span class="c1"># if slope is not coming down fast enough then most probably queue is going to get full</span>
-		<span class="n">mean_size_towards_end</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.85</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.95</span><span class="p">)])</span>
+		<span class="n">end_values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.85</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.95</span><span class="p">)]</span>	<span class="c1"># portion of last 15% values</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">end_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>	<span class="c1"># use last 2 values if the portion contains less than 2 values</span>
+			<span class="n">end_values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+		<span class="n">mean_size_towards_end</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">end_values</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">slope_ratio</span> <span class="o">&gt;</span> <span class="n">ratio_threshold</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Correlator </span><span class="si">{</span><span class="n">queue_name</span><span class="si">}</span><span class="s1"> queue was increasing continuously. It probably would have been full eventually. Mean queue size towards the end was </span><span class="si">{</span><span class="n">mean_size_towards_end</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 		<span class="k">elif</span> <span class="n">slope_ratio</span> <span class="o">&gt;</span> <span class="mf">0.2</span><span class="p">:</span>
@@ -1173,7 +1175,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2024 Software AG.
+        &#169; Copyright 2025 Cumulocity GmbH.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
     </div>
   </body>
