@@ -39,13 +39,13 @@ To find out how to performance test your EPL apps look at `Performance testing E
 
 In order to view the documentation on classes for PySys helpers for Apama EPL Apps see: `PySys helpers <https://cumulocity-iot.github.io/apama-eplapps-tools/autodocgen/apamax.eplapplications.html#module-apamax.eplapplications>`_.
 
-See `Apama Documentation <https://documentation.softwareag.com/pam/10.15.5/en>`_, `Streaming Analytics guide <https://cumulocity.com/docs/streaming-analytics>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
+See `Apama Documentation <https://cumulocity.com/apama/docs/10.15>`_, `Streaming Analytics guide <https://cumulocity.com/docs/2025/streaming-analytics>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
 
 System requirements
 -------------------
 This SDK requires an installation of Python 3.7+ and will run on either Windows or Linux.
 
-The EPL apps test framework requires you to have an installation of PySys. See `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for details. If you want the option of running tests locally, you will also need an installation of the latest Apama, which can be obtained from `Apama Downloads <https://apamacommunity.com/downloads>`_. If you choose to install Apama, you may skip the manual installation of Python and PySys as both are shipped with Apama.
+The EPL apps test framework requires you to have an installation of PySys. See `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for details. If you want the option of running tests locally, you will also need an installation of the latest Apama, which can be obtained from `Apama Downloads <https://download.cumulocity.com/Apama>`_. If you choose to install Apama, you may skip the manual installation of Python and PySys as both are shipped with Apama.
 
 
 Repository structure
