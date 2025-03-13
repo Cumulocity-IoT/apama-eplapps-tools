@@ -6,10 +6,7 @@
 	<!-- MUST be set, point to the checkout of the EPL testing repository -->
 	<property name="EPL_TESTING_SDK" value="${env.EPL_TESTING_SDK}"/>
 	
-	<!-- Specify the tenant which will be used to run the tests.
-	     If your server URL does not specify the tenant (such as when using Cumulocity IoT Edge),
-	     then set that in the username with a /, for example, t1234567/myUserName.
-	 -->
+	<!-- Specify the tenant which will be used to run the tests. -->
 	<property name="CUMULOCITY_SERVER_URL" value="${env.CUMULOCITY_SERVER_URL}" default="https://mytenant.example.com" />
 
 	<!-- username and password must be provided for authentication.-->
