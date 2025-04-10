@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Developing EPL Apps Locally &#8212; EPL Apps Tools  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="apamax.eplapplications.tenant" href="autodocgen/apamax.eplapplications.tenant.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="autodocgen/apamax.eplapplications.tenant.html" title="apamax.eplapplications.tenant"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="developing-epl-apps-locally">
+<h1>Developing EPL Apps Locally<a class="headerlink" href="#developing-epl-apps-locally" title="Permalink to this headline">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Description</dt>
+<dd class="field-odd"><p>Guide to writing EPL apps outside of Cumulocity.</p>
+</dd>
+</dl>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>EPL apps can be developed outside of the Streaming Analytics web application, using a local install of Apama and a Visual Studio Code install. This guide goes through the steps for using Visual Studio Code.</p>
+</div>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Install Visual Studio Code</strong>: Download and install <a class="reference external" href="https://code.visualstudio.com/">Visual Studio Code</a>.</p></li>
+<li><p><strong>Install Apama Extension</strong>: Install the <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ApamaCommunity.apama-extensions">Apama extension</a> from the Visual Studio Code Marketplace.</p></li>
+<li><p><strong>Configure Apama</strong>: Ensure you have an installation of Apama configured. This can be done by:
+- Installing the package provided for your operating system, or
+- Following the steps in the marketplace description to configure WSL with Apama.
+- If your installation is not automatically detected, configure the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Apama</span> <span class="pre">Home</span></code> value within the extension.</p></li>
+</ol>
+</div>
+<div class="section" id="create-a-project">
+<h2>Create a Project<a class="headerlink" href="#create-a-project" title="Permalink to this headline">¶</a></h2>
+<p>Open the VS Code Command Palette, and type <code class="xref py py-obj docutils literal notranslate"><span class="pre">Apama:</span> <span class="pre">Create</span> <span class="pre">Project</span> <span class="pre">in</span> <span class="pre">New</span> <span class="pre">Folder</span></code> to create a new Apama project folder. You will need to select the existing parent directory that will hold the folder first, and then the name of the new folder.</p>
+</div>
+<div class="section" id="add-bundles-to-the-project">
+<h2>Add Bundles to the Project<a class="headerlink" href="#add-bundles-to-the-project" title="Permalink to this headline">¶</a></h2>
+<p>There are three ways to add bundles to your project:</p>
+<ul class="simple">
+<li><p>Click the <code class="xref py py-obj docutils literal notranslate"><span class="pre">+</span></code> symbol next to the Project in the project pane,</p></li>
+<li><p>Use the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Apama:</span> <span class="pre">Add</span> <span class="pre">Bundle</span></code> option in the Command Palette,</p></li>
+<li><p>Use the <code class="xref py py-obj docutils literal notranslate"><span class="pre">apama_project</span></code> command line tool.</p></li>
+</ul>
+</div>
+<div class="section" id="bundle-for-epl-apps-tools-development">
+<h2>Bundle for EPL apps tools development<a class="headerlink" href="#bundle-for-epl-apps-tools-development" title="Permalink to this headline">¶</a></h2>
+<p>Add the EPL Apps bundle from <code class="xref py py-obj docutils literal notranslate"><span class="pre">bundle/EPLApps.bnd</span></code> to your project.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing-epl.html">Writing tests for EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autodocgen/apamax.html">PySys helpers for EPL apps</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developing EPL Apps Locally</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-project">Create a Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-bundles-to-the-project">Add Bundles to the Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bundle-for-epl-apps-tools-development">Bundle for EPL apps tools development</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="autodocgen/apamax.eplapplications.tenant.html" title="apamax.eplapplications.tenant"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 Cumulocity GmbH.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+    </div>
+  </body>
+</html>
