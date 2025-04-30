@@ -40,6 +40,11 @@ class ApamaC8YBaseTest(BaseTest):
 
 	def setup(self):
 		super(ApamaC8YBaseTest, self).setup()
+		# Check if the script is running on Windows
+		# If it is, print a warning message and exit
+		if os.name == 'nt':
+			self.abort(BLOCKED, "Warning: The eplapp-tools is no longer supported natively on Windows environment. We recommend using a WSL-based setup with a Debian distribution.")
+
 		# Check EPL_TESTING_SDK env is set
 		if not os.path.isdir(self.project.EPL_TESTING_SDK):
 			self.abort(BLOCKED, f'EPL_TESTING_SDK is not valid ({self.project.EPL_TESTING_SDK}). Please set the EPL_TESTING_SDK environment variable.')

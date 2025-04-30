@@ -4,15 +4,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -36,7 +37,8 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">apamax.eplapplications.basetest</a></li> 
       </ul>
     </div>  
 
@@ -45,13 +47,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-apamax.eplapplications.basetest">
+  <section id="module-apamax.eplapplications.basetest">
 <span id="apamax-eplapplications-basetest"></span><h1>apamax.eplapplications.basetest<a class="headerlink" href="#module-apamax.eplapplications.basetest" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="apamac8ybasetest">
+<section id="apamac8ybasetest">
 <h2>ApamaC8YBaseTest<a class="headerlink" href="#apamac8ybasetest" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest">
-<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.basetest.</code><code class="sig-name descname">ApamaC8YBaseTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.basetest.</span></span><span class="sig-name descname"><span class="pre">ApamaC8YBaseTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">descriptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outsubdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runner</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pysys.basetest.BaseTest</span></code></p>
 <p>Base test for EPL applications tests.</p>
 <p>Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):</p>
@@ -60,8 +62,8 @@
 <li><p>APAMA_HOME - Only if running a local correlator.</p></li>
 </ul>
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.addC8YPropertiesToProject">
-<code class="sig-name descname">addC8YPropertiesToProject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">apamaProject</span></em>, <em class="sig-param"><span class="n">params</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.addC8YPropertiesToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.addC8YPropertiesToProject" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.addC8YPropertiesToProject">
+<span class="sig-name descname"><span class="pre">addC8YPropertiesToProject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">apamaProject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.addC8YPropertiesToProject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.addC8YPropertiesToProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds the connection parameters into a project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -83,8 +85,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.copyWithReplace">
-<code class="sig-name descname">copyWithReplace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sourceFile</span></em>, <em class="sig-param"><span class="n">targetFile</span></em>, <em class="sig-param"><span class="n">replacementDict</span></em>, <em class="sig-param"><span class="n">marker</span><span class="o">=</span><span class="default_value">'&#64;'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.copyWithReplace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.copyWithReplace" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.copyWithReplace">
+<span class="sig-name descname"><span class="pre">copyWithReplace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sourceFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacementDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&#64;'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.copyWithReplace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.copyWithReplace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copies the source file to the target file and replaces the placeholder strings with the actual values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -99,8 +101,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.createAppKey">
-<code class="sig-name descname">createAppKey</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">password</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.createAppKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.createAppKey" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.createAppKey">
+<span class="sig-name descname"><span class="pre">createAppKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.createAppKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.createAppKey" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the tenant has an external application defined for us and if not, creates it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -117,8 +119,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.createProject">
-<code class="sig-name descname">createProject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">existingProject</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.createProject" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.createProject">
+<span class="sig-name descname"><span class="pre">createProject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">existingProject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.createProject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.createProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a <code class="xref py py-obj docutils literal notranslate"><span class="pre">ProjectHelper</span></code> object which mimics the Cumulocity IoT EPL applications environment.</p>
 <p>Adds all the required bundles and adds the properties to connect and authenticate to the configured Cumulocity IoT tenant.</p>
 <dl class="field-list simple">
@@ -135,8 +137,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice">
-<code class="sig-name descname">createTestDevice</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">'PySysTestDevice'</span></em>, <em class="sig-param"><span class="n">children</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.createTestDevice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice">
+<span class="sig-name descname"><span class="pre">createTestDevice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PySysTestDevice'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tenant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.createTestDevice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a Cumulocity IoT device for testing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -157,8 +159,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms">
-<code class="sig-name descname">getAlarms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">status</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateFrom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateTo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getAlarms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms">
+<span class="sig-name descname"><span class="pre">getAlarms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dateFrom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dateTo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tenant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getAlarms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all alarms with matching parameters.</p>
 <p>For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">getAlarms</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;my_alarms&#39;</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="s1">&#39;2021-04-15 11:00:00.000Z&#39;</span><span class="p">,</span> 
@@ -187,8 +189,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations">
-<code class="sig-name descname">getOperations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">deviceId</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fragmentType</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateFrom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dateTo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getOperations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations">
+<span class="sig-name descname"><span class="pre">getOperations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deviceId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragmentType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dateFrom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dateTo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tenant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getOperations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all operations with matching parameters.</p>
 <p>For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">getOperations</span><span class="p">(</span><span class="n">fragmentType</span><span class="o">=</span><span class="s1">&#39;my_ops&#39;</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="s1">&#39;2021-04-15 11:00:00.000Z&#39;</span><span class="p">,</span> 
@@ -216,8 +218,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getTestSubjectEPLApps">
-<code class="sig-name descname">getTestSubjectEPLApps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getTestSubjectEPLApps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getTestSubjectEPLApps" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getTestSubjectEPLApps">
+<span class="sig-name descname"><span class="pre">getTestSubjectEPLApps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getTestSubjectEPLApps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getTestSubjectEPLApps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves a list of paths to the EPL apps being tested.</p>
 <p>If the user defines the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&lt;user-data</span> <span class="pre">name=&quot;EPLApp&quot;</span> <span class="pre">value=&quot;EPLAppToBeTested&quot;/&gt;</span></code> tag in the pysystest.xml file, 
 then we just return the EPL app defined by the tag’s value. If this tag is not defined (or the value is an empty string) 
@@ -225,8 +227,8 @@ then all the mon files in the project.EPL_APPS directory are returned.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getUTCTime">
-<code class="sig-name descname">getUTCTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timestamp</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getUTCTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getUTCTime" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.getUTCTime">
+<span class="sig-name descname"><span class="pre">getUTCTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.getUTCTime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.getUTCTime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a Cumulocity IoT-compliant UTC timestamp string for the current time or the specified time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -242,8 +244,8 @@ then all the mon files in the project.EPL_APPS directory are returned.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant">
-<code class="sig-name descname">prepareTenant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.prepareTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant">
+<span class="sig-name descname"><span class="pre">prepareTenant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tenant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.prepareTenant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the tenant for a test by deleting all devices created by previous tests and clearing all active alarms.
 However, you can disable the default behavior of clearing all active alarms by setting the <code class="xref py py-obj docutils literal notranslate"><span class="pre">clearAllActiveAlarmsDuringTenantPreparation</span></code> property to <code class="xref py py-obj docutils literal notranslate"><span class="pre">false</span></code> in the PySys project configuration.</p>
 <dl class="field-list simple">
@@ -254,8 +256,8 @@ However, you can disable the default behavior of clearing all active alarms by s
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.ApamaC8YBaseTest.setup">
-<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.setup" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.ApamaC8YBaseTest.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#ApamaC8YBaseTest.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains setup actions to be executed before the test is executed.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">setup</span></code> method may be overridden by individual test classes, or (more commonly) in a custom <code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTest</span></code> 
 subclass that provides common functionality for multiple individual tests. However before implementing a custom 
@@ -269,37 +271,37 @@ that were already allocated.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="localcorrelatorsimpletest">
+</section>
+<section id="localcorrelatorsimpletest">
 <h2>LocalCorrelatorSimpleTest<a class="headerlink" href="#localcorrelatorsimpletest" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest">
-<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.basetest.</code><code class="sig-name descname">LocalCorrelatorSimpleTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.basetest.</span></span><span class="sig-name descname"><span class="pre">LocalCorrelatorSimpleTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">descriptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outsubdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runner</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="apamax.eplapplications.basetest.ApamaC8YBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.basetest.ApamaC8YBaseTest</span></code></a></p>
 <p>Base test for running test with no run.py with local correlator connected to Cumulocity IoT.</p>
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.addEPLAppsToProject">
-<code class="sig-name descname">addEPLAppsToProject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eplApps</span></em>, <em class="sig-param"><span class="n">project</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.addEPLAppsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.addEPLAppsToProject" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.addEPLAppsToProject">
+<span class="sig-name descname"><span class="pre">addEPLAppsToProject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eplApps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.addEPLAppsToProject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.addEPLAppsToProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds the EPL app(s) being tested to a project.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.execute">
-<code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.execute" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs all the tests in the Input directory against the applications configured in the EPL_APPS 
 directory or with the <code class="xref py py-obj docutils literal notranslate"><span class="pre">EPLApps</span></code> directive.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile">
-<code class="sig-name descname">getMonitorsFromInjectedFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">correlator</span></em>, <em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile">
+<span class="sig-name descname"><span class="pre">getMonitorsFromInjectedFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">correlator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves a list of active monitors in a correlator, added from a particular mon file 
 using a GET request to <a class="reference external" href="http://correlator.host:correlator.port">http://correlator.host:correlator.port</a>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup">
-<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains setup actions to be executed before the test is executed.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">setup</span></code> method may be overridden by individual test classes, or (more commonly) in a custom <code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTest</span></code> 
 subclass that provides common functionality for multiple individual tests. However before implementing a custom 
@@ -312,38 +314,38 @@ that were already allocated.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.validate">
-<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.validate" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#LocalCorrelatorSimpleTest.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks that no errors were logged to the correlator log file.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="eplappssimpletest">
+</section>
+<section id="eplappssimpletest">
 <h2>EPLAppsSimpleTest<a class="headerlink" href="#eplappssimpletest" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="apamax.eplapplications.basetest.EPLAppsSimpleTest">
-<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.basetest.</code><code class="sig-name descname">EPLAppsSimpleTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">outsubdir</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.EPLAppsSimpleTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.basetest.</span></span><span class="sig-name descname"><span class="pre">EPLAppsSimpleTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">descriptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outsubdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runner</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#apamax.eplapplications.basetest.ApamaC8YBaseTest" title="apamax.eplapplications.basetest.ApamaC8YBaseTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">apamax.eplapplications.basetest.ApamaC8YBaseTest</span></code></a></p>
 <p>Base test for running test with no run.py on EPL apps running in Cumulocity IoT.</p>
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.EPLAppsSimpleTest.execute">
-<code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.execute" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.EPLAppsSimpleTest.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs all the tests in the Input directory against the applications configured in the EPL_APPS 
 directory or with the <code class="xref py py-obj docutils literal notranslate"><span class="pre">EPLApps</span></code> directive using EPL apps to run each test.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant">
-<code class="sig-name descname">prepareTenant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tenant</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.prepareTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant">
+<span class="sig-name descname"><span class="pre">prepareTenant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tenant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.prepareTenant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL apps which have been uploaded by tests, and clearing all active alarms.</p>
 <p>This is done first so that it is not possible for existing test apps to raise alarms or create devices.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.EPLAppsSimpleTest.setup">
-<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.setup" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.EPLAppsSimpleTest.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains setup actions to be executed before the test is executed.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">setup</span></code> method may be overridden by individual test classes, or (more commonly) in a custom <code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTest</span></code> 
 subclass that provides common functionality for multiple individual tests. However before implementing a custom 
@@ -356,23 +358,24 @@ that were already allocated.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.EPLAppsSimpleTest.shutdown">
-<code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.shutdown" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.EPLAppsSimpleTest.shutdown">
+<span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.shutdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.shutdown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deactivates all uploaded EPL apps when the test terminates.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.basetest.EPLAppsSimpleTest.validate">
-<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.validate" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.basetest.EPLAppsSimpleTest.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/basetest.html#EPLAppsSimpleTest.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.basetest.EPLAppsSimpleTest.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ensures that no tests failed.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -409,7 +412,7 @@ that were already allocated.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -436,12 +439,13 @@ that were already allocated.</p>
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">apamax.eplapplications.basetest</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2025 Cumulocity GmbH.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

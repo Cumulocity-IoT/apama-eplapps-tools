@@ -4,15 +4,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Using PySys to test your EPL apps &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,7 +35,8 @@
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Using PySys to test your EPL apps</a></li> 
       </ul>
     </div>  
 
@@ -43,21 +45,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="using-pysys-to-test-your-epl-apps">
+  <section id="using-pysys-to-test-your-epl-apps">
 <h1>Using PySys to test your EPL apps<a class="headerlink" href="#using-pysys-to-test-your-epl-apps" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Description</dt>
 <dd class="field-odd"><p>Document detailing the use of the PySys framework to test EPL apps locally and in the cloud.</p>
 </dd>
 </dl>
-<div class="section" id="introduction">
+<section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>PySys is a testing framework that provides a way to test your applications.</p>
 <p>See <a class="reference external" href="https://pysys-test.github.io/pysys-test">PySys Documentation</a> for details on installation and how the framework can be used and the facilities it contains.</p>
-</div>
-<div class="section" id="testing-in-the-cumulocity-iot-cloud">
+</section>
+<section id="testing-in-the-cumulocity-iot-cloud">
 <span id="test-in-cloud"></span><h2>Testing in the Cumulocity IoT cloud<a class="headerlink" href="#testing-in-the-cumulocity-iot-cloud" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="setup-for-testing-in-the-cumulocity-iot-cloud">
+<section id="setup-for-testing-in-the-cumulocity-iot-cloud">
 <span id="setup-for-test-in-cloud"></span><h3>Setup for testing in the Cumulocity IoT cloud<a class="headerlink" href="#setup-for-testing-in-the-cumulocity-iot-cloud" title="Permalink to this headline">¶</a></h3>
 <p>You can automatically test your applications only using a Cumulocity IoT tenant with Apama EPL Apps enabled. To do this, you will need a dedicated Cumulocity IoT tenant for your testing in order to avoid disrupting any production activities. When testing within Cumulocity IoT, no Apama installation is required, just a copy of PySys, which can be installed via Pip, and a copy of this SDK.</p>
 <p>There is an extension to PySys that is needed for the framework included in this GitHub repository, it can automatically be made available to the PySys tests by setting the EPL_TESTING_SDK environment variable. You simply need to point it to the path where you checked out this repository.</p>
@@ -72,8 +74,8 @@
 <p>In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples and samples-performance directories of this GitHub repository.</p>
 <p>You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains the essential configuration necessary for testing with Apama and Cumulocity IoT.</p>
 <p>You can set the <code class="xref py py-obj docutils literal notranslate"><span class="pre">clearAllActiveAlarmsDuringTenantPreparation</span></code> property to <code class="xref py py-obj docutils literal notranslate"><span class="pre">false</span></code> in the pysysproject.xml file to disable the default behavior of clearing all active alarms.</p>
-</div>
-<div class="section" id="creating-a-test">
+</section>
+<section id="creating-a-test">
 <h3>Creating a test<a class="headerlink" href="#creating-a-test" title="Permalink to this headline">¶</a></h3>
 <p>See <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on creating and running performance tests.</p>
 <p>To create a test, you can either copy an existing test (such as one of our samples) and rename it, or by running:</p>
@@ -90,8 +92,8 @@
 </pre></div>
 </div>
 <p>The user-data section is optional. It specifies which of the applications in your EPL_APPS directory should be used with this test case. If you don’t specify it, then all the EPL apps in that directory will be injected before running this test.</p>
-</div>
-<div class="section" id="running-the-test">
+</section>
+<section id="running-the-test">
 <h3>Running the test<a class="headerlink" href="#running-the-test" title="Permalink to this headline">¶</a></h3>
 <p>Our sample tests are set up in the following way:</p>
 <div class="line-block">
@@ -118,9 +120,9 @@
 <p>Any other existing EPL apps, analytics builder models, devices, or historic data in your tenant should be unaffected by the test run. However, to avoid any potential interference between your tests and other EPL apps that may be running in your tenant, it is recommended that you use a dedicated (clean) tenant for running your tests.</p>
 <p>After the test has finished, any EPL apps that were uploaded to your tenant by the test are deactivated.</p>
 <p>See <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on running performance tests.</p>
-</div>
-</div>
-<div class="section" id="testing-locally">
+</section>
+</section>
+<section id="testing-locally">
 <h2>Testing locally<a class="headerlink" href="#testing-locally" title="Permalink to this headline">¶</a></h2>
 <p><em>To follow this, it is assumed that you have an Apama installation set up with the Apama PySys extensions.</em></p>
 <p>You can also test your EPL app with a locally running correlator connected to the Cumulocity IoT platform. This provides all the capabilities of running in the cloud whilst not taking valuable cloud resources. Running locally also gives you much more access to the correlator allowing some fine-tuning.</p>
@@ -131,20 +133,20 @@
 </pre></div>
 </div>
 <p>Setting which EPL app to run the test on works as before.</p>
-<div class="section" id="notifications-2-0">
+<section id="notifications-2-0">
 <h3>Notifications 2.0<a class="headerlink" href="#notifications-2-0" title="Permalink to this headline">¶</a></h3>
 <p>The EPL apps test framework supports using the new Notifications 2.0 API for receiving notifications from Cumulocity IoT. By default, this is disabled.</p>
 <p>See <a class="reference external" href="https://cumulocity.com/apama/docs/latest/change-logs/#10.15/cumulocity-10155-clientbundledeprecated">the release note</a> for more information about the Notifications 2.0 integration.</p>
 <p>To enable it within the EPL apps test framework, add the following elements to your PySys Project XML:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Whether Notifications 2.0 is enabled. By default, it is disabled. --&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- Whether Notifications 2.0 is enabled. By default, it is disabled. --&gt;</span>
 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;CUMULOCITY_NOTIFICATIONS_2&quot;</span> <span class="na">value=</span><span class="s">&quot;${env.CUMULOCITY_NOTIFICATIONS_2}&quot;</span> <span class="na">default=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
 
-<span class="c">&lt;!-- The Cumulocity Notifications 2.0 Service URL --&gt;</span>
+<span class="cm">&lt;!-- The Cumulocity Notifications 2.0 Service URL --&gt;</span>
 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;CUMULOCITY_NOTIFICATIONS_SERVICE_URL&quot;</span> <span class="na">value=</span><span class="s">&quot;${env.CUMULOCITY_NOTIFICATIONS_SERVICE_URL}&quot;</span> <span class="na">default=</span><span class="s">&quot;pulsar://pulsar-proxy&quot;</span> <span class="nt">/&gt;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h3>Running the test<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>To run the test using a local correlator requires the APAMA_HOME project property to be set as the path to your installation of Apama. This can be done by simply running the test in an Apama command prompt or by explicitly setting the APAMA_HOME environment variable.</p>
 <p>The sample for running with a local correlator is as below:</p>
@@ -167,9 +169,9 @@
 <li><p>All active Alarms in your Cumulocity IoT tenant are cleared.</p></li>
 <li><p>Any devices created by previous tests (which are identified by the device name having prefix “PYSYS_”) are deleted from your tenant.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="advanced-tests">
+</section>
+</section>
+<section id="advanced-tests">
 <h2>Advanced tests<a class="headerlink" href="#advanced-tests" title="Permalink to this headline">¶</a></h2>
 <p>For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.</p>
 <p>In order to view documentation on classes for PySys helpers for EPL Apps please see: <a class="reference external" href="https://cumulocity-iot.github.io/apama-eplapps-tools">PySys helpers</a> .</p>
@@ -232,10 +234,11 @@
                <span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="s1">&#39;c8y-correlator.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .*&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -270,7 +273,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -295,12 +298,13 @@
         <li class="right" >
           <a href="testing-epl.html" title="Writing tests for EPL apps"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Using PySys to test your EPL apps</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2025 Cumulocity GmbH.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

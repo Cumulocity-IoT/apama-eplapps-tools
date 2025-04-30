@@ -4,15 +4,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Using the eplapp.py command line tool &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,7 +35,8 @@
         <li class="right" >
           <a href="index.html" title="EPL Apps Tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Using the eplapp.py command line tool</a></li> 
       </ul>
     </div>  
 
@@ -43,14 +45,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="using-the-eplapp-py-command-line-tool">
+  <section id="using-the-eplapp-py-command-line-tool">
 <h1>Using the eplapp.py command line tool<a class="headerlink" href="#using-the-eplapp-py-command-line-tool" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Description</dt>
 <dd class="field-odd"><p>Document detailing the use of the eplapp.py tool to perform REST requests to Apama EPL Apps in Cumulocity IoT.</p>
 </dd>
 </dl>
-<div class="section" id="introduction">
+<section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The eplapp.py tool in the scripts directory of the SDK allows you to interact with your Apama EPL apps in Cumulocity IoT using the command line.</p>
 <p>The commands available are:</p>
@@ -70,16 +72,16 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eplapp.py &lt;command&gt; --help
 </pre></div>
 </div>
-</div>
-<div class="section" id="printing-a-list-of-your-epl-apps">
+</section>
+<section id="printing-a-list-of-your-epl-apps">
 <h2>Printing a list of your EPL apps<a class="headerlink" href="#printing-a-list-of-your-epl-apps" title="Permalink to this headline">¶</a></h2>
 <p>To print a list of all of your existing EPL apps in Cumulocity IoT, you can use the <code class="docutils literal notranslate"><span class="pre">list</span></code> command as follows:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eplapp.py list --cumulocity_url &lt;url&gt; --username &lt;username&gt; --password &lt;password&gt;
 </pre></div>
 </div>
 <p>For each EPL app the name, description, state, and lists of warnings or errors are printed.</p>
-</div>
-<div class="section" id="deploying-to-apama-epl-apps-in-cumulocity-iot">
+</section>
+<section id="deploying-to-apama-epl-apps-in-cumulocity-iot">
 <h2>Deploying to Apama EPL Apps in Cumulocity IoT<a class="headerlink" href="#deploying-to-apama-epl-apps-in-cumulocity-iot" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">deploy</span></code> command has an additional <em>mandatory</em> option:</p>
 <ul class="simple">
@@ -97,8 +99,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">|</span> <span class="pre">--inactive</span></code> - Deploys the EPL app in an ‘inactive’ state (by default, the state will be ‘active’).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">|</span> <span class="pre">--redeploy</span></code> - Overwrites the contents of an existing EPL app of name specified by the <code class="docutils literal notranslate"><span class="pre">--name</span></code> option.</p></li>
 </ul>
-</div>
-<div class="section" id="deleting-an-epl-app">
+</section>
+<section id="deleting-an-epl-app">
 <h2>Deleting an EPL app<a class="headerlink" href="#deleting-an-epl-app" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">delete</span></code> command also has an additional <em>mandatory</em> option:</p>
 <ul class="simple">
@@ -108,8 +110,8 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eplapp.py delete -c &lt;url&gt; -u &lt;username&gt; -p &lt;password&gt; -n &lt;name&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="updating-an-existing-epl-app">
+</section>
+<section id="updating-an-existing-epl-app">
 <h2>Updating an existing EPL app<a class="headerlink" href="#updating-an-existing-epl-app" title="Permalink to this headline">¶</a></h2>
 <p>You can update the contents, name, description, or state of an existing EPL app in Cumulocity IoT using the <code class="docutils literal notranslate"><span class="pre">update</span></code> command
 which, like the <code class="docutils literal notranslate"><span class="pre">delete</span></code> command, has an additional <em>mandatory</em> option:</p>
@@ -127,10 +129,11 @@ which, like the <code class="docutils literal notranslate"><span class="pre">del
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eplapp.py update -c &lt;url&gt; -u &lt;username&gt; -p &lt;password&gt; -n &lt;old_name&gt; -w &lt;new_name&gt; -f &lt;monFile&gt; -d <span class="s2">&quot;new description&quot;</span> -s active
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -157,7 +160,7 @@ which, like the <code class="docutils literal notranslate"><span class="pre">del
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -182,12 +185,13 @@ which, like the <code class="docutils literal notranslate"><span class="pre">del
         <li class="right" >
           <a href="index.html" title="EPL Apps Tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">EPL Apps Tools  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Using the eplapp.py command line tool</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2025 Cumulocity GmbH.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

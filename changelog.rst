@@ -2,6 +2,10 @@
 Change Log
 ===========
 
+26.95.0
+---------
++ The EPL Apps Tools is no longer supported natively on Windows environments. For Windows users, we recommend switching to a WSL-based (Windows Subsystem for Linux) environment using Debian.
+
 25.283.0
 ---------
 + By default, the EPL Apps Tools test framework clears all alarms on the tenant during startup. This behavior can now be disabled by setting the `clearAllActiveAlarmsDuringTenantPreparation` property to `false` in the PySys project configuration.
