@@ -4,15 +4,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>apamax.eplapplications.tenant &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -36,7 +37,8 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">apamax.eplapplications.tenant</a></li> 
       </ul>
     </div>  
 
@@ -45,13 +47,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-apamax.eplapplications.tenant">
+  <section id="module-apamax.eplapplications.tenant">
 <span id="apamax-eplapplications-tenant"></span><h1>apamax.eplapplications.tenant<a class="headerlink" href="#module-apamax.eplapplications.tenant" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="cumulocitytenant">
+<section id="cumulocitytenant">
 <h2>CumulocityTenant<a class="headerlink" href="#cumulocitytenant" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="apamax.eplapplications.tenant.CumulocityTenant">
-<em class="property">class </em><code class="sig-prename descclassname">apamax.eplapplications.tenant.</code><code class="sig-name descname">CumulocityTenant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">password</span></em>, <em class="sig-param"><span class="n">tenantId</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/tenant.html#CumulocityTenant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.tenant.CumulocityTenant" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.tenant.CumulocityTenant">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.tenant.</span></span><span class="sig-name descname"><span class="pre">CumulocityTenant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tenantId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/tenant.html#CumulocityTenant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.tenant.CumulocityTenant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class to represent a Cumulocity IoT tenant.</p>
 <p>It is used to get a <a class="reference internal" href="apamax.eplapplications.connection.html#apamax.eplapplications.connection.C8yConnection" title="apamax.eplapplications.connection.C8yConnection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">C8yConnection</span></code></a> object to perform a REST request against the tenant.</p>
@@ -66,8 +68,8 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt id="apamax.eplapplications.tenant.CumulocityTenant.getConnection">
-<code class="sig-name descname">getConnection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/tenant.html#CumulocityTenant.getConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.tenant.CumulocityTenant.getConnection" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.tenant.CumulocityTenant.getConnection">
+<span class="sig-name descname"><span class="pre">getConnection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/tenant.html#CumulocityTenant.getConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.tenant.CumulocityTenant.getConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the connection object to the tenant.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -80,17 +82,18 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="apamax.eplapplications.tenant.CumulocityTenant.getTenantId">
-<code class="sig-name descname">getTenantId</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/tenant.html#CumulocityTenant.getTenantId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#apamax.eplapplications.tenant.CumulocityTenant.getTenantId" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="apamax.eplapplications.tenant.CumulocityTenant.getTenantId">
+<span class="sig-name descname"><span class="pre">getTenantId</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/tenant.html#CumulocityTenant.getTenantId"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.tenant.CumulocityTenant.getTenantId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the tenant ID.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -125,7 +128,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -152,12 +155,13 @@
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">apamax.eplapplications.tenant</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2025 Cumulocity GmbH.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>
