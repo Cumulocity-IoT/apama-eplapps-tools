@@ -4,7 +4,7 @@ Change Log
 
 26.95.0
 ---------
-+ The EPL Apps Tools is no longer supported natively on Windows environments. For Windows users, we recommend switching to a WSL-based (Windows Subsystem for Linux) environment using Debian.
++ The EPL Apps Tools is no longer supported natively on Windows environments. For Windows users, we recommend switching to a WSL-based (Windows Subsystem for Linux) environment using Debian. You may wish to use the [Apama Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ApamaCommunity.apama-extensions) for developing EPL apps. 
 
 25.283.0
 ---------

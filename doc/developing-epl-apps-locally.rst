@@ -17,6 +17,8 @@ Setup
    - Following the steps in the marketplace description to configure WSL with Apama.
    - If your installation is not automatically detected, configure the `Apama Home` value within the extension.
 
+Optionally, you can utilize our `Dev Container <https://github.com/Cumulocity-IoT/cumulocity-analytics-vsc-devcontainer/>`, which will automatically provision Apama and clone this repository. See `Microsoft's instructions for Developing inside a Container <https://code.visualstudio.com/docs/devcontainers/containers>` for more information about Dev Containers.
+
 Create a Project
 ----------------
 Open the VS Code Command Palette, and type `Apama: Create Project in New Folder` to create a new Apama project folder. You will need to select the existing parent directory that will hold the folder first, and then the name of the new folder.
