@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle name="EPL Apps" type="monitorscript" singleton="true">
+	<version>
+		<id>24.0.0</id>
+		<date>2025-04-02</date>
+		<author>Cumulocity GmbH</author>
+		<comments/>
+		<!--
+			Copyright (c) 2025-present Cumulocity GmbH, Duesseldorf, Germany and/or its affiliates and/or their licensors.
+			Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Cumulocity GmbH
+			-->
+	</version>
+	<description>Support for building EPL apps</description>
+	<monitors></monitors>
+	<dependencies>
+		<dependency bundle-filename="CumulocityUtilities.bnd" catalog="${APAMA_HOME}/catalogs/bundles"/>
+		<dependency bundle-filename="Cumulocity Event Definitions.bnd" catalog="${APAMA_HOME}/catalogs/bundles"/>
+		<dependency bundle-filename="JSONPlugin.bnd" catalog="${APAMA_HOME}/catalogs/bundles/"/>
+		<dependency bundle-filename="TimeFormat.bnd" catalog="${APAMA_HOME}/catalogs/bundles/"/>
+		<dependency bundle-filename="AnyExtractor.bnd" catalog="${APAMA_HOME}/catalogs/bundles/"/>
+		<dependency bundle-filename="HTTPClientConnectivityGenericEvents.bnd" catalog="${APAMA_HOME}/catalogs/bundles/"/>
+		<dependency bundle-filename="ConnectivityPlugins-Common.bnd" catalog="${APAMA_HOME}/catalogs/bundles/"/>
+		<dependency bundle-filename="AutomaticOnApplicationInitialized.bnd" catalog="${APAMA_HOME}/catalogs/bundles/"/>
+		<dependency bundle-filename="CumulocityNotifications2Connectivity.bnd" catalog="${APAMA_HOME}/connectivity/bundles/"/>
+	</dependencies>
+</bundle>
