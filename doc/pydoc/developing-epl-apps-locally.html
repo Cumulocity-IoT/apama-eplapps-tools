@@ -50,22 +50,30 @@
 </dl>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>EPL apps can be developed outside of the Streaming Analytics web application, using a local installation of Apama and Visual Studio Code.</p>
+<p>EPL apps can be developed outside of the Streaming Analytics web application, using Microsoft Visual Studio Code with either a container or local installation of Apama.</p>
 </section>
 <section id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p><strong>Install Visual Studio Code</strong>: Download and install <a class="reference external" href="https://code.visualstudio.com/">Visual Studio Code</a>.</p></li>
 <li><p><strong>Install Apama Extension</strong>: Install the <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ApamaCommunity.apama-extensions">Apama extension</a> from the Visual Studio Code Marketplace.</p></li>
-<li><p>Following the steps listed on the extension page to either install Apama locally, or to use an Apama container.</p></li>
+<li><p>Following the steps listed on the extension page to setup WSL (if using Windows) and to install a container engine for running Apama inside a container, or else install Apama locally.</p></li>
 </ol>
-<p>Optionally, you can use our <a class="reference external" href="https://github.com/Cumulocity-IoT/cumulocity-analytics-vsc-devcontainer/">Dev Container</a>, which will automatically provision Apama and clone this repository. See Microsoft’s instructions for <a class="reference external" href="https://code.visualstudio.com/docs/devcontainers/containers">Developing inside a Container</a>.</p>
 </section>
 <section id="create-a-new-project">
 <h2>Create a new project<a class="headerlink" href="#create-a-new-project" title="Permalink to this headline">¶</a></h2>
-<p>Open the VS Code Command Palette, and type <code class="xref py py-obj docutils literal notranslate"><span class="pre">Apama:</span> <span class="pre">Create</span> <span class="pre">Project</span> <span class="pre">in</span> <span class="pre">New</span> <span class="pre">Folder</span></code> to create a new Apama project folder. You will need to select the existing parent directory that will hold the folder first, and then the name of the new folder.</p>
-<p>To configure your project with access to the Apama APIs that EPL apps can use, add the EPL Apps bundle from <code class="xref py py-obj docutils literal notranslate"><span class="pre">bundle/EPLApps.bnd</span></code> to your project.</p>
-<p>To add a bundle to your project, either click the <code class="xref py py-obj docutils literal notranslate"><span class="pre">+</span></code> symbol next to your project in the “Apama Projects” pane, or type <code class="xref py py-obj docutils literal notranslate"><span class="pre">Apama:</span> <span class="pre">Add</span> <span class="pre">Bundle</span></code> into the Command Palette.</p>
+<p>The best way to start EPL Apps development is to create a new repository based on the
+[Streaming Analytics Sample Repository Template](<a class="reference external" href="https://github.com/Cumulocity-IoT/streaming-analytics-sample-repo-template">https://github.com/Cumulocity-IoT/streaming-analytics-sample-repo-template</a>).
+Go to that page in GitHub, and click the button to “Use this template” and then “Create a new repository”.</p>
+<p>To open your new repository in VS Code, open the VS Code command palette (<code class="xref py py-obj docutils literal notranslate"><span class="pre">F1</span></code>), run <code class="xref py py-obj docutils literal notranslate"><span class="pre">Dev</span> <span class="pre">Containers:</span> <span class="pre">Clone</span> <span class="pre">Repository</span> <span class="pre">in</span> <span class="pre">Container</span> <span class="pre">Volume</span></code>
+and then enter the <code class="xref py py-obj docutils literal notranslate"><span class="pre">https://</span></code> link to your GitHub repository. This assumes you have a container engine installed.
+If you <strong>already have a Git repository</strong> for your application, just copy across the <code class="xref py py-obj docutils literal notranslate"><span class="pre">devcontainer</span></code> directory from the above template repository.</p>
+<p>Instead of using VS Code you can use a web browser to open the repository in [GitHub Codespaces](<a class="reference external" href="https://github.com/features/codespaces">https://github.com/features/codespaces</a>) without installing anything at all.
+If you prefer to use a local installation of Apama instead of a container, you need to <code class="xref py py-obj docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span></code> the [EPL Apps Tools](<a class="reference external" href="https://github.com/Cumulocity-IoT/apama-eplapps-tools">https://github.com/Cumulocity-IoT/apama-eplapps-tools</a>)
+repository, then clone your own repository and open it as a folder in VS Code.</p>
+<p>If you did not use the template repository to create your project, you need to add bundles to make Apama’s APIs available to your application.
+You do this by clicking the <code class="xref py py-obj docutils literal notranslate"><span class="pre">+</span></code> symbol next to your project in the “Apama Projects” pane of VS Code.
+To configure your project with access to the standard set of Apama APIs that EPL apps can use, add the EPL Apps bundle from <code class="xref py py-obj docutils literal notranslate"><span class="pre">/../apama-eplapps-tools/bundle/EPLApps.bnd</span></code> to your project.</p>
 </section>
 <section id="test">
 <h2>Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h2>

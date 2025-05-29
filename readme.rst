@@ -18,6 +18,7 @@ to include every contribution in the main project.
 
 Licensing
 ---------
+Copyright 2019-present Cumulocity GmbH
 This project is licensed under the Apache 2.0 license - see https://www.apache.org/licenses/LICENSE-2.0
 
 Apama EPL Apps Tools Version
