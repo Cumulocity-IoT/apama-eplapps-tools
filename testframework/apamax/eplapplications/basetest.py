@@ -623,7 +623,7 @@ class EPLAppsSimpleTest(ApamaC8YBaseTest):
 			Ensures that no tests failed.
 		"""
 		self.log.info("Checking for errors")
-		self.assertGrep(self.platform.getApamaLogFile(), expr=' (ERROR|FATAL) .* eplfiles\.', contains=False)
+		self.assertGrep(self.platform.getApamaLogFile(), expr=r' (ERROR|FATAL) .* eplfiles\.', contains=False)
 		
 	def shutdown(self):
 		"""

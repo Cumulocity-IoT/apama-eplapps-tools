@@ -1099,7 +1099,7 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">logFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">()</span>
 
-		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .* eplfiles\.&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39; (ERROR|FATAL) .* eplfiles\.&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 		<span class="c1"># Check that microservice did not use more than 90% of available memory</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;apama_highmemoryusage.*Apama is using 90. of available memory&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

@@ -1059,7 +1059,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 		"""
 		logFile = self.platform.getApamaLogFile()
 
-		self.assertGrep(logFile, expr=' (ERROR|FATAL) .* eplfiles\.', contains=False)
+		self.assertGrep(logFile, expr=r' (ERROR|FATAL) .* eplfiles\.', contains=False)
 
 		# Check that microservice did not use more than 90% of available memory
 		self.assertGrep(logFile, expr='apama_highmemoryusage.*Apama is using 90. of available memory', contains=False)

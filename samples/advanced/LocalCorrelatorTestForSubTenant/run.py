@@ -46,8 +46,8 @@ class PySysTest(ApamaC8YBaseTest):
 		# look for log statements in the correlator log file
 		prefix = self.platform.getTenant().getTenantId() + " : "
 		self.assertGrep('c8y-correlator.log', expr=' (ERROR|FATAL) .*', contains=False)
-		self.assertGrep('c8y-correlator.log', expr=prefix + 'Received com.apama.cumulocity.Measurement.*myMeasurementType.*MeasurementValue\(110.*')
-		self.assertGrep('c8y-correlator.log', expr=prefix + 'Received com.apama.cumulocity.Measurement.*myMeasurementType.*MeasurementValue\(90.*')
+		self.assertGrep('c8y-correlator.log', expr=prefix + r'Received com.apama.cumulocity.Measurement.*myMeasurementType.*MeasurementValue\(110.*')
+		self.assertGrep('c8y-correlator.log', expr=prefix + r'Received com.apama.cumulocity.Measurement.*myMeasurementType.*MeasurementValue\(90.*')
 		self.assertGrep('c8y-correlator.log', expr=prefix + 'Received com.apama.cumulocity.Alarm.*ThresholdExceededAlarm.*Measurement value 110 exceeded threshold value 100.*"ACTIVE".*')
 		self.assertGrep('c8y-correlator.log', expr=prefix + 'aboveThresholdTest: ThresholdExceededAlarm raised - PASS')
 		self.assertGrep('c8y-correlator.log', expr=prefix + 'belowThresholdTest: ThresholdExceededAlarm not raised - PASS')
