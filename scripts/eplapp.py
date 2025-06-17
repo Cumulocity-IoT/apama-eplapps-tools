@@ -16,7 +16,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'testframework'))
 from apamax.eplapplications import C8yConnection, EPLApps
 
-TOOL_VERSION_DESCRIPTION = f'Cumulocity IoT Apama EPL Apps command line tool'
+TOOL_VERSION_DESCRIPTION = f'Cumulocity Apama EPL Apps command line tool'
 
 class EPLAppsCLI:
 	"""Class for interacting with Apama EPL Apps in Cumulocity using a CLI"""
@@ -129,7 +129,7 @@ class EPLAppsCLI:
 
 		self.commands = {
 			'deploy': EPLAppsCLI.Command(
-				name='deploy', description='Deploys an EPL (.mon) file to Apama EPL Apps in Cumulocity IoT',
+				name='deploy', description='Deploys an EPL (.mon) file to Apama EPL Apps in Cumulocity',
 				usages=[
 					'eplapp.py deploy <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--file FILE> [option]*',
 					'eplapp.py deploy [--help]',
@@ -137,9 +137,9 @@ class EPLAppsCLI:
 				],
 				mandatoryOptionsMessage='Mandatory options for deploying a file to Apama EPL Apps:',
 				mandatoryOptions=[
-					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
-					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
-					['-p', '--password', 'PASSWORD', 'your Cumulocity IoT password'],
+					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity tenant'],
+					['-u', '--username', 'USERNAME', 'your Cumulocity username'],
+					['-p', '--password', 'PASSWORD', 'your Cumulocity password'],
 					['-f', '--file', 'FILE', 'the filepath to the .mon file to be deployed as an EPL app']
 				],
 				optionalOptionsMessage='Optional options for deploying a file to Apama EPL Apps:',
@@ -154,7 +154,7 @@ class EPLAppsCLI:
 				successMessage='EPL app was successfully deployed.'
 			),
 			'delete': EPLAppsCLI.Command(
-				name='delete', description='Deletes an existing EPL app in Cumulocity IoT',
+				name='delete', description='Deletes an existing EPL app in Cumulocity',
 				usages=[
 					'eplapp.py delete <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--name NAME>',
 					'eplapp.py delete [--help]',
@@ -162,41 +162,41 @@ class EPLAppsCLI:
 				],
 				mandatoryOptionsMessage='Mandatory options for deleting an EPL app:',
 				mandatoryOptions=[
-					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
-					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
-					['-p', '--password', 'PASSWORD', 'your Cumulocity IoT password'],
-					['-n', '--name', 'NAME', 'the name of the EPL app to be deleted from Cumulocity IoT'],
+					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity tenant'],
+					['-u', '--username', 'USERNAME', 'your Cumulocity username'],
+					['-p', '--password', 'PASSWORD', 'your Cumulocity password'],
+					['-n', '--name', 'NAME', 'the name of the EPL app to be deleted from Cumulocity'],
 				],
 				function=EPLApps.delete,
 				successMessage='EPL app was successfully deleted.'
 			),
 			'list': EPLAppsCLI.Command(
-				name='list', description='Prints a list of your existing EPL apps in Cumulocity IoT',
+				name='list', description='Prints a list of your existing EPL apps in Cumulocity',
 				usages=[
 					'eplapp.py list <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD>',
 					'eplapp.py list [--help]',
 					'eplapp.py list [--version]'
 				],
-				mandatoryOptionsMessage='Mandatory options for printing list of EPL apps in Cumulocity IoT:',
+				mandatoryOptionsMessage='Mandatory options for printing list of EPL apps in Cumulocity:',
 				mandatoryOptions=[
-					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
-					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
-					['-p', '--password', 'PASSWORD', 'your Cumulocity IoT password']
+					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity tenant'],
+					['-u', '--username', 'USERNAME', 'your Cumulocity username'],
+					['-p', '--password', 'PASSWORD', 'your Cumulocity password']
 				],
 				function=lambda *a, **kw: self.printEPLAppsList(EPLApps.getEPLApps(*a, **kw))
 			),
 			'update': EPLAppsCLI.Command(
-				name='update', description='Updates an existing EPL app in Cumulocity IoT',
+				name='update', description='Updates an existing EPL app in Cumulocity',
 				usages=[
 					'eplapp.py update <--cumulocity_url URL> <--username USERNAME> <--password PASSWORD> <--name NAME> <options>+',
 					'eplapp.py update [--help]',
 					'eplapp.py update [--version]'
 				],
-				mandatoryOptionsMessage='Mandatory options for updating an EPL app in Cumulocity IoT:',
+				mandatoryOptionsMessage='Mandatory options for updating an EPL app in Cumulocity:',
 				mandatoryOptions=[
-					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity IoT tenant'],
-					['-u', '--username', 'USERNAME', 'your Cumulocity IoT username'],
-					['-p', '--password', 'PASSWORD', 'your Cumulocity IoT password'],
+					['-c', '--cumulocity_url', 'URL', 'the base URL of your Cumulocity tenant'],
+					['-u', '--username', 'USERNAME', 'your Cumulocity username'],
+					['-p', '--password', 'PASSWORD', 'your Cumulocity password'],
 					['-n', '--name', 'NAME', 'the name of the EPL app to be updated'],
 				],
 				optionalOptionsMessage='Optional options for updating an EPL app (at least 1 is required):',

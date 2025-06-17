@@ -116,7 +116,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 			This must be called by the test before the application is deployed.
 
 			:param bool restartMicroservice: Restart the Apama-ctrl microservice.
-			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.
+			:param tenant: The Cumulocity tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.
 			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		"""
 		tenantId = (tenant or self.platform.getTenant()).getTenantId()
@@ -152,7 +152,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 		"""
 			Clears all measurements that we raised on teant as part of a pre-test tenant cleanup.
 
-			:param tenant: The Cumulocity IoT tenant.
+			:param tenant: The Cumulocity tenant.
 			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		"""
 		self.log.info("Clearing measurements of type type_device_temperature")
@@ -200,7 +200,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 		"""
 		Delete smart rules created by the framework.
 		
-		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, smart rules are deleted from the tenant configured in the pysysproject.xml file.
+		:param tenant: The Cumulocity tenant. If no tenant is specified, smart rules are deleted from the tenant configured in the pysysproject.xml file.
 		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional
 		"""
 		self.log.info("Clearing test smart rules")
@@ -260,7 +260,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 
 	def startMeasurementSimulator(self, devices, perDeviceRate, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP', tenant=None):
 		"""
-			Starts a measurement simulator process to publish simulated measurements to Cumulocity IoT.
+			Starts a measurement simulator process to publish simulated measurements to Cumulocity.
 
 			The simulator uses an instance of the provided measurement creator class to create new measurements to send, 
 			allowing the test to publish measurements of different types and sizes.
@@ -272,10 +272,10 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 			:param str creatorFile: The path to the Python file containing the measurement creator class.
 			:param str creatorClassName: The name of the measurement creator class that extends the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.
 			:param list creatorParams: The list of parameters to pass to the constructor of the measurement creator class to create a new instance.
-			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.
+			:param str processingMode: Cumulocity processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.
 			:param duration: The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.
 			:type duration: float, optional
-			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, measurements are published to the tenant configured in the pysysproject.xml file.
+			:param tenant: The Cumulocity tenant. If no tenant is specified, measurements are published to the tenant configured in the pysysproject.xml file.
 			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
 			:return: The process handle of the simulator process.
 			:rtype: L{pysys.process.Process}
@@ -314,7 +314,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 
 	def startEventSimulator(self, devices, perDeviceRate, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP', tenant=None):
 		"""
-			Starts an event simulator process to publish simulated events to Cumulocity IoT.
+			Starts an event simulator process to publish simulated events to Cumulocity.
 
 			The simulator uses an instance of the provided event creator class to create new events to send, 
 			allowing the test to publish events of different types and sizes.
@@ -326,10 +326,10 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 			:param str creatorFile: The path to the Python file containing the event creator class.
 			:param str creatorClassName: The name of the event creator class that extends the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.
 			:param list creatorParams: The list of parameters to pass to the constructor of the event creator class to create a new instance.
-			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.
+			:param str processingMode: Cumulocity processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.
 			:param duration: The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.
 			:type duration: float, optional
-			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, events are published to the tenant configured in the pysysproject.xml file.
+			:param tenant: The Cumulocity tenant. If no tenant is specified, events are published to the tenant configured in the pysysproject.xml file.
 			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
 			:return: The process handle of the simulator process.
 			:rtype: L{pysys.process.Process}
@@ -367,7 +367,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 	
 	def startAlarmSimulator(self, devices, perDeviceRate, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP', tenant=None):
 		"""
-			Starts an alarm simulator process to publish simulated alarms to Cumulocity IoT.
+			Starts an alarm simulator process to publish simulated alarms to Cumulocity.
 
 			The simulator uses an instance of the provided alarm creator class to create new alarms to send, 
 			allowing the test to publish alarms of different types.
@@ -379,10 +379,10 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 			:param str creatorFile: The path to the Python file containing the alarm creator class.
 			:param str creatorClassName: The name of the alarm creator class that extends the :class:`apamax.eplapplications.perf.basetest.ObjectCreator` class.
 			:param list creatorParams: The list of parameters to pass to the constructor of the alarm creator class to create a new instance.
-			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.
+			:param str processingMode: Cumulocity processing mode. Possible values are CEP, PERSISTENT, TRANSIENT, and QUIESCENT.
 			:param duration: The duration (in seconds) to run the simulator for. If no duration is specified, then the simulator runs until either stopped or the end of the test.
 			:type duration: float, optional
-			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, alarms are published to the tenant configured in the pysysproject.xml file.
+			:param tenant: The Cumulocity tenant. If no tenant is specified, alarms are published to the tenant configured in the pysysproject.xml file.
 			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
 			:return: The process handle of the simulator process.
 			:rtype: L{pysys.process.Process}
@@ -418,7 +418,7 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 
 	def _startPublisher(self, devices, perDeviceRate, resourceUrl, creatorFile, creatorClassName, creatorParams, duration=None, processingMode='CEP',tenant=None):
 		"""
-			Starts a publisher process to publish simulated data to Cumulocity IoT using provided object creator class.
+			Starts a publisher process to publish simulated data to Cumulocity using provided object creator class.
 
 			:param list[str] devices: List of device IDs.
 			:param float perDeviceRate: The rate of objects to publish per device.
@@ -426,10 +426,10 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 			:param str creatorFile: The path to the Python file containing object creator class.
 			:param str creatorClassName: The name of the object creator class.
 			:param list creatorParams: The list of parameters to pass to constructor of the object creator class.
-			:param str processingMode: Cumulocity IoT processing mode. Possible values are CEP, PERSISTENT, TRANSIENT and QUIESCENT.
+			:param str processingMode: Cumulocity processing mode. Possible values are CEP, PERSISTENT, TRANSIENT and QUIESCENT.
 			:param duration: The duration (in seconds) to run simulators for. If no duration specified then it runs until either stopped or end of the test.
 			:type duration: float, optional
-			:param tenant: The Cumulocity IoT tenant. If no tenant is specified, data is published to the tenant configured in the pysysproject.xml file.
+			:param tenant: The Cumulocity tenant. If no tenant is specified, data is published to the tenant configured in the pysysproject.xml file.
 			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
 			:return: The publisher object which can be stopped by calling stop() method on it.
 			:rtype: L{pysys.process.Process}
@@ -513,8 +513,8 @@ class ApamaC8YPerfBaseTest(ApamaC8YBaseTest):
 			cpu_limit += ' cores'
 
 		env = {
-			'Cumulocity IoT Tenant': c8y_url,
-			'Cumulocity IoT Version': c8y_version,
+			'Cumulocity Tenant': c8y_url,
+			'Cumulocity Version': c8y_version,
 			'Microservice name': microservice_name,
 			'Microservice CPU Limit': cpu_limit,
 			'Microservice Memory Limit': microservice_resources['memory'],

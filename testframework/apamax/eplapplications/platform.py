@@ -15,7 +15,7 @@ from .tenant import CumulocityTenant
 
 class CumulocityPlatform(object):
 	"""
-	Class to create a connection to the Cumulocity IoT platform configured in pysysproject.xml
+	Class to create a connection to the Cumulocity platform configured in pysysproject.xml
 	and spool the logs from the platform locally.
 
 	Requires the following properties to be set in pysysproject.xml:
@@ -144,7 +144,7 @@ class CumulocityPlatform(object):
 		return self._c8yConn
 
 	def getApamaLogFile(self):
-		""" Return the path to the Apama log file within Cumulocity IoT."""
+		""" Return the path to the Apama log file within Cumulocity."""
 		return os.path.join(self.parent.output, 'platform.log')
 
 	def getMicroserviceName(self):
@@ -165,20 +165,20 @@ class CumulocityPlatform(object):
 
 	def getTenant(self):
 		"""
-		Get the Cumulocity IoT tenant configured in the pysysproject.xml file.
-		:return: The Cumulocity IoT tenant.
+		Get the Cumulocity tenant configured in the pysysproject.xml file.
+		:return: The Cumulocity tenant.
 		:rtype: :class:`~apamax.eplapplications.tenant.CumulocityTenant`
 		"""
 		return self._tenant
 
 	def getSubscribedTenants(self):
 		"""
-		Get list of Cumulocity IoT tenants subscribed to the Apama-ctrl microservice if testing against a
+		Get list of Cumulocity tenants subscribed to the Apama-ctrl microservice if testing against a
 		multi-tenant Apama-ctrl microservice.
 
 		If the Apama-ctrl microservice is per-tenant, it returns a list only containing the configured tenant.
 
-		:return: List of Cumulocity IoT tenants.
+		:return: List of Cumulocity tenants.
 		:rtype: list[:class:`~apamax.eplapplications.tenant.CumulocityTenant`]
 		"""
 		if not self._isMultiTenantMicroservice:

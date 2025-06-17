@@ -2,9 +2,9 @@
 <pysystest type="auto">
 
   <description>
-    <title>Running basic test with local correlator connected to Cumulocity IoT</title>
+    <title>Running basic test with local correlator connected to Cumulocity</title>
     <purpose><![CDATA[
-        Basic scenario - run and test EPL Test in local correlator connected to Cumulocity IoT
+        Basic scenario - run and test EPL Test in local correlator connected to Cumulocity
 ]]>
     </purpose>
   </description>

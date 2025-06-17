@@ -7,7 +7,7 @@
       Check the performance of the AlarmOnMeasurementThreshold app by iterating over devices of various
       classes.
       
-      The Cumulocity IoT Device Classes define the incoming update frequency for each class of devices:
+      The Cumulocity Device Classes define the incoming update frequency for each class of devices:
       +================+========================+====================+=======================+
       | Device class   | Update frequency       | Example device     | Min Ev/s | Max Ev/s   |
       +================+========================+====================+==========+============+

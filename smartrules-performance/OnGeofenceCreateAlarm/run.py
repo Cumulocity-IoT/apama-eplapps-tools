@@ -29,7 +29,7 @@ class PySysTest(ApamaC8YPerfBaseTest):
 	# If false, then the test does not generate any simulated data.
 	useSimulatedData = True
 
-	# The processing mode to use when publishing simulated events to Cumulocity IoT.
+	# The processing mode to use when publishing simulated events to Cumulocity.
 	cumulocityProcessingMode = 'CEP'
 
 	##### Smartrule Configuration #####

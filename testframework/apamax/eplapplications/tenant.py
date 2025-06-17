@@ -14,14 +14,14 @@ from .connection import C8yConnection
 class CumulocityTenant(object):
 
 	"""
-	Class to represent a Cumulocity IoT tenant. 
+	Class to represent a Cumulocity tenant. 
 
 	It is used to get a `~apamax.eplapplications.connection.C8yConnection` object to perform a REST request against the tenant.
 
-	:param url: The Cumulocity IoT tenant URL.
+	:param url: The Cumulocity tenant URL.
 	:param username: The username.
 	:param password: The password.
-	:param tenantId: The optional tenant ID. If not provided, it is fetched from the Cumulocity IoT tenant.
+	:param tenantId: The optional tenant ID. If not provided, it is fetched from the Cumulocity tenant.
 
 	"""
 

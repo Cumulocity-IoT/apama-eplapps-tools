@@ -57,11 +57,11 @@
 <p>PySys is a testing framework that provides a way to test your applications.</p>
 <p>See <a class="reference external" href="https://pysys-test.github.io/pysys-test">PySys Documentation</a> for details on installation and how the framework can be used and the facilities it contains.</p>
 </section>
-<section id="testing-in-the-cumulocity-iot-cloud">
-<span id="test-in-cloud"></span><h2>Testing in the Cumulocity IoT cloud<a class="headerlink" href="#testing-in-the-cumulocity-iot-cloud" title="Permalink to this headline">¶</a></h2>
-<section id="setup-for-testing-in-the-cumulocity-iot-cloud">
-<span id="setup-for-test-in-cloud"></span><h3>Setup for testing in the Cumulocity IoT cloud<a class="headerlink" href="#setup-for-testing-in-the-cumulocity-iot-cloud" title="Permalink to this headline">¶</a></h3>
-<p>You can automatically test your applications only using a Cumulocity IoT tenant with Apama EPL Apps enabled. To do this, you will need a dedicated Cumulocity IoT tenant for your testing in order to avoid disrupting any production activities. When testing within Cumulocity IoT, no Apama installation is required, just a copy of PySys, which can be installed via Pip, and a copy of this SDK.</p>
+<section id="testing-in-the-cumulocity-cloud">
+<span id="test-in-cloud"></span><h2>Testing in the Cumulocity cloud<a class="headerlink" href="#testing-in-the-cumulocity-cloud" title="Permalink to this headline">¶</a></h2>
+<section id="setup-for-testing-in-the-cumulocity-cloud">
+<span id="setup-for-test-in-cloud"></span><h3>Setup for testing in the Cumulocity cloud<a class="headerlink" href="#setup-for-testing-in-the-cumulocity-cloud" title="Permalink to this headline">¶</a></h3>
+<p>You can automatically test your applications only using a Cumulocity tenant with Apama EPL Apps enabled. To do this, you will need a dedicated Cumulocity tenant for your testing in order to avoid disrupting any production activities. When testing within Cumulocity, no Apama installation is required, just a copy of PySys, which can be installed via Pip, and a copy of this SDK.</p>
 <p>There is an extension to PySys that is needed for the framework included in this GitHub repository, it can automatically be made available to the PySys tests by setting the EPL_TESTING_SDK environment variable. You simply need to point it to the path where you checked out this repository.</p>
 <p>For example, on Linux:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">EPL_TESTING_SDK</span><span class="o">=</span>/path_to_sdk
@@ -72,7 +72,7 @@
 </pre></div>
 </div>
 <p>In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples and samples-performance directories of this GitHub repository.</p>
-<p>You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains the essential configuration necessary for testing with Apama and Cumulocity IoT.</p>
+<p>You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains the essential configuration necessary for testing with Apama and Cumulocity.</p>
 <p>You can set the <code class="xref py py-obj docutils literal notranslate"><span class="pre">clearAllActiveAlarmsDuringTenantPreparation</span></code> property to <code class="xref py py-obj docutils literal notranslate"><span class="pre">false</span></code> in the pysysproject.xml file to disable the default behavior of clearing all active alarms.</p>
 </section>
 <section id="creating-a-test">
@@ -84,7 +84,7 @@
 </div>
 <p>If you do this, the default PySys test case comes with a run.py file. For these tests, you should remove that file, it is not needed. If you do want to use it, see the ‘<a class="reference internal" href="#advanced-tests">Advanced tests</a>’ section below.</p>
 <p>A PySys test case comprises a directory with a unique name, containing a pysystest.xml and an Input directory containing your test EPL monitors. These should be written according to the <a class="reference external" href="testing-epl.html#writing-tests-for-epl-apps">Writing tests for EPL apps</a> document, for example, AlarmOnMeasurementThresholdTest.mon in the provided samples. In particular, they must terminate either by all the listeners terminating or with an explicit ‘die’ statement.</p>
-<p>The test is configured through the pysystest.xml file. This contains the title and purpose, which you should use for a description of what your test does. You must also use it to specify how to run your test. To run a test using Apama EPL Apps in your Cumulocity IoT tenant, you must add the following block:</p>
+<p>The test is configured through the pysystest.xml file. This contains the title and purpose, which you should use for a description of what your test does. You must also use it to specify how to run your test. To run a test using Apama EPL Apps in your Cumulocity tenant, you must add the following block:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;data&gt;</span>
   <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;EPLAppsSimpleTest&quot;</span> <span class="na">module=</span><span class="s">&quot;${EPL_TESTING_SDK}/testframework/apamax/eplapplications/basetest&quot;</span><span class="nt">/&gt;</span>
   <span class="nt">&lt;user-data</span> <span class="na">name=</span><span class="s">&quot;EPLApp&quot;</span> <span class="na">value=</span><span class="s">&quot;AlarmOnMeasurementThreshold&quot;</span><span class="nt">/&gt;</span>
@@ -125,7 +125,7 @@
 <section id="testing-locally">
 <h2>Testing locally<a class="headerlink" href="#testing-locally" title="Permalink to this headline">¶</a></h2>
 <p><em>To follow this, it is assumed that you have an Apama installation set up with the Apama PySys extensions.</em></p>
-<p>You can also test your EPL app with a locally running correlator connected to the Cumulocity IoT platform. This provides all the capabilities of running in the cloud whilst not taking valuable cloud resources. Running locally also gives you much more access to the correlator allowing some fine-tuning.</p>
+<p>You can also test your EPL app with a locally running correlator connected to the Cumulocity platform. This provides all the capabilities of running in the cloud whilst not taking valuable cloud resources. Running locally also gives you much more access to the correlator allowing some fine-tuning.</p>
 <p>We provide a basic correlator project that can be used to deploy your test. It has the same bundles loaded as EPL apps have access to and so will behave the same as in the cloud.</p>
 <p>The PySys project should be set up the same as for testing EPL apps.</p>
 <p>In order to run your test with a local correlator, you must specify a different class to use in the data block of the test’s pysystest.xml:</p>
@@ -135,7 +135,7 @@
 <p>Setting which EPL app to run the test on works as before.</p>
 <section id="notifications-2-0">
 <h3>Notifications 2.0<a class="headerlink" href="#notifications-2-0" title="Permalink to this headline">¶</a></h3>
-<p>The EPL apps test framework supports using the new Notifications 2.0 API for receiving notifications from Cumulocity IoT. By default, this is disabled.</p>
+<p>The EPL apps test framework supports using the new Notifications 2.0 API for receiving notifications from Cumulocity. By default, this is disabled.</p>
 <p>See <a class="reference external" href="https://cumulocity.com/apama/docs/latest/change-logs/#10.15/cumulocity-10155-clientbundledeprecated">the release note</a> for more information about the Notifications 2.0 integration.</p>
 <p>To enable it within the EPL apps test framework, add the following elements to your PySys Project XML:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- Whether Notifications 2.0 is enabled. By default, it is disabled. --&gt;</span>
@@ -166,7 +166,7 @@
 </div>
 <p>Whenever you run a test using a local correlator, before the test is executed:</p>
 <ul class="simple">
-<li><p>All active Alarms in your Cumulocity IoT tenant are cleared.</p></li>
+<li><p>All active Alarms in your Cumulocity tenant are cleared.</p></li>
 <li><p>Any devices created by previous tests (which are identified by the device name having prefix “PYSYS_”) are deleted from your tenant.</p></li>
 </ul>
 </section>
@@ -250,8 +250,8 @@
 <li class="toctree-l1"><a class="reference internal" href="testing-epl.html">Writing tests for EPL apps</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using PySys to test your EPL apps</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#testing-in-the-cumulocity-iot-cloud">Testing in the Cumulocity IoT cloud</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#setup-for-testing-in-the-cumulocity-iot-cloud">Setup for testing in the Cumulocity IoT cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-in-the-cumulocity-cloud">Testing in the Cumulocity cloud</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup-for-testing-in-the-cumulocity-cloud">Setup for testing in the Cumulocity cloud</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#creating-a-test">Creating a test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#running-the-test">Running the test</a></li>
 </ul>

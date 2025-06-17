@@ -27,7 +27,7 @@ class PySysTest(ApamaC8YPerfBaseTest):
 	# The duration (in seconds) for the app to run for measuring the performance.
 	testDuration = 300.0
 
-	# The processing mode to use when publishing simulated measurements to Cumulocity IoT.
+	# The processing mode to use when publishing simulated measurements to Cumulocity.
 	cumulocityProcessingMode = 'CEP'
 
 	# The type of measurements, the app listens for.

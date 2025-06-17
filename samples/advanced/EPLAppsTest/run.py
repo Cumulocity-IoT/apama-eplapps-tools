@@ -19,7 +19,7 @@ class PySysTest(ApamaC8YBaseTest):
 
 	def execute(self):
 
-		# Interacting with Apama EPL Apps in Cumulocity IoT
+		# Interacting with Apama EPL Apps in Cumulocity
 		eplapps = EPLApps(self.platform.getC8YConnection())
 
 		# deploy the application

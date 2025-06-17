@@ -18,7 +18,7 @@
       of each building and raises an alarm if occupancy is more than the defined threshold. The OperationOnAlarmNotCleared 
       app monitors the raised alarms and creates an operation if a raised alarm is not cleared within the configured duration.
 
-      The Cumulocity IoT Device Classes define the incoming update frequency for each class of devices:
+      The Cumulocity Device Classes define the incoming update frequency for each class of devices:
       +================+========================+====================+=======================+
       | Device class   | Update frequency       | Example device     | Min Ev/s | Max Ev/s   |
       +================+========================+====================+==========+============+

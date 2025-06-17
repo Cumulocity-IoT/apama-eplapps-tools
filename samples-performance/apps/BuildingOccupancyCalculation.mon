@@ -34,7 +34,7 @@ using com.apama.cumulocity.Util;
  * The measurements for access points contain the current count of the number of people 
  * who entered and exited through the access point. The total occupancy of a building is 
  * calculated from measurements of all access points within a building. A measurement for 
- * the total occupancy count of a building is periodically generated and sent to Cumulocity IoT.
+ * the total occupancy count of a building is periodically generated and sent to Cumulocity.
  * 
  * The application finds the building to monitor by querying the managed objects of 
  * the defined type. The access points of a building are found by querying the children 
@@ -192,7 +192,7 @@ monitor BuildingAccessPointsMonitoring {
 	}
 
 	/**
-	 * Creates and sends measurements containing the number of people inside the building to Cumulocity IoT.
+	 * Creates and sends measurements containing the number of people inside the building to Cumulocity.
 	 * @param numOfPeopleInsideBuilding The number of people inside the building.
 	 */
 	action generateMeasurement(integer numOfPeopleInsideBuilding) {
@@ -207,7 +207,7 @@ monitor BuildingAccessPointsMonitoring {
 		measurementValue.value := numOfPeopleInsideBuilding.toFloat();
 		measurementValue.unit := "count";
 
-		// Send the measurement to Cumulocity IoT.
+		// Send the measurement to Cumulocity.
 		send buildingMeasurement to Measurement.SEND_CHANNEL;
 	}
 }

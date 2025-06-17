@@ -31,7 +31,7 @@ class PySysTest(EPLAppsPerfTest):
 	# If false, then the test does not generate any simulated data.
 	useSimulatedData = True
 
-	# The processing mode to use when publishing simulated measurements to Cumulocity IoT.
+	# The processing mode to use when publishing simulated measurements to Cumulocity.
 	cumulocityProcessingMode = 'CEP'
 	
 	# The type of measurements, the app listens for.

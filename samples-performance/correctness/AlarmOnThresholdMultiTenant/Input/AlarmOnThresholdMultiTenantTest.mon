@@ -136,7 +136,7 @@ monitor AlarmOnMeasurementThresholdTest {
 		mo.name := TEST_DEVICE_PREFIX + name; 
 		mo.params.add("c8y_IsDevice", new dictionary<any, any>);
 
-		// Create a ManagedObject in Cumulocity IoT and receive a response event confirming the change
+		// Create a ManagedObject in Cumulocity and receive a response event confirming the change
 		integer reqId := Util.generateReqId();
 		send mo.withChannelResponse(reqId, new dictionary<string, string>) to connection.getChannel(ManagedObject.SEND_CHANNEL);
 
@@ -160,7 +160,7 @@ monitor AlarmOnMeasurementThresholdTest {
 	}
 
 	/**
-	Sends a measurement with a given value to Cumulocity IoT.  
+	Sends a measurement with a given value to Cumulocity.  
 	@param source The id of the ManagedObject that is the source of the measurement. 
 	@param value The value of the measurement to be sent.
 	@returns The reqId of the measurement event.

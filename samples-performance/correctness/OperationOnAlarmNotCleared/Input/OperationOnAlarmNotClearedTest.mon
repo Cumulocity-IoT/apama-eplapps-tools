@@ -153,7 +153,7 @@ monitor OperationOnAlarmNotClearedTest {
 		mo.params.add("c8y_IsDevice", new dictionary<any, any>);
 		mo.params.add("com_cumulocity_model_Agent", new dictionary<any, any>);
 
-		// Create a ManagedObject in Cumulocity IoT and receive a response event confirming the change
+		// Create a ManagedObject in Cumulocity and receive a response event confirming the change
 		integer reqId := Util.generateReqId();
 		send mo.withResponse(reqId, new dictionary<string, string>) to ManagedObject.SEND_CHANNEL;
 

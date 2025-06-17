@@ -5,7 +5,7 @@
     <title>Run a test of project package (with an EPL application) using a local correlator for a child tenant</title>
     <purpose><![CDATA[
         Make sure the EPL app project is deployed from the local correlator and 
-        connected to the Cumulocity IoT platform. It should work without any errors from any child tenant.
+        connected to the Cumulocity platform. It should work without any errors from any child tenant.
     ]]>
     </purpose>
   </description>

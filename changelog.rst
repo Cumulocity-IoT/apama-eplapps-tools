@@ -12,7 +12,7 @@ Change Log
 
 25.219.0
 ---------
-+ The EPL Apps Tools test framework supports Notifications 2.0 for receiving notifications from Cumulocity IoT.
++ The EPL Apps Tools test framework supports Notifications 2.0 for receiving notifications from Cumulocity.
 
 24.0.0
 -------

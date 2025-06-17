@@ -13,9 +13,9 @@ import urllib, ssl, json, urllib.request, base64, logging
 
 class C8yConnection(object):
 	"""
-	Simple object to create connection to Cumulocity IoT and perform REST requests.
+	Simple object to create connection to Cumulocity and perform REST requests.
 
-	:param url: The Cumulocity IoT tenant url.
+	:param url: The Cumulocity tenant url.
 	:param username: The username.
 	:param password: The password.
 	"""

@@ -2,7 +2,7 @@
 <pysystest type="auto" state="runnable">
 
   <description>
-    <title>Run a test of an EPL app inside Cumulocity IoT</title>
+    <title>Run a test of an EPL app inside Cumulocity</title>
     <purpose><![CDATA[
 		 Advanced test with custom run.py, running in Apama EPL Apps
 ]]>

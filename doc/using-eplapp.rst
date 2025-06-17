@@ -1,26 +1,26 @@
 =====================================================
  Using the eplapp.py command line tool
 =====================================================
-:Description: Document detailing the use of the eplapp.py tool to perform REST requests to Apama EPL Apps in Cumulocity IoT.
+:Description: Document detailing the use of the eplapp.py tool to perform REST requests to Apama EPL Apps in Cumulocity.
 
 
 Introduction
 -------------
 
-The eplapp.py tool in the scripts directory of the SDK allows you to interact with your Apama EPL apps in Cumulocity IoT using the command line. 
+The eplapp.py tool in the scripts directory of the SDK allows you to interact with your Apama EPL apps in Cumulocity using the command line. 
 
 The commands available are:
 
-+ ``list`` - Prints details of your existing EPL apps in Cumulocity IoT.
-+ ``deploy`` - Uploads a local .mon file to EPL apps in Cumulocity IoT.
-+ ``delete`` - Deletes an EPL app from Cumulocity IoT.
-+ ``update`` - Updates one or more of the fields of an existing EPL app in Cumulocity IoT.
++ ``list`` - Prints details of your existing EPL apps in Cumulocity.
++ ``deploy`` - Uploads a local .mon file to EPL apps in Cumulocity.
++ ``delete`` - Deletes an EPL app from Cumulocity.
++ ``update`` - Updates one or more of the fields of an existing EPL app in Cumulocity.
 
-All of these commands have the following *mandatory* options for connecting to your Cumulocity IoT tenant: 
+All of these commands have the following *mandatory* options for connecting to your Cumulocity tenant: 
 
-+ ``-c | --cumulocity_url <url>`` - The base URL of your Cumulocity IoT tenant.
-+ ``-u | --username <username>`` - Your Cumulocity IoT username.
-+ ``-p | --password <password>`` - Your Cumulocity IoT password.
++ ``-c | --cumulocity_url <url>`` - The base URL of your Cumulocity tenant.
++ ``-u | --username <username>`` - Your Cumulocity username.
++ ``-p | --password <password>`` - Your Cumulocity password.
 
 Each command also has an *optional* ``-h | --help`` option which prints a usage message for that command, for example:
 
@@ -31,7 +31,7 @@ Each command also has an *optional* ``-h | --help`` option which prints a usage 
 
 Printing a list of your EPL apps 
 ---------------------------------
-To print a list of all of your existing EPL apps in Cumulocity IoT, you can use the ``list`` command as follows:
+To print a list of all of your existing EPL apps in Cumulocity, you can use the ``list`` command as follows:
 
 .. code-block:: shell
     
@@ -39,12 +39,12 @@ To print a list of all of your existing EPL apps in Cumulocity IoT, you can use 
 
 For each EPL app the name, description, state, and lists of warnings or errors are printed.  
 
-Deploying to Apama EPL Apps in Cumulocity IoT
+Deploying to Apama EPL Apps in Cumulocity
 ----------------------------------------------
 
 The ``deploy`` command has an additional *mandatory* option: 
 
-+ ``-f | --file <file>`` - The path to the .mon file you wish to upload to Cumulocity IoT as an EPL app.
++ ``-f | --file <file>`` - The path to the .mon file you wish to upload to Cumulocity as an EPL app.
 
 Thus, the minimal command for deploying to Apama EPL Apps would look like the following:
 
@@ -66,7 +66,7 @@ Deleting an EPL app
 
 The ``delete`` command also has an additional *mandatory* option: 
 
-+ ``-n | --name <name>`` - The name of the the EPL app you wish to delete from your Cumulocity IoT tenant.
++ ``-n | --name <name>`` - The name of the the EPL app you wish to delete from your Cumulocity tenant.
 
 For example:
 
@@ -76,7 +76,7 @@ For example:
 
 Updating an existing EPL app
 -----------------------------
-You can update the contents, name, description, or state of an existing EPL app in Cumulocity IoT using the ``update`` command
+You can update the contents, name, description, or state of an existing EPL app in Cumulocity using the ``update`` command
 which, like the ``delete`` command, has an additional *mandatory* option:
 
 + ``-n | --name <name>`` - The name of the EPL app you wish to update.

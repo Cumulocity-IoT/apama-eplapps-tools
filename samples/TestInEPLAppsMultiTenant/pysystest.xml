@@ -2,9 +2,9 @@
 <pysystest type="auto" state="runnable">
 
   <description>
-    <title>Run a test of an EPL application inside Cumulocity IoT against multi-tenant microservice</title>
+    <title>Run a test of an EPL application inside Cumulocity against multi-tenant microservice</title>
     <purpose><![CDATA[
-		Basic test of an EPL application, running the app and tests inside EPL apps in Cumulocity IoT.
+		Basic test of an EPL application, running the app and tests inside EPL apps in Cumulocity.
     This test expects the tenants to be subscribed to the required application before running the test.
 ]]>
     </purpose>

@@ -29,7 +29,7 @@ class PySysTest(ApamaC8YBaseTest):
 		correlator = CorrelatorHelper(self, name='c8y-correlator')
 		correlator.start(logfile='c8y-correlator.log', config=project.deployedDir())
 
-		self.waitForGrep('c8y-correlator.log', expr="Connected to Cumulocity IoT")
+		self.waitForGrep('c8y-correlator.log', expr="Connected to Cumulocity")
 	
 		# Inject our EPL files into the correlator.
 		correlator.injectEPL([self.project.EPL_APPS+"/AlarmOnMeasurementThreshold.mon", self.input+"/AlarmOnMeasurementThresholdTest.mon"])

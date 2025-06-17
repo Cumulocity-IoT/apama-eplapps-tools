@@ -28,7 +28,7 @@ class PySysTest(EPLAppsPerfTest):
 	# The duration (in seconds) for the app to run for measuring the performance for each variation.
 	testDuration = 300.0
 
-	# The processing mode to use when publishing simulated measurements to Cumulocity IoT.
+	# The processing mode to use when publishing simulated measurements to Cumulocity.
 	cumulocityProcessingMode = 'CEP'
 
 	##### App configuration #####

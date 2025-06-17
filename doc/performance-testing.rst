@@ -10,7 +10,7 @@ An EPL app or a smart rule can be either tested against real devices or simulate
 
 + Creating a test.
 + Defining the test options.
-+ Preparing the Cumulocity IoT tenant.
++ Preparing the Cumulocity tenant.
 + Creating device simulators (if applicable).
 + Deploying EPL apps.
 + Deploying smart rules.
@@ -19,7 +19,7 @@ An EPL app or a smart rule can be either tested against real devices or simulate
 + Generating the performance reports.
 + Writing a test for a multi-tenant microservice.
 
-This document demonstrates the common process involved in writing a performance test for your existing EPL apps and smart rules. The performance tests described in the document use the EPL apps SDK based on the PySys test framework. See the `PySys documentation <https://pysys-test.github.io/pysys-test>`_  for details on the installation, and how the framework can be used and the facilities it contains. Set up the EPL apps SDK by following the steps mentioned in `Testing in the Cumulocity IoT cloud <using-pysys.rst#testing-in-the-cumulocity-iot-cloud>`_.
+This document demonstrates the common process involved in writing a performance test for your existing EPL apps and smart rules. The performance tests described in the document use the EPL apps SDK based on the PySys test framework. See the `PySys documentation <https://pysys-test.github.io/pysys-test>`_  for details on the installation, and how the framework can be used and the facilities it contains. Set up the EPL apps SDK by following the steps mentioned in `Testing in the Cumulocity cloud <using-pysys.rst#testing-in-the-cumulocity-cloud>`_.
 
 Writing a performance test
 ===========================
@@ -74,9 +74,9 @@ Once the default value is defined with a static attribute, you can override the 
 
 See the `PySys test options <https://pysys-test.github.io/pysys-test/pysys/UserGuide.html#configuring-and-overriding-test-options>`_ in the PySys documentation for details on configuring and overriding test options.
 
-Preparing the Cumulocity IoT tenant
+Preparing the Cumulocity tenant
 ------------------------------------
-The performance test must make sure that the Cumulocity IoT tenant used for testing the EPL app or smart rule is prepared. This is done by calling the ``prepareTenant`` method before the EPL apps or smart rules are deployed.
+The performance test must make sure that the Cumulocity tenant used for testing the EPL app or smart rule is prepared. This is done by calling the ``prepareTenant`` method before the EPL apps or smart rules are deployed.
 
 The ``prepareTenant`` method performs the following actions:
 
@@ -103,7 +103,7 @@ Deploying EPL apps
 -------------------
 EPL apps can be deployed by using the ``deploy`` method of the ``EPLApps`` class. The field ``eplapps`` of type ``EPLApps`` is available for performance tests.
 
-The performance test may need to customize EPL apps for performance testing, for example, defining the threshold limit, or the type of measurements to listen for. The performance test may also test EPL apps for multiple values of some parameters in a single test or across multiple tests. One approach to customize EPL apps for testing is to use placeholder replacement strings in EPL apps and then replace the strings with actual values before deploying them to Cumulocity IoT. For example::
+The performance test may need to customize EPL apps for performance testing, for example, defining the threshold limit, or the type of measurements to listen for. The performance test may also test EPL apps for multiple values of some parameters in a single test or across multiple tests. One approach to customize EPL apps for testing is to use placeholder replacement strings in EPL apps and then replace the strings with actual values before deploying them to Cumulocity. For example::
 
     monitor MySimpleApp {
         constant float THRESHOLD := @MEASUREMENT_THRESHOLD@;
@@ -162,9 +162,9 @@ For example, the ``onMeasurementExplicitThresholdCreateAlarm`` smart rule can be
 
 Sending measurements
 --------------------
-A performance test can either use real-time measurements from real devices or simulated measurements from simulated devices. To generate simulated measurements, the test can start measurement simulators to publish simulated measurements to Cumulocity IoT at a specified rate which are then consumed by the EPL apps or smart rules being tested.
+A performance test can either use real-time measurements from real devices or simulated measurements from simulated devices. To generate simulated measurements, the test can start measurement simulators to publish simulated measurements to Cumulocity at a specified rate which are then consumed by the EPL apps or smart rules being tested.
 
-Different tests may have different requirements for the measurements being published. For example, a test may want to customize the type of measurements or range of measurement values. To support such requirements, the framework requires tests to define a measurement creator class to create measurements of desired types. A measurement simulator uses a measurement creator object to create measurements to publish to Cumulocity IoT.
+Different tests may have different requirements for the measurements being published. For example, a test may want to customize the type of measurements or range of measurement values. To support such requirements, the framework requires tests to define a measurement creator class to create measurements of desired types. A measurement simulator uses a measurement creator object to create measurements to publish to Cumulocity.
 
 The following example shows a test defining a measurement creator class to create measurements within a configurable range:
 
@@ -213,9 +213,9 @@ For example, a test can use the above measurement creator class to generate meas
 
 Sending events
 --------------------
-A performance test that consumes events can either use real-time events from real devices or simulated events from simulated devices. To generate simulated events, the test can start event simulators to publish simulated events to Cumulocity IoT at a specified rate which are then consumed by the EPL apps or smart rules being tested.
+A performance test that consumes events can either use real-time events from real devices or simulated events from simulated devices. To generate simulated events, the test can start event simulators to publish simulated events to Cumulocity at a specified rate which are then consumed by the EPL apps or smart rules being tested.
 
-Different tests may have different requirements for the events being published. For example, a test may want to customize the type of events. To support such requirements, the framework requires tests to define an event creator class to create events of desired types. An event simulator uses an event creator object to create events to publish to Cumulocity IoT.
+Different tests may have different requirements for the events being published. For example, a test may want to customize the type of events. To support such requirements, the framework requires tests to define an event creator class to create events of desired types. An event simulator uses an event creator object to create events to publish to Cumulocity.
 
 The following example shows a test defining an event creator class to create position update events within a configurable range of longitude and latitude:
 
@@ -269,9 +269,9 @@ For example, a test can use the above event creator class to generate position u
 
 Sending alarms
 --------------
-A performance test that consumes alarms can either use real-time alarms from real devices or simulated alarms from simulated devices. To generate simulated alarms, the test can start alarm simulators to publish simulated alarms to Cumulocity IoT at a specified rate which are then consumed by the EPL apps or smart rules being tested.
+A performance test that consumes alarms can either use real-time alarms from real devices or simulated alarms from simulated devices. To generate simulated alarms, the test can start alarm simulators to publish simulated alarms to Cumulocity at a specified rate which are then consumed by the EPL apps or smart rules being tested.
 
-Different tests may have different requirements for the alarms being published. For example, a test may want to customize the type of alarms. To support such requirements, the framework requires tests to define an alarm creator class to create alarms of desired types. An alarm simulator uses an alarm creator object to create alarms to publish to Cumulocity IoT.
+Different tests may have different requirements for the alarms being published. For example, a test may want to customize the type of alarms. To support such requirements, the framework requires tests to define an alarm creator class to create alarms of desired types. An alarm simulator uses an alarm creator object to create alarms to publish to Cumulocity.
 
 The following example shows a test defining an alarm creator class to create alarms:
 
@@ -408,7 +408,7 @@ See the OnExplicitThresholdCreateAlarm_MultiTenant sample in the smartrules-perf
 
 Running the performance test
 =============================
-Performance tests can only be run using a Cumulocity IoT tenant with EPL apps and smart rules enabled. Set up the framework to use a Cumulocity IoT tenant by following the steps mentioned in `Testing in the Cumulocity IoT cloud <using-pysys.rst#testing-in-the-cumulocity-iot-cloud>`_.
+Performance tests can only be run using a Cumulocity tenant with EPL apps and smart rules enabled. Set up the framework to use a Cumulocity tenant by following the steps mentioned in `Testing in the Cumulocity cloud <using-pysys.rst#testing-in-the-cumulocity-cloud>`_.
 
 When running a test, test options can be overridden by using the ``-X`` argument. See `Defining the test options`_ for details on defining and providing test options.
 
@@ -423,12 +423,12 @@ At the end of the test, a basic validation of the test run is performed. See `Py
 
 Performance report
 ==================
-At the end of a performance test, an HTML report is generated in the test's output directory. When running multiple iterations of the same EPL app or smart rules with different configurations, the results of each iteration are included in the report. The report contains metadata about the microservice and Cumulocity IoT environment, test-specific configurations, performance summary, and graphs.
+At the end of a performance test, an HTML report is generated in the test's output directory. When running multiple iterations of the same EPL app or smart rules with different configurations, the results of each iteration are included in the report. The report contains metadata about the microservice and Cumulocity environment, test-specific configurations, performance summary, and graphs.
 
-The report contains the following metadata about the microservice and the Cumulocity IoT environment:
+The report contains the following metadata about the microservice and the Cumulocity environment:
 
-+ Cumulocity IoT tenant URL
-+ Cumulocity IoT platform version
++ Cumulocity tenant URL
++ Cumulocity platform version
 + Apama-ctrl microservice name
 + Apama-ctrl microservice version (product code PAQ)
 + Apama platform version  (product code PAM)

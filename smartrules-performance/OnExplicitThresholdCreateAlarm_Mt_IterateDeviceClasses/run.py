@@ -26,7 +26,7 @@ class PySysTest(ApamaC8YPerfBaseTest):
 	# The duration (in seconds) for the app to run for measuring the performance.
 	testDuration = 1800.0
 
-	# The processing mode to use when publishing simulated measurements to Cumulocity IoT.
+	# The processing mode to use when publishing simulated measurements to Cumulocity.
 	cumulocityProcessingMode = 'CEP'
 
 	# The type of measurements, the app listens for.
@@ -199,7 +199,7 @@ class PySysTest(ApamaC8YPerfBaseTest):
 			self.wait(30)
 	
 	def do_send(self, body,tenant):
-		"""Send event(s) to Cumulocity IOT."""
+		"""Send event(s) to Cumulocity."""
 		headers = {
 					'Content-Type': 'application/vnd.com.nsn.cumulocity.measurementcollection+json',
 					'X-Cumulocity-Processing-Mode': self.cumulocityProcessingMode
@@ -214,7 +214,7 @@ class PySysTest(ApamaC8YPerfBaseTest):
 				# Retry in case of 5XX error.
 				if ex.code // 100 == 5:
 					time.sleep(0.5)
-				self.log.warn(f'WARN: Failed to send to Cumulocity IoT, retrying; error={ex}')
+				self.log.warn(f'WARN: Failed to send to Cumulocity, retrying; error={ex}')
 		
 	def _prepareTenant(self):
 		''' Cleaning tenants in parallel '''

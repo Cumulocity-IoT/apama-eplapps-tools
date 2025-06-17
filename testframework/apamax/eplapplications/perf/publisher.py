@@ -127,7 +127,7 @@ class DataPublisher(object):
 
 	def getUTCTime(self):
 		""" 
-			Gets a Cumulocity IoT-compliant UTC timestamp string for the current time.
+			Gets a Cumulocity-compliant UTC timestamp string for the current time.
 
 			:return: Timestamp string.
 			:rtype: str
@@ -135,7 +135,7 @@ class DataPublisher(object):
 		return datetime.now(timezone.utc).isoformat(timespec='milliseconds').replace('+00:00', 'Z')
 
 	def do_send(self, body):
-		"""Send event(s) to Cumulocity IOT."""
+		"""Send event(s) to Cumulocity."""
 
 		headers = {
 					'Content-Type': self.content_type,
@@ -155,13 +155,13 @@ class DataPublisher(object):
 			except urllib.error.HTTPError as ex:
 				# Retry in case of 5XX error.
 				if ex.code // 100 == 5:
-					print(f'WARN: Failed to send to Cumulocity IoT, retrying; error={ex}')
+					print(f'WARN: Failed to send to Cumulocity, retrying; error={ex}')
 					time.sleep(0.5)
 				else:
-					print(f'ERROR: Failed to send to Cumulocity IoT; error={ex}')
+					print(f'ERROR: Failed to send to Cumulocity; error={ex}')
 					raise ex
 		
-		print(f'ERROR: Failed to send to Cumulocity IoT after trying for {MAX_RETRY_TIME} seconds; headers={headers}, body={body}')
+		print(f'ERROR: Failed to send to Cumulocity after trying for {MAX_RETRY_TIME} seconds; headers={headers}, body={body}')
 
 	def run(self):
 		print(f'Started publishing Cumulocity {self.type_name} with rate of {self.per_device_rate} objects per device per second, with processing mode {self.processing_mode} to devices: {self.devices}')

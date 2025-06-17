@@ -28,7 +28,7 @@ class PySysTest(ApamaC8YBaseTest):
 			# Prepare the tenant for the test run.
 			self.prepareTenant(tenant=tenant)
 
-		# Interacting with Apama EPL Apps in Cumulocity IoT
+		# Interacting with Apama EPL Apps in Cumulocity
 		eplapps = EPLApps(self.platform.getC8YConnection())
 
 		# deploy the application

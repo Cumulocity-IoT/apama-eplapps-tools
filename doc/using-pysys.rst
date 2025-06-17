@@ -12,14 +12,14 @@ See `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for details
 
 .. _test-in-cloud:
 
-Testing in the Cumulocity IoT cloud
+Testing in the Cumulocity cloud
 ===================================
 
 .. _setup-for-test-in-cloud:
 
-Setup for testing in the Cumulocity IoT cloud
+Setup for testing in the Cumulocity cloud
 ----------------------------------------------
-You can automatically test your applications only using a Cumulocity IoT tenant with Apama EPL Apps enabled. To do this, you will need a dedicated Cumulocity IoT tenant for your testing in order to avoid disrupting any production activities. When testing within Cumulocity IoT, no Apama installation is required, just a copy of PySys, which can be installed via Pip, and a copy of this SDK.
+You can automatically test your applications only using a Cumulocity tenant with Apama EPL Apps enabled. To do this, you will need a dedicated Cumulocity tenant for your testing in order to avoid disrupting any production activities. When testing within Cumulocity, no Apama installation is required, just a copy of PySys, which can be installed via Pip, and a copy of this SDK.
 
 There is an extension to PySys that is needed for the framework included in this GitHub repository, it can automatically be made available to the PySys tests by setting the EPL_TESTING_SDK environment variable. You simply need to point it to the path where you checked out this repository. 
 
@@ -37,7 +37,7 @@ Or for Windows:
 
 In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples and samples-performance directories of this GitHub repository.
 
-You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains the essential configuration necessary for testing with Apama and Cumulocity IoT.
+You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains the essential configuration necessary for testing with Apama and Cumulocity.
 
 You can set the `clearAllActiveAlarmsDuringTenantPreparation` property to `false` in the pysysproject.xml file to disable the default behavior of clearing all active alarms.
 
@@ -55,7 +55,7 @@ If you do this, the default PySys test case comes with a run.py file. For these 
 
 A PySys test case comprises a directory with a unique name, containing a pysystest.xml and an Input directory containing your test EPL monitors. These should be written according to the `Writing tests for EPL apps <testing-epl.rst#writing-tests-for-epl-apps>`_ document, for example, AlarmOnMeasurementThresholdTest.mon in the provided samples. In particular, they must terminate either by all the listeners terminating or with an explicit 'die' statement.
 
-The test is configured through the pysystest.xml file. This contains the title and purpose, which you should use for a description of what your test does. You must also use it to specify how to run your test. To run a test using Apama EPL Apps in your Cumulocity IoT tenant, you must add the following block:
+The test is configured through the pysystest.xml file. This contains the title and purpose, which you should use for a description of what your test does. You must also use it to specify how to run your test. To run a test using Apama EPL Apps in your Cumulocity tenant, you must add the following block:
 
 .. code-block:: xml
 
@@ -105,7 +105,7 @@ Testing locally
 
 *To follow this, it is assumed that you have an Apama installation set up with the Apama PySys extensions.*
 
-You can also test your EPL app with a locally running correlator connected to the Cumulocity IoT platform. This provides all the capabilities of running in the cloud whilst not taking valuable cloud resources. Running locally also gives you much more access to the correlator allowing some fine-tuning. 
+You can also test your EPL app with a locally running correlator connected to the Cumulocity platform. This provides all the capabilities of running in the cloud whilst not taking valuable cloud resources. Running locally also gives you much more access to the correlator allowing some fine-tuning. 
 
 We provide a basic correlator project that can be used to deploy your test. It has the same bundles loaded as EPL apps have access to and so will behave the same as in the cloud. 
 
@@ -121,7 +121,7 @@ Setting which EPL app to run the test on works as before.
 
 Notifications 2.0
 --------------------
-The EPL apps test framework supports using the new Notifications 2.0 API for receiving notifications from Cumulocity IoT. By default, this is disabled.
+The EPL apps test framework supports using the new Notifications 2.0 API for receiving notifications from Cumulocity. By default, this is disabled.
 
 See `the release note <https://cumulocity.com/apama/docs/latest/change-logs/#10.15/cumulocity-10155-clientbundledeprecated>`_ for more information about the Notifications 2.0 integration.
 
@@ -161,7 +161,7 @@ Run the test from within the samples directory by using the following command:
 
 Whenever you run a test using a local correlator, before the test is executed:
 
-+ All active Alarms in your Cumulocity IoT tenant are cleared.
++ All active Alarms in your Cumulocity tenant are cleared.
 + Any devices created by previous tests (which are identified by the device name having prefix "PYSYS\_") are deleted from your tenant.
 
 Advanced tests

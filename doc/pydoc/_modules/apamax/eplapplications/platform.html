@@ -55,7 +55,7 @@
 
 <div class="viewcode-block" id="CumulocityPlatform"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform">[docs]</a><span class="k">class</span> <span class="nc">CumulocityPlatform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Class to create a connection to the Cumulocity IoT platform configured in pysysproject.xml</span>
+<span class="sd">	Class to create a connection to the Cumulocity platform configured in pysysproject.xml</span>
 <span class="sd">	and spool the logs from the platform locally.</span>
 
 <span class="sd">	Requires the following properties to be set in pysysproject.xml:</span>
@@ -184,7 +184,7 @@
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span></div>
 
 <div class="viewcode-block" id="CumulocityPlatform.getApamaLogFile"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile">[docs]</a>	<span class="k">def</span> <span class="nf">getApamaLogFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Return the path to the Apama log file within Cumulocity IoT.&quot;&quot;&quot;</span>
+		<span class="sd">&quot;&quot;&quot; Return the path to the Apama log file within Cumulocity.&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;platform.log&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CumulocityPlatform.getMicroserviceName"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName">[docs]</a>	<span class="k">def</span> <span class="nf">getMicroserviceName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -205,20 +205,20 @@
 
 <div class="viewcode-block" id="CumulocityPlatform.getTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getTenant">[docs]</a>	<span class="k">def</span> <span class="nf">getTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Get the Cumulocity IoT tenant configured in the pysysproject.xml file.</span>
-<span class="sd">		:return: The Cumulocity IoT tenant.</span>
+<span class="sd">		Get the Cumulocity tenant configured in the pysysproject.xml file.</span>
+<span class="sd">		:return: The Cumulocity tenant.</span>
 <span class="sd">		:rtype: :class:`~apamax.eplapplications.tenant.CumulocityTenant`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tenant</span></div>
 
 <div class="viewcode-block" id="CumulocityPlatform.getSubscribedTenants"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants">[docs]</a>	<span class="k">def</span> <span class="nf">getSubscribedTenants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Get list of Cumulocity IoT tenants subscribed to the Apama-ctrl microservice if testing against a</span>
+<span class="sd">		Get list of Cumulocity tenants subscribed to the Apama-ctrl microservice if testing against a</span>
 <span class="sd">		multi-tenant Apama-ctrl microservice.</span>
 
 <span class="sd">		If the Apama-ctrl microservice is per-tenant, it returns a list only containing the configured tenant.</span>
 
-<span class="sd">		:return: List of Cumulocity IoT tenants.</span>
+<span class="sd">		:return: List of Cumulocity tenants.</span>
 <span class="sd">		:rtype: list[:class:`~apamax.eplapplications.tenant.CumulocityTenant`]</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isMultiTenantMicroservice</span><span class="p">:</span>

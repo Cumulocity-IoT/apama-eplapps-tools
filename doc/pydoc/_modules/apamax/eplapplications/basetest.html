@@ -99,7 +99,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Checks if the tenant has an external application defined for us and if not, creates it.</span>
 
-<span class="sd">			:param url: The URL to the Cumulocity IoT tenant.</span>
+<span class="sd">			:param url: The URL to the Cumulocity tenant.</span>
 <span class="sd">			:param username: The user to authenticate to the tenant.</span>
 <span class="sd">			:param password: The password to authenticate to the tenant.</span>
 
@@ -118,9 +118,9 @@
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.createProject"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createProject">[docs]</a>	<span class="k">def</span> <span class="nf">createProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">existingProject</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Creates a `ProjectHelper` object which mimics the Cumulocity IoT EPL applications environment.</span>
+<span class="sd">			Creates a `ProjectHelper` object which mimics the Cumulocity EPL applications environment.</span>
 
-<span class="sd">			Adds all the required bundles and adds the properties to connect and authenticate to the configured Cumulocity IoT tenant.</span>
+<span class="sd">			Adds all the required bundles and adds the properties to connect and authenticate to the configured Cumulocity tenant.</span>
 
 <span class="sd">			:param name: The name of the project.</span>
 <span class="sd">			:param existingProject: If provided the path to an existing project. The environment will be added to that project instead of a new one.</span>
@@ -252,7 +252,7 @@
 <span class="sd">		Prepares the tenant for a test by deleting all devices created by previous tests and clearing all active alarms.</span>
 <span class="sd">		However, you can disable the default behavior of clearing all active alarms by setting the `clearAllActiveAlarmsDuringTenantPreparation` property to `false` in the PySys project configuration.</span>
 
-<span class="sd">		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.</span>
+<span class="sd">		:param tenant: The Cumulocity tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is prepared.</span>
 <span class="sd">		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Preparing tenant to run test(s)&#39;</span><span class="p">)</span>
@@ -263,14 +263,14 @@
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.createTestDevice"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice">[docs]</a>	<span class="k">def</span> <span class="nf">createTestDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;PySysTestDevice&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Creates a Cumulocity IoT device for testing.</span>
+<span class="sd">		Creates a Cumulocity device for testing.</span>
 
 <span class="sd">		:param str name: The name of the device. The name of the device is prefixed with `PYSYS_` so that the framework can identify and clean up test devices.</span>
 <span class="sd">		:param type: The type of the device.</span>
 <span class="sd">		:type type: str, optional</span>
 <span class="sd">		:param children: The list of device IDs to add them as children to the created device.</span>
 <span class="sd">		:type children: list[str], optional</span>
-<span class="sd">		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.</span>
+<span class="sd">		:param tenant: The Cumulocity tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.</span>
 <span class="sd">		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
 <span class="sd">		:return: The ID of the device created.</span>
 <span class="sd">		:rtype: str</span>
@@ -308,7 +308,7 @@
 <span class="sd">		:type dateFrom: str, optional</span>
 <span class="sd">		:param dateTo: The end time of the alarm in the ISO format. If specified, only alarms that are created on or before this time are fetched.</span>
 <span class="sd">		:type dateTo: str, optional</span>
-<span class="sd">		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.</span>
+<span class="sd">		:param tenant: The Cumulocity tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.</span>
 <span class="sd">		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
 <span class="sd">		:param \\**kwargs: All additional keyword arguments are treated as extra parameters for filtering alarms. </span>
 <span class="sd">		:return: List of alarms.</span>
@@ -347,7 +347,7 @@
 <span class="sd">		:type dateFrom: str, optional</span>
 <span class="sd">		:param dateTo: The end time of the operation in the ISO format. If specified, only operations that are created on or before this time are fetched.</span>
 <span class="sd">		:type dateTo: str, optional</span>
-<span class="sd">		:param tenant: The Cumulocity IoT tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.</span>
+<span class="sd">		:param tenant: The Cumulocity tenant. If no tenant is specified, the tenant configured in the pysysproject.xml file is used.</span>
 <span class="sd">		:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
 <span class="sd">		:param \\**kwargs: All additional keyword arguments are treated as extra parameters for filtering operations.</span>
 <span class="sd">		:return: List of operations.</span>
@@ -389,14 +389,14 @@
 		
 	<span class="k">def</span> <span class="nf">_getCumulocityObjectCollection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resourceUrl</span><span class="p">,</span> <span class="n">queryParams</span><span class="p">,</span> <span class="n">responseKey</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">			Gets all Cumulocity IoT object collection.</span>
+<span class="sd">			Gets all Cumulocity object collection.</span>
 
 <span class="sd">			Fetches all pages of the collection.</span>
 
 <span class="sd">			:param str resourceUrl: The base url of the object to get. For example, /alarm/alarms.</span>
 <span class="sd">			:param dict[str,str] queryParams: The query parameters.</span>
 <span class="sd">			:param str responseKey: The key to use to get actual object list from the response JSON.</span>
-<span class="sd">			:param tenant: The Cumulocity IoT tenant.</span>
+<span class="sd">			:param tenant: The Cumulocity tenant.</span>
 <span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
 <span class="sd">			:return: List of all object.</span>
 <span class="sd">			:rtype: list[dict]</span>
@@ -431,7 +431,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Clears all active alarms as part of a pre-test tenant cleanup.</span>
 
-<span class="sd">			:param tenant: The Cumulocity IoT tenant.</span>
+<span class="sd">			:param tenant: The Cumulocity tenant.</span>
 <span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="c1"># EPL Apps tools doesn&#39;t cleanup all alarms on tenant by default</span>
@@ -447,7 +447,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Deletes all ManagedObjects that have name prefixed with &quot;PYSYS_&quot; and the &#39;c8y_isDevice&#39; param as part of pre-test tenant cleanup.</span>
 
-<span class="sd">			:param tenant: The Cumulocity IoT tenant.</span>
+<span class="sd">			:param tenant: The Cumulocity tenant.</span>
 <span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
 
 <span class="sd">		&quot;&quot;&quot;</span>
@@ -466,7 +466,7 @@
 <span class="sd">			Deletes all EPL apps with name prefixed by &quot;PYSYS_&quot; or &quot;PYSYS_TEST&quot;</span>
 <span class="sd">			as part of a pre-test tenant cleanup. </span>
 
-<span class="sd">			:param tenant: The Cumulocity IoT tenant.</span>
+<span class="sd">			:param tenant: The Cumulocity tenant.</span>
 <span class="sd">			:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`, optional</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 
@@ -486,7 +486,7 @@
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.getUTCTime"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getUTCTime">[docs]</a>	<span class="k">def</span> <span class="nf">getUTCTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">			Gets a Cumulocity IoT-compliant UTC timestamp string for the current time or the specified time.</span>
+<span class="sd">			Gets a Cumulocity-compliant UTC timestamp string for the current time or the specified time.</span>
 
 <span class="sd">			:param timestamp: The epoc timestamp to get timestamp string for. Use current time if not specified.</span>
 <span class="sd">			:type timestamp: float, optional</span>
@@ -501,7 +501,7 @@
 
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest">[docs]</a><span class="k">class</span> <span class="nc">LocalCorrelatorSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">		Base test for running test with no run.py with local correlator connected to Cumulocity IoT.</span>
+<span class="sd">		Base test for running test with no run.py with local correlator connected to Cumulocity.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -533,7 +533,7 @@
 		<span class="c1"># Wait for our EPL App test subjects to be added</span>
 		<span class="n">correlator</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
-		<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;c8y-correlator.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s2">&quot;Connected to Cumulocity IoT&quot;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;c8y-correlator.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s2">&quot;Connected to Cumulocity&quot;</span><span class="p">)</span>
 
 		<span class="c1"># Inject test mon files from Input directory to correlator</span>
 		<span class="n">inputFiles</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
@@ -602,7 +602,7 @@
 
 <div class="viewcode-block" id="EPLAppsSimpleTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest">[docs]</a><span class="k">class</span> <span class="nc">EPLAppsSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Base test for running test with no run.py on EPL apps running in Cumulocity IoT.</span>
+<span class="sd">		Base test for running test with no run.py on EPL apps running in Cumulocity.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EPLAppsSimpleTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

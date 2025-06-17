@@ -58,7 +58,7 @@
 <ul class="simple">
 <li><p>Creating a test.</p></li>
 <li><p>Defining the test options.</p></li>
-<li><p>Preparing the Cumulocity IoT tenant.</p></li>
+<li><p>Preparing the Cumulocity tenant.</p></li>
 <li><p>Creating device simulators (if applicable).</p></li>
 <li><p>Deploying EPL apps.</p></li>
 <li><p>Deploying smart rules.</p></li>
@@ -67,7 +67,7 @@
 <li><p>Generating the performance reports.</p></li>
 <li><p>Writing a test for a multi-tenant microservice.</p></li>
 </ul>
-<p>This document demonstrates the common process involved in writing a performance test for your existing EPL apps and smart rules. The performance tests described in the document use the EPL apps SDK based on the PySys test framework. See the <a class="reference external" href="https://pysys-test.github.io/pysys-test">PySys documentation</a>  for details on the installation, and how the framework can be used and the facilities it contains. Set up the EPL apps SDK by following the steps mentioned in <a class="reference external" href="using-pysys.html#testing-in-the-cumulocity-iot-cloud">Testing in the Cumulocity IoT cloud</a>.</p>
+<p>This document demonstrates the common process involved in writing a performance test for your existing EPL apps and smart rules. The performance tests described in the document use the EPL apps SDK based on the PySys test framework. See the <a class="reference external" href="https://pysys-test.github.io/pysys-test">PySys documentation</a>  for details on the installation, and how the framework can be used and the facilities it contains. Set up the EPL apps SDK by following the steps mentioned in <a class="reference external" href="using-pysys.html#testing-in-the-cumulocity-cloud">Testing in the Cumulocity cloud</a>.</p>
 </section>
 <section id="writing-a-performance-test">
 <h2>Writing a performance test<a class="headerlink" href="#writing-a-performance-test" title="Permalink to this headline">¶</a></h2>
@@ -112,9 +112,9 @@
 </div>
 <p>See the <a class="reference external" href="https://pysys-test.github.io/pysys-test/pysys/UserGuide.html#configuring-and-overriding-test-options">PySys test options</a> in the PySys documentation for details on configuring and overriding test options.</p>
 </section>
-<section id="preparing-the-cumulocity-iot-tenant">
-<h3>Preparing the Cumulocity IoT tenant<a class="headerlink" href="#preparing-the-cumulocity-iot-tenant" title="Permalink to this headline">¶</a></h3>
-<p>The performance test must make sure that the Cumulocity IoT tenant used for testing the EPL app or smart rule is prepared. This is done by calling the <code class="docutils literal notranslate"><span class="pre">prepareTenant</span></code> method before the EPL apps or smart rules are deployed.</p>
+<section id="preparing-the-cumulocity-tenant">
+<h3>Preparing the Cumulocity tenant<a class="headerlink" href="#preparing-the-cumulocity-tenant" title="Permalink to this headline">¶</a></h3>
+<p>The performance test must make sure that the Cumulocity tenant used for testing the EPL app or smart rule is prepared. This is done by calling the <code class="docutils literal notranslate"><span class="pre">prepareTenant</span></code> method before the EPL apps or smart rules are deployed.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">prepareTenant</span></code> method performs the following actions:</p>
 <ul class="simple">
 <li><p>Deletes any test devices created by previous tests (which are identified by the device name having the prefix “PYSYS_”) from your tenant.</p></li>
@@ -135,7 +135,7 @@
 <section id="deploying-epl-apps">
 <h3>Deploying EPL apps<a class="headerlink" href="#deploying-epl-apps" title="Permalink to this headline">¶</a></h3>
 <p>EPL apps can be deployed by using the <code class="docutils literal notranslate"><span class="pre">deploy</span></code> method of the <code class="docutils literal notranslate"><span class="pre">EPLApps</span></code> class. The field <code class="docutils literal notranslate"><span class="pre">eplapps</span></code> of type <code class="docutils literal notranslate"><span class="pre">EPLApps</span></code> is available for performance tests.</p>
-<p>The performance test may need to customize EPL apps for performance testing, for example, defining the threshold limit, or the type of measurements to listen for. The performance test may also test EPL apps for multiple values of some parameters in a single test or across multiple tests. One approach to customize EPL apps for testing is to use placeholder replacement strings in EPL apps and then replace the strings with actual values before deploying them to Cumulocity IoT. For example:</p>
+<p>The performance test may need to customize EPL apps for performance testing, for example, defining the threshold limit, or the type of measurements to listen for. The performance test may also test EPL apps for multiple values of some parameters in a single test or across multiple tests. One approach to customize EPL apps for testing is to use placeholder replacement strings in EPL apps and then replace the strings with actual values before deploying them to Cumulocity. For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">monitor</span> <span class="n">MySimpleApp</span> <span class="p">{</span>
     <span class="n">constant</span> <span class="nb">float</span> <span class="n">THRESHOLD</span> <span class="o">:=</span> <span class="nd">@MEASUREMENT_THRESHOLD</span><span class="o">@</span><span class="p">;</span>
     <span class="n">constant</span> <span class="n">string</span> <span class="n">MEAS_TYPE</span> <span class="o">:=</span> <span class="s2">&quot;@MEASUREMENT_TYPE@&quot;</span><span class="p">;</span>
@@ -186,8 +186,8 @@ The field <code class="docutils literal notranslate"><span class="pre">smartRule
 </section>
 <section id="sending-measurements">
 <h3>Sending measurements<a class="headerlink" href="#sending-measurements" title="Permalink to this headline">¶</a></h3>
-<p>A performance test can either use real-time measurements from real devices or simulated measurements from simulated devices. To generate simulated measurements, the test can start measurement simulators to publish simulated measurements to Cumulocity IoT at a specified rate which are then consumed by the EPL apps or smart rules being tested.</p>
-<p>Different tests may have different requirements for the measurements being published. For example, a test may want to customize the type of measurements or range of measurement values. To support such requirements, the framework requires tests to define a measurement creator class to create measurements of desired types. A measurement simulator uses a measurement creator object to create measurements to publish to Cumulocity IoT.</p>
+<p>A performance test can either use real-time measurements from real devices or simulated measurements from simulated devices. To generate simulated measurements, the test can start measurement simulators to publish simulated measurements to Cumulocity at a specified rate which are then consumed by the EPL apps or smart rules being tested.</p>
+<p>Different tests may have different requirements for the measurements being published. For example, a test may want to customize the type of measurements or range of measurement values. To support such requirements, the framework requires tests to define a measurement creator class to create measurements of desired types. A measurement simulator uses a measurement creator object to create measurements to publish to Cumulocity.</p>
 <p>The following example shows a test defining a measurement creator class to create measurements within a configurable range:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the &#39;creator.py&#39; file in the test Input directory.</span>
 <span class="kn">import</span> <span class="nn">random</span>
@@ -231,8 +231,8 @@ The field <code class="docutils literal notranslate"><span class="pre">smartRule
 </section>
 <section id="sending-events">
 <h3>Sending events<a class="headerlink" href="#sending-events" title="Permalink to this headline">¶</a></h3>
-<p>A performance test that consumes events can either use real-time events from real devices or simulated events from simulated devices. To generate simulated events, the test can start event simulators to publish simulated events to Cumulocity IoT at a specified rate which are then consumed by the EPL apps or smart rules being tested.</p>
-<p>Different tests may have different requirements for the events being published. For example, a test may want to customize the type of events. To support such requirements, the framework requires tests to define an event creator class to create events of desired types. An event simulator uses an event creator object to create events to publish to Cumulocity IoT.</p>
+<p>A performance test that consumes events can either use real-time events from real devices or simulated events from simulated devices. To generate simulated events, the test can start event simulators to publish simulated events to Cumulocity at a specified rate which are then consumed by the EPL apps or smart rules being tested.</p>
+<p>Different tests may have different requirements for the events being published. For example, a test may want to customize the type of events. To support such requirements, the framework requires tests to define an event creator class to create events of desired types. An event simulator uses an event creator object to create events to publish to Cumulocity.</p>
 <p>The following example shows a test defining an event creator class to create position update events within a configurable range of longitude and latitude:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the &#39;creator.py&#39; file in the test Input directory.</span>
 <span class="kn">import</span> <span class="nn">random</span>
@@ -281,8 +281,8 @@ The field <code class="docutils literal notranslate"><span class="pre">smartRule
 </section>
 <section id="sending-alarms">
 <h3>Sending alarms<a class="headerlink" href="#sending-alarms" title="Permalink to this headline">¶</a></h3>
-<p>A performance test that consumes alarms can either use real-time alarms from real devices or simulated alarms from simulated devices. To generate simulated alarms, the test can start alarm simulators to publish simulated alarms to Cumulocity IoT at a specified rate which are then consumed by the EPL apps or smart rules being tested.</p>
-<p>Different tests may have different requirements for the alarms being published. For example, a test may want to customize the type of alarms. To support such requirements, the framework requires tests to define an alarm creator class to create alarms of desired types. An alarm simulator uses an alarm creator object to create alarms to publish to Cumulocity IoT.</p>
+<p>A performance test that consumes alarms can either use real-time alarms from real devices or simulated alarms from simulated devices. To generate simulated alarms, the test can start alarm simulators to publish simulated alarms to Cumulocity at a specified rate which are then consumed by the EPL apps or smart rules being tested.</p>
+<p>Different tests may have different requirements for the alarms being published. For example, a test may want to customize the type of alarms. To support such requirements, the framework requires tests to define an alarm creator class to create alarms of desired types. An alarm simulator uses an alarm creator object to create alarms to publish to Cumulocity.</p>
 <p>The following example shows a test defining an alarm creator class to create alarms:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the &#39;creator.py&#39; file in the test Input directory.</span>
 <span class="kn">import</span> <span class="nn">random</span>
@@ -401,7 +401,7 @@ The field <code class="docutils literal notranslate"><span class="pre">smartRule
 </section>
 <section id="running-the-performance-test">
 <h2>Running the performance test<a class="headerlink" href="#running-the-performance-test" title="Permalink to this headline">¶</a></h2>
-<p>Performance tests can only be run using a Cumulocity IoT tenant with EPL apps and smart rules enabled. Set up the framework to use a Cumulocity IoT tenant by following the steps mentioned in <a class="reference external" href="using-pysys.html#testing-in-the-cumulocity-iot-cloud">Testing in the Cumulocity IoT cloud</a>.</p>
+<p>Performance tests can only be run using a Cumulocity tenant with EPL apps and smart rules enabled. Set up the framework to use a Cumulocity tenant by following the steps mentioned in <a class="reference external" href="using-pysys.html#testing-in-the-cumulocity-cloud">Testing in the Cumulocity cloud</a>.</p>
 <p>When running a test, test options can be overridden by using the <code class="docutils literal notranslate"><span class="pre">-X</span></code> argument. See <a class="reference internal" href="#defining-the-test-options">Defining the test options</a> for details on defining and providing test options.</p>
 <p>For example, to change the test duration of the <code class="docutils literal notranslate"><span class="pre">AlarmOnThreshold</span></code> test, run the following:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys run -XtestDuration<span class="o">=</span><span class="m">180</span> AlarmOnThreshold
@@ -411,11 +411,11 @@ The field <code class="docutils literal notranslate"><span class="pre">smartRule
 </section>
 <section id="performance-report">
 <h2>Performance report<a class="headerlink" href="#performance-report" title="Permalink to this headline">¶</a></h2>
-<p>At the end of a performance test, an HTML report is generated in the test’s output directory. When running multiple iterations of the same EPL app or smart rules with different configurations, the results of each iteration are included in the report. The report contains metadata about the microservice and Cumulocity IoT environment, test-specific configurations, performance summary, and graphs.</p>
-<p>The report contains the following metadata about the microservice and the Cumulocity IoT environment:</p>
+<p>At the end of a performance test, an HTML report is generated in the test’s output directory. When running multiple iterations of the same EPL app or smart rules with different configurations, the results of each iteration are included in the report. The report contains metadata about the microservice and Cumulocity environment, test-specific configurations, performance summary, and graphs.</p>
+<p>The report contains the following metadata about the microservice and the Cumulocity environment:</p>
 <ul class="simple">
-<li><p>Cumulocity IoT tenant URL</p></li>
-<li><p>Cumulocity IoT platform version</p></li>
+<li><p>Cumulocity tenant URL</p></li>
+<li><p>Cumulocity platform version</p></li>
 <li><p>Apama-ctrl microservice name</p></li>
 <li><p>Apama-ctrl microservice version (product code PAQ)</p></li>
 <li><p>Apama platform version  (product code PAM)</p></li>
@@ -482,7 +482,7 @@ The field <code class="docutils literal notranslate"><span class="pre">smartRule
 <li class="toctree-l2"><a class="reference internal" href="#writing-a-performance-test">Writing a performance test</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#creating-a-test">Creating a test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#defining-the-test-options">Defining the test options</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#preparing-the-cumulocity-iot-tenant">Preparing the Cumulocity IoT tenant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-the-cumulocity-tenant">Preparing the Cumulocity tenant</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#creating-device-simulators">Creating device simulators</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#deploying-epl-apps">Deploying EPL apps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#deploying-smart-rules">Deploying smart rules</a></li>

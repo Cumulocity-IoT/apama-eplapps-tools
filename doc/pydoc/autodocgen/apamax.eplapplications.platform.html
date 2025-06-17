@@ -55,7 +55,7 @@
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">CumulocityPlatform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class to create a connection to the Cumulocity IoT platform configured in pysysproject.xml
+<p>Class to create a connection to the Cumulocity platform configured in pysysproject.xml
 and spool the logs from the platform locally.</p>
 <dl class="simple">
 <dt>Requires the following properties to be set in pysysproject.xml:</dt><dd><ul class="simple">
@@ -79,7 +79,7 @@ self.waitForGrep(self.platform.getApamaLogFile(), expr=’Added monitor eplfiles
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile">
 <span class="sig-name descname"><span class="pre">getApamaLogFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getApamaLogFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the path to the Apama log file within Cumulocity IoT.</p>
+<dd><p>Return the path to the Apama log file within Cumulocity.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -103,12 +103,12 @@ self.waitForGrep(self.platform.getApamaLogFile(), expr=’Added monitor eplfiles
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants">
 <span class="sig-name descname"><span class="pre">getSubscribedTenants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getSubscribedTenants"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get list of Cumulocity IoT tenants subscribed to the Apama-ctrl microservice if testing against a
+<dd><p>Get list of Cumulocity tenants subscribed to the Apama-ctrl microservice if testing against a
 multi-tenant Apama-ctrl microservice.</p>
 <p>If the Apama-ctrl microservice is per-tenant, it returns a list only containing the configured tenant.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>List of Cumulocity IoT tenants.</p>
+<dd class="field-odd"><p>List of Cumulocity tenants.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>list[<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>]</p>
@@ -119,8 +119,8 @@ multi-tenant Apama-ctrl microservice.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.getTenant">
 <span class="sig-name descname"><span class="pre">getTenant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getTenant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getTenant" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the Cumulocity IoT tenant configured in the pysysproject.xml file.
-:return: The Cumulocity IoT tenant.
+<dd><p>Get the Cumulocity tenant configured in the pysysproject.xml file.
+:return: The Cumulocity tenant.
 :rtype: <a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a></p>
 </dd></dl>
 

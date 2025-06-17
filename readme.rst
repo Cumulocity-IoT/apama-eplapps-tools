@@ -30,7 +30,7 @@ Documentation
 
 Complete documentation for Apama EPL Apps Tools can be found `here <https://cumulocity-iot.github.io/apama-eplapps-tools>`_.
 
-`Using the eplapp.py command line tool <https://cumulocity-iot.github.io/apama-eplapps-tools/using-eplapp>`_ is the guide which shows you how to use this tool to perform REST requests to Apama EPL Apps in Cumulocity IoT.
+`Using the eplapp.py command line tool <https://cumulocity-iot.github.io/apama-eplapps-tools/using-eplapp>`_ is the guide which shows you how to use this tool to perform REST requests to Apama EPL Apps in Cumulocity.
 
 You can read up on how to use PySys to test your EPL apps in `Using PySys to test EPL apps <https://cumulocity-iot.github.io/apama-eplapps-tools/using-pysys>`_.
 

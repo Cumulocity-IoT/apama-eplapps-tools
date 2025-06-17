@@ -45,10 +45,10 @@ class SmartRule(object):
 		An instance of this class must be created by calling the appropriate build method of 
 		the class :class:`SmartRulesManager`.
 
-		Call the `deploy` method to deploy a smart rule to Cumulocity IoT and call the `delete` 
-		method on a previously deployed smart rule to delete it from Cumulocity IoT.
+		Call the `deploy` method to deploy a smart rule to Cumulocity and call the `delete` 
+		method on a previously deployed smart rule to delete it from Cumulocity.
 		
-		Any updates to the object are not deployed on Cumulocity IoT until the `deploy` method is called.
+		Any updates to the object are not deployed on Cumulocity until the `deploy` method is called.
 	"""
 	NAME_PREFIX = 'PYSYS_'
 
@@ -245,7 +245,7 @@ class SmartRule(object):
 
 	def deploy(self, **kwargs):
 		"""
-		Deploy the smart rule to Cumulocity IoT.
+		Deploy the smart rule to Cumulocity.
 		"""
 		if self._id is None and self._cepModuleId is None:
 			# create smart rule
@@ -255,7 +255,7 @@ class SmartRule(object):
 
 	def delete(self, **kwargs):
 		"""
-		Delete the smart rule from Cumulocity IoT.
+		Delete the smart rule from Cumulocity.
 		"""
 		if self._id is None or self._cepModuleId is None:
 			raise Exception(f'Trying to delete previously deleted or not yet deployed {self._getDesc()}')
@@ -285,7 +285,7 @@ class SmartRule(object):
 		return f"{ruleContext} smart rule '{self.ruleName}' ({attrs_str})"
 
 	def _createRule(self, **kwargs):
-		""" Create the smart rule on Cumulocity IoT. """
+		""" Create the smart rule on Cumulocity. """
 		self._resetIds()
 		body = self._getRequestBody()
 		try:
@@ -298,7 +298,7 @@ class SmartRule(object):
 			raise Exception(f'Failed to create {self._getDesc()} using POST on {self.connection.base_url}{self._getEndPoint()}: {err}')
 	
 	def _updateRule(self, **kwargs):
-		""" Update the smart rule on Cumulocity IoT. """
+		""" Update the smart rule on Cumulocity. """
 		body = self._getRequestBody()
 		# c8y doesn't like if type is sent when updating a rule
 		if 'type' in body: body.pop('type')
@@ -365,9 +365,9 @@ class SmartRule(object):
 		"""
 		Extract the ID and cepModuleId of the smart rule and save them.
 
-		These are created by Cumulocity IoT when a smart rule is successfully created.
+		These are created by Cumulocity when a smart rule is successfully created.
 
-		:param dict response: The response from Cumulocity IoT.
+		:param dict response: The response from Cumulocity.
 		"""
 		self._id = response['id']
 		self._cepModuleId = response['cepModuleId']
@@ -399,11 +399,11 @@ class SmartRule(object):
 
 class SmartRulesManager(object):
 	"""
-	Class responsible for building smart rules objects that can be deployed on Cumulocity IoT.
+	Class responsible for building smart rules objects that can be deployed on Cumulocity.
 	
 	See the methods in the :class:`SmartRule` class to customize a smart rule object and deploy it.
 
-	:param tenant: The Cumulocity IoT tenant.
+	:param tenant: The Cumulocity tenant.
 	:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`.
 	:param log: The `logger` instance to use for logging.
 	"""
@@ -414,7 +414,7 @@ class SmartRulesManager(object):
 
 	def getAllSmartRules(self, withLocalRules=False):
 		"""
-		Get all smart rules deployed on Cumulocity IoT.
+		Get all smart rules deployed on Cumulocity.
 
 		:param withLocalRules: If `True`, also include smart rules local to a device or group.
 		:return: List of smart rule objects.
@@ -429,7 +429,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On measurement explicit threshold create alarm".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		:param str fragment: Measurement fragment the smart rule listens for.
 		:param str series: Measurement series the smart rule listens for.
@@ -455,7 +455,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On geofence create alarm".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		:param list[dict] geofence: The polygon that defines the boundaries of a region. It should be a list of dictionaries containing "lng" and "lat" keys.
 		:param str triggerAlarmOn: The reason for triggering the alarm - one of "entering", "leaving", or "both". The default is "leaving".
@@ -480,7 +480,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On missing measurements create alarm".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		:param str measurementType: The type of measurement.
 		:param float timeIntervalMinutes: Time (in minutes) to wait for missing measurements.
@@ -503,7 +503,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On alarm send SMS".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		:param alarmTypes: The types of alarms that trigger the rule.
 		:type alarmTypes: str or list[str]
@@ -525,7 +525,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On alarm send email".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		:param alarmTypes: The types of alarms that trigger the rule.
 		:type alarmTypes: str or list[str]
@@ -586,7 +586,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On alarm escalate it".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		Call the `build_onAlarmEscalateStepSendEmail` or `build_onAlarmEscalateStepSendSMS` methods to create escalation steps.
 
@@ -615,7 +615,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On alarm duration increase severity".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 		
 		:param alarmTypes: The types of alarms that trigger the rule.
 		:type alarmTypes: str or list[str]
@@ -634,7 +634,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On geofence send email".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		:param list[dict] geofence: The polygon that defines the boundaries of a region. It should be a list of dictionaries containing "lng" and "lat" keys.
 		:param str sendTo: The recipients of the email.
@@ -664,7 +664,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "Calculate energy consumption".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		:param str inputFragment: The name of the fragment for incoming measurements.
 		:param str inputSeries: The name of the series for incoming measurements.
@@ -687,7 +687,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On alarm execute operation".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		:param alarmTypes: The types of alarms that trigger the rule.
 		:type alarmTypes: str or list[str]
@@ -705,7 +705,7 @@ class SmartRulesManager(object):
 		"""
 		Build a smart rule object for the rule "On measurement threshold create alarm".
 
-		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.
+		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.
 
 		:param str dataPointObjectID: The ID of the Data Point Library object to use to find the values for the red and yellow ranges.
 		:param str alarmType: The type of raised alarms.
