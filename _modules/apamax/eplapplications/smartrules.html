@@ -85,10 +85,10 @@
 <span class="sd">		An instance of this class must be created by calling the appropriate build method of </span>
 <span class="sd">		the class :class:`SmartRulesManager`.</span>
 
-<span class="sd">		Call the `deploy` method to deploy a smart rule to Cumulocity IoT and call the `delete` </span>
-<span class="sd">		method on a previously deployed smart rule to delete it from Cumulocity IoT.</span>
+<span class="sd">		Call the `deploy` method to deploy a smart rule to Cumulocity and call the `delete` </span>
+<span class="sd">		method on a previously deployed smart rule to delete it from Cumulocity.</span>
 <span class="sd">		</span>
-<span class="sd">		Any updates to the object are not deployed on Cumulocity IoT until the `deploy` method is called.</span>
+<span class="sd">		Any updates to the object are not deployed on Cumulocity until the `deploy` method is called.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">NAME_PREFIX</span> <span class="o">=</span> <span class="s1">&#39;PYSYS_&#39;</span>
 
@@ -285,7 +285,7 @@
 
 <div class="viewcode-block" id="SmartRule.deploy"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.deploy">[docs]</a>	<span class="k">def</span> <span class="nf">deploy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Deploy the smart rule to Cumulocity IoT.</span>
+<span class="sd">		Deploy the smart rule to Cumulocity.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cepModuleId</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="c1"># create smart rule</span>
@@ -295,7 +295,7 @@
 
 <div class="viewcode-block" id="SmartRule.delete"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.delete">[docs]</a>	<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Delete the smart rule from Cumulocity IoT.</span>
+<span class="sd">		Delete the smart rule from Cumulocity.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cepModuleId</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Trying to delete previously deleted or not yet deployed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_getDesc</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -325,7 +325,7 @@
 		<span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ruleContext</span><span class="si">}</span><span class="s2"> smart rule &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ruleName</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="n">attrs_str</span><span class="si">}</span><span class="s2">)&quot;</span>
 
 	<span class="k">def</span> <span class="nf">_createRule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Create the smart rule on Cumulocity IoT. &quot;&quot;&quot;</span>
+		<span class="sd">&quot;&quot;&quot; Create the smart rule on Cumulocity. &quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_resetIds</span><span class="p">()</span>
 		<span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getRequestBody</span><span class="p">()</span>
 		<span class="k">try</span><span class="p">:</span>
@@ -338,7 +338,7 @@
 			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to create </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_getDesc</span><span class="p">()</span><span class="si">}</span><span class="s1"> using POST on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_getEndPoint</span><span class="p">()</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 	
 	<span class="k">def</span> <span class="nf">_updateRule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Update the smart rule on Cumulocity IoT. &quot;&quot;&quot;</span>
+		<span class="sd">&quot;&quot;&quot; Update the smart rule on Cumulocity. &quot;&quot;&quot;</span>
 		<span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getRequestBody</span><span class="p">()</span>
 		<span class="c1"># c8y doesn&#39;t like if type is sent when updating a rule</span>
 		<span class="k">if</span> <span class="s1">&#39;type&#39;</span> <span class="ow">in</span> <span class="n">body</span><span class="p">:</span> <span class="n">body</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
@@ -405,9 +405,9 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Extract the ID and cepModuleId of the smart rule and save them.</span>
 
-<span class="sd">		These are created by Cumulocity IoT when a smart rule is successfully created.</span>
+<span class="sd">		These are created by Cumulocity when a smart rule is successfully created.</span>
 
-<span class="sd">		:param dict response: The response from Cumulocity IoT.</span>
+<span class="sd">		:param dict response: The response from Cumulocity.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_cepModuleId</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;cepModuleId&#39;</span><span class="p">]</span>
@@ -439,11 +439,11 @@
 
 <div class="viewcode-block" id="SmartRulesManager"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager">[docs]</a><span class="k">class</span> <span class="nc">SmartRulesManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Class responsible for building smart rules objects that can be deployed on Cumulocity IoT.</span>
+<span class="sd">	Class responsible for building smart rules objects that can be deployed on Cumulocity.</span>
 <span class="sd">	</span>
 <span class="sd">	See the methods in the :class:`SmartRule` class to customize a smart rule object and deploy it.</span>
 
-<span class="sd">	:param tenant: The Cumulocity IoT tenant.</span>
+<span class="sd">	:param tenant: The Cumulocity tenant.</span>
 <span class="sd">	:type tenant: :class:`~apamax.eplapplications.tenant.CumulocityTenant`.</span>
 <span class="sd">	:param log: The `logger` instance to use for logging.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
@@ -454,7 +454,7 @@
 
 <div class="viewcode-block" id="SmartRulesManager.getAllSmartRules"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.getAllSmartRules">[docs]</a>	<span class="k">def</span> <span class="nf">getAllSmartRules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">withLocalRules</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Get all smart rules deployed on Cumulocity IoT.</span>
+<span class="sd">		Get all smart rules deployed on Cumulocity.</span>
 
 <span class="sd">		:param withLocalRules: If `True`, also include smart rules local to a device or group.</span>
 <span class="sd">		:return: List of smart rule objects.</span>
@@ -469,7 +469,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On measurement explicit threshold create alarm&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		:param str fragment: Measurement fragment the smart rule listens for.</span>
 <span class="sd">		:param str series: Measurement series the smart rule listens for.</span>
@@ -495,7 +495,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On geofence create alarm&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		:param list[dict] geofence: The polygon that defines the boundaries of a region. It should be a list of dictionaries containing &quot;lng&quot; and &quot;lat&quot; keys.</span>
 <span class="sd">		:param str triggerAlarmOn: The reason for triggering the alarm - one of &quot;entering&quot;, &quot;leaving&quot;, or &quot;both&quot;. The default is &quot;leaving&quot;.</span>
@@ -520,7 +520,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On missing measurements create alarm&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		:param str measurementType: The type of measurement.</span>
 <span class="sd">		:param float timeIntervalMinutes: Time (in minutes) to wait for missing measurements.</span>
@@ -543,7 +543,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm send SMS&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		:param alarmTypes: The types of alarms that trigger the rule.</span>
 <span class="sd">		:type alarmTypes: str or list[str]</span>
@@ -565,7 +565,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm send email&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		:param alarmTypes: The types of alarms that trigger the rule.</span>
 <span class="sd">		:type alarmTypes: str or list[str]</span>
@@ -626,7 +626,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm escalate it&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		Call the `build_onAlarmEscalateStepSendEmail` or `build_onAlarmEscalateStepSendSMS` methods to create escalation steps.</span>
 
@@ -655,7 +655,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm duration increase severity&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 <span class="sd">		</span>
 <span class="sd">		:param alarmTypes: The types of alarms that trigger the rule.</span>
 <span class="sd">		:type alarmTypes: str or list[str]</span>
@@ -674,7 +674,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On geofence send email&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		:param list[dict] geofence: The polygon that defines the boundaries of a region. It should be a list of dictionaries containing &quot;lng&quot; and &quot;lat&quot; keys.</span>
 <span class="sd">		:param str sendTo: The recipients of the email.</span>
@@ -704,7 +704,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;Calculate energy consumption&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		:param str inputFragment: The name of the fragment for incoming measurements.</span>
 <span class="sd">		:param str inputSeries: The name of the series for incoming measurements.</span>
@@ -727,7 +727,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm execute operation&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		:param alarmTypes: The types of alarms that trigger the rule.</span>
 <span class="sd">		:type alarmTypes: str or list[str]</span>
@@ -745,7 +745,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On measurement threshold create alarm&quot;.</span>
 
-<span class="sd">		To deploy it to Cumulocity IoT, call the `~SmartRule.deploy` method.</span>
+<span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
 
 <span class="sd">		:param str dataPointObjectID: The ID of the Data Point Library object to use to find the values for the red and yellow ranges.</span>
 <span class="sd">		:param str alarmType: The type of raised alarms.</span>

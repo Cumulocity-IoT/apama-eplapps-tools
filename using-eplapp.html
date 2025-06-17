@@ -49,24 +49,24 @@
 <h1>Using the eplapp.py command line tool<a class="headerlink" href="#using-the-eplapp-py-command-line-tool" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Description</dt>
-<dd class="field-odd"><p>Document detailing the use of the eplapp.py tool to perform REST requests to Apama EPL Apps in Cumulocity IoT.</p>
+<dd class="field-odd"><p>Document detailing the use of the eplapp.py tool to perform REST requests to Apama EPL Apps in Cumulocity.</p>
 </dd>
 </dl>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The eplapp.py tool in the scripts directory of the SDK allows you to interact with your Apama EPL apps in Cumulocity IoT using the command line.</p>
+<p>The eplapp.py tool in the scripts directory of the SDK allows you to interact with your Apama EPL apps in Cumulocity using the command line.</p>
 <p>The commands available are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">list</span></code> - Prints details of your existing EPL apps in Cumulocity IoT.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">deploy</span></code> - Uploads a local .mon file to EPL apps in Cumulocity IoT.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">delete</span></code> - Deletes an EPL app from Cumulocity IoT.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">update</span></code> - Updates one or more of the fields of an existing EPL app in Cumulocity IoT.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">list</span></code> - Prints details of your existing EPL apps in Cumulocity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deploy</span></code> - Uploads a local .mon file to EPL apps in Cumulocity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delete</span></code> - Deletes an EPL app from Cumulocity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span></code> - Updates one or more of the fields of an existing EPL app in Cumulocity.</p></li>
 </ul>
-<p>All of these commands have the following <em>mandatory</em> options for connecting to your Cumulocity IoT tenant:</p>
+<p>All of these commands have the following <em>mandatory</em> options for connecting to your Cumulocity tenant:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">|</span> <span class="pre">--cumulocity_url</span> <span class="pre">&lt;url&gt;</span></code> - The base URL of your Cumulocity IoT tenant.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">|</span> <span class="pre">--username</span> <span class="pre">&lt;username&gt;</span></code> - Your Cumulocity IoT username.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">|</span> <span class="pre">--password</span> <span class="pre">&lt;password&gt;</span></code> - Your Cumulocity IoT password.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">|</span> <span class="pre">--cumulocity_url</span> <span class="pre">&lt;url&gt;</span></code> - The base URL of your Cumulocity tenant.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">|</span> <span class="pre">--username</span> <span class="pre">&lt;username&gt;</span></code> - Your Cumulocity username.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">|</span> <span class="pre">--password</span> <span class="pre">&lt;password&gt;</span></code> - Your Cumulocity password.</p></li>
 </ul>
 <p>Each command also has an <em>optional</em> <code class="docutils literal notranslate"><span class="pre">-h</span> <span class="pre">|</span> <span class="pre">--help</span></code> option which prints a usage message for that command, for example:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eplapp.py &lt;command&gt; --help
@@ -75,17 +75,17 @@
 </section>
 <section id="printing-a-list-of-your-epl-apps">
 <h2>Printing a list of your EPL apps<a class="headerlink" href="#printing-a-list-of-your-epl-apps" title="Permalink to this headline">¶</a></h2>
-<p>To print a list of all of your existing EPL apps in Cumulocity IoT, you can use the <code class="docutils literal notranslate"><span class="pre">list</span></code> command as follows:</p>
+<p>To print a list of all of your existing EPL apps in Cumulocity, you can use the <code class="docutils literal notranslate"><span class="pre">list</span></code> command as follows:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eplapp.py list --cumulocity_url &lt;url&gt; --username &lt;username&gt; --password &lt;password&gt;
 </pre></div>
 </div>
 <p>For each EPL app the name, description, state, and lists of warnings or errors are printed.</p>
 </section>
-<section id="deploying-to-apama-epl-apps-in-cumulocity-iot">
-<h2>Deploying to Apama EPL Apps in Cumulocity IoT<a class="headerlink" href="#deploying-to-apama-epl-apps-in-cumulocity-iot" title="Permalink to this headline">¶</a></h2>
+<section id="deploying-to-apama-epl-apps-in-cumulocity">
+<h2>Deploying to Apama EPL Apps in Cumulocity<a class="headerlink" href="#deploying-to-apama-epl-apps-in-cumulocity" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">deploy</span></code> command has an additional <em>mandatory</em> option:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">|</span> <span class="pre">--file</span> <span class="pre">&lt;file&gt;</span></code> - The path to the .mon file you wish to upload to Cumulocity IoT as an EPL app.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">|</span> <span class="pre">--file</span> <span class="pre">&lt;file&gt;</span></code> - The path to the .mon file you wish to upload to Cumulocity as an EPL app.</p></li>
 </ul>
 <p>Thus, the minimal command for deploying to Apama EPL Apps would look like the following:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eplapp.py deploy -c &lt;url&gt; -u &lt;username&gt; -p &lt;password&gt; -f &lt;monFile&gt;
@@ -104,7 +104,7 @@
 <h2>Deleting an EPL app<a class="headerlink" href="#deleting-an-epl-app" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">delete</span></code> command also has an additional <em>mandatory</em> option:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">|</span> <span class="pre">--name</span> <span class="pre">&lt;name&gt;</span></code> - The name of the the EPL app you wish to delete from your Cumulocity IoT tenant.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">|</span> <span class="pre">--name</span> <span class="pre">&lt;name&gt;</span></code> - The name of the the EPL app you wish to delete from your Cumulocity tenant.</p></li>
 </ul>
 <p>For example:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eplapp.py delete -c &lt;url&gt; -u &lt;username&gt; -p &lt;password&gt; -n &lt;name&gt;
@@ -113,7 +113,7 @@
 </section>
 <section id="updating-an-existing-epl-app">
 <h2>Updating an existing EPL app<a class="headerlink" href="#updating-an-existing-epl-app" title="Permalink to this headline">¶</a></h2>
-<p>You can update the contents, name, description, or state of an existing EPL app in Cumulocity IoT using the <code class="docutils literal notranslate"><span class="pre">update</span></code> command
+<p>You can update the contents, name, description, or state of an existing EPL app in Cumulocity using the <code class="docutils literal notranslate"><span class="pre">update</span></code> command
 which, like the <code class="docutils literal notranslate"><span class="pre">delete</span></code> command, has an additional <em>mandatory</em> option:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">|</span> <span class="pre">--name</span> <span class="pre">&lt;name&gt;</span></code> - The name of the EPL app you wish to update.</p></li>
@@ -144,7 +144,7 @@ which, like the <code class="docutils literal notranslate"><span class="pre">del
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using the eplapp.py command line tool</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#printing-a-list-of-your-epl-apps">Printing a list of your EPL apps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#deploying-to-apama-epl-apps-in-cumulocity-iot">Deploying to Apama EPL Apps in Cumulocity IoT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploying-to-apama-epl-apps-in-cumulocity">Deploying to Apama EPL Apps in Cumulocity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deleting-an-epl-app">Deleting an EPL app</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#updating-an-existing-epl-app">Updating an existing EPL app</a></li>
 </ul>

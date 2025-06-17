@@ -57,7 +57,7 @@
 
 
 <div class="viewcode-block" id="EPLApps"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps">[docs]</a><span class="k">class</span> <span class="nc">EPLApps</span><span class="p">:</span>
-	<span class="sd">&quot;&quot;&quot;Class for interacting with Apama EPL Apps in Cumulocity IoT.</span>
+	<span class="sd">&quot;&quot;&quot;Class for interacting with Apama EPL Apps in Cumulocity.</span>
 
 <span class="sd">		:param connection: A C8yConnection object for the connection to the platform.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
@@ -67,7 +67,7 @@
 
 <div class="viewcode-block" id="EPLApps.deploy"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.deploy">[docs]</a>	<span class="k">def</span> <span class="nf">deploy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inactive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">redeploy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Deploys a local mon file to Apama EPL Apps in Cumulocity IoT.</span>
+<span class="sd">		Deploys a local mon file to Apama EPL Apps in Cumulocity.</span>
 
 <span class="sd">		:param file: Path to local mon file to be deployed as an EPL app.</span>
 <span class="sd">		:param name: Name of the EPL app to be uploaded (optional). By default this will be the name of the mon file being uploaded.</span>
@@ -130,7 +130,7 @@
 
 <div class="viewcode-block" id="EPLApps.update"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.update">[docs]</a>	<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">new_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Updates an EPL app in Cumulocity IoT.</span>
+<span class="sd">		Updates an EPL app in Cumulocity.</span>
 
 <span class="sd">		:param name: name of the EPL App to be updated.</span>
 <span class="sd">		:param new_name: the updated name of the EPL app (optional)</span>
@@ -200,7 +200,7 @@
 <div class="viewcode-block" id="EPLApps.getEPLApps"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.getEPLApps">[docs]</a>	<span class="k">def</span> <span class="nf">getEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">includeContents</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		:param includeContents: Fetches the EPL files with their contents if True. This is an optional query parameter.</span>
-<span class="sd">		:return: A json object of all the user&#39;s EPL apps in Cumulocity IoT.</span>
+<span class="sd">		:return: A json object of all the user&#39;s EPL apps in Cumulocity.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">try</span><span class="p">:</span>
 			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">do_get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/service/cep/eplfiles?contents=</span><span class="si">{</span><span class="n">includeContents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)[</span><span class="s1">&#39;eplfiles&#39;</span><span class="p">]</span>
@@ -209,7 +209,7 @@
 
 <div class="viewcode-block" id="EPLApps.delete"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.eplapps.html#apamax.eplapplications.eplapps.EPLApps.delete">[docs]</a>	<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Deletes an EPL app in Cumulocity IoT.</span>
+<span class="sd">		Deletes an EPL app in Cumulocity.</span>
 
 <span class="sd">		:param name: The name of the EPL app to be deleted.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
