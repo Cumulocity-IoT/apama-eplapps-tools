@@ -103,7 +103,7 @@ See `Testing the performance of your EPL apps and smart rules <performance-testi
 Testing locally
 ===============
 
-*To follow this, it is assumed that you have an Apama installation set up with the Apama PySys extensions.*
+*To follow this, it is assumed that you are running inside an Apama Dev Container or apama-builder image, or have an Apama installation set up with the Apama PySys extensions.*
 
 You can also test your EPL app with a locally running correlator connected to the Cumulocity platform. This provides all the capabilities of running in the cloud whilst not taking valuable cloud resources. Running locally also gives you much more access to the correlator allowing some fine-tuning. 
 
