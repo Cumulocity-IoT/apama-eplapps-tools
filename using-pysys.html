@@ -54,26 +54,27 @@
 </dl>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>PySys is a testing framework that provides a way to test your applications.</p>
-<p>See <a class="reference external" href="https://pysys-test.github.io/pysys-test">PySys Documentation</a> for details on installation and how the framework can be used and the facilities it contains.</p>
+<p>This topic describes two approaches to EPL app testing:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#testing-in-the-cumulocity-cloud">Testing in the Cumulocity cloud</a>, without requiring a local installation of Apama</p></li>
+<li><p><a class="reference internal" href="#testing-locally">Testing locally</a>, with a correlator that runs in the same container (or machine) where Apama is installed. This is great for cases such as <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">testing performance</a>, and provides easier access to logs and EPL debugging tools. You can even use it with the <code class="xref py py-obj docutils literal notranslate"><span class="pre">-XpauseDuringTest</span></code> command line for locally interacting with your correlator.</p></li>
+</ol>
+<p>Both approaches use PySys, a testing framework that provides a way to test your applications. See <a class="reference external" href="https://pysys-test.github.io/pysys-test">PySys Documentation</a> for details on installation and how the framework can be used and the facilities it contains.</p>
 </section>
 <section id="testing-in-the-cumulocity-cloud">
 <span id="test-in-cloud"></span><h2>Testing in the Cumulocity cloud<a class="headerlink" href="#testing-in-the-cumulocity-cloud" title="Permalink to this headline">¶</a></h2>
 <section id="setup-for-testing-in-the-cumulocity-cloud">
 <span id="setup-for-test-in-cloud"></span><h3>Setup for testing in the Cumulocity cloud<a class="headerlink" href="#setup-for-testing-in-the-cumulocity-cloud" title="Permalink to this headline">¶</a></h3>
-<p>You can automatically test your applications only using a Cumulocity tenant with Apama EPL Apps enabled. To do this, you will need a dedicated Cumulocity tenant for your testing in order to avoid disrupting any production activities. When testing within Cumulocity, no Apama installation is required, just a copy of PySys, which can be installed via Pip, and a copy of this SDK.</p>
-<p>There is an extension to PySys that is needed for the framework included in this GitHub repository, it can automatically be made available to the PySys tests by setting the EPL_TESTING_SDK environment variable. You simply need to point it to the path where you checked out this repository.</p>
-<p>For example, on Linux:</p>
+<p>You can automatically test your applications only using a Cumulocity tenant with Apama EPL Apps enabled, without a local installation of Apama.
+To do this you just need Python and an installation of PySys, which can be installed using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pysys</span></code>, and a copy of this SDK.</p>
+<p>You will need to use a dedicated Cumulocity tenant for testing in order to avoid disrupting any production activities.</p>
+<p>There is an extension to PySys that is needed for the framework included in this GitHub repository, it can automatically be made available to the PySys tests by setting the <code class="xref py py-obj docutils literal notranslate"><span class="pre">EPL_TESTING_SDK</span></code> environment variable. You simply need to point it to the path where you checked out this repository, for example:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">EPL_TESTING_SDK</span><span class="o">=</span>/path_to_sdk
 </pre></div>
 </div>
-<p>Or for Windows:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nv">EPL_TESTING_SDK</span><span class="o">=</span>path_to_sdk
-</pre></div>
-</div>
-<p>In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the samples and samples-performance directories of this GitHub repository.</p>
-<p>You can create an empty PySys project by creating a new directory and copying in the pysysproject.xml from the sample project. The sample project contains the essential configuration necessary for testing with Apama and Cumulocity.</p>
-<p>You can set the <code class="xref py py-obj docutils literal notranslate"><span class="pre">clearAllActiveAlarmsDuringTenantPreparation</span></code> property to <code class="xref py py-obj docutils literal notranslate"><span class="pre">false</span></code> in the pysysproject.xml file to disable the default behavior of clearing all active alarms.</p>
+<p>In order to use PySys to test your application, you will need to create a PySys project and some PySys tests under that directory. A sample project with sample tests can be found in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">samples/</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">samples-performance/</span></code> directories of this GitHub repository.</p>
+<p>You can create an empty PySys project by creating a new directory and copying in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">pysysproject.xml</span></code> from the sample project. The sample project contains the essential configuration necessary for testing with Apama and Cumulocity.</p>
+<p>If desired, you can set the <code class="xref py py-obj docutils literal notranslate"><span class="pre">clearAllActiveAlarmsDuringTenantPreparation</span></code> property to <code class="xref py py-obj docutils literal notranslate"><span class="pre">false</span></code> in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">pysysproject.xml</span></code> file to disable the default behavior of clearing all active alarms.</p>
 </section>
 <section id="creating-a-test">
 <h3>Creating a test<a class="headerlink" href="#creating-a-test" title="Permalink to this headline">¶</a></h3>
@@ -96,15 +97,15 @@
 <section id="running-the-test">
 <h3>Running the test<a class="headerlink" href="#running-the-test" title="Permalink to this headline">¶</a></h3>
 <p>Our sample tests are set up in the following way:</p>
-<div class="line-block">
-<div class="line">+-samples</div>
-<div class="line">+—pysysproject.xml</div>
-<div class="line">+—apps</div>
-<div class="line">+—–AlarmOnMeasurementThreshold.mon</div>
-<div class="line">+—TestInEPLApps</div>
-<div class="line">+—–Input</div>
-<div class="line">+——-AlarmOnMeasurementThresholdTest.mon</div>
-<div class="line">+—–pysystest.xml</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|</span> <span class="o">+-</span><span class="n">samples</span>
+<span class="o">|</span> <span class="o">+---</span><span class="n">pysysproject</span><span class="o">.</span><span class="n">xml</span>
+<span class="o">|</span> <span class="o">+---</span><span class="n">apps</span>
+<span class="o">|</span> <span class="o">+-----</span><span class="n">AlarmOnMeasurementThreshold</span><span class="o">.</span><span class="n">mon</span>
+<span class="o">|</span> <span class="o">+---</span><span class="n">TestInEPLApps</span>
+<span class="o">|</span> <span class="o">+-----</span><span class="n">Input</span>
+<span class="o">|</span> <span class="o">+-------</span><span class="n">AlarmOnMeasurementThresholdTest</span><span class="o">.</span><span class="n">mon</span>
+<span class="o">|</span> <span class="o">+-----</span><span class="n">pysystest</span><span class="o">.</span><span class="n">xml</span>
+</pre></div>
 </div>
 <p>Run the test from within the samples directory by using the following command:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys run TestInEPLApps
@@ -124,11 +125,15 @@
 </section>
 <section id="testing-locally">
 <h2>Testing locally<a class="headerlink" href="#testing-locally" title="Permalink to this headline">¶</a></h2>
-<p><em>To follow this, it is assumed that you are running inside an Apama Dev Container or apama-builder image, or have an Apama installation set up with the Apama PySys extensions.</em></p>
-<p>You can also test your EPL app with a locally running correlator connected to the Cumulocity platform. This provides all the capabilities of running in the cloud whilst not taking valuable cloud resources. Running locally also gives you much more access to the correlator allowing some fine-tuning.</p>
-<p>We provide a basic correlator project that can be used to deploy your test. It has the same bundles loaded as EPL apps have access to and so will behave the same as in the cloud.</p>
-<p>The PySys project should be set up the same as for testing EPL apps.</p>
-<p>In order to run your test with a local correlator, you must specify a different class to use in the data block of the test’s pysystest.xml:</p>
+<p>You can also test your EPL app with a locally running correlator connected to the Cumulocity platform. This provides all the capabilities of running in the cloud whilst not taking valuable cloud resources.
+More importantly, running locally also gives you full control over the correlator, including easier access to the logs and the chance to enable debugging and profiling options.</p>
+<p>The recommended way to do local testing is to start new projects by copying the <a class="reference external" href="https://github.com/Cumulocity-IoT/streaming-analytics-sample-repo-template">Apama sample repository template</a> and following the instructions it contains.
+This gives you an Apama project pre-configured with the same EPL bundles that all EPL Apps have available, as well as a PySys test project configuration you can use for your tests.</p>
+<p>You just need to follow the instructions given in the template readme to set the environment variables for your Cumulocity cloud tenant’s <code class="xref py py-obj docutils literal notranslate"><span class="pre">CUMULOCITY_SERVER_URL</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">CUMULOCITY_USERNAME</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">CUMULOCITY_PASSWORD</span></code>.
+For security reasons, be sure to avoid committing the password into your repository.
+If you are not using the template, you will need to manually set the same environment variables, as well as the <code class="xref py py-obj docutils literal notranslate"><span class="pre">EPL_TESTING_SDK</span></code> environment variable, and create a PySys project by copying a <code class="xref py py-obj docutils literal notranslate"><span class="pre">pysysproject.xml</span></code> file from any project that uses EPL Apps.</p>
+<p>The template comes with a local test called <code class="xref py py-obj docutils literal notranslate"><span class="pre">TestLocalCorrelator</span></code> which is a great starting point. Additional sample tests for both local and cloud testing can be found in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">samples/</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">samples-performance/</span></code> directories of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">EPL</span> <span class="pre">Apps</span> <span class="pre">Tools</span> <span class="pre">GitHub</span> <span class="pre">repository</span></code>.</p>
+<p>When creating new tests you can copy and existing test or create a new one. If you create a new one, in order to run your test with a local correlator, you must specify a different class to use in the data block of the test’s <code class="xref py py-obj docutils literal notranslate"><span class="pre">pysystest.xml</span></code>:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;LocalCorrelatorSimpleTest&quot;</span> <span class="na">module=</span><span class="s">&quot;${EPL_TESTING_SDK}/testframework/apamax/eplapplications/basetest&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
 </div>
@@ -148,17 +153,16 @@
 </section>
 <section id="id2">
 <h3>Running the test<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>To run the test using a local correlator requires the APAMA_HOME project property to be set as the path to your installation of Apama. This can be done by simply running the test in an Apama command prompt or by explicitly setting the APAMA_HOME environment variable.</p>
-<p>The sample for running with a local correlator is as below:</p>
-<div class="line-block">
-<div class="line">+-samples</div>
-<div class="line">+—pysysproject.xml</div>
-<div class="line">+—apps</div>
-<div class="line">+—–AlarmOnMeasurementThreshold.mon</div>
-<div class="line">+—TestLocalCorrelator</div>
-<div class="line">+—–Input</div>
-<div class="line">+——-AlarmOnMeasurementThresholdTest.mon</div>
-<div class="line">+—–pysystest.xml</div>
+<p>A sample for running with a local correlator is located in the following location in this repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|</span> <span class="o">+-</span><span class="n">samples</span>
+<span class="o">|</span> <span class="o">+---</span><span class="n">pysysproject</span><span class="o">.</span><span class="n">xml</span>
+<span class="o">|</span> <span class="o">+---</span><span class="n">apps</span>
+<span class="o">|</span> <span class="o">+-----</span><span class="n">AlarmOnMeasurementThreshold</span><span class="o">.</span><span class="n">mon</span>
+<span class="o">|</span> <span class="o">+---</span><span class="n">TestLocalCorrelator</span>
+<span class="o">|</span> <span class="o">+-----</span><span class="n">Input</span>
+<span class="o">|</span> <span class="o">+-------</span><span class="n">AlarmOnMeasurementThresholdTest</span><span class="o">.</span><span class="n">mon</span>
+<span class="o">|</span> <span class="o">+-----</span><span class="n">pysystest</span><span class="o">.</span><span class="n">xml</span>
+</pre></div>
 </div>
 <p>Run the test from within the samples directory by using the following command:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pysys run TestLocalCorrelator
@@ -169,11 +173,13 @@
 <li><p>All active Alarms in your Cumulocity tenant are cleared.</p></li>
 <li><p>Any devices created by previous tests (which are identified by the device name having prefix “PYSYS_”) are deleted from your tenant.</p></li>
 </ul>
+<p>Note: We assume you are running the tests from an Apama container, but if not you need to set the <code class="xref py py-obj docutils literal notranslate"><span class="pre">APAMA_HOME</span></code> environment variable to the location of your Apama installation.</p>
 </section>
 </section>
 <section id="advanced-tests">
 <h2>Advanced tests<a class="headerlink" href="#advanced-tests" title="Permalink to this headline">¶</a></h2>
-<p>For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a run.py to your test case. We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.</p>
+<p>For anyone who already knows how to use PySys and wants to write Python code for their test running and validation, it is possible to also add a <code class="xref py py-obj docutils literal notranslate"><span class="pre">pysystest.py</span></code> Python file to your test case.
+We provide samples of tests both running within Apama EPL Apps and with a local correlator in the advanced directory of the samples.</p>
 <p>In order to view documentation on classes for PySys helpers for EPL Apps please see: <a class="reference external" href="https://cumulocity-iot.github.io/apama-eplapps-tools">PySys helpers</a> .</p>
 <p>See <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> for details on writing performance tests.</p>
 <p>To run in Apama EPL Apps, your run.py should look something like this:</p>

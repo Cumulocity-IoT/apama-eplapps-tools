@@ -63,13 +63,13 @@
 <section id="create-a-new-project">
 <h2>Create a new project<a class="headerlink" href="#create-a-new-project" title="Permalink to this headline">¶</a></h2>
 <p>The best way to start EPL Apps development is to create a new repository based on the
-[Streaming Analytics Sample Repository Template](<a class="reference external" href="https://github.com/Cumulocity-IoT/streaming-analytics-sample-repo-template">https://github.com/Cumulocity-IoT/streaming-analytics-sample-repo-template</a>).
+<a class="reference external" href="https://github.com/Cumulocity-IoT/streaming-analytics-sample-repo-template">Streaming Analytics Sample Repository Template</a>.
 Go to that page in GitHub, and click the button to “Use this template” and then “Create a new repository”.</p>
 <p>To open your new repository in VS Code, open the VS Code command palette (<code class="xref py py-obj docutils literal notranslate"><span class="pre">F1</span></code>), run <code class="xref py py-obj docutils literal notranslate"><span class="pre">Dev</span> <span class="pre">Containers:</span> <span class="pre">Clone</span> <span class="pre">Repository</span> <span class="pre">in</span> <span class="pre">Container</span> <span class="pre">Volume</span></code>
 and then enter the <code class="xref py py-obj docutils literal notranslate"><span class="pre">https://</span></code> link to your GitHub repository. This assumes you have a container engine installed.
 If you <strong>already have a Git repository</strong> for your application, just copy across the <code class="xref py py-obj docutils literal notranslate"><span class="pre">devcontainer</span></code> directory from the above template repository.</p>
-<p>Instead of using VS Code you can use a web browser to open the repository in [GitHub Codespaces](<a class="reference external" href="https://github.com/features/codespaces">https://github.com/features/codespaces</a>) without installing anything at all.
-If you prefer to use a local installation of Apama instead of a container, you need to <code class="xref py py-obj docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span></code> the [EPL Apps Tools](<a class="reference external" href="https://github.com/Cumulocity-IoT/apama-eplapps-tools">https://github.com/Cumulocity-IoT/apama-eplapps-tools</a>)
+<p>Instead of using VS Code you can use a web browser to open the repository in <a class="reference external" href="https://github.com/features/codespaces">GitHub Codespaces</a> without installing anything at all.
+If you prefer to use a local installation of Apama instead of a container, you need to <code class="xref py py-obj docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span></code> the <code class="xref py py-obj docutils literal notranslate"><span class="pre">EPL</span> <span class="pre">Apps</span> <span class="pre">Tools</span></code> &lt;<a class="reference external" href="https://github.com/Cumulocity-IoT/apama-eplapps-tools">https://github.com/Cumulocity-IoT/apama-eplapps-tools</a>&gt;`_
 repository, then clone your own repository and open it as a folder in VS Code.</p>
 <p>If you did not use the template repository to create your project, you need to add bundles to make Apama’s APIs available to your application.
 You do this by clicking the <code class="xref py py-obj docutils literal notranslate"><span class="pre">+</span></code> symbol next to your project in the “Apama Projects” pane of VS Code.
@@ -78,8 +78,10 @@ To configure your project with access to the standard set of Apama APIs that EPL
 <section id="test">
 <h2>Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h2>
 <p>The best way to test whether your EPL app is working is to create a simple automated test for it using <a class="reference external" href="testing-epl.html">PySys</a>.</p>
+<p>If you want to explore or interact with the correlator running your application locally, start with the <code class="xref py py-obj docutils literal notranslate"><span class="pre">TestLocalCorrelator</span></code> sample PySys test,
+and execute it with <code class="xref py py-obj docutils literal notranslate"><span class="pre">pysys</span> <span class="pre">run</span> <span class="pre">-XpauseDuringTest</span></code> so you get a chance to run whatever commands you like (in another terminal) once the application is injected and before cleanup happens.</p>
 <p>If you prefer a more manual approach, you can also run the <code class="xref py py-obj docutils literal notranslate"><span class="pre">correlator</span></code> in a terminal window, and then in another terminal,
-inject your project into that correlator by running <code class="xref py py-obj docutils literal notranslate"><span class="pre">engine_deploy</span> <span class="pre">--inject</span></code>.</p>
+inject your project into that correlator by running <code class="xref py py-obj docutils literal notranslate"><span class="pre">engine_deploy</span> <span class="pre">--inject</span></code>. However this is more complex and easy to get wrong so we recommend using a test.</p>
 </section>
 </section>
 
