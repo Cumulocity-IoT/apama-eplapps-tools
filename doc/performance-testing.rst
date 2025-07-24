@@ -461,14 +461,14 @@ The summary of the various performance metrics and graphs provides an overview o
 
 Sample EPL apps and tests
 =========================
-Multiple sample EPL apps and tests can be found in the samples-performance directory of the EPL Apps Tools SDK. The structure of the samples-performance directory is as follows:
+Multiple sample EPL apps and tests can be found in the samples-performance directory of the EPL Apps Tools SDK. The structure of the samples-performance directory is as follows::
 
-| +--samples-performance
-| +-----pysysdirconfig.xml
-| +-----pysysproject.xml
-| +-----apps/
-| +-----correctness/
-| +-----performance/
+    | +--samples-performance
+    | +-----pysysdirconfig.xml
+    | +-----pysysproject.xml
+    | +-----apps/
+    | +-----correctness/
+    | +-----performance/
 
 The apps directory contains multiple sample apps for performance testing. The correctness directory contains basic correctness tests of the sample apps. It is recommended to always test your EPL apps for correctness before testing them for performance. See `Using PySys to test your EPL apps <using-pysys.rst#using-pysys-to-test-your-epl-apps>`_ for details on testing EPL apps for correctness. The performance directory contains performance tests for each sample app. These tests can be run as explained in `Running the performance test`_.
 

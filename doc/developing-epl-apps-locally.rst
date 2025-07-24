@@ -18,15 +18,15 @@ Create a new project
 --------------------
 
 The best way to start EPL Apps development is to create a new repository based on the 
-[Streaming Analytics Sample Repository Template](https://github.com/Cumulocity-IoT/streaming-analytics-sample-repo-template). 
+`Streaming Analytics Sample Repository Template <https://github.com/Cumulocity-IoT/streaming-analytics-sample-repo-template>`_. 
 Go to that page in GitHub, and click the button to "Use this template" and then "Create a new repository".
 
 To open your new repository in VS Code, open the VS Code command palette (`F1`), run `Dev Containers: Clone Repository in Container Volume` 
 and then enter the `https://` link to your GitHub repository. This assumes you have a container engine installed. 
 If you **already have a Git repository** for your application, just copy across the `.devcontainer` directory from the above template repository. 
 
-Instead of using VS Code you can use a web browser to open the repository in [GitHub Codespaces](https://github.com/features/codespaces) without installing anything at all. 
-If you prefer to use a local installation of Apama instead of a container, you need to `git clone` the [EPL Apps Tools](https://github.com/Cumulocity-IoT/apama-eplapps-tools) 
+Instead of using VS Code you can use a web browser to open the repository in `GitHub Codespaces <https://github.com/features/codespaces>`_ without installing anything at all. 
+If you prefer to use a local installation of Apama instead of a container, you need to `git clone` the `EPL Apps Tools` <https://github.com/Cumulocity-IoT/apama-eplapps-tools>`_  
 repository, then clone your own repository and open it as a folder in VS Code. 
 
 If you did not use the template repository to create your project, you need to add bundles to make Apama's APIs available to your application. 
@@ -37,5 +37,8 @@ Test
 ----
 The best way to test whether your EPL app is working is to create a simple automated test for it using `PySys <testing-epl.rst>`_. 
 
+If you want to explore or interact with the correlator running your application locally, start with the `TestLocalCorrelator` sample PySys test, 
+and execute it with `pysys run -XpauseDuringTest` so you get a chance to run whatever commands you like (in another terminal) once the application is injected and before cleanup happens.
+
 If you prefer a more manual approach, you can also run the `correlator` in a terminal window, and then in another terminal, 
-inject your project into that correlator by running `engine_deploy --inject <HOST> <PORT> <PROJECTDIR>`. 
+inject your project into that correlator by running `engine_deploy --inject <HOST> <PORT> <PROJECTDIR>`. However this is more complex and easy to get wrong so we recommend using a test.

@@ -138,18 +138,17 @@
 		<span class="n">n2</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s1">&#39;CUMULOCITY_NOTIFICATIONS_2&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span>
 
 		<span class="c1"># need to have a version independent addition or this will need to be maintained.</span>
-		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Automatic onApplicationInitialized&quot;</span><span class="p">)</span>
-		<span class="k">if</span> <span class="n">n2</span> <span class="o">==</span> <span class="s1">&#39;false&#39;</span><span class="p">:</span>
-			<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Cumulocity IoT &gt; Cumulocity Client&quot;</span><span class="p">)</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Cumulocity IoT &gt; Cumulocity Notifications 2.0&quot;</span><span class="p">)</span>
-		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Cumulocity IoT &gt; Event Definitions for Cumulocity&quot;</span><span class="p">)</span>
-		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Cumulocity IoT &gt; Utilities for Cumulocity&quot;</span><span class="p">)</span>
-		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Correlator Management&quot;</span><span class="p">)</span>
-		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;JSON Support&quot;</span><span class="p">)</span>
-		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Time Format&quot;</span><span class="p">)</span>
-		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;Functional EPL Library&quot;</span><span class="p">)</span>
-		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">(</span><span class="s2">&quot;The MemoryStore&quot;</span><span class="p">)</span>
+		<span class="n">apama_project</span><span class="o">.</span><span class="n">addBundle</span><span class="p">([</span>
+			<span class="s2">&quot;Automatic onApplicationInitialized&quot;</span><span class="p">,</span>
+			<span class="s2">&quot;Cumulocity IoT &gt; Cumulocity Client&quot;</span> <span class="k">if</span> <span class="n">n2</span> <span class="o">==</span> <span class="s1">&#39;false&#39;</span> <span class="k">else</span> <span class="s2">&quot;Cumulocity IoT &gt; Cumulocity Notifications 2.0&quot;</span><span class="p">,</span>
+			<span class="s2">&quot;Cumulocity IoT &gt; Event Definitions for Cumulocity&quot;</span><span class="p">,</span>
+			<span class="s2">&quot;Cumulocity IoT &gt; Utilities for Cumulocity&quot;</span><span class="p">,</span>
+			<span class="s2">&quot;Correlator Management&quot;</span><span class="p">,</span>
+			<span class="s2">&quot;JSON Support&quot;</span><span class="p">,</span>
+			<span class="s2">&quot;Time Format&quot;</span><span class="p">,</span>
+			<span class="s2">&quot;Functional EPL Library&quot;</span><span class="p">,</span>
+			<span class="s2">&quot;The MemoryStore&quot;</span><span class="p">,</span>
+		<span class="p">])</span>
 		<span class="k">return</span> <span class="n">apama_project</span></div>
 
 <div class="viewcode-block" id="ApamaC8YBaseTest.addC8YPropertiesToProject"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.addC8YPropertiesToProject">[docs]</a>	<span class="k">def</span> <span class="nf">addC8YPropertiesToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">apamaProject</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -497,11 +496,16 @@
 			<span class="n">t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
 		<span class="k">else</span><span class="p">:</span>
 			<span class="n">t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
-		<span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">timespec</span><span class="o">=</span><span class="s1">&#39;milliseconds&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;+00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">)</span></div></div>
+		<span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">timespec</span><span class="o">=</span><span class="s1">&#39;milliseconds&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;+00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">)</span></div>
+
+	<span class="k">def</span> <span class="nf">_maybePauseDuringTest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBoolProperty</span><span class="p">(</span><span class="s1">&#39;pauseDuringTest&#39;</span><span class="p">):</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;*** Pausing to allow manual validation before correlator is terminated. Press ENTER when done:&quot;</span><span class="p">)</span>
+			<span class="nb">input</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest">[docs]</a><span class="k">class</span> <span class="nc">LocalCorrelatorSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">		Base test for running test with no run.py with local correlator connected to Cumulocity.</span>
+<span class="sd">		Base test for running test with no pysystest.py with local correlator connected to Cumulocity.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="LocalCorrelatorSimpleTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -535,6 +539,8 @@
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;c8y-correlator.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s2">&quot;Connected to Cumulocity&quot;</span><span class="p">)</span>
 
+		<span class="bp">self</span><span class="o">.</span><span class="n">_maybePauseDuringTest</span><span class="p">()</span>
+
 		<span class="c1"># Inject test mon files from Input directory to correlator</span>
 		<span class="n">inputFiles</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">inputFile</span> <span class="ow">in</span> <span class="n">inputFiles</span><span class="p">:</span>
@@ -552,7 +558,6 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Checks that no errors were logged to the correlator log file.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-		<span class="c1"># look for log statements in the correlator log file</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking for errors&quot;</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="s1">&#39;c8y-correlator.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .*&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
@@ -602,7 +607,7 @@
 
 <div class="viewcode-block" id="EPLAppsSimpleTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest">[docs]</a><span class="k">class</span> <span class="nc">EPLAppsSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Base test for running test with no run.py on EPL apps running in Cumulocity.</span>
+<span class="sd">		Base test for running test with no pysystest.py on EPL apps running in Cumulocity.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EPLAppsSimpleTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -642,6 +647,8 @@
 			<span class="c1"># deploy the app and wait for it to start</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">redeploy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Application under test, injected by test framework&#39;</span><span class="p">)</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;Added monitor eplfiles.&#39;</span><span class="o">+</span><span class="n">name</span><span class="p">,</span> <span class="n">errorExpr</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Error injecting monitorscript from file &#39;</span><span class="o">+</span><span class="n">name</span><span class="p">])</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">_maybePauseDuringTest</span><span class="p">()</span>
 
 		<span class="c1"># Test application(s)</span>
 		<span class="n">testPaths</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.mon&#39;</span><span class="p">)]</span>

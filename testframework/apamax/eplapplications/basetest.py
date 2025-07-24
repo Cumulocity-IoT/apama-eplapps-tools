@@ -98,18 +98,17 @@ class ApamaC8YBaseTest(BaseTest):
 		n2 = getattr(self.project, 'CUMULOCITY_NOTIFICATIONS_2', 'false')
 
 		# need to have a version independent addition or this will need to be maintained.
-		apama_project.addBundle("Automatic onApplicationInitialized")
-		if n2 == 'false':
-			apama_project.addBundle("Cumulocity IoT > Cumulocity Client")
-		else:
-			apama_project.addBundle("Cumulocity IoT > Cumulocity Notifications 2.0")
-		apama_project.addBundle("Cumulocity IoT > Event Definitions for Cumulocity")
-		apama_project.addBundle("Cumulocity IoT > Utilities for Cumulocity")
-		apama_project.addBundle("Correlator Management")
-		apama_project.addBundle("JSON Support")
-		apama_project.addBundle("Time Format")
-		apama_project.addBundle("Functional EPL Library")
-		apama_project.addBundle("The MemoryStore")
+		apama_project.addBundle([
+			"Automatic onApplicationInitialized",
+			"Cumulocity IoT > Cumulocity Client" if n2 == 'false' else "Cumulocity IoT > Cumulocity Notifications 2.0",
+			"Cumulocity IoT > Event Definitions for Cumulocity",
+			"Cumulocity IoT > Utilities for Cumulocity",
+			"Correlator Management",
+			"JSON Support",
+			"Time Format",
+			"Functional EPL Library",
+			"The MemoryStore",
+		])
 		return apama_project
 
 	def addC8YPropertiesToProject(self, apamaProject, params=None):
@@ -459,9 +458,14 @@ class ApamaC8YBaseTest(BaseTest):
 			t = datetime.now(timezone.utc)
 		return t.isoformat(timespec='milliseconds').replace('+00:00', 'Z')
 
+	def _maybePauseDuringTest(self):
+		if self.getBoolProperty('pauseDuringTest'):
+			self.log.warning("*** Pausing to allow manual validation before correlator is terminated. Press ENTER when done:")
+			input()
+
 class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 	""" 
-		Base test for running test with no run.py with local correlator connected to Cumulocity.
+		Base test for running test with no pysystest.py with local correlator connected to Cumulocity.
 	"""
 
 	def setup(self):
@@ -495,6 +499,8 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 
 		self.waitForGrep('c8y-correlator.log', expr="Connected to Cumulocity")
 
+		self._maybePauseDuringTest()
+
 		# Inject test mon files from Input directory to correlator
 		inputFiles = os.listdir(self.input)
 		for inputFile in inputFiles:
@@ -512,7 +518,6 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 		"""
 			Checks that no errors were logged to the correlator log file.
 		"""
-		# look for log statements in the correlator log file
 		self.log.info("Checking for errors")
 		self.assertGrep('c8y-correlator.log', expr=' (ERROR|FATAL) .*', contains=False)
 
@@ -562,7 +567,7 @@ class LocalCorrelatorSimpleTest(ApamaC8YBaseTest):
 
 class EPLAppsSimpleTest(ApamaC8YBaseTest):
 	"""
-		Base test for running test with no run.py on EPL apps running in Cumulocity.
+		Base test for running test with no pysystest.py on EPL apps running in Cumulocity.
 	"""
 
 	def setup(self):
@@ -602,6 +607,8 @@ class EPLAppsSimpleTest(ApamaC8YBaseTest):
 			# deploy the app and wait for it to start
 			self.eplapps.deploy(path, name=name, redeploy=True, description='Application under test, injected by test framework')
 			self.waitForGrep(self.platform.getApamaLogFile(), expr='Added monitor eplfiles.'+name, errorExpr=['Error injecting monitorscript from file '+name])
+
+		self._maybePauseDuringTest()
 
 		# Test application(s)
 		testPaths = [os.path.join(self.input, x) for x in os.listdir(self.input) if x.endswith('.mon')]

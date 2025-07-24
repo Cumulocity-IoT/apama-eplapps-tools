@@ -51,4 +51,11 @@
 		<default-file-encoding pattern="*.log" encoding="utf-8"/>
 	</default-file-encodings>	
 
+	<project-help>
+		To configure these tests to interact with your Cumulocity cloud tenant, create and source a "c8y-vars" file with the required CUMULOCITY_* pysysproject.xml properties. 
+
+		To give you a chance to manually interact with the correlator while running a test, add "-XpauseDuringTest" to your "pysys run" command line. 
+
+	</project-help>
+
 </pysysproject>

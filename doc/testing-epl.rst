@@ -13,9 +13,15 @@ The behavior of most EPL apps usually consists of receiving data, sending measur
 + Listening for events that the EPL app should produce.
 + Querying Cumulocity for any objects created by the EPL app.
 
-This can all be done using additional EPL apps that run parallel to the EPL app that we wish to test for correctness. This document will demonstrate some of the common processes involved in writing these additional EPL apps that test your existing EPL apps, while outlining some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK. 
+There are 3 main options for testing your EPL apps:
 
-See the `Testing the performance of your EPL apps and smart rules <performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules>`_ document for writing performance tests.
+#. Write tests using the EPL apps editor in the **Cumulocity user interface**, by creating additional apps that test the behaviour of your main apps. This does not require installing anything locally. 
+#. Write tests locally (on your machine or in a dev container) using EPL and the `PySys <using-pysys.rst#using-pysys-to-test-your-epl-apps>`_  test framework, and **execute them in the Cumulocity cloud** (without a local installation of Apama). 
+#. Write tests locally using the `PySys <using-pysys.rst#using-pysys-to-test-your-epl-apps>`_  test framework in EPL and/or Python, and **execute them in a correlator that runs locally** (typically inside an Apama dev container). 
+   This is great for advanced cases including `testing performance <performance-testing.rst#testing-the-performance-of-your-epl-apps-and-smart-rules>`_, and provides easier access to logs and EPL debugging tools. 
+   You can even use it with the `-XpauseDuringTest` command line for locally interacting with your correlator.
+
+This topic demonstrates common processes involved in all of these approaches including how to write additional EPL apps that test your existing EPL apps, and outlines some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK. 
 
 .. _device-simulator:
 

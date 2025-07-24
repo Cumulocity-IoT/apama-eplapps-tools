@@ -61,8 +61,15 @@
 <li><p>Listening for events that the EPL app should produce.</p></li>
 <li><p>Querying Cumulocity for any objects created by the EPL app.</p></li>
 </ul>
-<p>This can all be done using additional EPL apps that run parallel to the EPL app that we wish to test for correctness. This document will demonstrate some of the common processes involved in writing these additional EPL apps that test your existing EPL apps, while outlining some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK.</p>
-<p>See the <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">Testing the performance of your EPL apps and smart rules</a> document for writing performance tests.</p>
+<p>There are 3 main options for testing your EPL apps:</p>
+<ol class="arabic simple">
+<li><p>Write tests using the EPL apps editor in the <strong>Cumulocity user interface</strong>, by creating additional apps that test the behaviour of your main apps. This does not require installing anything locally.</p></li>
+<li><p>Write tests locally (on your machine or in a dev container) using EPL and the <a class="reference external" href="using-pysys.html#using-pysys-to-test-your-epl-apps">PySys</a>  test framework, and <strong>execute them in the Cumulocity cloud</strong> (without a local installation of Apama).</p></li>
+<li><p>Write tests locally using the <a class="reference external" href="using-pysys.html#using-pysys-to-test-your-epl-apps">PySys</a>  test framework in EPL and/or Python, and <strong>execute them in a correlator that runs locally</strong> (typically inside an Apama dev container).
+This is great for advanced cases including <a class="reference external" href="performance-testing.html#testing-the-performance-of-your-epl-apps-and-smart-rules">testing performance</a>, and provides easier access to logs and EPL debugging tools.
+You can even use it with the <code class="xref py py-obj docutils literal notranslate"><span class="pre">-XpauseDuringTest</span></code> command line for locally interacting with your correlator.</p></li>
+</ol>
+<p>This topic demonstrates common processes involved in all of these approaches including how to write additional EPL apps that test your existing EPL apps, and outlines some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK.</p>
 </section>
 <section id="creating-device-simulators">
 <span id="device-simulator"></span><h2>Creating device simulators<a class="headerlink" href="#creating-device-simulators" title="Permalink to this headline">¶</a></h2>
