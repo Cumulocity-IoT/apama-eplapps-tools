@@ -107,11 +107,13 @@ More importantly, running locally also gives you full control over the correlato
 The recommended way to do local testing is to start new projects by copying the `Apama sample repository template <https://github.com/Cumulocity-IoT/streaming-analytics-sample-repo-template>`_ and following the instructions it contains. 
 This gives you an Apama project pre-configured with the same EPL bundles that all EPL Apps have available, as well as a PySys test project configuration you can use for your tests. 
 
-You just need to follow the instructions given in the template readme to set the environment variables for your Cumulocity cloud tenant's `CUMULOCITY_SERVER_URL`, `CUMULOCITY_USERNAME` and `CUMULOCITY_PASSWORD`. 
+You just need to follow the instructions given in the template readme to set the environment variables for your Cumulocity cloud tenant's `CUMULOCITY_SERVER_URL`, `CUMULOCITY_USERNAME` and `CUMULOCITY_PASSWORD` using the `c8y-vars` file. 
 For security reasons, be sure to avoid committing the password into your repository. 
 If you are not using the template, you will need to manually set the same environment variables, as well as the `EPL_TESTING_SDK` environment variable, and create a PySys project by copying a `pysysproject.xml` file from any project that uses EPL Apps.
 
-The template comes with a local test called `TestLocalCorrelator` which is a great starting point. Additional sample tests for both local and cloud testing can be found in the `samples/` and `samples-performance/` directories of the `EPL Apps Tools GitHub repository <https://github.com/Cumulocity-IoT/apama-eplapps-tools>`.
+The template comes with a local test called `TestLocalCorrelator` which is a great starting point. If you want an easy way to start your EPL App for local debugging and experimentation, run the test with the `pysys run -XpauseDuringTest` command line option, which will cause it to pause once the application has been injected and before it is cleaned up. 
+
+Additional sample tests for both local and cloud testing can be found in the `samples/` and `samples-performance/` directories of the `EPL Apps Tools GitHub repository <https://github.com/Cumulocity-IoT/apama-eplapps-tools>`.
 
 When creating new tests you can copy and existing test or create a new one. If you create a new one, in order to run your test with a local correlator, you must specify a different class to use in the data block of the test's `pysystest.xml`:
 
