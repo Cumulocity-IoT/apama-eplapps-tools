@@ -26,9 +26,7 @@ class C8yConnection(object):
 		auth_handler = urllib.request.HTTPBasicAuthHandler()
 		auth_handler.add_password(realm='Name of Your Realm', uri=url, user=username, passwd=password)
 		auth_handler.add_password(realm='Cumulocity', uri=url, user=username, passwd=password)
-		ctx = ssl.SSLContext(ssl.PROTOCOL_TLS)
-		self.urlopener = urllib.request.build_opener(urllib.request.HTTPSHandler(context=ctx),
-																	auth_handler)
+		self.urlopener = urllib.request.build_opener(urllib.request.HTTPSHandler(), auth_handler)
 		self.base_url = url
 		self.auth_header = "Basic " + base64.b64encode(bytes("%s:%s" % (username, password), "utf8")).decode()
 		self.logger = logging.getLogger("pysys.apamax.eplapplications.C8yConnection")
