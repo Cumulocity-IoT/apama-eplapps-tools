@@ -22,5 +22,6 @@
 		<dependency bundle-filename="ConnectivityPlugins-Common.bnd" catalog="${APAMA_HOME}/catalogs/bundles/"/>
 		<dependency bundle-filename="AutomaticOnApplicationInitialized.bnd" catalog="${APAMA_HOME}/catalogs/bundles/"/>
 		<dependency bundle-filename="CumulocityNotifications2Connectivity.bnd" catalog="${APAMA_HOME}/connectivity/bundles/"/>
+		<dependency bundle-filename="DeviceServiceConnectivity.bnd" catalog="${APAMA_HOME}/connectivity/bundles/"/>
 	</dependencies>
 </bundle>
