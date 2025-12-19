@@ -137,7 +137,7 @@ To enable it within the EPL apps test framework, add the following elements to y
 	<property name="CUMULOCITY_NOTIFICATIONS_2" value="${env.CUMULOCITY_NOTIFICATIONS_2}" default="true" />
 
 	<!-- The Cumulocity Notifications 2.0 Service URL -->
-	<property name="CUMULOCITY_NOTIFICATIONS_SERVICE_URL" value="${env.CUMULOCITY_NOTIFICATIONS_SERVICE_URL}" default="pulsar://pulsar-proxy" />
+	<property name="CUMULOCITY_NOTIFICATIONS_SERVICE_URL" value="${env.CUMULOCITY_NOTIFICATIONS_SERVICE_URL}" default="" />
 
 Running the test
 -----------------
