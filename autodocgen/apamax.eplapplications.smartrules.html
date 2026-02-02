@@ -1,0 +1,722 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>apamax.eplapplications.smartrules &#8212; EPL Apps Tools  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="apamax.eplapplications.tenant" href="apamax.eplapplications.tenant.html" />
+    <link rel="prev" title="apamax.eplapplications.platform" href="apamax.eplapplications.platform.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.tenant.html" title="apamax.eplapplications.tenant"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.platform.html" title="apamax.eplapplications.platform"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" accesskey="U">apamax.eplapplications</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">apamax.eplapplications.smartrules</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-apamax.eplapplications.smartrules">
+<span id="apamax-eplapplications-smartrules"></span><h1>apamax.eplapplications.smartrules<a class="headerlink" href="#module-apamax.eplapplications.smartrules" title="Permalink to this headline">¶</a></h1>
+<section id="smartrule">
+<h2>SmartRule<a class="headerlink" href="#smartrule" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.smartrules.</span></span><span class="sig-name descname"><span class="pre">SmartRule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ruleType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smartRulesManager</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class representing a smart rule object.</p>
+<p>An instance of this class must be created by calling the appropriate build method of 
+the class <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRulesManager" title="apamax.eplapplications.smartrules.SmartRulesManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRulesManager</span></code></a>.</p>
+<p>Call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method to deploy a smart rule to Cumulocity and call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.delete" title="apamax.eplapplications.smartrules.SmartRule.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code></a> 
+method on a previously deployed smart rule to delete it from Cumulocity.</p>
+<p>Any updates to the object are not deployed on Cumulocity until the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method is called.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the smart rule from Cumulocity.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.deploy">
+<span class="sig-name descname"><span class="pre">deploy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.deploy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deploy the smart rule to Cumulocity.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.getConfiguration">
+<span class="sig-name descname"><span class="pre">getConfiguration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.getConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.getConfiguration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the configuration of the smart rule instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The configuration.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.getDisabledSources">
+<span class="sig-name descname"><span class="pre">getDisabledSources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.getDisabledSources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.getDisabledSources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of device IDs for which this smart rule is disabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The list of device IDs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.getEnabledSources">
+<span class="sig-name descname"><span class="pre">getEnabledSources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.getEnabledSources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.getEnabledSources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of device IDs for which this smart rule is enabled.</p>
+<p>The list will be empty for a global smart rule that is enabled for all devices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The list of device IDs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.getID">
+<span class="sig-name descname"><span class="pre">getID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.getID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.getID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ID of the smart rule.</p>
+<p>Returns None if the smart rule is deleted or not yet deployed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ID of the smart rule.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.getRuleName">
+<span class="sig-name descname"><span class="pre">getRuleName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.getRuleName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.getRuleName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the smart rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of the smart rule.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.isEnabled">
+<span class="sig-name descname"><span class="pre">isEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.isEnabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.isEnabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the smart rule is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code> if the smart rule is enabled, <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.isGlobal">
+<span class="sig-name descname"><span class="pre">isGlobal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.isGlobal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.isGlobal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the smart rule is global.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code> if the smart rule is global, <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.isLocal">
+<span class="sig-name descname"><span class="pre">isLocal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.isLocal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.isLocal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the smart rule is local to a device or a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code> if the smart rule is local to a device or a group, <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.setDisabledSources">
+<span class="sig-name descname"><span class="pre">setDisabledSources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deviceList</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.setDisabledSources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.setDisabledSources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the list of device IDs for which this smart rule must be disabled.</p>
+<p>The disabled sources list will be ignored if the enabled sources list is also set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deviceList</strong> (<em>list</em>) – The list of devices or device IDs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.setEnabled">
+<span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.setEnabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.setEnabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable or disable the smart rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>enabled</strong> (<em>bool</em>) – The smart rule is enabled if <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, otherwise it is disabled.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.setEnabledSources">
+<span class="sig-name descname"><span class="pre">setEnabledSources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deviceList</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.setEnabledSources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.setEnabledSources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the list of device IDs for which this smart rule must be enabled.</p>
+<p>If the smart rule is local to a group, all devices must be part of the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deviceList</strong> (<em>str</em>) – The list of devices or device IDs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.setGlobal">
+<span class="sig-name descname"><span class="pre">setGlobal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.setGlobal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.setGlobal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the smart rule to be global.</p>
+<p>If a smart rule is previously set to be local to a device or group, it cannot be changed to be global.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The updated smart rule object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.setLocal">
+<span class="sig-name descname"><span class="pre">setLocal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deviceOrGroupId</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.setLocal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.setLocal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the smart rule to be local to the specified device or group.</p>
+<p>If a smart rule is previously set to be global, it cannot be changed to be local to a device or group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deviceOrGroupId</strong> (<em>str</em>) – The ID of the device or group.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.setRuleName">
+<span class="sig-name descname"><span class="pre">setRuleName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addTestPrefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.setRuleName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.setRuleName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name of the smart rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name.</p></li>
+<li><p><strong>addTestPrefix</strong> (<em>bool</em>) – Add a test prefix to the name of the smart rule so that it can be identified and cleaned up as part of the test setup.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRule.updateConfiguration">
+<span class="sig-name descname"><span class="pre">updateConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRule.updateConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRule.updateConfiguration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the configuration of the smart rule instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<em>dict</em><em>[</em><em>str</em><em>,</em><em>any</em><em>]</em>) – A dictionary of the updated configuration values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="smartrulesmanager">
+<h2>SmartRulesManager<a class="headerlink" href="#smartrulesmanager" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.smartrules.</span></span><span class="sig-name descname"><span class="pre">SmartRulesManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tenant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class responsible for building smart rules objects that can be deployed on Cumulocity.</p>
+<p>See the methods in the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a> class to customize a smart rule object and deploy it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tenant</strong> (<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>.) – The Cumulocity tenant.</p></li>
+<li><p><strong>log</strong> – The <code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code> instance to use for logging.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_calculateEnergyConsumption">
+<span class="sig-name descname"><span class="pre">build_calculateEnergyConsumption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputFragment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c8y_EnergyCounter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputSeries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'E'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeIntervalMinutes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputFragment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c8y_EnergyConsumption'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputSeries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'E'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_calculateEnergyConsumption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_calculateEnergyConsumption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “Calculate energy consumption”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputFragment</strong> (<em>str</em>) – The name of the fragment for incoming measurements.</p></li>
+<li><p><strong>inputSeries</strong> (<em>str</em>) – The name of the series for incoming measurements.</p></li>
+<li><p><strong>timeIntervalMinutes</strong> (<em>float</em>) – The interval for which to calculate consumption values.</p></li>
+<li><p><strong>outputFragment</strong> (<em>str</em>) – The name of the fragment for generated measurements.</p></li>
+<li><p><strong>outputSeries</strong> (<em>str</em>) – The name of the series for generated measurements.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmDurationIncreaseSeverity">
+<span class="sig-name descname"><span class="pre">build_onAlarmDurationIncreaseSeverity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alarmTypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmDurationMinutes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onAlarmDurationIncreaseSeverity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmDurationIncreaseSeverity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On alarm duration increase severity”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alarmTypes</strong> (<em>str</em><em> or </em><em>list</em><em>[</em><em>str</em><em>]</em>) – The types of alarms that trigger the rule.</p></li>
+<li><p><strong>alarmDurationMinutes</strong> (<em>float</em>) – The duration (in minutes) an alarm must be active before increasing the severity.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateIt">
+<span class="sig-name descname"><span class="pre">build_onAlarmEscalateIt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alarmTypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">escalationSteps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onAlarmEscalateIt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateIt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On alarm escalate it”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<p>Call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendEmail" title="apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendEmail"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_onAlarmEscalateStepSendEmail</span></code></a> or <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendSMS" title="apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendSMS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_onAlarmEscalateStepSendSMS</span></code></a> methods to create escalation steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alarmTypes</strong> (<em>str</em><em> or </em><em>list</em><em>[</em><em>str</em><em>]</em>) – The types of alarms that trigger the rule.</p></li>
+<li><p><strong>escalationSteps</strong> (<em>list</em>) – Escalation steps.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendEmail">
+<span class="sig-name descname"><span class="pre">build_onAlarmEscalateStepSendEmail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sendTo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sendCC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sendBCC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replyTo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'New</span> <span class="pre">#{severity}</span> <span class="pre">alarm</span> <span class="pre">from</span> <span class="pre">#{source.name}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'New</span> <span class="pre">#{severity}</span> <span class="pre">alarm</span> <span class="pre">has</span> <span class="pre">been</span> <span class="pre">received</span> <span class="pre">from</span> <span class="pre">#{source.name}.</span> <span class="pre">Alarm</span> <span class="pre">text</span> <span class="pre">is:</span> <span class="pre">&quot;#{text}&quot;.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onAlarmEscalateStepSendEmail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build an escalation step to send an email for the rule “On alarm escalate it”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sendTo</strong> (<em>str</em>) – The recipients of the email.</p></li>
+<li><p><strong>sendCC</strong> (<em>str</em><em>, </em><em>optional</em>) – The recipients that are to receive a copy of the email.</p></li>
+<li><p><strong>sendBCC</strong> (<em>str</em><em>, </em><em>optional</em>) – The recipients that are to receive a blind copy of the email.</p></li>
+<li><p><strong>replyTo</strong> (<em>str</em><em>, </em><em>optional</em>) – The reply-to address for the email.</p></li>
+<li><p><strong>subject</strong> (<em>str</em>) – The subject of the email.</p></li>
+<li><p><strong>message</strong> (<em>str</em>) – The text of the email.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An escalation step object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendSMS">
+<span class="sig-name descname"><span class="pre">build_onAlarmEscalateStepSendSMS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smsTo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smsText</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'New</span> <span class="pre">#{severity}</span> <span class="pre">alarm</span> <span class="pre">has</span> <span class="pre">been</span> <span class="pre">received</span> <span class="pre">from</span> <span class="pre">#{source.name}.</span> <span class="pre">Alarm</span> <span class="pre">text</span> <span class="pre">is:</span> <span class="pre">&quot;#{text}&quot;.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onAlarmEscalateStepSendSMS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendSMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build an escalation step to send an SMS for the rule “On alarm escalate it”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>smsTo</strong> (<em>str</em>) – The target phone number for the SMS.</p></li>
+<li><p><strong>smsText</strong> (<em>str</em>) – The text of the SMS.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An escalation step object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmExecuteOperation">
+<span class="sig-name descname"><span class="pre">build_onAlarmExecuteOperation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alarmTypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onAlarmExecuteOperation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmExecuteOperation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On alarm execute operation”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alarmTypes</strong> (<em>str</em><em> or </em><em>list</em><em>[</em><em>str</em><em>]</em>) – The types of alarms that trigger the rule.</p></li>
+<li><p><strong>operation</strong> (<em>dict</em><em>[</em><em>str</em><em>,</em><em>any</em><em>]</em>) – The operation that will be sent. It must be a dictionary representing a JSON description of the operation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmSendEmail">
+<span class="sig-name descname"><span class="pre">build_onAlarmSendEmail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alarmTypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sendTo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sendCC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sendBCC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replyTo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'New</span> <span class="pre">#{severity}</span> <span class="pre">alarm</span> <span class="pre">from</span> <span class="pre">#{source.name}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'New</span> <span class="pre">#{severity}</span> <span class="pre">alarm</span> <span class="pre">has</span> <span class="pre">been</span> <span class="pre">received</span> <span class="pre">from</span> <span class="pre">#{source.name}.</span> <span class="pre">Alarm</span> <span class="pre">text</span> <span class="pre">is:</span> <span class="pre">&quot;#{text}&quot;.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onAlarmSendEmail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmSendEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On alarm send email”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alarmTypes</strong> (<em>str</em><em> or </em><em>list</em><em>[</em><em>str</em><em>]</em>) – The types of alarms that trigger the rule.</p></li>
+<li><p><strong>sendTo</strong> (<em>str</em>) – The recipients of the email.</p></li>
+<li><p><strong>sendCC</strong> (<em>str</em><em>, </em><em>optional</em>) – The recipients that are to receive a copy of the email.</p></li>
+<li><p><strong>sendBCC</strong> (<em>str</em><em>, </em><em>optional</em>) – The recipients that are to receive a blind copy of the email.</p></li>
+<li><p><strong>replyTo</strong> (<em>str</em><em>, </em><em>optional</em>) – The reply-to address for the email.</p></li>
+<li><p><strong>subject</strong> (<em>str</em>) – The subject of the email.</p></li>
+<li><p><strong>message</strong> (<em>str</em>) – The text of the email.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmSendSMS">
+<span class="sig-name descname"><span class="pre">build_onAlarmSendSMS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alarmTypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smsTo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smsText</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Alarm</span> <span class="pre">occurred'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onAlarmSendSMS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmSendSMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On alarm send SMS”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alarmTypes</strong> (<em>str</em><em> or </em><em>list</em><em>[</em><em>str</em><em>]</em>) – The types of alarms that trigger the rule.</p></li>
+<li><p><strong>smsTo</strong> (<em>str</em>) – The target phone number for the SMS.</p></li>
+<li><p><strong>smsText</strong> (<em>str</em>) – The text of the SMS.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onGeofenceCreateAlarm">
+<span class="sig-name descname"><span class="pre">build_onGeofenceCreateAlarm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geofence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">triggerAlarmOn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'leaving'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c8y_GeofenceAlarm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmSeverity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MAJOR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmText</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Geofence</span> <span class="pre">violation'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onGeofenceCreateAlarm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onGeofenceCreateAlarm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On geofence create alarm”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geofence</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – The polygon that defines the boundaries of a region. It should be a list of dictionaries containing “lng” and “lat” keys.</p></li>
+<li><p><strong>triggerAlarmOn</strong> (<em>str</em>) – The reason for triggering the alarm - one of “entering”, “leaving”, or “both”. The default is “leaving”.</p></li>
+<li><p><strong>alarmType</strong> (<em>str</em>) – The type of raised alarms.</p></li>
+<li><p><strong>alarmSeverity</strong> (<em>str</em>) – The severity of raised alarms.</p></li>
+<li><p><strong>alarmText</strong> (<em>str</em>) – The alarm message.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onGeofenceSendEmail">
+<span class="sig-name descname"><span class="pre">build_onGeofenceSendEmail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geofence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sendTo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sendCC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sendBCC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replyTo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'New</span> <span class="pre">geofence</span> <span class="pre">violation</span> <span class="pre">from</span> <span class="pre">#{source.name}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'New</span> <span class="pre">geofence</span> <span class="pre">violation</span> <span class="pre">from</span> <span class="pre">#{source.name}'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onGeofenceSendEmail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onGeofenceSendEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On geofence send email”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geofence</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – The polygon that defines the boundaries of a region. It should be a list of dictionaries containing “lng” and “lat” keys.</p></li>
+<li><p><strong>sendTo</strong> (<em>str</em>) – The recipients of the email.</p></li>
+<li><p><strong>sendCC</strong> (<em>str</em><em>, </em><em>optional</em>) – The recipients that are to receive a copy of the email.</p></li>
+<li><p><strong>sendBCC</strong> (<em>str</em><em>, </em><em>optional</em>) – The recipients that are to receive a blind copy of the email.</p></li>
+<li><p><strong>replyTo</strong> (<em>str</em><em>, </em><em>optional</em>) – The reply-to address for the email.</p></li>
+<li><p><strong>subject</strong> (<em>str</em>) – The subject of the email.</p></li>
+<li><p><strong>message</strong> (<em>str</em>) – The text of the email.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onMeasurementExplicitThresholdCreateAlarm">
+<span class="sig-name descname"><span class="pre">build_onMeasurementExplicitThresholdCreateAlarm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fragment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rangeMin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rangeMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c8y_ThresholdAlarm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmText</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Threshold</span> <span class="pre">exceeded'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onMeasurementExplicitThresholdCreateAlarm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onMeasurementExplicitThresholdCreateAlarm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On measurement explicit threshold create alarm”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fragment</strong> (<em>str</em>) – Measurement fragment the smart rule listens for.</p></li>
+<li><p><strong>series</strong> (<em>str</em>) – Measurement series the smart rule listens for.</p></li>
+<li><p><strong>rangeMin</strong> (<em>float</em>) – The minimum value of measurements for which an alarm is raised.</p></li>
+<li><p><strong>rangeMax</strong> (<em>float</em>) – The maximum value of measurements for which an alarm is raised.</p></li>
+<li><p><strong>alarmType</strong> (<em>str</em>) – The type of raised alarms.</p></li>
+<li><p><strong>alarmText</strong> (<em>str</em>) – The alarm message.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onMeasurementThresholdCreateAlarm">
+<span class="sig-name descname"><span class="pre">build_onMeasurementThresholdCreateAlarm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataPointObjectID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c8y_ThresholdAlarm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmText</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Thresholds</span> <span class="pre">exceeded'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onMeasurementThresholdCreateAlarm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onMeasurementThresholdCreateAlarm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On measurement threshold create alarm”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataPointObjectID</strong> (<em>str</em>) – The ID of the Data Point Library object to use to find the values for the red and yellow ranges.</p></li>
+<li><p><strong>alarmType</strong> (<em>str</em>) – The type of raised alarms.</p></li>
+<li><p><strong>alarmText</strong> (<em>str</em>) – The alarm message.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.build_onMissingMeasurementsCreateAlarm">
+<span class="sig-name descname"><span class="pre">build_onMissingMeasurementsCreateAlarm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurementType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeIntervalMinutes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c8y_MissingMeasurementsAlarm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmSeverity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MAJOR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarmText</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Missing</span> <span class="pre">measurements</span> <span class="pre">of</span> <span class="pre">type:</span> <span class="pre">#{type}'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.build_onMissingMeasurementsCreateAlarm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.build_onMissingMeasurementsCreateAlarm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a smart rule object for the rule “On missing measurements create alarm”.</p>
+<p>To deploy it to Cumulocity, call the <a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule.deploy" title="apamax.eplapplications.smartrules.SmartRule.deploy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>measurementType</strong> (<em>str</em>) – The type of measurement.</p></li>
+<li><p><strong>timeIntervalMinutes</strong> (<em>float</em>) – Time (in minutes) to wait for missing measurements.</p></li>
+<li><p><strong>alarmType</strong> (<em>str</em>) – The type of raised alarms.</p></li>
+<li><p><strong>alarmSeverity</strong> (<em>str</em>) – The severity of raised alarms.</p></li>
+<li><p><strong>alarmText</strong> (<em>str</em>) – The alarm message.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A smart rule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apamax.eplapplications.smartrules.SmartRulesManager.getAllSmartRules">
+<span class="sig-name descname"><span class="pre">getAllSmartRules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">withLocalRules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/smartrules.html#SmartRulesManager.getAllSmartRules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.smartrules.SmartRulesManager.getAllSmartRules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all smart rules deployed on Cumulocity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>withLocalRules</strong> – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, also include smart rules local to a device or group.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of smart rule objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="#apamax.eplapplications.smartrules.SmartRule" title="apamax.eplapplications.smartrules.SmartRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmartRule</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using-eplapp.html">Using the eplapp.py command line tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing-epl.html">Writing tests for EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using-pysys.html">Using PySys to test your EPL apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance-testing.html">Testing the performance of your EPL apps and smart rules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="apamax.html">PySys helpers for EPL apps</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="apamax.eplapplications.html">apamax.eplapplications</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.basetest.html">apamax.eplapplications.basetest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.connection.html">apamax.eplapplications.connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.eplapps.html">apamax.eplapplications.eplapps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.perf.html">apamax.eplapplications.perf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.platform.html">apamax.eplapplications.platform</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">apamax.eplapplications.smartrules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smartrule">SmartRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smartrulesmanager">SmartRulesManager</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.tenant.html">apamax.eplapplications.tenant</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developing-epl-apps-locally.html">Developing EPL Apps Locally</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.tenant.html" title="apamax.eplapplications.tenant"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="apamax.eplapplications.platform.html" title="apamax.eplapplications.platform"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">EPL Apps Tools  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="apamax.html" >PySys helpers for EPL apps</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="apamax.eplapplications.html" >apamax.eplapplications</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">apamax.eplapplications.smartrules</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026 Cumulocity GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>
