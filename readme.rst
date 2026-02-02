@@ -42,7 +42,7 @@ In order to view the documentation on classes for PySys helpers for Apama EPL Ap
 
 To configure a local development environment see: `Developing EPL apps locally <https://cumulocity-iot.github.io/apama-eplapps-tools/developing-epl-apps-locally>`_.
 
-See `Apama Documentation <https://cumulocity.com/apama/docs/latest>`_, `Streaming Analytics guide <https://cumulocity.com/docs/streaming-analytics>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
+See `Apama Documentation <https://cumulocity.com/apama/docs/2026>`_, `Streaming Analytics guide <https://cumulocity.com/docs/2026/streaming-analytics>`_ and `PySys Documentation <https://pysys-test.github.io/pysys-test>`_ for further docs.
 
 System requirements
 -------------------
