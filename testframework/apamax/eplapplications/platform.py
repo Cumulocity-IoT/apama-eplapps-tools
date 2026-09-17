@@ -9,9 +9,30 @@
 # either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-import time, math, threading, os, urllib, urllib.parse
+import time, math, threading, os, urllib, urllib.parse, urllib.error
 from datetime import datetime, timezone, timedelta
 from .tenant import CumulocityTenant
+
+#: Timeout (in seconds) for each socket operation when requesting the microservice log, so that a stalled request
+#: does not stop that thread noticing it has been asked to stop. Bounds each operation, not the whole request.
+LOG_SPOOLING_REQUEST_TIMEOUT_SECS = 10
+
+#: How long (in seconds) the log spooling thread waits between requests for the microservice log.
+LOG_SPOOLING_POLL_INTERVAL_SECS = 1.0
+
+#: How far back (in seconds) each log request overlaps the previous one, to cover the lag before a logged line
+#: becomes queryable. Duplicates only cost bandwidth; anything below the lag is lost for good.
+LOG_SPOOLING_WINDOW_OVERLAP_SECS = 10
+
+#: How far back (in seconds) before spooling started the window may reach, allowing for the platform's clock being
+#: behind ours. Kept small, as anything here risks collecting the tail of a previous test's log.
+LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS = 1.0
+
+#: How many consecutive failed log requests before looking for the instance that replaced the one we are on.
+LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY = 5
+
+#: HTTP statuses meaning an application is not one whose log we could spool, rather than a transient problem.
+_NOT_OUR_APPLICATION_STATUSES = (401, 403, 404)
 
 class CumulocityPlatform(object):
 	"""
@@ -84,17 +105,8 @@ class CumulocityPlatform(object):
 				self._microserviceName = application['name']
 				self.__applicationOwnerTenantId = application.get('owner',{}).get('tenant',{}).get('id')
 
-				instances = {}
-				try:
-					while len(instances) == 0:
-						applicationStatus = self._c8yConn.do_get(f"/application/applications/{self._applicationId}/status?refresh=true")
-						instances = applicationStatus['c8y_Status']['instances']
-						time.sleep(1.0)
-					if len(instances) > 0:
-						self._instanceName = list(instances)[0]
-						break
-				except Exception as e:
-					self.parent.log.debug("Caught exception looking for platform subscription. Assuming that means it's a different application: %s" % e)
+				self._instanceName = self._findRunningInstance(self._applicationId)
+				if self._instanceName: break
 
 		self.isBootstrapTenant = True
 		# This means that the tenant is not the bootstrap tenant for the multi-tenant microservice.
@@ -107,8 +119,73 @@ class CumulocityPlatform(object):
 
 		# The log spooling must be done only for the bootstrap tenant in case of multi-tenant microservice.
 		if self.isBootstrapTenant:
+			self.parent.log.info(f"Spooling the log of microservice {self._microserviceName} instance {self._instanceName} to platform.log")
+			# Create the file up front, so that waiters have something to wait on even if the first requests fail
+			open(os.path.join(self.parent.output, 'platform.log'), 'w', encoding='utf8').close()
 			self.parent.startBackgroundThread("spooling", self._logSpoolingThread)
-			self.parent.waitForGrep('platform.log', expr='.')
+			self.parent.waitForGrep('platform.log', expr='.', timeout=self._defaultTimeoutSecs(),
+				detailMessage=f'waiting for the log of {self._microserviceName} instance {self._instanceName}')
+
+	def _defaultTimeoutSecs(self):
+		"""
+		The PySys signal timeout. Imported here, not at module scope, so this module stays importable without
+		PySys - the eplapp command line tool pulls it in and does not require PySys.
+
+		:meta private:
+		"""
+		from pysys.constants import TIMEOUTS
+		return TIMEOUTS['WaitForSignal']
+
+	def _findRunningInstance(self, applicationId, timeoutSecs=None):
+		"""
+		Find the name of the instance (a Kubernetes pod) to spool the microservice log from.
+
+		Waits for exactly one instance: a starting microservice reports none, a restarting one briefly reports two.
+		Falls back to the first of several rather than giving up.
+
+		:param applicationId: The id of the application to find a running instance of.
+		:param timeoutSecs: How long to keep retrying for, defaulting to the PySys signal timeout. Pass 0 for a
+			single attempt.
+		:return: The instance name, or None if this is not an application we can spool, or none was found in time.
+
+		:meta private:
+		"""
+		if timeoutSecs is None: timeoutSecs = self._defaultTimeoutSecs()
+		deadline = time.time() + timeoutSecs
+		instances = {}
+		while True:
+			try:
+				# Asking for a refresh is necessary to get an up to date list of instances
+				applicationStatus = self._c8yConn.do_get(f"/application/applications/{applicationId}/status?refresh=true",
+					timeoutSecs=LOG_SPOOLING_REQUEST_TIMEOUT_SECS)
+				# A status without instances races with the microservice starting up, so treat it as "none yet"
+				instances = (applicationStatus or {}).get('c8y_Status', {}).get('instances', None) or {}
+			except urllib.error.HTTPError as e:
+				if e.code in _NOT_OUR_APPLICATION_STATUSES:
+					# Most likely a different application sharing the 'cep' context path, or we are a subtenant
+					self.parent.log.debug(f"Cannot see the status of application {applicationId} ({e}), assuming it is not the microservice under test")
+					return None
+				self.parent.log.debug(f"Failed to get the status of application {applicationId}, will retry: {e}")
+			except Exception as e:
+				# Anything else is transient, so keep trying until the deadline
+				self.parent.log.debug(f"Failed to get the status of application {applicationId}, will retry: {e}")
+
+			if len(instances) == 1:
+				return list(instances)[0]
+
+			if time.time() >= deadline:
+				if len(instances) > 1:
+					# Better a log that may stop partway through the test than no log at all
+					self.parent.log.warning(f"Application {applicationId} reports more than one running instance ({sorted(instances)}), spooling the log of the first")
+					return list(instances)[0]
+				if timeoutSecs > 0:
+					self.parent.log.warning(f"Application {applicationId} did not report a running instance within {timeoutSecs} seconds")
+				return None
+
+			if len(instances) > 1:
+				# Picking the instance on its way out would give a log that stops partway through the test
+				self.parent.log.debug(f"Application {applicationId} reports more than one running instance ({sorted(instances)}), waiting for a single instance")
+			time.sleep(1.0)
 
 	def _logSpoolingThread(self, stopping, log):
 		""" When doing non-local testing, this method implements a thread that is responsible for regularly grabbing
@@ -116,24 +193,50 @@ class CumulocityPlatform(object):
 		self.__spoolLogs = True
 
 		logLineDeduplication = set()
-		now = datetime.now(timezone.utc)
-		dateRange = urllib.parse.urlencode({
-			'dateFrom': now.isoformat(timespec='milliseconds'),
-			'dateTo': (now + timedelta(days=365)).isoformat(timespec='milliseconds')
-		})
+		# Ask only for what is new each time; requesting the whole log grows every request until the endpoint
+		# times out on it, after which no more log arrives
+		earliestLogTime = datetime.now(timezone.utc) - timedelta(seconds=LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS)
+		getLogsFrom = earliestLogTime
+		consecutiveFailures = 0
 
 		while self.__spoolLogs and not stopping.is_set():
 			try:
-				resp = self._c8yConn.do_get("/application/applications/%s/logs/%s?%s" % (self._applicationId, self._instanceName, dateRange), jsonResp=False)
+				requestStart = datetime.now(timezone.utc)
+				dateRange = urllib.parse.urlencode({'dateFrom': getLogsFrom.isoformat(timespec='milliseconds')})
+				resp = self._c8yConn.do_get("/application/applications/%s/logs/%s?%s" % (self._applicationId, self._instanceName, dateRange), jsonResp=False,
+					timeoutSecs=LOG_SPOOLING_REQUEST_TIMEOUT_SECS)
+				consecutiveFailures = 0
 				logLatest = resp.decode('utf8').split("\n")
 
-				with open(os.path.join(self.parent.output, 'platform.log'), 'a', encoding='utf8') as logfile:
-					for line in logLatest:
-						if line not in logLineDeduplication:
-							logfile.write(line + "\n")
-							logLineDeduplication.add(line)
+				# The endpoint returns nothing at all while a container is starting, so don't move past a window
+				# until something arrives
+				if logLatest != ['']:
+					with open(os.path.join(self.parent.output, 'platform.log'), 'a', encoding='utf8') as logfile:
+						for line in logLatest:
+							if line not in logLineDeduplication:
+								logfile.write(line + "\n")
+								logLineDeduplication.add(line)
+					# Never reach back before spooling started, or the overlap would collect a previous test's log
+					getLogsFrom = max(requestStart - timedelta(seconds=LOG_SPOOLING_WINDOW_OVERLAP_SECS), earliestLogTime)
 			except Exception as e:
-				log.error("Exception while spooling logs:" + str(e))
+				# Requests that are interrupted or time out while the test is finishing are expected, so don't
+				# report those as errors
+				if self.__spoolLogs and not stopping.is_set():
+					log.error("Exception while spooling logs:" + str(e))
+					consecutiveFailures += 1
+					if consecutiveFailures >= LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY:
+						# A rescheduled microservice comes back under a new instance name. Don't wait for one here,
+						# or this thread stops noticing it has been asked to stop
+						consecutiveFailures = 0
+						instanceName = self._findRunningInstance(self._applicationId, timeoutSecs=0)
+						if instanceName and instanceName != self._instanceName:
+							log.info(f"Microservice instance changed from {self._instanceName} to {instanceName}, spooling the log of the new instance")
+							self._instanceName = instanceName
+
+			# Wait before the next request, waking up immediately if this thread has been asked to stop. As well as
+			# avoiding needless load on the platform, this keeps the thread responsive to being stopped at the end of
+			# the test, since each request opens a new connection and so cannot be interrupted once it is under way
+			if stopping.wait(LOG_SPOOLING_POLL_INTERVAL_SECS): break
 
 	def shutdown(self):
 		""" Stop spooling the log files when the test finishes. """

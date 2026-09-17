@@ -18,9 +18,12 @@ class C8yConnection(object):
 	:param url: The Cumulocity tenant url.
 	:param username: The username.
 	:param password: The password.
+	:param timeoutSecs: The default timeout (in seconds) for each socket operation performed while making a
+		REST request using this connection. Individual requests can override this. If neither is specified,
+		Python's default socket timeout applies.
 	"""
 
-	def __init__(self, url, username, password):
+	def __init__(self, url, username, password, timeoutSecs=None):
 		if not (url.startswith('http://') or url.startswith('https://')):
 			url = 'https://' + url
 		auth_handler = urllib.request.HTTPBasicAuthHandler()
@@ -29,9 +32,10 @@ class C8yConnection(object):
 		self.urlopener = urllib.request.build_opener(urllib.request.HTTPSHandler(), auth_handler)
 		self.base_url = url
 		self.auth_header = "Basic " + base64.b64encode(bytes("%s:%s" % (username, password), "utf8")).decode()
+		self.timeoutSecs = timeoutSecs
 		self.logger = logging.getLogger("pysys.apamax.eplapplications.C8yConnection")
 
-	def request(self, method, path, body=None, headers=None, useLocationHeaderPostResp=True):
+	def request(self, method, path, body=None, headers=None, useLocationHeaderPostResp=True, timeoutSecs=None):
 		"""
 		Perform an HTTP request. In case of POST request, return the id of the created resource.
 
@@ -41,6 +45,8 @@ class C8yConnection(object):
 		:param headers: The headers for the request.
 		:param useLocationHeaderPostResp: Whether or not to attempt to use the
 			'Location' header in the response to return the ID of the resource that was created by a POST request.
+		:param timeoutSecs: The timeout (in seconds) for each socket operation performed while making this request.
+			If not specified, the default timeout of this connection is used, if it has one.
 		:return: Body of the response. In case of POST request, id of the resource specified by the Location header.
 		"""
 		headers = headers or {}
@@ -49,7 +55,10 @@ class C8yConnection(object):
 			body = bytes(body, encoding='utf8')
 		url = self.base_url[:-1] if self.base_url.endswith('/') else self.base_url
 		req = urllib.request.Request(url + path, data=body, headers=headers, method=method)
-		resp = self.urlopener.open(req)
+		# Only pass a timeout if one was requested, so that by default urllib's own behaviour (i.e. Python's
+		# default socket timeout) is left untouched
+		timeoutSecs = timeoutSecs if timeoutSecs is not None else self.timeoutSecs
+		resp = self.urlopener.open(req, **({'timeout': timeoutSecs} if timeoutSecs is not None else {}))
 
 		if resp.getheader('Content-Type',
 								'') == 'text/html':  # we never ask for HTML, if we got it, this is probably the wrong URL (or we're very confused)
@@ -64,7 +73,7 @@ class C8yConnection(object):
 			return loc.split('/')[-1]
 		return resp.read()
 
-	def do_get(self, path, params=None, headers=None, jsonResp=True):
+	def do_get(self, path, params=None, headers=None, jsonResp=True, timeoutSecs=None):
 		"""
 		Perform GET request.
 
@@ -72,11 +81,13 @@ class C8yConnection(object):
 		:param params: The query params.
 		:param headers: The headers.
 		:param jsonResp: Response is JSON.
+		:param timeoutSecs: The timeout (in seconds) for each socket operation performed while making this request.
+			If not specified, the default timeout of this connection is used, if it has one.
 		:return: The body of the response. If JSON output is expected then parse the JSON string to python object.
 		"""
 		if params:
 			path = f'{path}?{urllib.parse.urlencode(params)}'
-		body = self.request('GET', path, None, headers)
+		body = self.request('GET', path, None, headers, timeoutSecs=timeoutSecs)
 		if body and jsonResp:
 			body = json.loads(body)
 		return body
