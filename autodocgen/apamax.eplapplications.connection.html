@@ -53,7 +53,7 @@
 <h2>C8yConnection<a class="headerlink" href="#c8yconnection" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="apamax.eplapplications.connection.C8yConnection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.connection.</span></span><span class="sig-name descname"><span class="pre">C8yConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.connection.</span></span><span class="sig-name descname"><span class="pre">C8yConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSecs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Simple object to create connection to Cumulocity and perform REST requests.</p>
 <dl class="field-list simple">
@@ -62,12 +62,15 @@
 <li><p><strong>url</strong> – The Cumulocity tenant url.</p></li>
 <li><p><strong>username</strong> – The username.</p></li>
 <li><p><strong>password</strong> – The password.</p></li>
+<li><p><strong>timeoutSecs</strong> – The default timeout (in seconds) for each socket operation performed while making a
+REST request using this connection. Individual requests can override this. If neither is specified,
+Python’s default socket timeout applies.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.connection.C8yConnection.do_get">
-<span class="sig-name descname"><span class="pre">do_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jsonResp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.do_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.do_get" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jsonResp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSecs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.do_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.do_get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform GET request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -76,6 +79,8 @@
 <li><p><strong>params</strong> – The query params.</p></li>
 <li><p><strong>headers</strong> – The headers.</p></li>
 <li><p><strong>jsonResp</strong> – Response is JSON.</p></li>
+<li><p><strong>timeoutSecs</strong> – The timeout (in seconds) for each socket operation performed while making this request.
+If not specified, the default timeout of this connection is used, if it has one.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -106,7 +111,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.connection.C8yConnection.request">
-<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useLocationHeaderPostResp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.request" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useLocationHeaderPostResp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSecs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform an HTTP request. In case of POST request, return the id of the created resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -117,6 +122,8 @@
 <li><p><strong>headers</strong> – The headers for the request.</p></li>
 <li><p><strong>useLocationHeaderPostResp</strong> – Whether or not to attempt to use the
 ‘Location’ header in the response to return the ID of the resource that was created by a POST request.</p></li>
+<li><p><strong>timeoutSecs</strong> – The timeout (in seconds) for each socket operation performed while making this request.
+If not specified, the default timeout of this connection is used, if it has one.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

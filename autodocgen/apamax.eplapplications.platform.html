@@ -49,6 +49,54 @@
             
   <section id="module-apamax.eplapplications.platform">
 <span id="apamax-eplapplications-platform"></span><h1>apamax.eplapplications.platform<a class="headerlink" href="#module-apamax.eplapplications.platform" title="Permalink to this headline">¶</a></h1>
+<section id="log-spooling-request-timeout-secs">
+<h2>LOG_SPOOLING_REQUEST_TIMEOUT_SECS<a class="headerlink" href="#log-spooling-request-timeout-secs" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_REQUEST_TIMEOUT_SECS">
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_REQUEST_TIMEOUT_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_REQUEST_TIMEOUT_SECS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timeout (in seconds) for each socket operation when requesting the microservice log, so that a stalled request
+does not stop that thread noticing it has been asked to stop. Bounds each operation, not the whole request.</p>
+</dd></dl>
+
+</section>
+<section id="log-spooling-poll-interval-secs">
+<h2>LOG_SPOOLING_POLL_INTERVAL_SECS<a class="headerlink" href="#log-spooling-poll-interval-secs" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_POLL_INTERVAL_SECS">
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_POLL_INTERVAL_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_POLL_INTERVAL_SECS" title="Permalink to this definition">¶</a></dt>
+<dd><p>How long (in seconds) the log spooling thread waits between requests for the microservice log.</p>
+</dd></dl>
+
+</section>
+<section id="log-spooling-window-overlap-secs">
+<h2>LOG_SPOOLING_WINDOW_OVERLAP_SECS<a class="headerlink" href="#log-spooling-window-overlap-secs" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_WINDOW_OVERLAP_SECS">
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_WINDOW_OVERLAP_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_WINDOW_OVERLAP_SECS" title="Permalink to this definition">¶</a></dt>
+<dd><p>How far back (in seconds) each log request overlaps the previous one, to cover the lag before a logged line
+becomes queryable. Duplicates only cost bandwidth; anything below the lag is lost for good.</p>
+</dd></dl>
+
+</section>
+<section id="log-spooling-start-skew-allowance-secs">
+<h2>LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS<a class="headerlink" href="#log-spooling-start-skew-allowance-secs" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS">
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS" title="Permalink to this definition">¶</a></dt>
+<dd><p>How far back (in seconds) before spooling started the window may reach, allowing for the platform’s clock being
+behind ours. Kept small, as anything here risks collecting the tail of a previous test’s log.</p>
+</dd></dl>
+
+</section>
+<section id="log-spooling-failures-before-rediscovery">
+<h2>LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY<a class="headerlink" href="#log-spooling-failures-before-rediscovery" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY">
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many consecutive failed log requests before looking for the instance that replaced the one we are on.</p>
+</dd></dl>
+
+</section>
 <section id="cumulocityplatform">
 <h2>CumulocityPlatform<a class="headerlink" href="#cumulocityplatform" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
@@ -155,6 +203,11 @@ multi-tenant Apama-ctrl microservice.</p>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.eplapps.html">apamax.eplapplications.eplapps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.perf.html">apamax.eplapplications.perf</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">apamax.eplapplications.platform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-request-timeout-secs">LOG_SPOOLING_REQUEST_TIMEOUT_SECS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-poll-interval-secs">LOG_SPOOLING_POLL_INTERVAL_SECS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-window-overlap-secs">LOG_SPOOLING_WINDOW_OVERLAP_SECS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-start-skew-allowance-secs">LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-failures-before-rediscovery">LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cumulocityplatform">CumulocityPlatform</a></li>
 </ul>
 </li>
