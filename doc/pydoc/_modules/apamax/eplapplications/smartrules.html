@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>apamax.eplapplications.smartrules &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=7fae59db" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -78,8 +76,10 @@
 	<span class="n">RULE_THRESHOLD</span><span class="p">:</span> <span class="s1">&#39;Creates alarms when measurement reaches thresholds&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 
-<div class="viewcode-block" id="SmartRule"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule">[docs]</a><span class="k">class</span> <span class="nc">SmartRule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SmartRule">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule">[docs]</a>
+<span class="k">class</span> <span class="nc">SmartRule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Class representing a smart rule object.</span>
 
 <span class="sd">		An instance of this class must be created by calling the appropriate build method of </span>
@@ -107,8 +107,10 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_roleScope</span> <span class="o">=</span> <span class="kc">None</span>							<span class="c1"># Rule is &#39;global&#39; or &#39;local&#39;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">setRuleName</span><span class="p">(</span><span class="n">RULE_NAMES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ruleType</span><span class="p">,</span> <span class="n">ruleType</span><span class="p">))</span>
 
-<div class="viewcode-block" id="SmartRule.getID"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getID">[docs]</a>	<span class="k">def</span> <span class="nf">getID</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SmartRule.getID">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getID">[docs]</a>
+	<span class="k">def</span> <span class="nf">getID</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get the ID of the smart rule.</span>
 
 <span class="sd">		Returns None if the smart rule is deleted or not yet deployed.</span>
@@ -118,8 +120,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span></div>
 
-<div class="viewcode-block" id="SmartRule.getRuleName"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getRuleName">[docs]</a>	<span class="k">def</span> <span class="nf">getRuleName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.getRuleName">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getRuleName">[docs]</a>
+	<span class="k">def</span> <span class="nf">getRuleName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get the name of the smart rule.</span>
 
 <span class="sd">		:return: The name of the smart rule.</span>
@@ -127,8 +132,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ruleName</span></div>
 
-<div class="viewcode-block" id="SmartRule.setRuleName"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setRuleName">[docs]</a>	<span class="k">def</span> <span class="nf">setRuleName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">addTestPrefix</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.setRuleName">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setRuleName">[docs]</a>
+	<span class="k">def</span> <span class="nf">setRuleName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">addTestPrefix</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Set the name of the smart rule.</span>
 <span class="sd">		</span>
 <span class="sd">		:param str name: The name.</span>
@@ -141,8 +149,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">ruleName</span> <span class="o">=</span> <span class="n">name</span>
 		<span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="SmartRule.isGlobal"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.isGlobal">[docs]</a>	<span class="k">def</span> <span class="nf">isGlobal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.isGlobal">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.isGlobal">[docs]</a>
+	<span class="k">def</span> <span class="nf">isGlobal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Check if the smart rule is global.</span>
 
 <span class="sd">		:return: `True` if the smart rule is global, `False` otherwise.</span>
@@ -150,8 +161,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roleScope</span> <span class="o">==</span> <span class="s1">&#39;global&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">managedObjectId</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRule.setGlobal"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setGlobal">[docs]</a>	<span class="k">def</span> <span class="nf">setGlobal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.setGlobal">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setGlobal">[docs]</a>
+	<span class="k">def</span> <span class="nf">setGlobal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Set the smart rule to be global.</span>
 
 <span class="sd">		If a smart rule is previously set to be local to a device or group, it cannot be changed to be global.</span>
@@ -165,8 +179,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_roleScope</span> <span class="o">=</span> <span class="s1">&#39;global&#39;</span>
 		<span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="SmartRule.isLocal"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.isLocal">[docs]</a>	<span class="k">def</span> <span class="nf">isLocal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.isLocal">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.isLocal">[docs]</a>
+	<span class="k">def</span> <span class="nf">isLocal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Check if the smart rule is local to a device or a group.</span>
 
 <span class="sd">		:return: `True` if the smart rule is local to a device or a group, `False` otherwise.</span>
@@ -174,8 +191,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isGlobal</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SmartRule.setLocal"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setLocal">[docs]</a>	<span class="k">def</span> <span class="nf">setLocal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceOrGroupId</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.setLocal">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setLocal">[docs]</a>
+	<span class="k">def</span> <span class="nf">setLocal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceOrGroupId</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Set the smart rule to be local to the specified device or group.</span>
 
 <span class="sd">		If a smart rule is previously set to be global, it cannot be changed to be local to a device or group.</span>
@@ -197,8 +217,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_roleScope</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
 		<span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="SmartRule.getConfiguration"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getConfiguration">[docs]</a>	<span class="k">def</span> <span class="nf">getConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.getConfiguration">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getConfiguration">[docs]</a>
+	<span class="k">def</span> <span class="nf">getConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get the configuration of the smart rule instance.</span>
 
 <span class="sd">		:return: The configuration.</span>
@@ -206,8 +229,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">configuration</span></div>
 
-<div class="viewcode-block" id="SmartRule.updateConfiguration"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.updateConfiguration">[docs]</a>	<span class="k">def</span> <span class="nf">updateConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.updateConfiguration">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.updateConfiguration">[docs]</a>
+	<span class="k">def</span> <span class="nf">updateConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Update the configuration of the smart rule instance.</span>
 
 <span class="sd">		:param dict[str,any] configuration: A dictionary of the updated configuration values.</span>
@@ -217,8 +243,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
 		<span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="SmartRule.getEnabledSources"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getEnabledSources">[docs]</a>	<span class="k">def</span> <span class="nf">getEnabledSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.getEnabledSources">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getEnabledSources">[docs]</a>
+	<span class="k">def</span> <span class="nf">getEnabledSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get the list of device IDs for which this smart rule is enabled.</span>
 
 <span class="sd">		The list will be empty for a global smart rule that is enabled for all devices.</span>
@@ -228,8 +257,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabledSources</span></div>
 
-<div class="viewcode-block" id="SmartRule.setEnabledSources"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setEnabledSources">[docs]</a>	<span class="k">def</span> <span class="nf">setEnabledSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceList</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.setEnabledSources">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setEnabledSources">[docs]</a>
+	<span class="k">def</span> <span class="nf">setEnabledSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceList</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Set the list of device IDs for which this smart rule must be enabled.</span>
 
 <span class="sd">		If the smart rule is local to a group, all devices must be part of the group.</span>
@@ -241,8 +273,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">enabledSources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toDeviceIds</span><span class="p">(</span><span class="n">deviceList</span><span class="p">)</span>
 		<span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="SmartRule.getDisabledSources"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getDisabledSources">[docs]</a>	<span class="k">def</span> <span class="nf">getDisabledSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.getDisabledSources">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.getDisabledSources">[docs]</a>
+	<span class="k">def</span> <span class="nf">getDisabledSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get the list of device IDs for which this smart rule is disabled.</span>
 
 <span class="sd">		:return: The list of device IDs.</span>
@@ -250,8 +285,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">disabledSources</span></div>
 
-<div class="viewcode-block" id="SmartRule.setDisabledSources"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setDisabledSources">[docs]</a>	<span class="k">def</span> <span class="nf">setDisabledSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceList</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.setDisabledSources">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setDisabledSources">[docs]</a>
+	<span class="k">def</span> <span class="nf">setDisabledSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceList</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Set the list of device IDs for which this smart rule must be disabled.</span>
 
 <span class="sd">		The disabled sources list will be ignored if the enabled sources list is also set.</span>
@@ -263,8 +301,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">disabledSources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toDeviceIds</span><span class="p">(</span><span class="n">deviceList</span><span class="p">)</span>
 		<span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="SmartRule.isEnabled"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.isEnabled">[docs]</a>	<span class="k">def</span> <span class="nf">isEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.isEnabled">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.isEnabled">[docs]</a>
+	<span class="k">def</span> <span class="nf">isEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Check if the smart rule is enabled.</span>
 
 <span class="sd">		:return: `True` if the smart rule is enabled, `False` otherwise.</span>
@@ -272,8 +313,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span></div>
 
-<div class="viewcode-block" id="SmartRule.setEnabled"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setEnabled">[docs]</a>	<span class="k">def</span> <span class="nf">setEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.setEnabled">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.setEnabled">[docs]</a>
+	<span class="k">def</span> <span class="nf">setEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Enable or disable the smart rule.</span>
 
 <span class="sd">		:param bool enabled: The smart rule is enabled if `True`, otherwise it is disabled.</span>
@@ -283,8 +327,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">enabled</span>
 		<span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="SmartRule.deploy"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.deploy">[docs]</a>	<span class="k">def</span> <span class="nf">deploy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.deploy">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.deploy">[docs]</a>
+	<span class="k">def</span> <span class="nf">deploy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Deploy the smart rule to Cumulocity.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cepModuleId</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -293,8 +340,11 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">_updateRule</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRule.delete"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.delete">[docs]</a>	<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRule.delete">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRule.delete">[docs]</a>
+	<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Delete the smart rule from Cumulocity.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cepModuleId</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -306,9 +356,10 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Deleted </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_getDesc</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to delete </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_getDesc</span><span class="p">()</span><span class="si">}</span><span class="s1"> using DELETE on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_getEndPoint</span><span class="p">()</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
 	
 	<span class="k">def</span> <span class="nf">_getDesc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get the description of the smart rule for logging.</span>
 
 <span class="sd">		:return: A basic description of the smart rule.</span>
@@ -325,7 +376,7 @@
 		<span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ruleContext</span><span class="si">}</span><span class="s2"> smart rule &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ruleName</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="n">attrs_str</span><span class="si">}</span><span class="s2">)&quot;</span>
 
 	<span class="k">def</span> <span class="nf">_createRule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Create the smart rule on Cumulocity. &quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; Create the smart rule on Cumulocity. &quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_resetIds</span><span class="p">()</span>
 		<span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getRequestBody</span><span class="p">()</span>
 		<span class="k">try</span><span class="p">:</span>
@@ -338,7 +389,7 @@
 			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to create </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_getDesc</span><span class="p">()</span><span class="si">}</span><span class="s1"> using POST on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">base_url</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_getEndPoint</span><span class="p">()</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 	
 	<span class="k">def</span> <span class="nf">_updateRule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Update the smart rule on Cumulocity. &quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; Update the smart rule on Cumulocity. &quot;&quot;&quot;</span>
 		<span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getRequestBody</span><span class="p">()</span>
 		<span class="c1"># c8y doesn&#39;t like if type is sent when updating a rule</span>
 		<span class="k">if</span> <span class="s1">&#39;type&#39;</span> <span class="ow">in</span> <span class="n">body</span><span class="p">:</span> <span class="n">body</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
@@ -353,7 +404,7 @@
 
 	<span class="nd">@staticmethod</span>
 	<span class="k">def</span> <span class="nf">_toDeviceIds</span><span class="p">(</span><span class="n">deviceList</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; </span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">		Extract the device IDs from the list of the devices. </span>
 <span class="sd">		</span>
 <span class="sd">		:param deviceList: Device(s).</span>
@@ -377,7 +428,7 @@
 		<span class="k">return</span> <span class="n">result</span>
 
 	<span class="k">def</span> <span class="nf">_getRequestBody</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get the body of the smart rule used for creating/updating a smart rule using the REST API.</span>
 
 <span class="sd">		:return: a dictionary containing all the data required to create/update the smart rule using REST API.</span>
@@ -402,7 +453,7 @@
 		<span class="k">return</span> <span class="n">request</span>
 
 	<span class="k">def</span> <span class="nf">_extractAndSaveIds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Extract the ID and cepModuleId of the smart rule and save them.</span>
 
 <span class="sd">		These are created by Cumulocity when a smart rule is successfully created.</span>
@@ -413,14 +464,14 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_cepModuleId</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;cepModuleId&#39;</span><span class="p">]</span>
 
 	<span class="k">def</span> <span class="nf">_resetIds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Reset the id and cepModuleId of the smart rule.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_cepModuleId</span> <span class="o">=</span> <span class="kc">None</span>
 
 	<span class="k">def</span> <span class="nf">_getEndPoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Gets the REST endpoint associated with the smart rule.</span>
 
 <span class="sd">		:return: The REST endpoint of the smart rule.</span>
@@ -429,7 +480,7 @@
 		<span class="k">return</span> <span class="s1">&#39;/service/smartrule&#39;</span> <span class="o">+</span> <span class="p">(</span> <span class="s1">&#39;/managedObjects/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">managedObjectId</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">managedObjectId</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/smartrules&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_isTestSmartRule</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Checks if the smart rule was created by the test framework as part of a test.</span>
 
 <span class="sd">		:return: `True` if the smartRule was created by the framework, `False` otherwise.</span>
@@ -437,8 +488,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ruleName</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">SmartRule</span><span class="o">.</span><span class="n">NAME_PREFIX</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager">[docs]</a><span class="k">class</span> <span class="nc">SmartRulesManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager">[docs]</a>
+<span class="k">class</span> <span class="nc">SmartRulesManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Class responsible for building smart rules objects that can be deployed on Cumulocity.</span>
 <span class="sd">	</span>
 <span class="sd">	See the methods in the :class:`SmartRule` class to customize a smart rule object and deploy it.</span>
@@ -452,8 +506,10 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">tenant</span><span class="o">.</span><span class="n">getConnection</span><span class="p">()</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span>
 
-<div class="viewcode-block" id="SmartRulesManager.getAllSmartRules"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.getAllSmartRules">[docs]</a>	<span class="k">def</span> <span class="nf">getAllSmartRules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">withLocalRules</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SmartRulesManager.getAllSmartRules">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.getAllSmartRules">[docs]</a>
+	<span class="k">def</span> <span class="nf">getAllSmartRules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">withLocalRules</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get all smart rules deployed on Cumulocity.</span>
 
 <span class="sd">		:param withLocalRules: If `True`, also include smart rules local to a device or group.</span>
@@ -465,8 +521,11 @@
 		<span class="n">rules</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)[</span><span class="s1">&#39;rules&#39;</span><span class="p">]</span>
 		<span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_parseSmartRule</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onMeasurementExplicitThresholdCreateAlarm"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onMeasurementExplicitThresholdCreateAlarm">[docs]</a>	<span class="k">def</span> <span class="nf">build_onMeasurementExplicitThresholdCreateAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fragment</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">rangeMin</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">rangeMax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alarmType</span><span class="o">=</span><span class="s1">&#39;c8y_ThresholdAlarm&#39;</span><span class="p">,</span> <span class="n">alarmText</span><span class="o">=</span><span class="s1">&#39;Threshold exceeded&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onMeasurementExplicitThresholdCreateAlarm">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onMeasurementExplicitThresholdCreateAlarm">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onMeasurementExplicitThresholdCreateAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fragment</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">rangeMin</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">rangeMax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alarmType</span><span class="o">=</span><span class="s1">&#39;c8y_ThresholdAlarm&#39;</span><span class="p">,</span> <span class="n">alarmText</span><span class="o">=</span><span class="s1">&#39;Threshold exceeded&#39;</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On measurement explicit threshold create alarm&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -491,8 +550,11 @@
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_EXPLICIT_THRESHOLD</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onGeofenceCreateAlarm"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onGeofenceCreateAlarm">[docs]</a>	<span class="k">def</span> <span class="nf">build_onGeofenceCreateAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geofence</span><span class="p">,</span> <span class="n">triggerAlarmOn</span><span class="o">=</span><span class="s1">&#39;leaving&#39;</span><span class="p">,</span> <span class="n">alarmType</span><span class="o">=</span><span class="s1">&#39;c8y_GeofenceAlarm&#39;</span><span class="p">,</span> <span class="n">alarmSeverity</span><span class="o">=</span><span class="s1">&#39;MAJOR&#39;</span><span class="p">,</span> <span class="n">alarmText</span><span class="o">=</span><span class="s1">&#39;Geofence violation&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onGeofenceCreateAlarm">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onGeofenceCreateAlarm">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onGeofenceCreateAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geofence</span><span class="p">,</span> <span class="n">triggerAlarmOn</span><span class="o">=</span><span class="s1">&#39;leaving&#39;</span><span class="p">,</span> <span class="n">alarmType</span><span class="o">=</span><span class="s1">&#39;c8y_GeofenceAlarm&#39;</span><span class="p">,</span> <span class="n">alarmSeverity</span><span class="o">=</span><span class="s1">&#39;MAJOR&#39;</span><span class="p">,</span> <span class="n">alarmText</span><span class="o">=</span><span class="s1">&#39;Geofence violation&#39;</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On geofence create alarm&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -516,8 +578,11 @@
 
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_ON_GEOFENCE_CREATE_ALARM</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onMissingMeasurementsCreateAlarm"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onMissingMeasurementsCreateAlarm">[docs]</a>	<span class="k">def</span> <span class="nf">build_onMissingMeasurementsCreateAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurementType</span><span class="p">,</span> <span class="n">timeIntervalMinutes</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">alarmType</span><span class="o">=</span><span class="s1">&#39;c8y_MissingMeasurementsAlarm&#39;</span><span class="p">,</span> <span class="n">alarmSeverity</span><span class="o">=</span><span class="s1">&#39;MAJOR&#39;</span><span class="p">,</span> <span class="n">alarmText</span><span class="o">=</span><span class="s1">&#39;Missing measurements of type: #</span><span class="si">{type}</span><span class="s1">&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onMissingMeasurementsCreateAlarm">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onMissingMeasurementsCreateAlarm">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onMissingMeasurementsCreateAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurementType</span><span class="p">,</span> <span class="n">timeIntervalMinutes</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">alarmType</span><span class="o">=</span><span class="s1">&#39;c8y_MissingMeasurementsAlarm&#39;</span><span class="p">,</span> <span class="n">alarmSeverity</span><span class="o">=</span><span class="s1">&#39;MAJOR&#39;</span><span class="p">,</span> <span class="n">alarmText</span><span class="o">=</span><span class="s1">&#39;Missing measurements of type: #</span><span class="si">{type}</span><span class="s1">&#39;</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On missing measurements create alarm&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -539,8 +604,11 @@
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_MISSING_MEASUREMENTS</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onAlarmSendSMS"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmSendSMS">[docs]</a>	<span class="k">def</span> <span class="nf">build_onAlarmSendSMS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">smsTo</span><span class="p">,</span> <span class="n">smsText</span><span class="o">=</span><span class="s1">&#39;Alarm occurred&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onAlarmSendSMS">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmSendSMS">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onAlarmSendSMS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">smsTo</span><span class="p">,</span> <span class="n">smsText</span><span class="o">=</span><span class="s1">&#39;Alarm occurred&#39;</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm send SMS&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -559,10 +627,13 @@
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_ON_ALARM_SEND_SMS</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onAlarmSendEmail"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmSendEmail">[docs]</a>	<span class="k">def</span> <span class="nf">build_onAlarmSendEmail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">sendTo</span><span class="p">,</span> <span class="n">sendCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sendBCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replyTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onAlarmSendEmail">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmSendEmail">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onAlarmSendEmail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">sendTo</span><span class="p">,</span> <span class="n">sendCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sendBCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replyTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 			<span class="n">subject</span><span class="o">=</span><span class="s1">&#39;New #</span><span class="si">{severity}</span><span class="s1"> alarm from #</span><span class="si">{source.name}</span><span class="s1">&#39;</span><span class="p">,</span>
 			<span class="n">message</span><span class="o">=</span><span class="s1">&#39;New #</span><span class="si">{severity}</span><span class="s1"> alarm has been received from #</span><span class="si">{source.name}</span><span class="s1">. Alarm text is: &quot;#</span><span class="si">{text}</span><span class="s1">&quot;.&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm send email&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -592,10 +663,13 @@
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_ON_ALARM_SEND_EMAIL</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onAlarmEscalateStepSendEmail"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendEmail">[docs]</a>	<span class="k">def</span> <span class="nf">build_onAlarmEscalateStepSendEmail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sendTo</span><span class="p">,</span> <span class="n">sendCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sendBCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replyTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onAlarmEscalateStepSendEmail">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendEmail">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onAlarmEscalateStepSendEmail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sendTo</span><span class="p">,</span> <span class="n">sendCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sendBCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replyTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 			<span class="n">subject</span><span class="o">=</span><span class="s1">&#39;New #</span><span class="si">{severity}</span><span class="s1"> alarm from #</span><span class="si">{source.name}</span><span class="s1">&#39;</span><span class="p">,</span>
 			<span class="n">message</span><span class="o">=</span><span class="s1">&#39;New #</span><span class="si">{severity}</span><span class="s1"> alarm has been received from #</span><span class="si">{source.name}</span><span class="s1">. Alarm text is: &quot;#</span><span class="si">{text}</span><span class="s1">&quot;.&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build an escalation step to send an email for the rule &quot;On alarm escalate it&quot;.</span>
 
 <span class="sd">		:param str sendTo: The recipients of the email.</span>
@@ -612,8 +686,11 @@
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_onAlarmSendEmail</span><span class="p">(</span><span class="n">alarmTypes</span><span class="o">=</span><span class="s1">&#39;todo&#39;</span><span class="p">,</span> <span class="n">sendTo</span><span class="o">=</span><span class="n">sendTo</span><span class="p">,</span> <span class="n">sendCC</span><span class="o">=</span><span class="n">sendCC</span><span class="p">,</span> <span class="n">sendBCC</span><span class="o">=</span><span class="n">sendBCC</span><span class="p">,</span>
 			<span class="n">replyTo</span><span class="o">=</span><span class="n">replyTo</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onAlarmEscalateStepSendSMS"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendSMS">[docs]</a>	<span class="k">def</span> <span class="nf">build_onAlarmEscalateStepSendSMS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smsTo</span><span class="p">,</span> <span class="n">smsText</span><span class="o">=</span><span class="s1">&#39;New #</span><span class="si">{severity}</span><span class="s1"> alarm has been received from #</span><span class="si">{source.name}</span><span class="s1">. Alarm text is: &quot;#</span><span class="si">{text}</span><span class="s1">&quot;.&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onAlarmEscalateStepSendSMS">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateStepSendSMS">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onAlarmEscalateStepSendSMS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smsTo</span><span class="p">,</span> <span class="n">smsText</span><span class="o">=</span><span class="s1">&#39;New #</span><span class="si">{severity}</span><span class="s1"> alarm has been received from #</span><span class="si">{source.name}</span><span class="s1">. Alarm text is: &quot;#</span><span class="si">{text}</span><span class="s1">&quot;.&#39;</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build an escalation step to send an SMS for the rule &quot;On alarm escalate it&quot;.</span>
 
 <span class="sd">		:param str smsTo: The target phone number for the SMS.</span>
@@ -622,8 +699,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_onAlarmSendSMS</span><span class="p">(</span><span class="n">alarmTypes</span><span class="o">=</span><span class="s1">&#39;todo&#39;</span><span class="p">,</span> <span class="n">smsTo</span><span class="o">=</span><span class="n">smsTo</span><span class="p">,</span><span class="n">smsText</span><span class="o">=</span><span class="n">smsText</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onAlarmEscalateIt"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateIt">[docs]</a>	<span class="k">def</span> <span class="nf">build_onAlarmEscalateIt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">escalationSteps</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onAlarmEscalateIt">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmEscalateIt">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onAlarmEscalateIt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">escalationSteps</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm escalate it&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -651,8 +731,11 @@
 			<span class="s1">&#39;subrules&#39;</span><span class="p">:</span> <span class="n">sub_rules</span><span class="p">,</span>
 		<span class="p">})</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onAlarmDurationIncreaseSeverity"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmDurationIncreaseSeverity">[docs]</a>	<span class="k">def</span> <span class="nf">build_onAlarmDurationIncreaseSeverity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">alarmDurationMinutes</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onAlarmDurationIncreaseSeverity">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmDurationIncreaseSeverity">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onAlarmDurationIncreaseSeverity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">alarmDurationMinutes</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm duration increase severity&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -669,9 +752,12 @@
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_INCREASE_ALARM_SEVERITY</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onGeofenceSendEmail"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onGeofenceSendEmail">[docs]</a>	<span class="k">def</span> <span class="nf">build_onGeofenceSendEmail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geofence</span><span class="p">,</span> <span class="n">sendTo</span><span class="p">,</span> <span class="n">sendCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sendBCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replyTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onGeofenceSendEmail">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onGeofenceSendEmail">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onGeofenceSendEmail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geofence</span><span class="p">,</span> <span class="n">sendTo</span><span class="p">,</span> <span class="n">sendCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sendBCC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replyTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 			<span class="n">subject</span><span class="o">=</span><span class="s1">&#39;New geofence violation from #</span><span class="si">{source.name}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s1">&#39;New geofence violation from #</span><span class="si">{source.name}</span><span class="s1">&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On geofence send email&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -700,8 +786,11 @@
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_ON_GEOFENCE_SEND_EMAIL</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_calculateEnergyConsumption"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_calculateEnergyConsumption">[docs]</a>	<span class="k">def</span> <span class="nf">build_calculateEnergyConsumption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputFragment</span><span class="o">=</span><span class="s1">&#39;c8y_EnergyCounter&#39;</span><span class="p">,</span> <span class="n">inputSeries</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="n">timeIntervalMinutes</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">outputFragment</span><span class="o">=</span><span class="s1">&#39;c8y_EnergyConsumption&#39;</span><span class="p">,</span> <span class="n">outputSeries</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_calculateEnergyConsumption">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_calculateEnergyConsumption">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_calculateEnergyConsumption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputFragment</span><span class="o">=</span><span class="s1">&#39;c8y_EnergyCounter&#39;</span><span class="p">,</span> <span class="n">inputSeries</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="n">timeIntervalMinutes</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">outputFragment</span><span class="o">=</span><span class="s1">&#39;c8y_EnergyConsumption&#39;</span><span class="p">,</span> <span class="n">outputSeries</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;Calculate energy consumption&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -723,8 +812,11 @@
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_CALCULATE_ENERGY</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onAlarmExecuteOperation"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmExecuteOperation">[docs]</a>	<span class="k">def</span> <span class="nf">build_onAlarmExecuteOperation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">operation</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onAlarmExecuteOperation">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onAlarmExecuteOperation">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onAlarmExecuteOperation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alarmTypes</span><span class="p">,</span> <span class="n">operation</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On alarm execute operation&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -741,8 +833,11 @@
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_ON_ALARM_EXECUTE_OPERATION</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SmartRulesManager.build_onMeasurementThresholdCreateAlarm"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onMeasurementThresholdCreateAlarm">[docs]</a>	<span class="k">def</span> <span class="nf">build_onMeasurementThresholdCreateAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataPointObjectID</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alarmType</span><span class="o">=</span><span class="s1">&#39;c8y_ThresholdAlarm&#39;</span><span class="p">,</span> <span class="n">alarmText</span><span class="o">=</span><span class="s1">&#39;Thresholds exceeded&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmartRulesManager.build_onMeasurementThresholdCreateAlarm">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.smartrules.html#apamax.eplapplications.smartrules.SmartRulesManager.build_onMeasurementThresholdCreateAlarm">[docs]</a>
+	<span class="k">def</span> <span class="nf">build_onMeasurementThresholdCreateAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataPointObjectID</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alarmType</span><span class="o">=</span><span class="s1">&#39;c8y_ThresholdAlarm&#39;</span><span class="p">,</span> <span class="n">alarmText</span><span class="o">=</span><span class="s1">&#39;Thresholds exceeded&#39;</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Build a smart rule object for the rule &quot;On measurement threshold create alarm&quot;.</span>
 
 <span class="sd">		To deploy it to Cumulocity, call the `~SmartRule.deploy` method.</span>
@@ -760,6 +855,7 @@
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="n">SmartRule</span><span class="p">(</span><span class="n">RULE_THRESHOLD</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
+
 	<span class="nd">@staticmethod</span>
 	<span class="k">def</span> <span class="nf">_seq_to_str</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
 		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -767,7 +863,7 @@
 		<span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_parseSmartRule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dictToParse</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Create a smart rule object by parsing a response from the server.</span>
 
 <span class="sd">		:param dictToParse: Response received from the server.</span>
@@ -796,13 +892,14 @@
 
 		<span class="n">rule</span><span class="o">.</span><span class="n">_extractAndSaveIds</span><span class="p">(</span><span class="n">dictToParse</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">rule</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <ul>
@@ -814,7 +911,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../developing-epl-apps-locally.html">Developing EPL Apps Locally</a></li>
 </ul>
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
@@ -822,13 +919,13 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -843,8 +940,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026 Cumulocity GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2026 Cumulocity GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>apamax.eplapplications.basetest &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=7fae59db" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -68,8 +66,10 @@
 <span class="n">APPLICATION_NAME</span> <span class="o">=</span> <span class="s1">&#39;pysys-test-application&#39;</span>
 <span class="n">APPLICATION_KEY</span> <span class="o">=</span> <span class="s1">&#39;pysys-test-key&#39;</span>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest">[docs]</a><span class="k">class</span> <span class="nc">ApamaC8YBaseTest</span><span class="p">(</span><span class="n">BaseTest</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ApamaC8YBaseTest">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest">[docs]</a>
+<span class="k">class</span> <span class="nc">ApamaC8YBaseTest</span><span class="p">(</span><span class="n">BaseTest</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Base test for EPL applications tests.</span>
 
 <span class="sd">	Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):</span>
@@ -78,7 +78,9 @@
 <span class="sd">	- APAMA_HOME - Only if running a local correlator.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ApamaC8YBaseTest.setup">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.setup">[docs]</a>
+	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 		<span class="c1"># Check if the script is running on Windows</span>
 		<span class="c1"># If it is, print a warning message and exit</span>
@@ -95,8 +97,11 @@
 		<span class="c1"># connect to the platform</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="n">CumulocityPlatform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.createAppKey"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createAppKey">[docs]</a>	<span class="k">def</span> <span class="nf">createAppKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.createAppKey">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createAppKey">[docs]</a>
+	<span class="k">def</span> <span class="nf">createAppKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Checks if the tenant has an external application defined for us and if not, creates it.</span>
 
 <span class="sd">			:param url: The URL to the Cumulocity tenant.</span>
@@ -116,8 +121,11 @@
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Failure to create application key for remote access: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.createProject"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createProject">[docs]</a>	<span class="k">def</span> <span class="nf">createProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">existingProject</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.createProject">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createProject">[docs]</a>
+	<span class="k">def</span> <span class="nf">createProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">existingProject</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Creates a `ProjectHelper` object which mimics the Cumulocity EPL applications environment.</span>
 
 <span class="sd">			Adds all the required bundles and adds the properties to connect and authenticate to the configured Cumulocity tenant.</span>
@@ -151,8 +159,11 @@
 		<span class="p">])</span>
 		<span class="k">return</span> <span class="n">apama_project</span></div>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.addC8YPropertiesToProject"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.addC8YPropertiesToProject">[docs]</a>	<span class="k">def</span> <span class="nf">addC8YPropertiesToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">apamaProject</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;Adds the connection parameters into a project.</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.addC8YPropertiesToProject">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.addC8YPropertiesToProject">[docs]</a>
+	<span class="k">def</span> <span class="nf">addC8YPropertiesToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">apamaProject</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Adds the connection parameters into a project.</span>
 <span class="sd">		</span>
 <span class="sd">		:param apamaProject: The `ProjectHelper` object for a project.</span>
 <span class="sd">		:param params: The dictionary of parameters to override and add to those defined for the project::</span>
@@ -165,7 +176,7 @@
 <span class="sd">			&lt;property name=&quot;CUMULOCITY_MEASUREMENT_FORMAT&quot; value=&quot;&quot;/&gt;</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">def</span> <span class="nf">create_properties_file</span><span class="p">(</span><span class="n">output_name</span><span class="p">,</span> <span class="n">dest_file</span><span class="p">,</span> <span class="n">properties</span><span class="p">):</span>
-			<span class="sd">&quot;&quot;&quot;Creates a local properties file and copies it to the destination.&quot;&quot;&quot;</span>
+<span class="w">			</span><span class="sd">&quot;&quot;&quot;Creates a local properties file and copies it to the destination.&quot;&quot;&quot;</span>
 			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">output_name</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">propfile</span><span class="p">:</span>
 				<span class="n">propfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\ufeff\n</span><span class="s1">&#39;</span><span class="p">)</span>
 				<span class="k">for</span> <span class="n">prop</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -214,8 +225,11 @@
 			<span class="n">n2props</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 			<span class="n">create_properties_file</span><span class="p">(</span><span class="s2">&quot;CumulocityNotifications2.properties&quot;</span><span class="p">,</span> <span class="s2">&quot;/connectivity/CumulocityNotifications2.0/CumulocityNotifications2.properties&quot;</span><span class="p">,</span> <span class="n">n2props</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.getTestSubjectEPLApps"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getTestSubjectEPLApps">[docs]</a>	<span class="k">def</span> <span class="nf">getTestSubjectEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.getTestSubjectEPLApps">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getTestSubjectEPLApps">[docs]</a>
+	<span class="k">def</span> <span class="nf">getTestSubjectEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Retrieves a list of paths to the EPL apps being tested.</span>
 
 <span class="sd">			If the user defines the `&lt;user-data name=&quot;EPLApp&quot; value=&quot;EPLAppToBeTested&quot;/&gt;` tag in the pysystest.xml file, </span>
@@ -246,8 +260,11 @@
 					<span class="n">eplAppsPaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">EPL_APPS</span><span class="p">,</span> <span class="n">eplApp</span><span class="p">))</span>
 		<span class="k">return</span> <span class="n">eplAppsPaths</span></div>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.prepareTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.prepareTenant">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.prepareTenant">[docs]</a>
+	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Prepares the tenant for a test by deleting all devices created by previous tests and clearing all active alarms.</span>
 <span class="sd">		However, you can disable the default behavior of clearing all active alarms by setting the `clearAllActiveAlarmsDuringTenantPreparation` property to `false` in the PySys project configuration.</span>
 
@@ -260,8 +277,11 @@
 		<span class="c1"># Delete devices that were created by tests</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestDevices</span><span class="p">(</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.createTestDevice"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice">[docs]</a>	<span class="k">def</span> <span class="nf">createTestDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;PySysTestDevice&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.createTestDevice">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.createTestDevice">[docs]</a>
+	<span class="k">def</span> <span class="nf">createTestDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;PySysTestDevice&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Creates a Cumulocity device for testing.</span>
 
 <span class="sd">		:param str name: The name of the device. The name of the device is prefixed with `PYSYS_` so that the framework can identify and clean up test devices.</span>
@@ -288,8 +308,11 @@
 			<span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/inventory/managedObjects/</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">/childDevices&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;managedObject&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">child</span><span class="p">}})</span>
 		<span class="k">return</span> <span class="nb">id</span></div>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.getAlarms"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms">[docs]</a>	<span class="k">def</span> <span class="nf">getAlarms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.getAlarms">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getAlarms">[docs]</a>
+	<span class="k">def</span> <span class="nf">getAlarms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Gets all alarms with matching parameters.</span>
 
 <span class="sd">		For example::</span>
@@ -329,8 +352,11 @@
 			
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getCumulocityObjectCollection</span><span class="p">(</span><span class="s1">&#39;/alarm/alarms&#39;</span><span class="p">,</span> <span class="n">queryParams</span><span class="o">=</span><span class="n">queryParams</span><span class="p">,</span> <span class="n">responseKey</span><span class="o">=</span><span class="s1">&#39;alarms&#39;</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.getOperations"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations">[docs]</a>	<span class="k">def</span> <span class="nf">getOperations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceId</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fragmentType</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.getOperations">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getOperations">[docs]</a>
+	<span class="k">def</span> <span class="nf">getOperations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceId</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fragmentType</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateFrom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dateTo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Gets all operations with matching parameters.</span>
 
 <span class="sd">		For example::</span>
@@ -367,8 +393,11 @@
 		
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getCumulocityObjectCollection</span><span class="p">(</span><span class="s1">&#39;/devicecontrol/operations&#39;</span><span class="p">,</span> <span class="n">queryParams</span><span class="o">=</span><span class="n">queryParams</span><span class="p">,</span> <span class="n">responseKey</span><span class="o">=</span><span class="s1">&#39;operations&#39;</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.copyWithReplace"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.copyWithReplace">[docs]</a>	<span class="k">def</span> <span class="nf">copyWithReplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceFile</span><span class="p">,</span> <span class="n">targetFile</span><span class="p">,</span> <span class="n">replacementDict</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YBaseTest.copyWithReplace">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.copyWithReplace">[docs]</a>
+	<span class="k">def</span> <span class="nf">copyWithReplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceFile</span><span class="p">,</span> <span class="n">targetFile</span><span class="p">,</span> <span class="n">replacementDict</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Copies the source file to the target file and replaces the placeholder strings with the actual values.</span>
 
 <span class="sd">			:param sourceFile: The path to the source file to copy.</span>
@@ -385,9 +414,10 @@
 				<span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">marker</span><span class="si">}{</span><span class="n">key</span><span class="si">}{</span><span class="n">marker</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 			<span class="k">return</span> <span class="n">line</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sourceFile</span><span class="p">,</span> <span class="n">targetFile</span><span class="p">,</span> <span class="n">mappers</span><span class="o">=</span><span class="p">[</span><span class="n">mapper</span><span class="p">])</span></div>
+
 		
 	<span class="k">def</span> <span class="nf">_getCumulocityObjectCollection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resourceUrl</span><span class="p">,</span> <span class="n">queryParams</span><span class="p">,</span> <span class="n">responseKey</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Gets all Cumulocity object collection.</span>
 
 <span class="sd">			Fetches all pages of the collection.</span>
@@ -427,7 +457,7 @@
 		<span class="k">return</span> <span class="n">result</span>
 
 	<span class="k">def</span> <span class="nf">_clearActiveAlarms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Clears all active alarms as part of a pre-test tenant cleanup.</span>
 
 <span class="sd">			:param tenant: The Cumulocity tenant.</span>
@@ -443,7 +473,7 @@
 		<span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;/alarm/alarms?status=ACTIVE&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;CLEARED&quot;</span><span class="p">})</span>
 
 	<span class="k">def</span> <span class="nf">_deleteTestDevices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Deletes all ManagedObjects that have name prefixed with &quot;PYSYS_&quot; and the &#39;c8y_isDevice&#39; param as part of pre-test tenant cleanup.</span>
 
 <span class="sd">			:param tenant: The Cumulocity tenant.</span>
@@ -461,7 +491,7 @@
 			<span class="n">resp</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/inventory/managedObjects/</span><span class="si">{</span><span class="n">deviceId</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_deleteTestEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Deletes all EPL apps with name prefixed by &quot;PYSYS_&quot; or &quot;PYSYS_TEST&quot;</span>
 <span class="sd">			as part of a pre-test tenant cleanup. </span>
 
@@ -483,8 +513,10 @@
 		<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">appsToDelete</span><span class="p">:</span>
 			<span class="n">eplapps</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ApamaC8YBaseTest.getUTCTime"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getUTCTime">[docs]</a>	<span class="k">def</span> <span class="nf">getUTCTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; </span>
+<div class="viewcode-block" id="ApamaC8YBaseTest.getUTCTime">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.ApamaC8YBaseTest.getUTCTime">[docs]</a>
+	<span class="k">def</span> <span class="nf">getUTCTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">			Gets a Cumulocity-compliant UTC timestamp string for the current time or the specified time.</span>
 
 <span class="sd">			:param timestamp: The epoc timestamp to get timestamp string for. Use current time if not specified.</span>
@@ -498,23 +530,32 @@
 			<span class="n">t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">timespec</span><span class="o">=</span><span class="s1">&#39;milliseconds&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;+00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">)</span></div>
 
+
 	<span class="k">def</span> <span class="nf">_maybePauseDuringTest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBoolProperty</span><span class="p">(</span><span class="s1">&#39;pauseDuringTest&#39;</span><span class="p">):</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;*** Pausing to allow manual validation before correlator is terminated. Press ENTER when done:&quot;</span><span class="p">)</span>
 			<span class="nb">input</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="LocalCorrelatorSimpleTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest">[docs]</a><span class="k">class</span> <span class="nc">LocalCorrelatorSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot; </span>
+
+<div class="viewcode-block" id="LocalCorrelatorSimpleTest">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest">[docs]</a>
+<span class="k">class</span> <span class="nc">LocalCorrelatorSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">		Base test for running test with no pysystest.py with local correlator connected to Cumulocity.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="LocalCorrelatorSimpleTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LocalCorrelatorSimpleTest.setup">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.setup">[docs]</a>
+	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">LocalCorrelatorSimpleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 		<span class="c1"># Prepare the tenant for the test by performing a pre-test cleanup of artifacts from previous tests</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="LocalCorrelatorSimpleTest.execute"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LocalCorrelatorSimpleTest.execute">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.execute">[docs]</a>
+	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Runs all the tests in the Input directory against the applications configured in the EPL_APPS </span>
 <span class="sd">			directory or with the `EPLApps` directive. </span>
 <span class="sd">		&quot;&quot;&quot;</span>
@@ -554,15 +595,21 @@
 				<span class="k">for</span> <span class="n">monitor</span> <span class="ow">in</span> <span class="n">activeTestMonitors</span><span class="p">:</span>
 					<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="s1">&#39;c8y-correlator.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Removed monitor </span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">process</span><span class="o">=</span><span class="n">correlator</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LocalCorrelatorSimpleTest.validate"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.validate">[docs]</a>	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LocalCorrelatorSimpleTest.validate">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.validate">[docs]</a>
+	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Checks that no errors were logged to the correlator log file.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking for errors&quot;</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="s1">&#39;c8y-correlator.log&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39; (ERROR|FATAL) .*&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LocalCorrelatorSimpleTest.addEPLAppsToProject"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.addEPLAppsToProject">[docs]</a>	<span class="k">def</span> <span class="nf">addEPLAppsToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eplApps</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LocalCorrelatorSimpleTest.addEPLAppsToProject">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.addEPLAppsToProject">[docs]</a>
+	<span class="k">def</span> <span class="nf">addEPLAppsToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eplApps</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Adds the EPL app(s) being tested to a project. </span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">for</span> <span class="n">eplApp</span> <span class="ow">in</span> <span class="n">eplApps</span><span class="p">:</span>
@@ -572,8 +619,11 @@
 			<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Error adding EPL app </span><span class="si">{</span><span class="n">eplApp</span><span class="si">}</span><span class="s1"> to test project: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile">[docs]</a>	<span class="k">def</span> <span class="nf">getMonitorsFromInjectedFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">correlator</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.LocalCorrelatorSimpleTest.getMonitorsFromInjectedFile">[docs]</a>
+	<span class="k">def</span> <span class="nf">getMonitorsFromInjectedFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">correlator</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Retrieves a list of active monitors in a correlator, added from a particular mon file </span>
 <span class="sd">			using a GET request to http://correlator.host:correlator.port.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
@@ -603,14 +653,20 @@
 		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">(</span><span class="n">BLOCKED</span><span class="p">,</span> <span class="s1">&#39;Error retrieving injected monitors: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
 		<span class="k">finally</span><span class="p">:</span>
-			<span class="k">return</span> <span class="n">monitors</span></div></div>
+			<span class="k">return</span> <span class="n">monitors</span></div>
+</div>
 
-<div class="viewcode-block" id="EPLAppsSimpleTest"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest">[docs]</a><span class="k">class</span> <span class="nc">EPLAppsSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EPLAppsSimpleTest">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest">[docs]</a>
+<span class="k">class</span> <span class="nc">EPLAppsSimpleTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Base test for running test with no pysystest.py on EPL apps running in Cumulocity.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EPLAppsSimpleTest.setup"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EPLAppsSimpleTest.setup">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.setup">[docs]</a>
+	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">EPLAppsSimpleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 		<span class="c1"># connect to the platform</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">tests</span> <span class="o">=</span> <span class="kc">None</span>
@@ -622,8 +678,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span> <span class="o">=</span> <span class="n">EPLApps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">())</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="EPLAppsSimpleTest.prepareTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EPLAppsSimpleTest.prepareTenant">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.prepareTenant">[docs]</a>
+	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Prepares the tenant for a test by deleting all devices created by previous tests, deleting all EPL apps which have been uploaded by tests, and clearing all active alarms. </span>
 <span class="sd">			</span>
 <span class="sd">			This is done first so that it is not possible for existing test apps to raise alarms or create devices.</span>
@@ -631,8 +690,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_deleteTestEPLApps</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">EPLAppsSimpleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">prepareTenant</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EPLAppsSimpleTest.execute"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EPLAppsSimpleTest.execute">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.execute">[docs]</a>
+	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Runs all the tests in the Input directory against the applications configured in the EPL_APPS </span>
 <span class="sd">			directory or with the `EPLApps` directive using EPL apps to run each test.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
@@ -664,16 +726,22 @@
 
 			<span class="c1"># wait until the test completes</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">waitForGrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;Removed monitor eplfiles.&#39;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span></div>
+
 		
-<div class="viewcode-block" id="EPLAppsSimpleTest.validate"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.validate">[docs]</a>	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EPLAppsSimpleTest.validate">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.validate">[docs]</a>
+	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Ensures that no tests failed.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking for errors&quot;</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">assertGrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getApamaLogFile</span><span class="p">(),</span> <span class="n">expr</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39; (ERROR|FATAL) .* eplfiles\.&#39;</span><span class="p">,</span> <span class="n">contains</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
 		
-<div class="viewcode-block" id="EPLAppsSimpleTest.shutdown"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.shutdown">[docs]</a>	<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EPLAppsSimpleTest.shutdown">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.basetest.html#apamax.eplapplications.basetest.EPLAppsSimpleTest.shutdown">[docs]</a>
+	<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Deactivates all uploaded EPL apps when the test terminates.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deactivating EPL apps&quot;</span><span class="p">)</span>
@@ -683,14 +751,16 @@
 				<span class="k">try</span><span class="p">:</span>
 					<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;inactive&#39;</span><span class="p">)</span>
 				<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-					<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to deactivate app </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+					<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to deactivate app </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <ul>
@@ -702,7 +772,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../developing-epl-apps-locally.html">Developing EPL Apps Locally</a></li>
 </ul>
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
@@ -710,13 +780,13 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -731,8 +801,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026 Cumulocity GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2026 Cumulocity GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

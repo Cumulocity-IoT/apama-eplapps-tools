@@ -1,26 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>apamax.eplapplications.platform &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=7fae59db" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="apamax.eplapplications.smartrules" href="apamax.eplapplications.smartrules.html" />
     <link rel="prev" title="apamax.eplapplications.perf.publisher" href="apamax.eplapplications.perf.publisher.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -48,60 +46,60 @@
           <div class="body" role="main">
             
   <section id="module-apamax.eplapplications.platform">
-<span id="apamax-eplapplications-platform"></span><h1>apamax.eplapplications.platform<a class="headerlink" href="#module-apamax.eplapplications.platform" title="Permalink to this headline">¶</a></h1>
+<span id="apamax-eplapplications-platform"></span><h1>apamax.eplapplications.platform<a class="headerlink" href="#module-apamax.eplapplications.platform" title="Link to this heading">¶</a></h1>
 <section id="log-spooling-request-timeout-secs">
-<h2>LOG_SPOOLING_REQUEST_TIMEOUT_SECS<a class="headerlink" href="#log-spooling-request-timeout-secs" title="Permalink to this headline">¶</a></h2>
+<h2>LOG_SPOOLING_REQUEST_TIMEOUT_SECS<a class="headerlink" href="#log-spooling-request-timeout-secs" title="Link to this heading">¶</a></h2>
 <dl class="py data">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_REQUEST_TIMEOUT_SECS">
-<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_REQUEST_TIMEOUT_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_REQUEST_TIMEOUT_SECS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_REQUEST_TIMEOUT_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_REQUEST_TIMEOUT_SECS" title="Link to this definition">¶</a></dt>
 <dd><p>Timeout (in seconds) for each socket operation when requesting the microservice log, so that a stalled request
 does not stop that thread noticing it has been asked to stop. Bounds each operation, not the whole request.</p>
 </dd></dl>
 
 </section>
 <section id="log-spooling-poll-interval-secs">
-<h2>LOG_SPOOLING_POLL_INTERVAL_SECS<a class="headerlink" href="#log-spooling-poll-interval-secs" title="Permalink to this headline">¶</a></h2>
+<h2>LOG_SPOOLING_POLL_INTERVAL_SECS<a class="headerlink" href="#log-spooling-poll-interval-secs" title="Link to this heading">¶</a></h2>
 <dl class="py data">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_POLL_INTERVAL_SECS">
-<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_POLL_INTERVAL_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_POLL_INTERVAL_SECS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_POLL_INTERVAL_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_POLL_INTERVAL_SECS" title="Link to this definition">¶</a></dt>
 <dd><p>How long (in seconds) the log spooling thread waits between requests for the microservice log.</p>
 </dd></dl>
 
 </section>
 <section id="log-spooling-window-overlap-secs">
-<h2>LOG_SPOOLING_WINDOW_OVERLAP_SECS<a class="headerlink" href="#log-spooling-window-overlap-secs" title="Permalink to this headline">¶</a></h2>
+<h2>LOG_SPOOLING_WINDOW_OVERLAP_SECS<a class="headerlink" href="#log-spooling-window-overlap-secs" title="Link to this heading">¶</a></h2>
 <dl class="py data">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_WINDOW_OVERLAP_SECS">
-<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_WINDOW_OVERLAP_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_WINDOW_OVERLAP_SECS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_WINDOW_OVERLAP_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_WINDOW_OVERLAP_SECS" title="Link to this definition">¶</a></dt>
 <dd><p>How far back (in seconds) each log request overlaps the previous one, to cover the lag before a logged line
 becomes queryable. Duplicates only cost bandwidth; anything below the lag is lost for good.</p>
 </dd></dl>
 
 </section>
 <section id="log-spooling-start-skew-allowance-secs">
-<h2>LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS<a class="headerlink" href="#log-spooling-start-skew-allowance-secs" title="Permalink to this headline">¶</a></h2>
+<h2>LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS<a class="headerlink" href="#log-spooling-start-skew-allowance-secs" title="Link to this heading">¶</a></h2>
 <dl class="py data">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS">
-<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS" title="Link to this definition">¶</a></dt>
 <dd><p>How far back (in seconds) before spooling started the window may reach, allowing for the platform’s clock being
 behind ours. Kept small, as anything here risks collecting the tail of a previous test’s log.</p>
 </dd></dl>
 
 </section>
 <section id="log-spooling-failures-before-rediscovery">
-<h2>LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY<a class="headerlink" href="#log-spooling-failures-before-rediscovery" title="Permalink to this headline">¶</a></h2>
+<h2>LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY<a class="headerlink" href="#log-spooling-failures-before-rediscovery" title="Link to this heading">¶</a></h2>
 <dl class="py data">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY">
-<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#apamax.eplapplications.platform.LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY" title="Link to this definition">¶</a></dt>
 <dd><p>How many consecutive failed log requests before looking for the instance that replaced the one we are on.</p>
 </dd></dl>
 
 </section>
 <section id="cumulocityplatform">
-<h2>CumulocityPlatform<a class="headerlink" href="#cumulocityplatform" title="Permalink to this headline">¶</a></h2>
+<h2>CumulocityPlatform<a class="headerlink" href="#cumulocityplatform" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">CumulocityPlatform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.platform.</span></span><span class="sig-name descname"><span class="pre">CumulocityPlatform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class to create a connection to the Cumulocity platform configured in pysysproject.xml
 and spool the logs from the platform locally.</p>
@@ -120,45 +118,45 @@ self.waitForGrep(self.platform.getApamaLogFile(), expr=’Added monitor eplfiles
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>parent</strong> – The PySys test object using this platform object.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile">
-<span class="sig-name descname"><span class="pre">getApamaLogFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getApamaLogFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getApamaLogFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getApamaLogFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile" title="Link to this definition">¶</a></dt>
 <dd><p>Return the path to the Apama log file within Cumulocity.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection">
-<span class="sig-name descname"><span class="pre">getC8YConnection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getC8YConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getC8YConnection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getC8YConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection" title="Link to this definition">¶</a></dt>
 <dd><p>Return the C8yConnection object for this platform.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.getC8yConnectionDetails">
-<span class="sig-name descname"><span class="pre">getC8yConnectionDetails</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getC8yConnectionDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getC8yConnectionDetails" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getC8yConnectionDetails</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getC8yConnectionDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getC8yConnectionDetails" title="Link to this definition">¶</a></dt>
 <dd><p>Return the (url, tenantid, username, password) defined in the pysysproject.xml)</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName">
-<span class="sig-name descname"><span class="pre">getMicroserviceName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getMicroserviceName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getMicroserviceName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getMicroserviceName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName" title="Link to this definition">¶</a></dt>
 <dd><p>Get the name of the Apama-ctrl microservice being tested.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants">
-<span class="sig-name descname"><span class="pre">getSubscribedTenants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getSubscribedTenants"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getSubscribedTenants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getSubscribedTenants"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants" title="Link to this definition">¶</a></dt>
 <dd><p>Get list of Cumulocity tenants subscribed to the Apama-ctrl microservice if testing against a
 multi-tenant Apama-ctrl microservice.</p>
 <p>If the Apama-ctrl microservice is per-tenant, it returns a list only containing the configured tenant.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List of Cumulocity tenants.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list[<a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a>]</p>
 </dd>
 </dl>
@@ -166,7 +164,7 @@ multi-tenant Apama-ctrl microservice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.getTenant">
-<span class="sig-name descname"><span class="pre">getTenant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getTenant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getTenant" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getTenant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.getTenant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.getTenant" title="Link to this definition">¶</a></dt>
 <dd><p>Get the Cumulocity tenant configured in the pysysproject.xml file.
 :return: The Cumulocity tenant.
 :rtype: <a class="reference internal" href="apamax.eplapplications.tenant.html#apamax.eplapplications.tenant.CumulocityTenant" title="apamax.eplapplications.tenant.CumulocityTenant"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulocityTenant</span></code></a></p>
@@ -174,7 +172,7 @@ multi-tenant Apama-ctrl microservice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.platform.CumulocityPlatform.shutdown">
-<span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.shutdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.shutdown" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/platform.html#CumulocityPlatform.shutdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.platform.CumulocityPlatform.shutdown" title="Link to this definition">¶</a></dt>
 <dd><p>Stop spooling the log files when the test finishes.</p>
 </dd></dl>
 
@@ -188,7 +186,7 @@ multi-tenant Apama-ctrl microservice.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table of Contents</a></h3>
 <ul class="current">
@@ -203,12 +201,39 @@ multi-tenant Apama-ctrl microservice.</p>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.eplapps.html">apamax.eplapplications.eplapps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.perf.html">apamax.eplapplications.perf</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">apamax.eplapplications.platform</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#log-spooling-request-timeout-secs">LOG_SPOOLING_REQUEST_TIMEOUT_SECS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#log-spooling-poll-interval-secs">LOG_SPOOLING_POLL_INTERVAL_SECS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#log-spooling-window-overlap-secs">LOG_SPOOLING_WINDOW_OVERLAP_SECS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#log-spooling-start-skew-allowance-secs">LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#log-spooling-failures-before-rediscovery">LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cumulocityplatform">CumulocityPlatform</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-request-timeout-secs">LOG_SPOOLING_REQUEST_TIMEOUT_SECS</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#apamax.eplapplications.platform.LOG_SPOOLING_REQUEST_TIMEOUT_SECS"><code class="docutils literal notranslate"><span class="pre">LOG_SPOOLING_REQUEST_TIMEOUT_SECS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-poll-interval-secs">LOG_SPOOLING_POLL_INTERVAL_SECS</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#apamax.eplapplications.platform.LOG_SPOOLING_POLL_INTERVAL_SECS"><code class="docutils literal notranslate"><span class="pre">LOG_SPOOLING_POLL_INTERVAL_SECS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-window-overlap-secs">LOG_SPOOLING_WINDOW_OVERLAP_SECS</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#apamax.eplapplications.platform.LOG_SPOOLING_WINDOW_OVERLAP_SECS"><code class="docutils literal notranslate"><span class="pre">LOG_SPOOLING_WINDOW_OVERLAP_SECS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-start-skew-allowance-secs">LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#apamax.eplapplications.platform.LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS"><code class="docutils literal notranslate"><span class="pre">LOG_SPOOLING_START_SKEW_ALLOWANCE_SECS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#log-spooling-failures-before-rediscovery">LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#apamax.eplapplications.platform.LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY"><code class="docutils literal notranslate"><span class="pre">LOG_SPOOLING_FAILURES_BEFORE_REDISCOVERY</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#cumulocityplatform">CumulocityPlatform</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#apamax.eplapplications.platform.CumulocityPlatform"><code class="docutils literal notranslate"><span class="pre">CumulocityPlatform</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile"><code class="docutils literal notranslate"><span class="pre">CumulocityPlatform.getApamaLogFile()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection"><code class="docutils literal notranslate"><span class="pre">CumulocityPlatform.getC8YConnection()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.platform.CumulocityPlatform.getC8yConnectionDetails"><code class="docutils literal notranslate"><span class="pre">CumulocityPlatform.getC8yConnectionDetails()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName"><code class="docutils literal notranslate"><span class="pre">CumulocityPlatform.getMicroserviceName()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants"><code class="docutils literal notranslate"><span class="pre">CumulocityPlatform.getSubscribedTenants()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.platform.CumulocityPlatform.getTenant"><code class="docutils literal notranslate"><span class="pre">CumulocityPlatform.getTenant()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.platform.CumulocityPlatform.shutdown"><code class="docutils literal notranslate"><span class="pre">CumulocityPlatform.shutdown()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.smartrules.html">apamax.eplapplications.smartrules</a></li>
@@ -220,7 +245,7 @@ multi-tenant Apama-ctrl microservice.</p>
 <li class="toctree-l1"><a class="reference internal" href="../developing-epl-apps-locally.html">Developing EPL Apps Locally</a></li>
 </ul>
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -228,13 +253,13 @@ multi-tenant Apama-ctrl microservice.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -256,8 +281,8 @@ multi-tenant Apama-ctrl microservice.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026 Cumulocity GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2026 Cumulocity GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

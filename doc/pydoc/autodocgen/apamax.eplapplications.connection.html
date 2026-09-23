@@ -1,26 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>apamax.eplapplications.connection &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=7fae59db" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="apamax.eplapplications.eplapps" href="apamax.eplapplications.eplapps.html" />
     <link rel="prev" title="apamax.eplapplications.basetest" href="apamax.eplapplications.basetest.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -48,16 +46,16 @@
           <div class="body" role="main">
             
   <section id="module-apamax.eplapplications.connection">
-<span id="apamax-eplapplications-connection"></span><h1>apamax.eplapplications.connection<a class="headerlink" href="#module-apamax.eplapplications.connection" title="Permalink to this headline">¶</a></h1>
+<span id="apamax-eplapplications-connection"></span><h1>apamax.eplapplications.connection<a class="headerlink" href="#module-apamax.eplapplications.connection" title="Link to this heading">¶</a></h1>
 <section id="c8yconnection">
-<h2>C8yConnection<a class="headerlink" href="#c8yconnection" title="Permalink to this headline">¶</a></h2>
+<h2>C8yConnection<a class="headerlink" href="#c8yconnection" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="apamax.eplapplications.connection.C8yConnection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.connection.</span></span><span class="sig-name descname"><span class="pre">C8yConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSecs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apamax.eplapplications.connection.</span></span><span class="sig-name descname"><span class="pre">C8yConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSecs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Simple object to create connection to Cumulocity and perform REST requests.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>url</strong> – The Cumulocity tenant url.</p></li>
 <li><p><strong>username</strong> – The username.</p></li>
@@ -70,10 +68,10 @@ Python’s default socket timeout applies.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.connection.C8yConnection.do_get">
-<span class="sig-name descname"><span class="pre">do_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jsonResp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSecs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.do_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.do_get" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jsonResp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSecs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.do_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.do_get" title="Link to this definition">¶</a></dt>
 <dd><p>Perform GET request.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>path</strong> – The path to the resource.</p></li>
 <li><p><strong>params</strong> – The query params.</p></li>
@@ -83,7 +81,7 @@ Python’s default socket timeout applies.</p></li>
 If not specified, the default timeout of this connection is used, if it has one.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The body of the response. If JSON output is expected then parse the JSON string to python object.</p>
 </dd>
 </dl>
@@ -91,10 +89,10 @@ If not specified, the default timeout of this connection is used, if it has one.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.connection.C8yConnection.do_request_json">
-<span class="sig-name descname"><span class="pre">do_request_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.do_request_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.do_request_json" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_request_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.do_request_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.do_request_json" title="Link to this definition">¶</a></dt>
 <dd><p>Perform REST request (POST/GET mainly) with JSON body.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> – The REST method.</p></li>
 <li><p><strong>path</strong> – The path to resource.</p></li>
@@ -103,7 +101,7 @@ If not specified, the default timeout of this connection is used, if it has one.
 <li><p><strong>kwargs</strong> – Any additional kwargs to pass to the <a class="reference internal" href="#apamax.eplapplications.connection.C8yConnection.request" title="apamax.eplapplications.connection.C8yConnection.request"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code></a> method.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Response body string.</p>
 </dd>
 </dl>
@@ -111,10 +109,10 @@ If not specified, the default timeout of this connection is used, if it has one.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apamax.eplapplications.connection.C8yConnection.request">
-<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useLocationHeaderPostResp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSecs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.request" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useLocationHeaderPostResp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeoutSecs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apamax/eplapplications/connection.html#C8yConnection.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apamax.eplapplications.connection.C8yConnection.request" title="Link to this definition">¶</a></dt>
 <dd><p>Perform an HTTP request. In case of POST request, return the id of the created resource.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> – The method.</p></li>
 <li><p><strong>path</strong> – The path of the resource.</p></li>
@@ -126,7 +124,7 @@ If not specified, the default timeout of this connection is used, if it has one.
 If not specified, the default timeout of this connection is used, if it has one.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Body of the response. In case of POST request, id of the resource specified by the Location header.</p>
 </dd>
 </dl>
@@ -142,7 +140,7 @@ If not specified, the default timeout of this connection is used, if it has one.
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table of Contents</a></h3>
 <ul class="current">
@@ -154,7 +152,15 @@ If not specified, the default timeout of this connection is used, if it has one.
 <li class="toctree-l2 current"><a class="reference internal" href="apamax.eplapplications.html">apamax.eplapplications</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.basetest.html">apamax.eplapplications.basetest</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">apamax.eplapplications.connection</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#c8yconnection">C8yConnection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c8yconnection">C8yConnection</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#apamax.eplapplications.connection.C8yConnection"><code class="docutils literal notranslate"><span class="pre">C8yConnection</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.connection.C8yConnection.do_get"><code class="docutils literal notranslate"><span class="pre">C8yConnection.do_get()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.connection.C8yConnection.do_request_json"><code class="docutils literal notranslate"><span class="pre">C8yConnection.do_request_json()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#apamax.eplapplications.connection.C8yConnection.request"><code class="docutils literal notranslate"><span class="pre">C8yConnection.request()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="apamax.eplapplications.eplapps.html">apamax.eplapplications.eplapps</a></li>
@@ -169,7 +175,7 @@ If not specified, the default timeout of this connection is used, if it has one.
 <li class="toctree-l1"><a class="reference internal" href="../developing-epl-apps-locally.html">Developing EPL Apps Locally</a></li>
 </ul>
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -177,13 +183,13 @@ If not specified, the default timeout of this connection is used, if it has one.
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -205,8 +211,8 @@ If not specified, the default timeout of this connection is used, if it has one.
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026 Cumulocity GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2026 Cumulocity GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

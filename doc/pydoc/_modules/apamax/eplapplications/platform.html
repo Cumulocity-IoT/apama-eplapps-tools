@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>apamax.eplapplications.platform &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=7fae59db" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -74,8 +72,10 @@
 <span class="c1">#: HTTP statuses meaning an application is not one whose log we could spool, rather than a transient problem.</span>
 <span class="n">_NOT_OUR_APPLICATION_STATUSES</span> <span class="o">=</span> <span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span>
 
-<div class="viewcode-block" id="CumulocityPlatform"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform">[docs]</a><span class="k">class</span> <span class="nc">CumulocityPlatform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CumulocityPlatform">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform">[docs]</a>
+<span class="k">class</span> <span class="nc">CumulocityPlatform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Class to create a connection to the Cumulocity platform configured in pysysproject.xml</span>
 <span class="sd">	and spool the logs from the platform locally.</span>
 
@@ -94,14 +94,17 @@
 <span class="sd">	:param parent: The PySys test object using this platform object.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CumulocityPlatform.getC8yConnectionDetails"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getC8yConnectionDetails">[docs]</a>	<span class="k">def</span> <span class="nf">getC8yConnectionDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CumulocityPlatform.getC8yConnectionDetails">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getC8yConnectionDetails">[docs]</a>
+	<span class="k">def</span> <span class="nf">getC8yConnectionDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Return the (url, tenantid, username, password) defined in the pysysproject.xml)</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_SERVER_URL</span><span class="p">,</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_USERNAME</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;/&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_USERNAME</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_USERNAME</span><span class="p">,</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">CUMULOCITY_PASSWORD</span><span class="p">)</span></div>
+
 
 	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
 
@@ -124,10 +127,10 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">addCleanupFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">)</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remoteTenantId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tenant</span><span class="o">.</span><span class="n">getTenantId</span><span class="p">()</span>
 
-		<span class="sd">&quot;&quot;&quot; All tenants that can be used for testing &quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; All tenants that can be used for testing &quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span> <span class="o">=</span> <span class="p">[]</span>
 
-		<span class="sd">&quot;&quot;&quot; Protects initialisation and mutation of __subscribedTenants &quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; Protects initialisation and mutation of __subscribedTenants &quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">_applicationId</span> <span class="o">=</span> <span class="kc">None</span>
@@ -167,7 +170,7 @@
 				<span class="n">detailMessage</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;waiting for the log of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_microserviceName</span><span class="si">}</span><span class="s1"> instance </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_instanceName</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_defaultTimeoutSecs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		The PySys signal timeout. Imported here, not at module scope, so this module stays importable without</span>
 <span class="sd">		PySys - the eplapp command line tool pulls it in and does not require PySys.</span>
 
@@ -177,7 +180,7 @@
 		<span class="k">return</span> <span class="n">TIMEOUTS</span><span class="p">[</span><span class="s1">&#39;WaitForSignal&#39;</span><span class="p">]</span>
 
 	<span class="k">def</span> <span class="nf">_findRunningInstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">applicationId</span><span class="p">,</span> <span class="n">timeoutSecs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Find the name of the instance (a Kubernetes pod) to spool the microservice log from.</span>
 
 <span class="sd">		Waits for exactly one instance: a starting microservice reports none, a restarting one briefly reports two.</span>
@@ -228,7 +231,7 @@
 			<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_logSpoolingThread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stopping</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; When doing non-local testing, this method implements a thread that is responsible for regularly grabbing</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; When doing non-local testing, this method implements a thread that is responsible for regularly grabbing</span>
 <span class="sd">			the latest microservice log snippets, and writing it to a single appending log file &quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">__spoolLogs</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -278,21 +281,33 @@
 			<span class="c1"># the test, since each request opens a new connection and so cannot be interrupted once it is under way</span>
 			<span class="k">if</span> <span class="n">stopping</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">LOG_SPOOLING_POLL_INTERVAL_SECS</span><span class="p">):</span> <span class="k">break</span>
 
-<div class="viewcode-block" id="CumulocityPlatform.shutdown"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.shutdown">[docs]</a>	<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Stop spooling the log files when the test finishes. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CumulocityPlatform.shutdown">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.shutdown">[docs]</a>
+	<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; Stop spooling the log files when the test finishes. &quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">__spoolLogs</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="CumulocityPlatform.getC8YConnection"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection">[docs]</a>	<span class="k">def</span> <span class="nf">getC8YConnection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Return the C8yConnection object for this platform. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CumulocityPlatform.getC8YConnection">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getC8YConnection">[docs]</a>
+	<span class="k">def</span> <span class="nf">getC8YConnection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; Return the C8yConnection object for this platform. &quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c8yConn</span></div>
 
-<div class="viewcode-block" id="CumulocityPlatform.getApamaLogFile"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile">[docs]</a>	<span class="k">def</span> <span class="nf">getApamaLogFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Return the path to the Apama log file within Cumulocity.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CumulocityPlatform.getApamaLogFile">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getApamaLogFile">[docs]</a>
+	<span class="k">def</span> <span class="nf">getApamaLogFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; Return the path to the Apama log file within Cumulocity.&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;platform.log&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CumulocityPlatform.getMicroserviceName"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName">[docs]</a>	<span class="k">def</span> <span class="nf">getMicroserviceName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Get the name of the Apama-ctrl microservice being tested. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CumulocityPlatform.getMicroserviceName">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getMicroserviceName">[docs]</a>
+	<span class="k">def</span> <span class="nf">getMicroserviceName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; Get the name of the Apama-ctrl microservice being tested. &quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microserviceName</span></div>
+
 
 	<span class="c1"># Check if microservice supports EPL apps (undocumented)</span>
 	<span class="k">def</span> <span class="nf">supportsEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -306,16 +321,21 @@
 	<span class="k">def</span> <span class="nf">isMultiTenantMicroservice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isMultiTenantMicroservice</span>
 
-<div class="viewcode-block" id="CumulocityPlatform.getTenant"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getTenant">[docs]</a>	<span class="k">def</span> <span class="nf">getTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CumulocityPlatform.getTenant">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getTenant">[docs]</a>
+	<span class="k">def</span> <span class="nf">getTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get the Cumulocity tenant configured in the pysysproject.xml file.</span>
 <span class="sd">		:return: The Cumulocity tenant.</span>
 <span class="sd">		:rtype: :class:`~apamax.eplapplications.tenant.CumulocityTenant`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tenant</span></div>
 
-<div class="viewcode-block" id="CumulocityPlatform.getSubscribedTenants"><a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants">[docs]</a>	<span class="k">def</span> <span class="nf">getSubscribedTenants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CumulocityPlatform.getSubscribedTenants">
+<a class="viewcode-back" href="../../../autodocgen/apamax.eplapplications.platform.html#apamax.eplapplications.platform.CumulocityPlatform.getSubscribedTenants">[docs]</a>
+	<span class="k">def</span> <span class="nf">getSubscribedTenants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get list of Cumulocity tenants subscribed to the Apama-ctrl microservice if testing against a</span>
 <span class="sd">		multi-tenant Apama-ctrl microservice.</span>
 
@@ -373,14 +393,16 @@
 							<span class="n">username</span> <span class="o">=</span> <span class="p">(</span><span class="n">tenant</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="s1">&#39;/&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span>
 							<span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CumulocityTenant</span><span class="p">(</span><span class="n">tenant</span><span class="p">[</span><span class="s2">&quot;domain&quot;</span><span class="p">],</span> <span class="n">username</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">tenant</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]))</span>
 
-			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span></div></div>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__subscribedTenants</span></div>
+</div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <ul>
@@ -392,7 +414,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../developing-epl-apps-locally.html">Developing EPL Apps Locally</a></li>
 </ul>
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
@@ -400,13 +422,13 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -421,8 +443,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026 Cumulocity GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2026 Cumulocity GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>
