@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>apamax.eplapplications.perf.basetest &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css?v=7fae59db" />
     
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -97,12 +95,16 @@
 <span class="n">OUTFILE_PERF_COUNTERS</span> <span class="o">=</span> <span class="s1">&#39;perf_counters&#39;</span>
 <span class="n">OUTFILE_ENV_DETAILS</span> <span class="o">=</span> <span class="s1">&#39;env_details&#39;</span>
 
-<div class="viewcode-block" id="ObjectCreator"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ObjectCreator">[docs]</a><span class="k">class</span> <span class="nc">ObjectCreator</span><span class="p">:</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ObjectCreator">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ObjectCreator">[docs]</a>
+<span class="k">class</span> <span class="nc">ObjectCreator</span><span class="p">:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Base class for object creator implementation.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
-<div class="viewcode-block" id="ObjectCreator.createObject"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ObjectCreator.createObject">[docs]</a>	<span class="k">def</span> <span class="nf">createObject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ObjectCreator.createObject">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ObjectCreator.createObject">[docs]</a>
+	<span class="k">def</span> <span class="nf">createObject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Creates an object to publish.</span>
 
 <span class="sd">			:param str device: The ID of the device to create an object for.</span>
@@ -123,10 +125,14 @@
 <span class="sd">			        }</span>
 <span class="sd">			    }</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not Implemeted&#39;</span><span class="p">)</span></div></div>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not Implemeted&#39;</span><span class="p">)</span></div>
+</div>
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest">[docs]</a><span class="k">class</span> <span class="nc">ApamaC8YPerfBaseTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest">[docs]</a>
+<span class="k">class</span> <span class="nc">ApamaC8YPerfBaseTest</span><span class="p">(</span><span class="n">ApamaC8YBaseTest</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Base class for performance tests for EPL apps and smart rules.</span>
 
 <span class="sd">	Requires the following to be set on the project in the pysysproject.xml file (typically from the environment):</span>
@@ -139,7 +145,9 @@
 <span class="sd">	:vartype smartRulesManager: :class:`~apamax.eplapplications.smartrules.SmartRulesManager`</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.setup"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.setup">[docs]</a>	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.setup">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.setup">[docs]</a>
+	<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">addCleanupFunction</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shutdown</span><span class="p">())</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">eplapps</span> <span class="o">=</span> <span class="n">EPLApps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getC8YConnection</span><span class="p">())</span>
@@ -149,8 +157,11 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorCount</span> <span class="o">=</span> <span class="mi">0</span>		<span class="c1"># Number of time performance monitoring is started</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">simulators</span> <span class="o">=</span> <span class="p">{}</span>			<span class="c1"># All simulators per tenant</span></div>
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.prepareTenant"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.prepareTenant">[docs]</a>	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">restartMicroservice</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.prepareTenant">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.prepareTenant">[docs]</a>
+	<span class="k">def</span> <span class="nf">prepareTenant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">restartMicroservice</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Prepares the tenant for a performance test by deleting all devices created by previous tests, deleting all EPL test applications, and clearing all active alarms.</span>
 
 <span class="sd">			This must be called by the test before the application is deployed.</span>
@@ -188,8 +199,9 @@
 		<span class="k">if</span> <span class="n">restartMicroservice</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">_restartApamaMicroserviceImpl</span><span class="p">()</span></div>
 
+
 	<span class="k">def</span> <span class="nf">_deleteMeasurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Clears all measurements that we raised on teant as part of a pre-test tenant cleanup.</span>
 
 <span class="sd">			:param tenant: The Cumulocity tenant.</span>
@@ -200,7 +212,7 @@
 		<span class="n">connection</span><span class="o">.</span><span class="n">do_request_json</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="s1">&#39;/measurement/measurements?type=type_device_temperature&#39;</span><span class="p">,</span> <span class="p">{})</span>
 
 	<span class="k">def</span> <span class="nf">_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Performs common cleanup during test shutdown, like stopping performance monitoring thread, deactivating EPL test apps, and generating final HTML report.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span><span class="p">:</span>
@@ -213,7 +225,7 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">_stopSimulators</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_stopSimulators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tenantId</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Stop running simulators for the specified tenant ID. &quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; Stop running simulators for the specified tenant ID. &quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="n">tenantId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulators</span><span class="p">:</span>
 			<span class="n">simulators</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulators</span><span class="p">[</span><span class="n">tenantId</span><span class="p">]</span>
 			<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">simulators</span><span class="p">:</span>
@@ -227,7 +239,7 @@
 		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_deleteTestEPLApps</span><span class="p">(</span><span class="n">tenant</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_disableTestSmartRules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; As part of test cleanup, disable smart rules created by the framework for all tenants.&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; As part of test cleanup, disable smart rules created by the framework for all tenants.&quot;&quot;&quot;</span>
 		<span class="k">for</span> <span class="n">tenant</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getSubscribedTenants</span><span class="p">():</span>
 			<span class="n">sm</span> <span class="o">=</span> <span class="n">SmartRulesManager</span><span class="p">(</span><span class="n">tenant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
 			<span class="n">rules</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">getAllSmartRules</span><span class="p">(</span><span class="n">withLocalRules</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -237,7 +249,7 @@
 					<span class="n">rule</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
 
 	<span class="k">def</span> <span class="nf">_deleteTestSmartRules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Delete smart rules created by the framework.</span>
 <span class="sd">		</span>
 <span class="sd">		:param tenant: The Cumulocity tenant. If no tenant is specified, smart rules are deleted from the tenant configured in the pysysproject.xml file.</span>
@@ -253,14 +265,17 @@
 			<span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">_isTestSmartRule</span><span class="p">():</span>
 				<span class="n">rule</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.restartApamaMicroservice"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.restartApamaMicroservice">[docs]</a>	<span class="k">def</span> <span class="nf">restartApamaMicroservice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.restartApamaMicroservice">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.restartApamaMicroservice">[docs]</a>
+	<span class="k">def</span> <span class="nf">restartApamaMicroservice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Restarts the Apama-ctrl microservice and waits for it to come back up.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_restartApamaMicroserviceImpl</span><span class="p">()</span></div>
 
+
 	<span class="k">def</span> <span class="nf">_restartApamaMicroserviceImpl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; Restarts Apama-ctrl microservice and wait for it to come back up. &quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot; Restarts Apama-ctrl microservice and wait for it to come back up. &quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">isSmartrulesOnlyMicroservice</span><span class="p">():</span>
 			<span class="c1"># We cannot restart smartrules microservice</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot restart </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">getMicroserviceName</span><span class="p">()</span><span class="si">}</span><span class="s1"> microservice as it is not supported.&#39;</span><span class="p">)</span>
@@ -284,7 +299,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Apama-ctrl microservice is successfully restarted&#39;</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">_deactivateTestEPLApps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Deactivates all EPL test apps as part of test cleanup.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">supportsEPLApps</span><span class="p">():</span>
@@ -298,8 +313,10 @@
 						<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to deactivate app </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startMeasurementSimulator"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startMeasurementSimulator">[docs]</a>	<span class="k">def</span> <span class="nf">startMeasurementSimulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startMeasurementSimulator">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startMeasurementSimulator">[docs]</a>
+	<span class="k">def</span> <span class="nf">startMeasurementSimulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Starts a measurement simulator process to publish simulated measurements to Cumulocity.</span>
 
 <span class="sd">			The simulator uses an instance of the provided measurement creator class to create new measurements to send, </span>
@@ -352,8 +369,11 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startPublisher</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="s1">&#39;/measurement/measurements&#39;</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">processingMode</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startEventSimulator"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startEventSimulator">[docs]</a>	<span class="k">def</span> <span class="nf">startEventSimulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startEventSimulator">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startEventSimulator">[docs]</a>
+	<span class="k">def</span> <span class="nf">startEventSimulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Starts an event simulator process to publish simulated events to Cumulocity.</span>
 
 <span class="sd">			The simulator uses an instance of the provided event creator class to create new events to send, </span>
@@ -404,9 +424,12 @@
 <span class="sd">				    )</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startPublisher</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="s1">&#39;/event/events&#39;</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">processingMode</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span></div>
+
 	
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startAlarmSimulator"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startAlarmSimulator">[docs]</a>	<span class="k">def</span> <span class="nf">startAlarmSimulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startAlarmSimulator">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startAlarmSimulator">[docs]</a>
+	<span class="k">def</span> <span class="nf">startAlarmSimulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span> <span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Starts an alarm simulator process to publish simulated alarms to Cumulocity.</span>
 
 <span class="sd">			The simulator uses an instance of the provided alarm creator class to create new alarms to send, </span>
@@ -456,8 +479,9 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startPublisher</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="s1">&#39;/alarm/alarms&#39;</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">processingMode</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="n">tenant</span><span class="p">)</span></div>
 
+
 	<span class="k">def</span> <span class="nf">_startPublisher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">perDeviceRate</span><span class="p">,</span> <span class="n">resourceUrl</span><span class="p">,</span> <span class="n">creatorFile</span><span class="p">,</span> <span class="n">creatorClassName</span><span class="p">,</span> <span class="n">creatorParams</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">processingMode</span><span class="o">=</span><span class="s1">&#39;CEP&#39;</span><span class="p">,</span><span class="n">tenant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Starts a publisher process to publish simulated data to Cumulocity using provided object creator class.</span>
 
 <span class="sd">			:param list[str] devices: List of device IDs.</span>
@@ -488,7 +512,7 @@
 		<span class="c1"># Add python path from parent</span>
 		<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="n">env</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">]:</span>
 			<span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PYTHONPATH&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
-				<span class="n">pythonpath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pythonpath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="si">}{</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PYTHONPATH&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+				<span class="n">pythonpath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pythonpath</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="si">}{</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PYTHONPATH&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 
 		<span class="n">env</span><span class="p">[</span><span class="s1">&#39;PYTHONPATH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pythonpath</span>
 		<span class="n">env</span><span class="p">[</span><span class="s1">&#39;PYTHONDONTWRITEBYTECODE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;true&#39;</span>
@@ -517,7 +541,7 @@
 		<span class="k">return</span> <span class="n">p</span>
 	
 	<span class="k">def</span> <span class="nf">_perfMonitorSuffix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noSuffixForFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Gets suffix to add to generated files.</span>
 
 <span class="sd">		:param noSuffixForFirst: Do not generate suffix if first perf monitoring thread is running, defaults to True</span>
@@ -531,7 +555,7 @@
 			<span class="k">return</span> <span class="s1">&#39;&#39;</span>
 	
 	<span class="k">def</span> <span class="nf">_getEnvironmentDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Gets environment details in which test is running.</span>
 
 <span class="sd">			Used for HTML report.</span>
@@ -570,8 +594,10 @@
 		<span class="n">env</span><span class="p">[</span><span class="s1">&#39;Uptime (secs)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uptime</span>
 		<span class="k">return</span> <span class="n">env</span>
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startPerformanceMonitoring"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startPerformanceMonitoring">[docs]</a>	<span class="k">def</span> <span class="nf">startPerformanceMonitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pollingInterval</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.startPerformanceMonitoring">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.startPerformanceMonitoring">[docs]</a>
+	<span class="k">def</span> <span class="nf">startPerformanceMonitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pollingInterval</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Starts a performance monitoring thread that periodically gathers and logs various metrics and publishes </span>
 <span class="sd">			performance statistics at the end.</span>
 
@@ -589,8 +615,9 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">startBackgroundThread</span><span class="p">(</span><span class="s2">&quot;perf_monitoring_thread&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitorPerformance</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;pollingInterval&#39;</span><span class="p">:</span><span class="n">pollingInterval</span><span class="p">})</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfMonitorThread</span></div>
 
+
 	<span class="k">def</span> <span class="nf">_monitorPerformance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stopping</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">pollingInterval</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Implements performance gathering thread.</span>
 <span class="sd">			</span>
 <span class="sd">			:param stopping: To check if thread should be stopped.</span>
@@ -666,7 +693,7 @@
 			<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished performance monitoring&#39;</span><span class="p">)</span>
 	
 	<span class="k">def</span> <span class="nf">_monitor_cpu_usage_impl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stopping</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Implements CPU usage monitoring thread.</span>
 <span class="sd">		</span>
 <span class="sd">		:param stopping: To check if thread should be stopped.</span>
@@ -700,7 +727,7 @@
 					<span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unable to get cpu usage: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
 	<span class="k">def</span> <span class="nf">_generatePerfStatistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Generates performance statistics.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perfMonitorSuffix</span><span class="p">()</span>
@@ -777,8 +804,10 @@
 					<span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
 				<span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.read_json"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.read_json">[docs]</a>	<span class="k">def</span> <span class="nf">read_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">fileDirectory</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.read_json">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.read_json">[docs]</a>
+	<span class="k">def</span> <span class="nf">read_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">fileDirectory</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Reads a JSON file and returns its content.</span>
 
 <span class="sd">			:param fileName: Name of the file.</span>
@@ -790,8 +819,9 @@
 		<span class="n">fileDirectory</span> <span class="o">=</span> <span class="n">fileDirectory</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span>
 		<span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">fileDirectory</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">))</span></div>
 
+
 	<span class="k">def</span> <span class="nf">_confirmStableQueueSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue_name</span><span class="p">,</span> <span class="n">perf_data</span><span class="p">,</span> <span class="n">noise_floor</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ratio_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">discard_fraction</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Checks that the queue sizes are stable or coming down. Logs warning if queue sizes are still increasing.</span>
 
 <span class="sd">			:param: queue_name: The name of the correlator queue.</span>
@@ -838,7 +868,7 @@
 		<span class="c1"># test is not failed because it might be false positive</span>
 
 	<span class="k">def</span> <span class="nf">_to_html_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Generates a HTML list to be embedded in an HTML page from provided values.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="s1">&#39;&#39;</span>
@@ -854,7 +884,7 @@
 		<span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;ul&gt;</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s1">&lt;/ul&gt;&#39;</span>
 	
 	<span class="k">def</span> <span class="nf">_dict_to_html_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">column_names</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Generates a HTML table to be embedded in an HTML page from provided dictionary.</span>
 <span class="sd">		:param: values: Dictionary of values.</span>
 <span class="sd">		:param: column_names: Name of the columns to use.</span>
@@ -880,8 +910,10 @@
 
 		<span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;table&gt;</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s1">&lt;/table&gt;&#39;</span>
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.generateHTMLReport"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.generateHTMLReport">[docs]</a>	<span class="k">def</span> <span class="nf">generateHTMLReport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">testConfigurationDetails</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extraPerformanceMetrics</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.generateHTMLReport">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.generateHTMLReport">[docs]</a>
+	<span class="k">def</span> <span class="nf">generateHTMLReport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">testConfigurationDetails</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extraPerformanceMetrics</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Generates an HTML report of the performance result. The report is generated at the end of the test.</span>
 
 <span class="sd">		When testing for multiple variations, multiple HTML reports are combined into a single HTML report.</span>
@@ -1016,8 +1048,9 @@
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;html_report_data</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_perfMonitorSuffix</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">variation_replacements</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span></div>
 
+
 	<span class="k">def</span> <span class="nf">_generateFinalHTMLReport</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Generates a final HTML report.</span>
 
 <span class="sd">		Combines multiple HTML reports into one.</span>
@@ -1037,16 +1070,16 @@
 		<span class="n">memory_unit</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">isalpha</span><span class="p">,</span> <span class="n">memory_limit_val</span><span class="p">))</span>
 
 		<span class="k">if</span> <span class="n">memory_unit</span> <span class="o">==</span> <span class="s1">&#39;Ti&#39;</span><span class="p">:</span>
-			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">memory_numeric</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="si">}</span><span class="s1">]&#39;</span>
+			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">memory_numeric</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="si">}</span><span class="s1">]&#39;</span>
 		<span class="k">elif</span> <span class="n">memory_unit</span> <span class="o">==</span> <span class="s1">&#39;Gi&#39;</span><span class="p">:</span>
-			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">memory_numeric</span> <span class="o">*</span> <span class="mi">1024</span><span class="si">}</span><span class="s1">]&#39;</span>
+			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">memory_numeric</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="si">}</span><span class="s1">]&#39;</span>
 		<span class="k">elif</span> <span class="n">memory_unit</span> <span class="o">==</span> <span class="s1">&#39;Mi&#39;</span><span class="p">:</span>
 			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">memory_numeric</span><span class="si">}</span><span class="s1">]&#39;</span>
 		<span class="k">else</span><span class="p">:</span>
 			<span class="n">memory_limit_mb</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;includeZero&quot;: true&#39;</span>
 
 		<span class="n">cpu_limit_millis</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">env_details</span><span class="p">[</span><span class="s1">&#39;Microservice CPU Limit&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-		<span class="n">cpu_limit_millis</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">cpu_limit_millis</span> <span class="o">*</span> <span class="mi">1000</span><span class="si">}</span><span class="s1">]&#39;</span>
+		<span class="n">cpu_limit_millis</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;valueRange&quot;: [0, </span><span class="si">{</span><span class="n">cpu_limit_millis</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="si">}</span><span class="s1">]&#39;</span>
 
 		<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
 			<span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -1081,10 +1114,12 @@
 		<span class="p">}</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">copyWithReplace</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">template_dir</span><span class="si">}</span><span class="s1">/template_perf_report.html&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s1">/report.html&#39;</span><span class="p">,</span> <span class="n">replacements</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Generated performance report </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;report.html&quot;</span><span class="p">))</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Generated performance report </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="sa">f</span><span class="s2">&quot;report.html&quot;</span><span class="p">))</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ApamaC8YPerfBaseTest.validate"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.validate">[docs]</a>	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ApamaC8YPerfBaseTest.validate">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.ApamaC8YPerfBaseTest.validate">[docs]</a>
+	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">			Performs standard validations of the test run.</span>
 
 <span class="sd">			The following validations are performed.</span>
@@ -1125,21 +1160,26 @@
 				<span class="n">stats</span> <span class="o">=</span> <span class="n">perf_stats</span><span class="p">[</span><span class="n">PERF_CORR_IQ_SIZE</span> <span class="k">if</span> <span class="n">queue</span> <span class="o">==</span> <span class="s1">&#39;input&#39;</span> <span class="k">else</span> <span class="n">PERF_CORR_OQ_SIZE</span><span class="p">]</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">assertThat</span><span class="p">(</span><span class="s1">&#39;median_queue_size &lt; max_queue_size * 0.8&#39;</span><span class="p">,</span> <span class="n">median_queue_size</span><span class="o">=</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;median&#39;</span><span class="p">],</span> <span class="n">max_queue_size</span><span class="o">=</span><span class="n">max_size</span><span class="p">)</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">assertThat</span><span class="p">(</span><span class="s1">&#39;mean_queue_size &lt; max_queue_size * 0.8&#39;</span><span class="p">,</span> <span class="n">mean_queue_size</span><span class="o">=</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">],</span> <span class="n">max_queue_size</span><span class="o">=</span><span class="n">max_size</span><span class="p">)</span>
-				<span class="bp">self</span><span class="o">.</span><span class="n">_confirmStableQueueSize</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">raw_perf_data</span><span class="p">)</span></div></div>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_confirmStableQueueSize</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">raw_perf_data</span><span class="p">)</span></div>
+</div>
 
-<div class="viewcode-block" id="EPLAppsPerfTest"><a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.EPLAppsPerfTest">[docs]</a><span class="k">class</span> <span class="nc">EPLAppsPerfTest</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EPLAppsPerfTest">
+<a class="viewcode-back" href="../../../../autodocgen/apamax.eplapplications.perf.basetest.html#apamax.eplapplications.perf.basetest.EPLAppsPerfTest">[docs]</a>
+<span class="k">class</span> <span class="nc">EPLAppsPerfTest</span><span class="p">(</span><span class="n">ApamaC8YPerfBaseTest</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Base class for EPL applications performance tests.</span>
 
 <span class="sd">	The class :class:`ApamaC8YPerfBaseTest` supersedes this class and should be used when writing new tests.</span>
 <span class="sd">	&quot;&quot;&quot;</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../../../../index.html">Table of Contents</a></h3>
 <ul>
@@ -1151,7 +1191,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../developing-epl-apps-locally.html">Developing EPL Apps Locally</a></li>
 </ul>
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
@@ -1159,13 +1199,13 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -1180,8 +1220,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026 Cumulocity GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2026 Cumulocity GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

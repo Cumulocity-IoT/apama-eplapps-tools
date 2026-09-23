@@ -1,26 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Writing tests for EPL apps &#8212; EPL Apps Tools  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=7fae59db" />
     
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using PySys to test your EPL apps" href="using-pysys.html" />
     <link rel="prev" title="Using the eplapp.py command line tool" href="using-eplapp.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,14 +44,14 @@
           <div class="body" role="main">
             
   <section id="writing-tests-for-epl-apps">
-<h1>Writing tests for EPL apps<a class="headerlink" href="#writing-tests-for-epl-apps" title="Permalink to this headline">¶</a></h1>
+<h1>Writing tests for EPL apps<a class="headerlink" href="#writing-tests-for-epl-apps" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Description</dt>
+<dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Guide to writing tests in EPL for your EPL apps.</p>
 </dd>
 </dl>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
 <p>The behavior of most EPL apps usually consists of receiving data, sending measurements, and raising alarms. Thus to test that an EPL app produces the correct behavior will generally involve:</p>
 <ul class="simple">
 <li><p>Creating device simulators.</p></li>
@@ -72,7 +70,7 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
 <p>This topic demonstrates common processes involved in all of these approaches including how to write additional EPL apps that test your existing EPL apps, and outlines some of the conventions for writing tests that best utilize the PySys test framework provided in the SDK.</p>
 </section>
 <section id="creating-device-simulators">
-<span id="device-simulator"></span><h2>Creating device simulators<a class="headerlink" href="#creating-device-simulators" title="Permalink to this headline">¶</a></h2>
+<span id="device-simulator"></span><h2>Creating device simulators<a class="headerlink" href="#creating-device-simulators" title="Link to this heading">¶</a></h2>
 <p>All measurements and alarms in Cumulocity must be associated with a source. Devices in Cumulocity are represented by managed objects, each of which has a unique identifier. When sending measurement or alarm events, the <code class="docutils literal notranslate"><span class="pre">source</span></code> field of these events must be set to a identifier of a managed object in Cumulocity. Therefore, in order to send measurements from our test EPL app, it must create a <code class="docutils literal notranslate"><span class="pre">ManagedObject</span></code> device simulator to be the source of these measurements.</p>
 <p>If you are using the PySys framework to <a class="reference external" href="using-pysys.html#testing-in-the-cumulocity-cloud">run tests in the cloud</a>, any devices created by your tests should be named with prefix “PYSYS_”, and have the <code class="docutils literal notranslate"><span class="pre">c8y_IsDevice</span></code> property. These indicators are what the framework uses to identify which devices should be deleted following a test. Note that deleting a device in Cumulocity will also delete any alarms or measurements associated with that device so the cleanup from a test is done when another test is next run.</p>
 <p>To see how this can be done, have a look at the <code class="docutils literal notranslate"><span class="pre">createNewDevice</span></code> action below:</p>
@@ -113,7 +111,7 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
 <p>This action initializes a <code class="docutils literal notranslate"><span class="pre">ManagedObject</span></code> (using the “PYSYS_” naming prefix and adding the <code class="docutils literal notranslate"><span class="pre">c8y_IsDevice</span></code> property), before sending it using a <code class="docutils literal notranslate"><span class="pre">withResponse</span></code> action. It then confirms that it has been successfully created using listeners for <code class="docutils literal notranslate"><span class="pre">ObjectCommitted</span></code> and <code class="docutils literal notranslate"><span class="pre">ObjectCommitFailed</span></code> events. Whenever you are creating or updating an object in Cumulocity and you want to verify that the change has been successful, it is recommended that you use the <code class="docutils literal notranslate"><span class="pre">withResponse</span></code> action in conjunction with <code class="docutils literal notranslate"><span class="pre">ObjectCommitted</span></code> and <code class="docutils literal notranslate"><span class="pre">ObjectCommitFailed</span></code> listeners (for more information, see the information on updating a managed object in the ‘The Cumulocity IoT Transport Connectivity Plug-in’ section of the <a class="reference external" href="https://cumulocity.com/apama/docs/latest/standard-connectivity-plugins/the-cumulocity-iot-transport-connectivity-plug-in/">documentation</a>). Using this approach you can easily relay when the process has completed (which is done by sending an event, <code class="docutils literal notranslate"><span class="pre">DeviceCreated</span></code>, in the example above), and in the event of an error you can cause the test to exit quickly.</p>
 </section>
 <section id="sending-events-to-your-epl-apps">
-<h2>Sending events to your EPL apps<a class="headerlink" href="#sending-events-to-your-epl-apps" title="Permalink to this headline">¶</a></h2>
+<h2>Sending events to your EPL apps<a class="headerlink" href="#sending-events-to-your-epl-apps" title="Link to this heading">¶</a></h2>
 <p>If your EPL app listens for measurements (or any other kind of event), your test EPL app will need to send it some mock data, covering all edge cases we want to test, to verify that it responds correctly. Look at the <code class="docutils literal notranslate"><span class="pre">sendMeasurement</span></code> action defined below. It takes the identifier of a managed object (which is returned when we create a new device) and a measurement value as arguments:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">action</span> <span class="n">sendMeasurement</span><span class="p">(</span><span class="n">string</span> <span class="n">source</span><span class="p">,</span> <span class="nb">float</span> <span class="n">value</span><span class="p">)</span> <span class="n">returns</span> <span class="n">integer</span>
 <span class="p">{</span>
@@ -143,7 +141,7 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
 <p>Similarly to the <code class="docutils literal notranslate"><span class="pre">createNewDevice</span></code> action, in this example we send the measurement using a <code class="docutils literal notranslate"><span class="pre">withResponse</span></code> action and define a <code class="docutils literal notranslate"><span class="pre">ObjectCommitFailed</span></code> listener, so that if there is an error creating the measurement in Cumulocity we can cause the test to exit quickly instead of waiting for it to time out.</p>
 </section>
 <section id="receiving-events-from-your-epl-apps">
-<h2>Receiving events from your EPL apps<a class="headerlink" href="#receiving-events-from-your-epl-apps" title="Permalink to this headline">¶</a></h2>
+<h2>Receiving events from your EPL apps<a class="headerlink" href="#receiving-events-from-your-epl-apps" title="Link to this heading">¶</a></h2>
 <p>If your EPL app outputs events of any kind, your test app will need to listen for those events to verify that the expected events are being produced. Your tests should construct listeners for both possibilites: one for if an event <em>is</em> produced by the EPL app being tested; and another for if an event is <em>not</em> produced.</p>
 <p>Below is a section of a test that listens for an alarm event after a measurement is sent to Cumulocity:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">on</span> <span class="n">DeviceCreated</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">createNewDevice</span><span class="p">(</span><span class="s2">&quot;DeviceSimulator&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">device</span>
@@ -178,7 +176,7 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
 <p>To receive the alarm event, firstly we must subscribe to the relevant channel, <code class="docutils literal notranslate"><span class="pre">Alarm.SUBSCRIBE_CHANNEL</span></code>. We then constuct two listeners, one for each possible outcome: the first is for if an alarm <em>is</em> raised by the measurement; and the second listens for if an alarm event is <em>not</em> raised (within a defined timeout period).</p>
 </section>
 <section id="querying-cumulocity">
-<h2>Querying Cumulocity<a class="headerlink" href="#querying-cumulocity" title="Permalink to this headline">¶</a></h2>
+<h2>Querying Cumulocity<a class="headerlink" href="#querying-cumulocity" title="Link to this heading">¶</a></h2>
 <p>An alternative approach to the one demonstrated in the ‘<a class="reference internal" href="#receiving-events-from-your-epl-apps">Receiving events from your EPL apps</a>’ section involves querying Cumulocity. With this approach you are able to retrieve historical data. It is possible to query Cumulocity for alarms, events, measurements, operations, and managed objects. More information on querying can be found in ‘The Cumulocity IoT Transport Connectivity Plug-in’ section of the  <a class="reference external" href="https://cumulocity.com/apama/docs/latest/standard-connectivity-plugins/the-cumulocity-iot-transport-connectivity-plug-in/">documentation</a>.</p>
 <p>Using an example of a test that checks for an alarm, this would involve subscribing to the <code class="docutils literal notranslate"><span class="pre">FindAlarmResponse.SUBSCRIBE_CHANNEL</span></code> and using a <code class="docutils literal notranslate"><span class="pre">FindAlarm</span></code> event with <code class="docutils literal notranslate"><span class="pre">FindAlarmResponse</span></code> and <code class="docutils literal notranslate"><span class="pre">FindAlarmResponseAck</span></code> listeners:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">on</span> <span class="n">DeviceCreated</span><span class="p">(</span><span class="n">reqId</span><span class="o">=</span><span class="n">createNewDevice</span><span class="p">(</span><span class="s2">&quot;DeviceSimulator&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">device</span>
@@ -216,15 +214,15 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
 <p>Note that with this approach you will need to ensure that the <code class="docutils literal notranslate"><span class="pre">FindAlarm</span></code> event is sent after the alarm has appeared in Cumulocity.</p>
 </section>
 <section id="reporting-test-outcomes">
-<h2>Reporting test outcomes<a class="headerlink" href="#reporting-test-outcomes" title="Permalink to this headline">¶</a></h2>
+<h2>Reporting test outcomes<a class="headerlink" href="#reporting-test-outcomes" title="Link to this heading">¶</a></h2>
 <p>As a general rule, messages from a passing test should be logged at <code class="docutils literal notranslate"><span class="pre">INFO</span></code>, and messages from a failure should be logged at <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>. Look at the EPL snippets in the ‘<a class="reference internal" href="#receiving-events-from-your-epl-apps">Receiving events from your EPL apps</a>’ and ‘<a class="reference internal" href="#querying-cumulocity">Querying Cumulocity</a>’ sections to see examples of how the test outcome should be reported. Any messages logged at <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> will automatically raise a MAJOR alarm in Cumulocity, alerting you to the test failure. You will need to use this convention of logging failures at <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> if you are using the PySys framework to run your tests, as the framework determines whether a test has passed or failed based on whether there are any messages logged at <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> (or <code class="docutils literal notranslate"><span class="pre">FATAL</span></code>) in the correlator log after the test has completed.</p>
 </section>
 <section id="exiting-the-test">
-<h2>Exiting the test<a class="headerlink" href="#exiting-the-test" title="Permalink to this headline">¶</a></h2>
+<h2>Exiting the test<a class="headerlink" href="#exiting-the-test" title="Link to this heading">¶</a></h2>
 <p>The test framework will wait until all test cases have terminated before completing. It’s important to either have your test explicitly <code class="docutils literal notranslate"><span class="pre">die</span></code>, or arrange that when your test finishes all listeners have terminated, since this will also cause your test case to exit. In the EPL examples above, notice how if an unexpected error occurs (for example, if sending a measurement or creating a device fails), then the <code class="docutils literal notranslate"><span class="pre">die</span></code> statement is used to exit the test early, rather than waiting for it to time out. If your test has defined any listeners for multiple events using the <code class="docutils literal notranslate"><span class="pre">on</span> <span class="pre">all</span></code> operator, then you will need to include a <code class="docutils literal notranslate"><span class="pre">die</span></code> statement after the test code has been executed.</p>
 </section>
 <section id="summary">
-<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>EPL apps can be tested using other EPL apps that run alongside the app being tested for correctness.</p></li>
 <li><p>If your test needs to send measurements or raise alarms, use managed objects to create device simulators to act as the source. If using the PySys framework to test your EPL apps in the cloud, prefix your device <code class="docutils literal notranslate"><span class="pre">name</span></code> with “PYSYS_” and add <code class="docutils literal notranslate"><span class="pre">c8y_IsDevice</span></code> to the managed object’s <code class="docutils literal notranslate"><span class="pre">params</span></code> for the framework to clean up devices created by the test.</p></li>
@@ -234,7 +232,7 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
 <li><p>Make sure there are no active listeners in your tests when they have finished executing.</p></li>
 </ul>
 <section id="epl-test-samples">
-<h3>EPL test samples<a class="headerlink" href="#epl-test-samples" title="Permalink to this headline">¶</a></h3>
+<h3>EPL test samples<a class="headerlink" href="#epl-test-samples" title="Link to this heading">¶</a></h3>
 <p>A sample EPL app and test can be found in the samples directory of the EPL Apps Tools SDK. Most of the EPL code snippets in this document are from the sample test, AlarmOnMeasurementThresholdTest, which can be found in the Input directory of any of the samples provided. This tests the sample EPL app, AlarmOnMeasurementThreshold, which can be found in the samples/apps directory of the SDK. Information on how to run the sample test can be found in the <a class="reference external" href="using-pysys.html#using-pysys-to-test-your-epl-apps">Using PySys to test your EPL apps</a> document.</p>
 </section>
 </section>
@@ -245,7 +243,7 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table of Contents</a></h3>
 <ul class="current">
@@ -270,7 +268,7 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
 <li class="toctree-l1"><a class="reference internal" href="developing-epl-apps-locally.html">Developing EPL Apps Locally</a></li>
 </ul>
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -278,13 +276,13 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -304,8 +302,8 @@ You can even use it with the <code class="xref py py-obj docutils literal notran
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026 Cumulocity GmbH.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2026 Cumulocity GmbH.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>
